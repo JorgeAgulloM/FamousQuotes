@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">famousQuotes</string>
+    <string name="app_name_historical">HistoricalQuotes</string>
+    <string name="app_name_uplifting">UpliftingQuotes</string>
 </resources>
