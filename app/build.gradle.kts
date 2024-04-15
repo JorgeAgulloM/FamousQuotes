@@ -52,6 +52,30 @@ android {
             applicationIdSuffix = ".dev"
         }
     }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("historical") {
+            dimension = "version"
+            buildConfigField("String", "APP_TITLE", "\"app_name_historical\"")
+            buildConfigField("String", "DB_COLLECTION", "\"historical_quotes\"")
+            buildConfigField("int", "PRIMARY_COLOR", "0xFF70B8FF")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFF0077B8")
+            buildConfigField("int", "TERTIARY_COLOR", "0xFFF98348")
+            android.buildFeatures.buildConfig = true
+        }
+
+        create("uplifting") {
+            dimension = "version"
+            buildConfigField("String", "APP_TITLE", "\"app_name_uplifting\"")
+            buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
+            buildConfigField("int", "PRIMARY_COLOR", "0xFF70B8FF")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFF0077B8")
+            buildConfigField("int", "TERTIARY_COLOR", "0xFFF9C54E")
+            android.buildFeatures.buildConfig = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
