@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes
+package com.softyorch.famousquotes.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,11 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.TertiaryColor
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
