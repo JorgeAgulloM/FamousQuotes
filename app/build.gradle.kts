@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.utils.toSetOrEmpty
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -12,6 +13,10 @@ plugins {
 val keystorePropertiesFile: File = file("../signing/signing.properties")
 val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+val adMobPropertiesFile: File = file("../admob/admob.properties")
+val adMobProperties = Properties()
+adMobProperties.load(FileInputStream(adMobPropertiesFile))
 
 android {
     namespace = "com.softyorch.famousquotes"
@@ -47,9 +52,13 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["RELEASE_KEY_ID_ADMOB_APP"] ?: ""
+            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["RELEASE_KEY_ID_BANNER_HOME"].toString())
         }
         debug {
             applicationIdSuffix = ".dev"
+            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"] ?: ""
+            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
         }
     }
 
@@ -62,7 +71,7 @@ android {
             buildConfigField("int", "PRIMARY_COLOR", "0xFF0E4D77")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF0077B8")
             buildConfigField("int", "TERTIARY_COLOR", "0xFF70B8FF")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFFF9C54E")
+            buildConfigField("int", "PANEL_COLOR", "0xFFF9C54E")
             buildConfigField("int", "AUX_COLOR", "0xFFF98348")
             android.buildFeatures.buildConfig = true
         }
@@ -74,7 +83,7 @@ android {
             buildConfigField("int", "PRIMARY_COLOR", "0xFFF4B043")
             buildConfigField("int", "SECONDARY_COLOR", "0xFFF7D6B6")
             buildConfigField("int", "TERTIARY_COLOR", "0xFFA3D2CA")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF6EB98F")
+            buildConfigField("int", "PANEL_COLOR", "0xFF6EB98F")
             buildConfigField("int", "AUX_COLOR", "0xFF3A8188")
             android.buildFeatures.buildConfig = true
         }
@@ -86,7 +95,7 @@ android {
             buildConfigField("int", "PRIMARY_COLOR", "0xFF2C4263")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF486C89")
             buildConfigField("int", "TERTIARY_COLOR", "0xFFA4A7B2")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFFC1B79A")
+            buildConfigField("int", "PANEL_COLOR", "0xFFC1B79A")
             buildConfigField("int", "AUX_COLOR", "0xFFD6A26B")
             android.buildFeatures.buildConfig = true
         }
@@ -113,6 +122,10 @@ android {
 }
 
 dependencies {
+
+    //Google Admob
+    implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
