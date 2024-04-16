@@ -59,9 +59,11 @@ android {
             dimension = "version"
             buildConfigField("String", "APP_TITLE", "\"app_name_historical\"")
             buildConfigField("String", "DB_COLLECTION", "\"historical_quotes\"")
-            buildConfigField("int", "PRIMARY_COLOR", "0xFF70B8FF")
+            buildConfigField("int", "PRIMARY_COLOR", "0xFF0E4D77")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF0077B8")
-            buildConfigField("int", "TERTIARY_COLOR", "0xFFF98348")
+            buildConfigField("int", "TERTIARY_COLOR", "0xFF70B8FF")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFFF9C54E")
+            buildConfigField("int", "AUX_COLOR", "0xFFF98348")
             android.buildFeatures.buildConfig = true
         }
 
@@ -69,9 +71,23 @@ android {
             dimension = "version"
             buildConfigField("String", "APP_TITLE", "\"app_name_uplifting\"")
             buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
-            buildConfigField("int", "PRIMARY_COLOR", "0xFF70B8FF")
-            buildConfigField("int", "SECONDARY_COLOR", "0xFF0077B8")
-            buildConfigField("int", "TERTIARY_COLOR", "0xFFF9C54E")
+            buildConfigField("int", "PRIMARY_COLOR", "0xFFF4B043")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFFF7D6B6")
+            buildConfigField("int", "TERTIARY_COLOR", "0xFFA3D2CA")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF6EB98F")
+            buildConfigField("int", "AUX_COLOR", "0xFF3A8188")
+            android.buildFeatures.buildConfig = true
+        }
+
+        create("biblical") {
+            dimension = "version"
+            buildConfigField("String", "APP_TITLE", "\"app_name_biblical\"")
+            buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
+            buildConfigField("int", "PRIMARY_COLOR", "0xFF2C4263")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFF486C89")
+            buildConfigField("int", "TERTIARY_COLOR", "0xFFA4A7B2")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFFC1B79A")
+            buildConfigField("int", "AUX_COLOR", "0xFFD6A26B")
             android.buildFeatures.buildConfig = true
         }
     }
