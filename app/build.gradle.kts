@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.utils.toSetOrEmpty
 import java.io.FileInputStream
 import java.util.Properties
 
