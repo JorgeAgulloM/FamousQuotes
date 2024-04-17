@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
 import com.softyorch.famousquotes.domain.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val selectQuote: SelectRandomQuote,
+    private val dbService: DatabaseServiceImpl,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
 
@@ -25,6 +27,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         getQuote()
+        viewModelScope.launch(dispatcherIO) {
+            //dbService.provisionalSetQuotes()
+        }
     }
 
     private fun getQuote() {
@@ -34,8 +39,8 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote()
             }
-
-            _uiState.update { it.copy(isLoading = false, quote = quote) }
+            if (quote != null)
+                _uiState.update { it.copy(isLoading = false, quote = quote) }
         }
     }
 }
