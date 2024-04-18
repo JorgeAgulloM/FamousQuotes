@@ -20,7 +20,7 @@ import com.softyorch.famousquotes.BuildConfig
 fun Banner() {
     val currentWidth = LocalConfiguration.current.screenWidthDp + 80
     ElevatedCard(
-        modifier = Modifier.padding(horizontal = 2.dp, vertical = 16.dp),
+        modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.elevatedCardElevation(2.dp)
     ) {
