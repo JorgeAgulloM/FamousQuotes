@@ -16,11 +16,10 @@ data class FamousQuoteModel(
         )
 
         private fun getBodyLocal(bodyList: List<String>): String = try {
-            val local = Locale.getDefault().toString().split("_")[0]
-            local.filter { it.toString().startsWith(local) }.split("#")[1]
+            val local = Locale.getDefault().toString().split("_")[0].uppercase()
+            bodyList.first { it.startsWith(local) }.split("#")[1]
         } catch (ex: Exception) {
-            bodyList.first()
+            bodyList.first().split("#")[1]
         }
-
     }
 }
