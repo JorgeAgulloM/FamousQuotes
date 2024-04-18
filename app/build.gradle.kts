@@ -122,6 +122,12 @@ android {
 
 dependencies {
 
+    // GoogleFonts
+    implementation(libs.androidx.ui.text.google.fonts)
+
+    // Coil
+    implementation(libs.coil.compose)
+
     //Google Admob
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
