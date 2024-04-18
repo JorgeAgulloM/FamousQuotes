@@ -17,7 +17,12 @@ class StorageServiceImpl @Inject constructor(private val storage: FirebaseStorag
 
     override suspend fun getImages(): List<String> {
         val ref = storage.reference.child(ROUTE_STORE)
-        val list = ref.listAll().await().items.map { it.toString() }
+        val list = ref.listAll().await().items.map {
+            val items = it.toString().split("/").size
+            val route = storage.reference.child("${ROUTE_STORE}/${it.toString().split("/")[items -1]}").downloadUrl.await().toString()
+            route
+        }
+
         Log.i("LOGTAG", "List: $list")
         return list
     }
