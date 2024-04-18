@@ -1,10 +1,8 @@
 package com.softyorch.famousquotes.data.network
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.BuildConfig
-import com.softyorch.famousquotes.data.FakeDataBaseImplement
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.domain.IDatabaseService
 import kotlinx.coroutines.tasks.await
@@ -38,7 +36,7 @@ class DatabaseServiceImpl @Inject constructor(
 
 
 
-    suspend fun provisionalSetQuotes() {
+/*    suspend fun provisionalSetQuotes() {
         val quotes = FakeDataBaseImplement().quotes
 
         val filterQuotes = quotes.distinctBy { it.body }
@@ -56,7 +54,7 @@ class DatabaseServiceImpl @Inject constructor(
 
                 firestore.collection(COLLECTION).document(id).set(productQuote).await()
             }
-    }
+    }*/
 
     private var temporalId: Long = 0
 
