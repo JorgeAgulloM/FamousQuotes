@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.domain
+package com.softyorch.famousquotes.domain.interfaces
 
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 
