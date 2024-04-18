@@ -1,5 +1,7 @@
 package com.softyorch.famousquotes.ui.theme
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.softyorch.famousquotes.BuildConfig
 
@@ -17,3 +19,14 @@ val TertiaryColor = Color(BuildConfig.TERTIARY_COLOR)
 val BackgroundColor = Color(0xFFC1B79A)
 val PanelColor = Color(BuildConfig.PANEL_COLOR)
 val AuxColor = Color(BuildConfig.AUX_COLOR)
+
+@Composable
+fun brushBackGround(): Brush = Brush.linearGradient(
+    listOf(
+        BackgroundColor,
+        Color.White,
+        BackgroundColor,
+        Color.White,
+        BackgroundColor
+    )
+)
