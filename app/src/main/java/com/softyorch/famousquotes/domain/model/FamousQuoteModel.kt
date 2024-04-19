@@ -11,15 +11,15 @@ data class FamousQuoteModel(
     companion object {
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             owner = owner,
-            body = getBodyLocal(bodyList),
+            body = getBodyLocal(quote),
             imageUrl = imageUrl
         )
 
-        private fun getBodyLocal(bodyList: List<String>): String = try {
+        private fun getBodyLocal(quotes: List<String>): String = try {
             val local = Locale.getDefault().toString().split("_")[0].uppercase()
-            bodyList.first { it.startsWith(local) }.split("#")[1]
+            quotes.first { it.startsWith(local) }.split("#")[1]
         } catch (ex: Exception) {
-            bodyList.first().split("#")[1]
+            quotes.first().split("#")[1]
         }
     }
 }
