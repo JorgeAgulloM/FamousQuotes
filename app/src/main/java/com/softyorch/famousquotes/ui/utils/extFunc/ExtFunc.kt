@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.tools.extFunc
+package com.softyorch.famousquotes.ui.utils.extFunc
 
 import android.annotation.SuppressLint
 import android.content.Context
