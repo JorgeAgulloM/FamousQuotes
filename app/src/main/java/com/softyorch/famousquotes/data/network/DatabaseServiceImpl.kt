@@ -13,16 +13,16 @@ import javax.inject.Inject
 
 class DatabaseServiceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
-): IDatabaseService {
+) : IDatabaseService {
 
     companion object {
         const val COLLECTION = BuildConfig.DB_COLLECTION
     }
 
     override suspend fun getQuote(id: String): QuoteResponse? {
-//        getAllQuotes()
+//      getAllQuotes()
 
-        val document = firestore.collection("${COLLECTION}3").document(id)
+        val document = firestore.collection(COLLECTION).document(id)
 
         return try {
             document.get(Source.CACHE).await().toObject(QuoteResponse::class.java)
@@ -31,12 +31,17 @@ class DatabaseServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getRandomQuote(): QuoteResponse? {
+        val document = getAllQuotes()
+        return document.random()
+    }
 
-    private suspend fun getAllQuotes() {
-        val document = firestore.collection("${COLLECTION}3").orderBy("id").get().await().map {
+    private suspend fun getAllQuotes(): List<QuoteResponse?> {
+        val document = firestore.collection(COLLECTION).orderBy("id").get().await().map {
             it.toObject(QuoteResponse::class.java)
         }
-        setUpdate(document)
+//      setUpdate(document)
+        return document
     }
 
     private suspend fun setUpdate(quotes: List<QuoteResponse>) {
@@ -68,14 +73,16 @@ class DatabaseServiceImpl @Inject constructor(
                 "date" to date
             )
 
-            firestore.collection("${COLLECTION}3").document(id).set(newData).await()
+            firestore.collection(COLLECTION).document(id).set(newData).await()
         }
     }
 
     private fun getToday(timeInMillis: Long) = Timestamp((timeInMillis / 1000), 0)
 
-    private fun getIdFromCalendarStartZero(day: Int): String {        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.set(Calendar.HOUR_OF_DAY, day)
+    private fun getIdFromCalendarStartZero(day: Int): String {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        calendar.set(Calendar.DAY_OF_YEAR, day)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
