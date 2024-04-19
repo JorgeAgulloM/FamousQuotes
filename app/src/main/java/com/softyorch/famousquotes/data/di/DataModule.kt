@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.di
+package com.softyorch.famousquotes.data.di
 
 import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
