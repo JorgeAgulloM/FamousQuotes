@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +55,8 @@ import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceStringComposable
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
@@ -61,16 +64,17 @@ fun HomeScreen(viewModel: HomeViewModel) {
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
 
     if (state.showInterstitial) Interstitial(true) {
-        if (it !is InterstitialAdState.Loading) {
+        if (it is InterstitialAdState.Showed ||
+            it is InterstitialAdState.Error
+        ) {
+            writeLog(LevelLog.INFO, "itState: $it")
             viewModel.onActions(HomeActions.New)
         }
     }
 
     Box(contentAlignment = Alignment.Center) {
         BackgroundImage(uri = state.quote.imageUrl)
-        CardQuote(body = state.quote.body, owner = state.quote.owner) { action ->
-            viewModel.onActions(action)
-        }
+        CardQuote(state = state) { action -> viewModel.onActions(action) }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
     }
@@ -81,8 +85,6 @@ fun BackgroundImage(uri: String) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         val context = LocalContext.current
-        val modifier = Modifier.fillMaxWidth().height(300.dp)
-        val scale = ContentScale.Crop
 
         val data = if (uri.startsWith("http")) uri else context.getResourceStringComposable(uri)
 
@@ -96,37 +98,22 @@ fun BackgroundImage(uri: String) {
 
         val state = painter.state
 
-        AnimatedVisibility(
-            visible = state is AsyncImagePainter.State.Success,
-            enter = slideInVertically(
-                animationSpec = spring(1f, 12f)
-            ) + fadeIn(animationSpec = tween(durationMillis = 1000))
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = "Image",
-                modifier = modifier,
-                contentScale = scale
-            )
-        }
-        AnimatedVisibility(
-            visible = state !is AsyncImagePainter.State.Success,
-            exit = shrinkVertically(
-                animationSpec = spring(1f, 12f)
-            ) + fadeOut(animationSpec = tween(durationMillis = 1000))
-        ) {
-            Image(
-                painter = painterResource(R.drawable.loading_1),
-                contentDescription = "Image",
-                modifier = modifier,
-                contentScale = scale
-            )
-        }
+        AnimatedImage(
+            isVisible = state is AsyncImagePainter.State.Success,
+            painter = painter
+        )
+        AnimatedImage(
+            isVisible = state !is AsyncImagePainter.State.Success,
+            painter = painterResource(R.drawable.loading_1)
+        )
     }
 }
 
 @Composable
-fun CardQuote(body: String, owner: String, onAction: (HomeActions) -> Unit) {
+fun CardQuote(
+    state: HomeState,
+    onAction: (HomeActions) -> Unit,
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f))
         ElevatedCard(
@@ -145,14 +132,14 @@ fun CardQuote(body: String, owner: String, onAction: (HomeActions) -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Controls { onAction(it) }
-                    TextHome(text = body, isBody = true, needMark = true)
+                    Controls(state.showInterstitial) { onAction(it) }
+                    TextHome(text = state.quote.body, isBody = true, needMark = true)
                     SpacerHeight(height = 24)
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterEnd
                     ) {
-                        TextHome(text = owner)
+                        TextHome(text = state.quote.owner)
                     }
                 }
                 Banner()
@@ -162,7 +149,7 @@ fun CardQuote(body: String, owner: String, onAction: (HomeActions) -> Unit) {
 }
 
 @Composable
-fun Controls(onAction: (HomeActions) -> Unit) {
+fun Controls(disabledReload: Boolean, onAction: (HomeActions) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(end = 16.dp),
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
@@ -177,7 +164,8 @@ fun Controls(onAction: (HomeActions) -> Unit) {
         ) { onAction(HomeActions.Buy) }
         IconButtonMenu(
             text = "Otra frase",
-            icon = Icons.Outlined.RestartAlt
+            icon = Icons.Outlined.RestartAlt,
+            isEnabled = !disabledReload
         ) { onAction(HomeActions.New) }
         IconButtonMenu(
             text = "Compartir",
@@ -191,11 +179,17 @@ fun Controls(onAction: (HomeActions) -> Unit) {
 }
 
 @Composable
-fun IconButtonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
+fun IconButtonMenu(
+    text: String,
+    icon: ImageVector,
+    isEnabled: Boolean = true,
+    onClick: () -> Unit,
+) {
     IconButton(
         onClick = { onClick() }, colors = IconButtonDefaults.iconButtonColors(
             contentColor = PrimaryColor
-        )
+        ),
+        enabled = isEnabled
     ) {
         Icon(imageVector = icon, contentDescription = text)
     }
@@ -231,11 +225,20 @@ fun InfoDialog(onAction: () -> Unit) {
         ) {
             InfoIcons(icon = Icons.Outlined.Info, text = "Información sobre los iconos de la app")
             SpacerHeight(height = 32)
-            InfoIcons(icon = Icons.Outlined.LocalMall, text = "Si te gusta la imagen, puedes acceder a nuestra tienda de Etsy.com para comprarla.")
+            InfoIcons(
+                icon = Icons.Outlined.LocalMall,
+                text = "Si te gusta la imagen, puedes acceder a nuestra tienda de Etsy.com para comprarla."
+            )
             SpacerHeight()
-            InfoIcons(icon = Icons.Outlined.RestartAlt, text = "Pulsa en este icono si te gustaría ver otra imagen.")
+            InfoIcons(
+                icon = Icons.Outlined.RestartAlt,
+                text = "Pulsa en este icono si te gustaría ver otra imagen."
+            )
             SpacerHeight()
-            InfoIcons(icon = Icons.Outlined.Share, text = "Comprate tu frase del día con tus amigos y familiares.")
+            InfoIcons(
+                icon = Icons.Outlined.Share,
+                text = "Comprate tu frase del día con tus amigos y familiares."
+            )
         }
     }
 }
@@ -251,4 +254,27 @@ fun InfoIcons(icon: ImageVector, text: String) {
 @Composable
 fun SpacerHeight(height: Int = 16) {
     Spacer(modifier = Modifier.height(height.dp))
+}
+
+@Composable
+fun AnimatedImage(isVisible: Boolean, painter: Painter) {
+    val modifier = Modifier.fillMaxWidth().height(300.dp)
+    val scale = ContentScale.Crop
+
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            animationSpec = spring(1f, 12f)
+        ) + fadeIn(animationSpec = tween(durationMillis = 1000)),
+        exit = shrinkVertically(
+            animationSpec = spring(1f, 12f)
+        ) + fadeOut(animationSpec = tween(durationMillis = 1000))
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = "Image",
+            modifier = modifier,
+            contentScale = scale
+        )
+    }
 }
