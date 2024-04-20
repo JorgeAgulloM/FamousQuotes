@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val selectQuote: SelectRandomQuote,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val send: Send
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel("", "", "")))
@@ -26,6 +28,21 @@ class HomeViewModel @Inject constructor(
     init {
         getQuote()
     }
+
+    fun onActions(action: HomeActions) {
+        when (action) {
+            HomeActions.Info -> {}
+            HomeActions.New -> {}
+            HomeActions.Send -> { shareQuote() }
+            HomeActions.Buy -> {  }
+        }
+    }
+
+    private fun shareQuote() {
+        val dataToSend = "${_uiState.value.quote.body} - ${_uiState.value.quote.owner}"
+        send.sendDataTo(dataToSend)
+    }
+
 
     private fun getQuote() {
         viewModelScope.launch {
