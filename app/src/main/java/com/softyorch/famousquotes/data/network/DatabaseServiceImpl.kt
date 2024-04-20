@@ -6,6 +6,8 @@ import com.google.firebase.firestore.Source
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.utils.LevelLog.WARN
+import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 import java.util.TimeZone
@@ -27,6 +29,7 @@ class DatabaseServiceImpl @Inject constructor(
         return try {
             document.get(Source.CACHE).await().toObject(QuoteResponse::class.java)
         } catch (ex: Exception) {
+            writeLog(WARN, "Fail to get image $id from cache!!")
             document.get().await().toObject(QuoteResponse::class.java)
         }
     }
