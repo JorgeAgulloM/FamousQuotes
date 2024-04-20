@@ -20,9 +20,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material.icons.outlined.LocalMall
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -58,7 +59,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     Box(contentAlignment = Alignment.Center) {
         BackgroundImage(uri = state.quote.imageUrl)
-        CardQuote(body = state.quote.body, owner = state.quote.owner)
+        CardQuote(body = state.quote.body, owner = state.quote.owner) { action ->
+            viewModel.onActions(action)
+        }
     }
 }
 
@@ -102,7 +105,7 @@ fun BackgroundImage(uri: String) {
             ) + fadeOut(animationSpec = tween(durationMillis = 1000))
         ) {
             Image(
-                painter = painterResource(R.drawable.loading_2),
+                painter = painterResource(R.drawable.loading_1),
                 contentDescription = "Image",
                 modifier = modifier,
                 contentScale = scale
@@ -112,7 +115,7 @@ fun BackgroundImage(uri: String) {
 }
 
 @Composable
-fun CardQuote(body: String, owner: String) {
+fun CardQuote(body: String, owner: String, onAction: (HomeActions) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f))
         ElevatedCard(
@@ -131,7 +134,7 @@ fun CardQuote(body: String, owner: String) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Controls()
+                    Controls{ onAction(it) }
                     TextHome(text = body, true)
                     Spacer(modifier = Modifier.height(24.dp))
                     Box(
@@ -148,14 +151,15 @@ fun CardQuote(body: String, owner: String) {
 }
 
 @Composable
-fun Controls() {
+fun Controls(onAction: (HomeActions) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(end = 16.dp),
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
     ) {
-        IconButtonMenu(text = "Info", icon = Icons.Outlined.Info) {}
-        IconButtonMenu(text = "Otra frase", icon = Icons.Outlined.Refresh) {}
-        IconButtonMenu(text = "Compartir", icon = Icons.Outlined.Send) {}
+        IconButtonMenu(text = "Info", icon = Icons.Outlined.Info) { onAction(HomeActions.Info) }
+        IconButtonMenu(text = "Buy image", icon = Icons.Outlined.LocalMall) { onAction(HomeActions.Info) }
+        IconButtonMenu(text = "Otra frase", icon = Icons.Outlined.RestartAlt) { onAction(HomeActions.New) }
+        IconButtonMenu(text = "Compartir", icon = Icons.AutoMirrored.Outlined.Send) { onAction(HomeActions.Send) }
     }
 }
 
