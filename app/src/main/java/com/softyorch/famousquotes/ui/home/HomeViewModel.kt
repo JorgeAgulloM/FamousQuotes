@@ -37,6 +37,7 @@ class HomeViewModel @Inject constructor(
             HomeActions.New -> { loadNewRandomQuote() }
             HomeActions.Send -> { shareQuote() }
             HomeActions.Buy -> { goToBuyImage() }
+            HomeActions.Owner -> { goToSearchOwner() }
         }
     }
 
@@ -61,6 +62,12 @@ class HomeViewModel @Inject constructor(
     private fun goToBuyImage() {
         viewModelScope.launch {
             intents.goToWebShopImages()
+        }
+    }
+
+    private fun goToSearchOwner() {
+        viewModelScope.launch {
+            intents.goToSearchOwnerInBrowser(_uiState.value.quote.owner)
         }
     }
 

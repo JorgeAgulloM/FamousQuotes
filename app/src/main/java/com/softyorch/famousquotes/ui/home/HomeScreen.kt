@@ -9,6 +9,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,11 +36,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,6 +56,7 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
+import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceStringComposable
 import com.softyorch.famousquotes.utils.LevelLog
@@ -133,13 +137,15 @@ fun CardQuote(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Controls(state.showInterstitial) { onAction(it) }
-                    TextHome(text = state.quote.body, isBody = true, needMark = true)
+                    TextBody(text = state.quote.body)
                     SpacerHeight(height = 24)
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterEnd
                     ) {
-                        TextHome(text = state.quote.owner)
+                        TextOwner(text = state.quote.owner) {
+                            onAction(HomeActions.Owner)
+                        }
                     }
                 }
                 Banner()
@@ -196,22 +202,51 @@ fun IconButtonMenu(
 }
 
 @Composable
-fun TextHome(text: String, isBody: Boolean = false, needMark: Boolean = false) {
-    val style = if (isBody) MyTypography.displayLarge else MyTypography.labelLarge
+fun TextInfo(text: String) {
+    AnimatedTextHome(text) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MyTypography.labelLarge
+        )
+    }
+}
+
+@Composable
+fun TextBody(text: String) {
+    AnimatedTextHome(text) {
+        Text(
+            text = "\"$text\"",
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MyTypography.displayLarge
+        )
+    }
+}
+
+@Composable
+fun TextOwner(text: String, onClick: () -> Unit) {
+    AnimatedTextHome(text) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 16.dp)
+                .clip(shape = MaterialTheme.shapes.large)
+                .clickable { onClick() },
+            style = MyTypography.labelLarge,
+            textDecoration = TextDecoration.Underline,
+            color = PrimaryColor
+        )
+    }
+}
+
+@Composable
+fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = text.isNotBlank(),
         enter = fadeIn(
             animationSpec = spring(0.8f, 0.8f),
             initialAlpha = 0f
         )
-    ) {
-        val finishText = if (needMark) "\"$text\"" else text
-        Text(
-            text = finishText,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = style
-        )
-    }
+    ) { content() }
 }
 
 @Composable
@@ -247,7 +282,7 @@ fun InfoDialog(onAction: () -> Unit) {
 fun InfoIcons(icon: ImageVector, text: String) {
     Row {
         Icon(imageVector = icon, contentDescription = text, tint = PrimaryColor)
-        TextHome(text)
+        TextInfo(text)
     }
 }
 
