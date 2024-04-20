@@ -20,4 +20,16 @@ class Intents @Inject constructor(@ApplicationContext private val context: Conte
             context.startActivity(intent)
         }
     }
+
+    suspend fun goToSearchOwnerInBrowser(owner: String) {
+        coroutineScope {
+            val intent = Intent(
+                Intent.ACTION_WEB_SEARCH
+            ).apply {
+                putExtra("query", owner)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(intent)
+        }
+    }
 }
