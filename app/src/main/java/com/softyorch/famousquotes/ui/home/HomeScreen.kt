@@ -20,10 +20,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -62,6 +63,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         CardQuote(body = state.quote.body, owner = state.quote.owner) { action ->
             viewModel.onActions(action)
         }
+        if (state.showInfo) InfoDialog { viewModel.onActions(HomeActions.Info) }
     }
 }
 
@@ -134,9 +136,9 @@ fun CardQuote(body: String, owner: String, onAction: (HomeActions) -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Controls{ onAction(it) }
-                    TextHome(text = body, true)
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Controls { onAction(it) }
+                    TextHome(text = body, isBody = true, needMark = true)
+                    SpacerHeight(height = 24)
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterEnd
@@ -156,10 +158,26 @@ fun Controls(onAction: (HomeActions) -> Unit) {
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(end = 16.dp),
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
     ) {
-        IconButtonMenu(text = "Info", icon = Icons.Outlined.Info) { onAction(HomeActions.Info) }
-        IconButtonMenu(text = "Buy image", icon = Icons.Outlined.LocalMall) { onAction(HomeActions.Buy) }
-        IconButtonMenu(text = "Otra frase", icon = Icons.Outlined.RestartAlt) { onAction(HomeActions.New) }
-        IconButtonMenu(text = "Compartir", icon = Icons.AutoMirrored.Outlined.Send) { onAction(HomeActions.Send) }
+        IconButtonMenu(
+            text = "Info",
+            icon = Icons.Outlined.Info
+        ) { onAction(HomeActions.Info) }
+        IconButtonMenu(
+            text = "Buy image",
+            icon = Icons.Outlined.LocalMall
+        ) { onAction(HomeActions.Buy) }
+        IconButtonMenu(
+            text = "Otra frase",
+            icon = Icons.Outlined.RestartAlt
+        ) { onAction(HomeActions.New) }
+        IconButtonMenu(
+            text = "Compartir",
+            icon = Icons.Outlined.Share
+        ) {
+            onAction(
+                HomeActions.Send
+            )
+        }
     }
 }
 
@@ -175,7 +193,7 @@ fun IconButtonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
 }
 
 @Composable
-fun TextHome(text: String, isBody: Boolean = false) {
+fun TextHome(text: String, isBody: Boolean = false, needMark: Boolean = false) {
     val style = if (isBody) MyTypography.displayLarge else MyTypography.labelLarge
     AnimatedVisibility(
         visible = text.isNotBlank(),
@@ -184,10 +202,44 @@ fun TextHome(text: String, isBody: Boolean = false) {
             initialAlpha = 0f
         )
     ) {
+        val finishText = if (needMark) "\"$text\"" else text
         Text(
-            text = "\"$text\"",
+            text = finishText,
             modifier = Modifier.padding(horizontal = 16.dp),
             style = style
         )
     }
+}
+
+@Composable
+fun InfoDialog(onAction: () -> Unit) {
+    Dialog(onDismissRequest = { onAction() }) {
+        Column(
+            modifier = Modifier.background(
+                brush = brushBackGround(),
+                shape = MaterialTheme.shapes.extraLarge
+            ).padding(16.dp)
+        ) {
+            InfoIcons(icon = Icons.Outlined.Info, text = "Información sobre los iconos de la app")
+            SpacerHeight(height = 32)
+            InfoIcons(icon = Icons.Outlined.LocalMall, text = "Si te gusta la imagen, puedes acceder a nuestra tienda de Etsy.com para comprarla.")
+            SpacerHeight()
+            InfoIcons(icon = Icons.Outlined.RestartAlt, text = "Pulsa en este icono si te gustaría ver otra imagen.")
+            SpacerHeight()
+            InfoIcons(icon = Icons.Outlined.Share, text = "Comprate tu frase del día con tus amigos y familiares.")
+        }
+    }
+}
+
+@Composable
+fun InfoIcons(icon: ImageVector, text: String) {
+    Row {
+        Icon(imageVector = icon, contentDescription = text, tint = PrimaryColor)
+        TextHome(text)
+    }
+}
+
+@Composable
+fun SpacerHeight(height: Int = 16) {
+    Spacer(modifier = Modifier.height(height.dp))
 }
