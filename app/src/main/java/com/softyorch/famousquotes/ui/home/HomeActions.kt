@@ -5,4 +5,5 @@ sealed class HomeActions {
     data object New: HomeActions()
     data object Send: HomeActions()
     data object Buy: HomeActions()
+    data object Owner: HomeActions()
 }
