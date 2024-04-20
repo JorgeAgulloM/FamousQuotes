@@ -47,8 +47,10 @@ class HomeViewModel @Inject constructor(
     private fun loadNewRandomQuote() {
         if (!_uiState.value.showInterstitial) {
             _uiState.update { it.copy(showInterstitial = true) }
+        } else {
             getRandomQuote()
-        } else _uiState.update { it.copy(showInterstitial = false) }
+            _uiState.update { it.copy(showInterstitial = false) }
+        }
     }
 
     private fun shareQuote() {
