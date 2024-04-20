@@ -50,7 +50,7 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
-import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
+import com.softyorch.famousquotes.ui.utils.extFunc.getResourceStringComposable
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
@@ -73,7 +73,7 @@ fun BackgroundImage(uri: String) {
         val modifier = Modifier.fillMaxWidth().height(300.dp)
         val scale = ContentScale.Crop
 
-        val data = if (uri.startsWith("http")) uri else context.getResourceString(uri)
+        val data = if (uri.startsWith("http")) uri else context.getResourceStringComposable(uri)
 
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(context)
@@ -157,7 +157,7 @@ fun Controls(onAction: (HomeActions) -> Unit) {
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
     ) {
         IconButtonMenu(text = "Info", icon = Icons.Outlined.Info) { onAction(HomeActions.Info) }
-        IconButtonMenu(text = "Buy image", icon = Icons.Outlined.LocalMall) { onAction(HomeActions.Info) }
+        IconButtonMenu(text = "Buy image", icon = Icons.Outlined.LocalMall) { onAction(HomeActions.Buy) }
         IconButtonMenu(text = "Otra frase", icon = Icons.Outlined.RestartAlt) { onAction(HomeActions.New) }
         IconButtonMenu(text = "Compartir", icon = Icons.AutoMirrored.Outlined.Send) { onAction(HomeActions.Send) }
     }
