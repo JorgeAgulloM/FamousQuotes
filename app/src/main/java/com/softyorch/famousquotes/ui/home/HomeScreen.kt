@@ -48,6 +48,8 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
+import com.softyorch.famousquotes.ui.admob.Interstitial
+import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
@@ -58,12 +60,19 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (state.showInterstitial) Interstitial(true) {
+        if (it !is InterstitialAdState.Loading) {
+            viewModel.onActions(HomeActions.New)
+        }
+    }
+
     Box(contentAlignment = Alignment.Center) {
         BackgroundImage(uri = state.quote.imageUrl)
         CardQuote(body = state.quote.body, owner = state.quote.owner) { action ->
             viewModel.onActions(action)
         }
-        if (state.showInfo) InfoDialog { viewModel.onActions(HomeActions.Info) }
+        if (state.showInfo)
+            InfoDialog { viewModel.onActions(HomeActions.Info) }
     }
 }
 
