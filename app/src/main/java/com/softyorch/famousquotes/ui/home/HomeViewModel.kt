@@ -33,11 +33,15 @@ class HomeViewModel @Inject constructor(
 
     fun onActions(action: HomeActions) {
         when (action) {
-            HomeActions.Info -> {}
+            HomeActions.Info -> { showInfoDialog() }
             HomeActions.New -> {}
             HomeActions.Send -> { shareQuote() }
             HomeActions.Buy -> { goToBuyImage() }
         }
+    }
+
+    private fun showInfoDialog() {
+        _uiState.update { it.copy(showInfo = !it.showInfo) }
     }
 
     private fun shareQuote() {
