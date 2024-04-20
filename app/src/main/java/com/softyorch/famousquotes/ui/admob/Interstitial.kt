@@ -1,7 +1,6 @@
 package com.softyorch.famousquotes.ui.admob
 
 import android.app.Activity
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
