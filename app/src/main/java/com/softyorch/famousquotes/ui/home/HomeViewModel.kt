@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val selectQuote: SelectRandomQuote,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-    private val send: Send
+    private val send: Send,
+    private val intents: Intents
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel("", "", "")))
@@ -34,7 +36,7 @@ class HomeViewModel @Inject constructor(
             HomeActions.Info -> {}
             HomeActions.New -> {}
             HomeActions.Send -> { shareQuote() }
-            HomeActions.Buy -> {  }
+            HomeActions.Buy -> { goToBuyImage() }
         }
     }
 
@@ -43,6 +45,11 @@ class HomeViewModel @Inject constructor(
         send.sendDataTo(dataToSend)
     }
 
+    private fun goToBuyImage() {
+        viewModelScope.launch {
+            intents.goToWebShopImages()
+        }
+    }
 
     private fun getQuote() {
         viewModelScope.launch {
