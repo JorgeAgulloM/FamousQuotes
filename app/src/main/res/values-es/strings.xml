@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">Frases Famosas</string>
     <string name="app_name_historical">Frases Históricas</string>
+    <string name="app_name_biblical">Frases Biblicas</string>
     <string name="app_name_uplifting">Frases Positivas</string>
 </resources>
