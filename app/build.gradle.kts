@@ -53,11 +53,13 @@ android {
             signingConfig = signingConfigs.getByName("release")
             manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["RELEASE_KEY_ID_ADMOB_APP"] ?: ""
             buildConfigField("String", "ID_BANNER_HOME", adMobProperties["RELEASE_KEY_ID_BANNER_HOME"].toString())
+            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
         debug {
             applicationIdSuffix = ".dev"
             manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"] ?: ""
             buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
+            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
     }
 
