@@ -21,12 +21,21 @@ class SelectRandomQuote @Inject constructor(
         val id = getTodayId()
         val image = getImage()
 
-        val quote = dbService.getQuote(id) ?: dbService.getRandomQuote().also {
+        val quote = dbService.getQuote(id) ?: getRandomQuoteFromDb().also {
             writeLog(WARN, "[SelectRandomQuote] -> Quote has been getting from random!!")
         }
 
         return quote?.toDomain()?.copy(imageUrl = image)
     }
+
+    suspend fun getRandomQuote(): FamousQuoteModel? {
+        val image = getImage()
+        val quote = getRandomQuoteFromDb()
+
+        return quote?.toDomain()?.copy(imageUrl = image)
+    }
+
+    private suspend fun getRandomQuoteFromDb() = dbService.getRandomQuote()
 
     private suspend fun getImage(): String {
         getImageFromDatastore().let { set ->
