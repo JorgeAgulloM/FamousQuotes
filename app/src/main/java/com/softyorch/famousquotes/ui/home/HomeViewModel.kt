@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
     fun onActions(action: HomeActions) {
         when (action) {
             HomeActions.Info -> { showInfoDialog() }
-            HomeActions.New -> {}
+            HomeActions.New -> { loadNewRandomQuote() }
             HomeActions.Send -> { shareQuote() }
             HomeActions.Buy -> { goToBuyImage() }
         }
@@ -42,6 +42,13 @@ class HomeViewModel @Inject constructor(
 
     private fun showInfoDialog() {
         _uiState.update { it.copy(showInfo = !it.showInfo) }
+    }
+
+    private fun loadNewRandomQuote() {
+        if (!_uiState.value.showInterstitial) {
+            _uiState.update { it.copy(showInterstitial = true) }
+            getRandomQuote()
+        } else _uiState.update { it.copy(showInterstitial = false) }
     }
 
     private fun shareQuote() {
@@ -61,6 +68,18 @@ class HomeViewModel @Inject constructor(
 
             val quote = withContext(dispatcherIO) {
                 selectQuote()
+            }
+            if (quote != null)
+                _uiState.update { it.copy(isLoading = false, quote = quote) }
+        }
+    }
+
+    private fun getRandomQuote() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            val quote = withContext(dispatcherIO) {
+                selectQuote.getRandomQuote()
             }
             if (quote != null)
                 _uiState.update { it.copy(isLoading = false, quote = quote) }
