@@ -68,7 +68,7 @@ android {
         create("historical") {
             applicationIdSuffix = ".historical"
             dimension = "version"
-            resValue("string", "app_name", "")
+            buildConfigField("String", "DB_VERSION", "\"historical_db_update_version\"")
             buildConfigField("String", "APP_TITLE", "\"app_name_historical\"")
             buildConfigField("String", "DB_COLLECTION", "\"historical_quotes\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF0E4D77")
@@ -82,6 +82,7 @@ android {
         create("uplifting") {
             dimension = "version"
             applicationIdSuffix = ".uplifting"
+            buildConfigField("String", "DB_VERSION", "\"uplifting_db_update_version\"")
             buildConfigField("String", "APP_TITLE", "\"app_name_uplifting\"")
             buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFFF4B043")
@@ -95,6 +96,7 @@ android {
         create("biblical") {
             dimension = "version"
             applicationIdSuffix = ".biblical"
+            buildConfigField("String", "DB_VERSION", "\"biblical_db_update_version\"")
             buildConfigField("String", "APP_TITLE", "\"app_name_biblical\"")
             buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF2C4263")
