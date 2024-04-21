@@ -16,3 +16,13 @@ fun getTodayId(): String {
         writeLog(LevelLog.INFO, "Id generated: $it")
     }
 }
+
+fun versionList(nameVersion: String): List<Int> =
+    nameVersion.split(".").map { it.toInt() }.also {
+        writeLog(LevelLog.INFO, "[versionList] -> nameVersion: $nameVersion")
+    }
+
+fun emptyVersionList(): List<Int> = listOf(0, 0, 0)
+
+fun versionToString(versionList: List<Int>): String =
+    "${versionList[0]}.${versionList[1]}.${versionList[2]}"
