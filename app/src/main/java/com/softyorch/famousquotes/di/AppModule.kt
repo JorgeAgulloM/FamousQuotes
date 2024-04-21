@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.di
+package com.softyorch.famousquotes.di
 
 import dagger.Module
 import dagger.Provides
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UiModule {
+object AppModule {
 
     @Singleton
     @Provides
