@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.data.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.softyorch.famousquotes.BuildConfig
@@ -21,7 +22,11 @@ class DatastoreImpl @Inject constructor(
         )
 
         private const val IMAGES_KEY = "ds_images"
+        private const val DB_VERSION = "db_version"
     }
+
+
+    /*********** Images ***************************************************************************/
 
     override fun getImageSet(): Flow<Set<String>> = context.datastore.data.map { data ->
         data[stringSetPreferencesKey(IMAGES_KEY)] ?: emptySet()
@@ -30,6 +35,19 @@ class DatastoreImpl @Inject constructor(
     override suspend fun setImageSet(images: Set<String>) {
         context.datastore.edit { data ->
             data[stringSetPreferencesKey(IMAGES_KEY)] = images
+        }
+    }
+
+
+    /*********** Db Version ***********************************************************************/
+
+    override fun getDbVersion(): Flow<String> = context.datastore.data.map { data ->
+        data[stringPreferencesKey(DB_VERSION)].orEmpty()
+    }
+
+    override suspend fun setDbVersion(dbVersion: String) {
+        context.datastore.edit { data ->
+            data[stringPreferencesKey(DB_VERSION)] = dbVersion
         }
     }
 }
