@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>historical_db_update_version</key>
+    <value>1.0.0</value>
+  </entry>
+  <entry>
+    <key>biblical_db_update_version</key>
+    <value>1.0.0</value>
+  </entry>
+  <entry>
+    <key>uplifting_db_update_version</key>
+    <value>1.0.0</value>
+  </entry>
+  <entry>
+    <key>app_min_version</key>
+    <value>1.0.0</value>
+  </entry>
+</defaults>
