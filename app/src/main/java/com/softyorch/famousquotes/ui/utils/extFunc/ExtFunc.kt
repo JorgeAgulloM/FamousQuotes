@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.utils.extFunc
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 
@@ -21,3 +22,5 @@ fun Context.getResourceStringNotComposable(name: String): String {
     val intResource = this.resources.getIdentifier(name, "string", this.packageName)
     return getString(intResource)
 }
+
+fun Context.packageNameApp(): PackageInfo = this.packageManager.getPackageInfo(this.packageName, 0)
