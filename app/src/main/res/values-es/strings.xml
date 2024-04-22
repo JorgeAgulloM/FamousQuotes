@@ -23,4 +23,40 @@
     <string name="update_dialog_body">¡%1$s ha recibido una actualización importante!\nTe recomendamos que actualices la aplicación para seguir disfrutando de todas sus funciones.\n¡No te pierdas las nuevas características y mejoras!\nActualiza ahora para asegurarte de que puedas acceder a tu aplicación sin problemas.</string>
     <string name="update_dialog_icon_cont_desc">Actualizar</string>
 
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">ES#La imaginación es más importante que el conocimiento</string>
+    <string name="historical_quote_default_02">ES#Si he hecho descubrimientos invaluables ha sido más por tener paciencia, que cualquier otro talento</string>
+    <string name="historical_quote_default_03">ES#Sé el cambio que quieres ver en el mundo</string>
+    <string name="historical_quote_default_04">ES#Nada en la vida debe ser temido, sólo comprendido</string>
+    <string name="historical_quote_default_05">ES#El aprendizaje nunca agota la mente</string>
+    <string name="historical_quote_default_06">ES#El éxito es la capacidad de ir de fracaso en fracaso sin perder el entusiasmo</string>
+    <string name="historical_quote_default_07">ES#La verdadera medida de un hombre no es cómo se comporta en momentos de comodidad y conveniencia, sino cómo se mantiene en tiempos de controversia y desafío</string>
+    <string name="historical_quote_default_08">ES#El secreto de salir adelante es comenzar</string>
+    <string name="historical_quote_default_09">ES#Pies, para qué los quiero si tengo alas para volar</string>
+    <string name="historical_quote_default_10">ES#Tu trabajo va a llenar gran parte de tu vida, y la única forma de estar realmente satisfecho es hacer lo que crees que es un gran trabajo</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">ES#El Señor es mi pastor; nada me falta</string>
+    <string name="biblical_quote_default_02">ES#Ama a tu prójimo como a ti mismo</string>
+    <string name="biblical_quote_default_03">ES#Confía en el Señor con todo tu corazón, y no te apoyes en tu propio entendimiento</string>
+    <string name="biblical_quote_default_04">ES#Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree no se pierda, sino que tenga vida eterna</string>
+    <string name="biblical_quote_default_05">ES#Dios es amor</string>
+    <string name="biblical_quote_default_06">ES#No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te fortalezco</string>
+    <string name="biblical_quote_default_07">ES#Honra a tu padre y a tu madre, para que tus días se alarguen en la tierra que Jehová tu Dios te da</string>
+    <string name="biblical_quote_default_08">ES#El principio de la sabiduría es el temor del Señor; buen entendimiento tienen todos los que practican sus mandamientos</string>
+    <string name="biblical_quote_default_09">ES#El Señor es mi luz y mi salvación; ¿a quién temeré?</string>
+    <string name="biblical_quote_default_10">ES#Bienaventurados los que tienen hambre y sed de justicia, porque ellos serán saciados</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">ES#El éxito es la suma de pequeños esfuerzos repetidos día tras día</string>
+    <string name="uplifting_quote_default_02">ES#El optimismo es la fe que conduce al logro. Nada puede hacerse sin esperanza y confianza</string>
+    <string name="uplifting_quote_default_03">ES#No importa lo lento que vayas, siempre y cuando no te detengas</string>
+    <string name="uplifting_quote_default_04">ES#Nunca es demasiado tarde para ser lo que podrías haber sido</string>
+    <string name="uplifting_quote_default_05">ES#Las dificultades preparan a personas comunes para destinos extraordinarios</string>
+    <string name="uplifting_quote_default_06">ES#No esperes por el momento perfecto, ¡empieza donde estás, con lo que tienes, y haz lo que puedas!</string>
+    <string name="uplifting_quote_default_07">ES#El éxito no es la clave de la felicidad. La felicidad es la clave del éxito. Si amas lo que estás haciendo, tendrás éxito</string>
+    <string name="uplifting_quote_default_08">ES#Cree en ti mismo y todo será posible</string>
+    <string name="uplifting_quote_default_09">ES#La diferencia entre lo imposible y lo posible está en la determinación de una persona</string>
+    <string name="uplifting_quote_default_10">ES#No importa cuántas veces caigas, lo importante es cuántas veces te levantes</string>
+
 </resources>

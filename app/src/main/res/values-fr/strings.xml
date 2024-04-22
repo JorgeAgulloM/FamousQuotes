@@ -22,4 +22,41 @@
     <string name="update_dialog_title">Mise à jour nécessaire !</string>
     <string name="update_dialog_body">¡%1$s a reçu une mise à jour importante!\nNous vous recommandons de mettre à jour l\'application pour continuer à profiter de toutes ses fonctionnalités.\nNe manquez pas les nouvelles fonctionnalités et améliorations !\nMettez à jour maintenant pour vous assurer que vous pouvez accéder à votre application sans problème.</string>
     <string name="update_dialog_icon_cont_desc">Mettre à jour</string>
+
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">FR#L\'imagination est plus importante que le savoir</string>
+    <string name="historical_quote_default_02">FR#Si j\'ai fait des découvertes inestimables, c\'est plus par patience que par tout autre talent</string>
+    <string name="historical_quote_default_03">FR#Soyez le changement que vous voulez voir dans le monde</string>
+    <string name="historical_quote_default_04">FR#Rien dans la vie ne doit être craint, mais seulement compris</string>
+    <string name="historical_quote_default_05">FR#L\'apprentissage ne vide jamais l\'esprit</string>
+    <string name="historical_quote_default_06">FR#Le succès n\'est pas final, l\'échec n\'est pas fatal : c'est le courage de continuer qui compte</string>
+    <string name="historical_quote_default_07">FR#La vraie mesure d\'un homme n\'est pas où il se tient dans des moments de confort et de commodité, mais où il se tient dans des temps de controverse et de défi</string>
+    <string name="historical_quote_default_08">FR#Le secret de faire des progrès est de commencer</string>
+    <string name="historical_quote_default_09">FR#Pieds, à quoi bon vous ai-je si j\'ai des ailes pour voler</string>
+    <string name="historical_quote_default_10">FR#Votre travail va remplir une grande partie de votre vie, et la seule façon d\'être vraiment satisfait est de faire ce que vous croyez être un grand travail</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">FR#L\'Éternel est mon berger : je ne manquerai de rien</string>
+    <string name="biblical_quote_default_02">FR#Aime ton prochain comme toi-même</string>
+    <string name="biblical_quote_default_03">FR#Confie-toi en l\'Éternel de tout ton cœur, et ne t\'appuie pas sur ton intelligence</string>
+    <string name="biblical_quote_default_04">FR#Car Dieu a tant aimé le monde qu\'il a donné son Fils unique, afin que quiconque croit en lui ne périsse pas, mais ait la vie éternelle</string>
+    <string name="biblical_quote_default_05">FR#Dieu est amour</string>
+    <string name="biblical_quote_default_06">FR#N\'aie pas peur, car je suis avec toi ; ne sois pas effrayé, car je suis ton Dieu ; je te fortifierai, je t\'aiderai, je te soutiendrai de ma main droite juste</string>
+    <string name="biblical_quote_default_07">FR#Honore ton père et ta mère, afin que tes jours se prolongent dans le pays que l\'Éternel, ton Dieu, te donne</string>
+    <string name="biblical_quote_default_08">FR#La crainte de l\'Éternel est le commencement de la sagesse ; tous ceux qui pratiquent cela ont une bonne intelligence</string>
+    <string name="biblical_quote_default_09">FR#L\'Éternel est ma lumière et mon salut ; de qui aurais-je peur ?</string>
+    <string name="biblical_quote_default_10">FR#Heureux ceux qui ont faim et soif de justice, car ils seront rassasiés</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">FR#Le succès est la somme de petits efforts répétés jour après jour</string>
+    <string name="uplifting_quote_default_02">FR#L\'optimisme est la foi qui mène à la réalisation. Rien ne peut se faire sans espoir et confiance</string>
+    <string name="uplifting_quote_default_03">FR#Peu importe à quelle vitesse vous avancez, tant que vous ne vous arrêtez pas</string>
+    <string name="uplifting_quote_default_04">FR#Il n\'est jamais trop tard pour devenir ce que vous auriez pu être</string>
+    <string name="uplifting_quote_default_05">FR#Les difficultés préparent des gens ordinaires à des destins extraordinaires</string>
+    <string name="uplifting_quote_default_06">FR#N\'attendez pas le moment parfait, commencez là où vous êtes, avec ce que vous avez, et faites ce que vous pouvez</string>
+    <string name="uplifting_quote_default_07">FR#Le succès n\'est pas la clé du bonheur. Le bonheur est la clé du succès. Si vous aimez ce que vous faites, vous réussirez</string>
+    <string name="uplifting_quote_default_08">FR#Crois en toi-même et tout sera possible</string>
+    <string name="uplifting_quote_default_09">FR#La différence entre l\'impossible et le possible réside dans la détermination d'une personne</string>
+    <string name="uplifting_quote_default_10">FR#Ce n\'est pas combien de fois vous tombez qui compte, mais combien de fois vous vous relevez</string>
+
 </resources>

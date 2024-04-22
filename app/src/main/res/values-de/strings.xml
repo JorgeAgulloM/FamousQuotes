@@ -22,4 +22,41 @@
     <string name="update_dialog_title">Aktualisierung erforderlich!!</string>
     <string name="update_dialog_body">¡%1$s hat ein wichtiges Update erhalten!\nWir empfehlen Ihnen, die Anwendung zu aktualisieren, um weiterhin alle Funktionen genießen zu können.\nVerpassen Sie nicht die neuen Funktionen und Verbesserungen!\nAktualisieren Sie jetzt, um sicherzustellen, dass Sie auf Ihre App zugreifen können, ohne Probleme zu haben.</string>
     <string name="update_dialog_icon_cont_desc">Aktualisieren</string>
+
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">DE#Phantasie ist wichtiger als Wissen</string>
+    <string name="historical_quote_default_02">DE#Wenn ich wertvolle Entdeckungen gemacht habe, so war es mehr durch Geduld als durch irgendein anderes Talent</string>
+    <string name="historical_quote_default_03">DE#Sei die Veränderung, die du in der Welt sehen möchtest</string>
+    <string name="historical_quote_default_04">DE#Nichts im Leben soll gefürchtet, sondern nur verstanden werden</string>
+    <string name="historical_quote_default_05">DE#Lernen erschöpft niemals den Geist</string>
+    <string name="historical_quote_default_06">DE#Erfolg ist nicht endgültig, Misserfolg ist nicht tödlich: Es ist der Mut zum Weitermachen, der zählt</string>
+    <string name="historical_quote_default_07">DE#Das wahre Maß eines Menschen ist nicht, wo er in Momenten des Komforts und der Bequemlichkeit steht, sondern wo er in Zeiten von Herausforderung und Kontroverse steht</string>
+    <string name="historical_quote_default_08">DE#Das Geheimnis des Vorankommens liegt im Anfangen</string>
+    <string name="historical_quote_default_09">DE#Füße, wozu brauche ich euch, wenn ich Flügel zum Fliegen habe</string>
+    <string name="historical_quote_default_10">DE#Deine Arbeit wird einen großen Teil deines Lebens ausmachen, und die einzige Möglichkeit, wirklich zufrieden zu sein, ist, das zu tun, was du für großartige Arbeit hältst</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">DE#Der Herr ist mein Hirte, mir wird nichts mangeln</string>
+    <string name="biblical_quote_default_02">DE#Liebe deinen Nächsten wie dich selbst</string>
+    <string name="biblical_quote_default_03">DE#Vertraue dem Herrn von ganzem Herzen und verlasse dich nicht auf deinen eigenen Verstand</string>
+    <string name="biblical_quote_default_04">DE#Denn so hat Gott die Welt geliebt, dass er seinen einzigen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat</string>
+    <string name="biblical_quote_default_05">DE#Gott ist Liebe</string>
+    <string name="biblical_quote_default_06">DE#Fürchte dich nicht, denn ich bin bei dir; sei nicht verzweifelt, denn ich bin dein Gott; ich werde dich stärken, ich werde dir helfen, ich werde dich mit meiner gerechten rechten Hand halten</string>
+    <string name="biblical_quote_default_07">DE#Ehre deinen Vater und deine Mutter, damit deine Tage lang sind in dem Land, das dir der Herr, dein Gott, gibt</string>
+    <string name="biblical_quote_default_08">DE#Die Furcht des Herrn ist der Anfang der Weisheit; alle, die danach handeln, haben ein gutes Verständnis</string>
+    <string name="biblical_quote_default_09">DE#Der Herr ist mein Licht und mein Heil; vor wem sollte ich mich fürchten?</string>
+    <string name="biblical_quote_default_10">DE#Glückselig sind, die hungern und dürsten nach Gerechtigkeit; denn sie werden gesättigt werden</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">DE#Erfolg ist die Summe kleiner Anstrengungen, die Tag für Tag wiederholt werden</string>
+    <string name="uplifting_quote_default_02">DE#Optimismus ist der Glaube, der zum Erfolg führt. Nichts kann ohne Hoffnung und Vertrauen getan werden</string>
+    <string name="uplifting_quote_default_03">DE#Es spielt keine Rolle, wie langsam du gehst, solange du nicht stehen bleibst</string>
+    <string name="uplifting_quote_default_04">DE#Es ist nie zu spät, das zu sein, was du hättest sein können</string>
+    <string name="uplifting_quote_default_05">DE#Schwierigkeiten bereiten gewöhnliche Menschen auf außergewöhnliche Schicksale vor</string>
+    <string name="uplifting_quote_default_06">DE#Warte nicht auf den perfekten Moment, nimm den Moment und mach ihn perfekt</string>
+    <string name="uplifting_quote_default_07">DE#Erfolg ist nicht der Schlüssel zum Glück. Glück ist der Schlüssel zum Erfolg. Wenn du liebst, was du tust, wirst du erfolgreich sein</string>
+    <string name="uplifting_quote_default_08">DE#Glaube an dich selbst und alles wird möglich sein</string>
+    <string name="uplifting_quote_default_09">DE#Der Unterschied zwischen dem Unmöglichen und dem Möglichen liegt in der Entschlossenheit einer Person</string>
+    <string name="uplifting_quote_default_10">DE#Es kommt nicht darauf an, wie oft du fällst, sondern wie oft du aufstehst</string>
+
 </resources>

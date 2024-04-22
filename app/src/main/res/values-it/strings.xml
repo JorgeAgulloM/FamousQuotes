@@ -22,4 +22,41 @@
     <string name="update_dialog_title">Aggiornamento necessario!!</string>
     <string name="update_dialog_body">¡%1$s ha ricevuto un importante aggiornamento!\nTi consigliamo di aggiornare l\'applicazione per continuare a godere di tutte le sue funzionalità.\nNon perderti le nuove funzionalità e miglioramenti!\nAggiorna ora per assicurarti di poter accedere alla tua app senza problemi.</string>
     <string name="update_dialog_icon_cont_desc">Aggiornamento</string>
+
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">IT#L\'immaginazione è più importante della conoscenza</string>
+    <string name="historical_quote_default_02">IT#Se ho fatto scoperte preziose, è stato più per pazienza che per qualsiasi altro talento</string>
+    <string name="historical_quote_default_03">IT#Sii il cambiamento che vuoi vedere nel mondo</string>
+    <string name="historical_quote_default_04">IT#Niente nella vita deve essere temuto, solo compreso</string>
+    <string name="historical_quote_default_05">IT#L\'apprendimento non esaurisce mai la mente</string>
+    <string name="historical_quote_default_06">IT#Il successo è la capacità di passare da un fallimento all\'altro senza perdere l'entusiasmo</string>
+    <string name="historical_quote_default_07">IT#La vera misura di un uomo non è come si comporta nei momenti di comodità e convenienza, ma come si tiene nei momenti di controversia e sfida</string>
+    <string name="historical_quote_default_08">IT#Il segreto per andare avanti è iniziare</string>
+    <string name="historical_quote_default_09">IT#Piedi, a cosa mi servono se ho ali per volare</string>
+    <string name="historical_quote_default_10">IT#Il tuo lavoro riempirà gran parte della tua vita, e l\'unica via per essere davvero soddisfatti è fare ciò che credi sia un grande lavoro</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">IT#Il Signore è il mio pastore, non manco di nulla</string>
+    <string name="biblical_quote_default_02">IT#Ama il tuo prossimo come te stesso</string>
+    <string name="biblical_quote_default_03">IT#Confida nel Signore con tutto il tuo cuore, e non appoggiarti alla tua intelligenza</string>
+    <string name="biblical_quote_default_04">IT#Dio ha tanto amato il mondo da dare il suo unico Figlio, affinché chiunque creda in lui non perisca, ma abbia vita eterna</string>
+    <string name="biblical_quote_default_05">IT#Dio è amore</string>
+    <string name="biblical_quote_default_06">IT#Non temere, perché io sono con te; non smarrire la speranza, perché io sono il tuo Dio che ti fortifica</string>
+    <string name="biblical_quote_default_07">IT#Onora tuo padre e tua madre, affinché i tuoi giorni si prolunghino nel paese che il Signore tuo Dio ti dà</string>
+    <string name="biblical_quote_default_08">IT#L\'inizio della saggezza è il timore del Signore; buon discernimento hanno tutti coloro che osservano i suoi comandamenti</string>
+    <string name="biblical_quote_default_09">IT#Il Signore è la mia luce e la mia salvezza; di chi avrò paura?</string>
+    <string name="biblical_quote_default_10">IT#Beati coloro che hanno fame e sete di giustizia, perché saranno saziati</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">IT#Il successo è la somma di piccoli sforzi ripetuti giorno dopo giorno</string>
+    <string name="uplifting_quote_default_02">IT#L\'ottimismo è la fede che porta al successo. Nulla può essere fatto senza speranza e fiducia</string>
+    <string name="uplifting_quote_default_03">IT#Non importa quanto lentamente vai, purché non ti fermi mai</string>
+    <string name="uplifting_quote_default_04">IT#Non è mai troppo tardi per diventare ciò che avresti potuto essere</string>
+    <string name="uplifting_quote_default_05">IT#Le difficoltà preparano le persone comuni per destini straordinari</string>
+    <string name="uplifting_quote_default_06">IT#Non aspettare il momento perfetto, inizia dove sei, con quello che hai, e fai ciò che puoi!</string>
+    <string name="uplifting_quote_default_07">IT#Il successo non è la chiave della felicità. La felicità è la chiave del successo. Se ami ciò che stai facendo, avrai successo</string>
+    <string name="uplifting_quote_default_08">IT#Credi in te stesso e tutto sarà possibile</string>
+    <string name="uplifting_quote_default_09">IT#La differenza tra l\'impossibile e il possibile sta nella determinazione di una persona</string>
+    <string name="uplifting_quote_default_10">IT#Non importa quante volte cadi, ciò che conta è quante volte ti rialzi</string>
+
 </resources>

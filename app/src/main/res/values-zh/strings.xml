@@ -22,4 +22,41 @@
     <string name="update_dialog_title">需要更新！！</string>
     <string name="update_dialog_body">¡%1$s 已經接收到一個重要的更新！\n我們建議您更新應用程式，以繼續享受其所有功能。\n不要錯過新功能和改進！\n立即更新，以確保您可以無任何問題地訪問您的應用程式。</string>
     <string name="update_dialog_icon_cont_desc">更新</string>
+
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">ZH#想象力比知识更重要</string>
+    <string name="historical_quote_default_02">ZH#如果我做出了宝贵的发现，那更多是因为耐心，而不是其他天赋</string>
+    <string name="historical_quote_default_03">ZH#成为你想在世界上看到的变化</string>
+    <string name="historical_quote_default_04">ZH#生活中没有什么可怕的，只有理解</string>
+    <string name="historical_quote_default_05">ZH#学习永远不会耗尽心灵</string>
+    <string name="historical_quote_default_06">ZH#成功是能够从一个失败走向另一个失败而不失去热情的能力</string>
+    <string name="historical_quote_default_07">ZH#一个人真正的衡量标准不在于他在舒适和方便的时候是如何行事的，而是在于他在争议和挑战的时候是如何坚持的</string>
+    <string name="historical_quote_default_08">ZH#前进的秘诀就是开始</string>
+    <string name="historical_quote_default_09">ZH#脚，如果我有翅膀飞</string>
+    <string name="historical_quote_default_10">ZH#你的工作将占据你生活的大部分时间，真正感到满意的唯一方法是做你认为是伟大的工作</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">ZH#主是我的牧者，我必不至缺乏</string>
+    <string name="biblical_quote_default_02">ZH#要爱人如己</string>
+    <string name="biblical_quote_default_03">ZH#你要尽心信靠耶和华，不可倚靠自己的聪明</string>
+    <string name="biblical_quote_default_04">ZH#神爱世人，甚至将他的独生子赐给他们，叫一切信他的，不至灭亡，反得永生</string>
+    <string name="biblical_quote_default_05">ZH#神就是爱</string>
+    <string name="biblical_quote_default_06">ZH#不要害怕，因为我与你同在；不要惊惶，因为我是你的神，我必坚固你，我必帮助你，我必用我公义的右手扶持你</string>
+    <string name="biblical_quote_default_07">ZH#要尊敬父母，使你在耶和华你神所赐你的地上的日子长久</string>
+    <string name="biblical_quote_default_08">ZH#敬畏耶和华是智慧的开端，凡遵行他命令的是聪明人</string>
+    <string name="biblical_quote_default_09">ZH#耶和华是我的亮光，是我的拯救，我还怕谁呢？</string>
+    <string name="biblical_quote_default_10">ZH#饥渴慕义的人有福了，因为他们必得饱足</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">ZH#成功是每天重复的小努力的总和</string>
+    <string name="uplifting_quote_default_02">ZH#乐观是通往成功的信念。没有希望和信心，一切都无法实现</string>
+    <string name="uplifting_quote_default_03">ZH#无论你走得多慢，只要不停止</string>
+    <string name="uplifting_quote_default_04">ZH#永远不会太晚成为你本来可以成为的人</string>
+    <string name="uplifting_quote_default_05">ZH#困难为普通人铺就了非凡的命运</string>
+    <string name="uplifting_quote_default_06">ZH#不要等待完美的时刻，从你所在的地方开始，用你拥有的东西，做你能做的事情！</string>
+    <string name="uplifting_quote_default_07">ZH#成功不是幸福的关键。幸福是成功的关键。如果你热爱你所做的事情，你就会成功</string>
+    <string name="uplifting_quote_default_08">ZH#相信自己，一切皆有可能</string>
+    <string name="uplifting_quote_default_09">ZH#不可能与可能之间的区别在于一个人的决心</string>
+    <string name="uplifting_quote_default_10">ZH#重要的不是你倒下了多少次，而是你站起来的次数</string>
+
 </resources>
