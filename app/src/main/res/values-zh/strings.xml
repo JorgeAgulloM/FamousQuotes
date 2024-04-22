@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">名言警句</string>
+    <string name="app_name_historical">歷史名言</string>
+    <string name="app_name_biblical">聖經名言</string>
+    <string name="app_name_uplifting">鼓舞人心的名言</string>
+
+    <!-- Main strings -->
+    <string name="main_icon_content_desc_info">資訊</string>
+    <string name="main_icon_content_desc_buy_image">購買圖片</string>
+    <string name="main_icon_content_desc_other_quote">其他引用</string>
+    <string name="main_icon_content_desc_share">分享</string>
+    <string name="main_info_dialog_text_info">有關應用程式圖示的資訊</string>
+    <string name="main_info_dialog_text_buy_image">如果您喜歡這幅圖片，您可以前往我們的 Etsy.com 商店購買。</string>
+    <string name="main_info_dialog_text_other_quote">如果您想查看其他圖片，請點擊此圖示。</string>
+    <string name="main_info_dialog_text_">與您的朋友和家人分享您的每日引用。</string>
+    <string name="main_content_desc_image">圖片</string>
+
+    <!-- Update dialog strings -->
+    <string name="update_dialog_exit_btn">退出應用程式</string>
+    <string name="update_dialog_update_btn">更新</string>
+    <string name="update_dialog_title">需要更新！！</string>
+    <string name="update_dialog_body">¡%1$s 已經接收到一個重要的更新！\n我們建議您更新應用程式，以繼續享受其所有功能。\n不要錯過新功能和改進！\n立即更新，以確保您可以無任何問題地訪問您的應用程式。</string>
+    <string name="update_dialog_icon_cont_desc">更新</string>
+</resources>

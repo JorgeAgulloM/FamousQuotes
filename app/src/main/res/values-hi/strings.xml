@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">प्रसिद्ध उध्धरण</string>
+    <string name="app_name_historical">ऐतिहासिक उध्धरण</string>
+    <string name="app_name_biblical">धार्मिक उध्धरण</string>
+    <string name="app_name_uplifting">उत्साहवर्धक उध्धरण</string>
+
+    <!-- Main strings -->
+    <string name="main_icon_content_desc_info">जानकारी</string>
+    <string name="main_icon_content_desc_buy_image">छवि खरीदें</string>
+    <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
+    <string name="main_icon_content_desc_share">शेयर करें</string>
+    <string name="main_info_dialog_text_info">ऐप आइकन्स के बारे में जानकारी</string>
+    <string name="main_info_dialog_text_buy_image">यदि आपको छवि पसंद है, तो आप इसे खरीद सकते हैं।</string>
+    <string name="main_info_dialog_text_other_quote">इस आइकन पर क्लिक करें यदि आप किसी और छवि देखना चाहते हैं।</string>
+    <string name="main_info_dialog_text_">अपने दिन के उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
+    <string name="main_content_desc_image">छवि</string>
+
+    <!-- Update dialog strings -->
+    <string name="update_dialog_exit_btn">ऐप बंद करें</string>
+    <string name="update_dialog_update_btn">अपडेट करें</string>
+    <string name="update_dialog_title">अपडेट की जरूरत है!!</string>
+    <string name="update_dialog_body">¡%1$s ने एक महत्वपूर्ण अपडेट प्राप्त किया है!\nहम सलाह देते हैं कि आप ऐप्लिकेशन को अपडेट करें ताकि आप इसके सभी फ़ंक्शन का आनंद ले सकें।\nनए फीचर्स और सुधारों को न छोड़ें!\nअब अपडेट करें ताकि आप बिना किसी परेशानी के अपने ऐप का उपयोग कर सकें।</string>
+    <string name="update_dialog_icon_cont_desc">अपडेट</string>
+</resources>

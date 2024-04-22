@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Berühmte Zitate</string>
+    <string name="app_name_historical">Historische Zitate</string>
+    <string name="app_name_biblical">Biblische Zitate</string>
+    <string name="app_name_uplifting">Aufbauende Zitate</string>
+
+    <!-- Main strings -->
+    <string name="main_icon_content_desc_info">Info</string>
+    <string name="main_icon_content_desc_buy_image">Bild kaufen</string>
+    <string name="main_icon_content_desc_other_quote">Anderes Zitat</string>
+    <string name="main_icon_content_desc_share">Teilen</string>
+    <string name="main_info_dialog_text_info">Informationen zu den App-Symbolen</string>
+    <string name="main_info_dialog_text_buy_image">Wenn Ihnen das Bild gefällt, können Sie es in unserem Etsy.com-Shop kaufen.</string>
+    <string name="main_info_dialog_text_other_quote">Klicken Sie auf dieses Symbol, wenn Sie ein anderes Bild sehen möchten.</string>
+    <string name="main_info_dialog_text_">Teilen Sie Ihr Zitat des Tages mit Ihren Freunden und Ihrer Familie.</string>
+    <string name="main_content_desc_image">Bild</string>
+
+    <!-- Update dialog strings -->
+    <string name="update_dialog_exit_btn">App beenden</string>
+    <string name="update_dialog_update_btn">Aktualisieren</string>
+    <string name="update_dialog_title">Aktualisierung erforderlich!!</string>
+    <string name="update_dialog_body">¡%1$s hat ein wichtiges Update erhalten!\nWir empfehlen Ihnen, die Anwendung zu aktualisieren, um weiterhin alle Funktionen genießen zu können.\nVerpassen Sie nicht die neuen Funktionen und Verbesserungen!\nAktualisieren Sie jetzt, um sicherzustellen, dass Sie auf Ihre App zugreifen können, ohne Probleme zu haben.</string>
+    <string name="update_dialog_icon_cont_desc">Aktualisieren</string>
+</resources>
