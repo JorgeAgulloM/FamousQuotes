@@ -22,4 +22,41 @@
     <string name="update_dialog_title">अपडेट की जरूरत है!!</string>
     <string name="update_dialog_body">¡%1$s ने एक महत्वपूर्ण अपडेट प्राप्त किया है!\nहम सलाह देते हैं कि आप ऐप्लिकेशन को अपडेट करें ताकि आप इसके सभी फ़ंक्शन का आनंद ले सकें।\nनए फीचर्स और सुधारों को न छोड़ें!\nअब अपडेट करें ताकि आप बिना किसी परेशानी के अपने ऐप का उपयोग कर सकें।</string>
     <string name="update_dialog_icon_cont_desc">अपडेट</string>
+
+    <!-- Historical default quotes -->
+    <string name="historical_quote_default_01">HI#कल्पना ज्ञान से अधिक महत्वपूर्ण है</string>
+    <string name="historical_quote_default_02">HI#अगर मैंने अनमोल खोज की है, तो यह धैर्य के लिए अधिक है किसी भी अन्य प्रतिभा से</string>
+    <string name="historical_quote_default_03">HI#वह परिवर्तन बनो जो तुम दुनिया में देखना चाहते हो</string>
+    <string name="historical_quote_default_04">HI#जीवन में कुछ भी डरावना नहीं होना चाहिए, केवल समझा जाना चाहिए</string>
+    <string name="historical_quote_default_05">HI#शिक्षा कभी मन को खाली नहीं करती है</string>
+    <string name="historical_quote_default_06">HI#सफलता अंतिम नहीं है, असफलता फाताल नहीं है: जारी रखने का साहस है</string>
+    <string name="historical_quote_default_07">HI#एक व्यक्ति की वास्तविक माप यह नहीं है कि वह सुख और सुविधा के क्षणों में कैसे व्यवहार करता है, बल्कि वह किस प्रकार विवाद और चुनौती के समय खड़ा होता है</string>
+    <string name="historical_quote_default_08">HI#आगे बढ़ने का रहस्य शुरुआत करना है</string>
+    <string name="historical_quote_default_09">HI#पैर, मुझे आसमान में उड़ने के लिए पंख हैं, तो मुझे पैर क्यों होने चाहिए</string>
+    <string name="historical_quote_default_10">HI#आपका काम आपके जीवन का बड़ा हिस्सा भरेगा, और वास्तव में संतुष्ट होने का एकमात्र तरीका यह है कि आप वह करें जिसे आपको महान काम लगता है</string>
+
+    <!-- Biblical default quotes -->
+    <string name="biblical_quote_default_01">HI#परमेश्वर मेरा चरवाहा है; मुझे कुछ भी कमी नहीं है</string>
+    <string name="biblical_quote_default_02">HI#अपने पड़ोसी को अपने आप से प्रेम करो</string>
+    <string name="biblical_quote_default_03">HI#पूरे दिल से यहोवा पर भरोसा रखें, और अपने बुद्धिमानी पर नहीं आश्रय दें</string>
+    <string name="biblical_quote_default_04">HI#क्योंकि परमेश्वर ने जिस प्रकार से दुनिया को प्रेम किया है, वह अपने एकमात्र पुत्र को दिया है, ताकि हर वह जो उसमें विश्वास करता है, न नष्ट हो, बल्कि अबिनाशी जीवन पाए</string>
+    <string name="biblical_quote_default_05">HI#परमेश्वर प्रेम है</string>
+    <string name="biblical_quote_default_06">HI#डरो मत, क्योंकि मैं तुम्हारे साथ हूं; हिम्मत न हारो, क्योंकि मैं तुम्हारा परमेश्वर हूं जो तुम्हें मजबूत करता हूं</string>
+    <string name="biblical_quote_default_07">HI#अपने माता-पिता का सम्मान करो, ताकि तेरे दिन लम्बे हों जो यहोवा तेरा परमेश्वर तुझे देता है</string>
+    <string name="biblical_quote_default_08">HI#ज्ञान का आरंभ परमेश्वर का भय है; जो भी इसके आज्ञाओं का पालन करता है, उसके पास समझ है</string>
+    <string name="biblical_quote_default_09">HI#यहोवा मेरी ज्योति और मेरी उद्धारण है; मैं किससे डरूं?</string>
+    <string name="biblical_quote_default_10">HI#धर्म और न्याय की भूखी लोग धन्य हैं, क्योंकि वे प्रसन्न होंगे</string>
+
+    <!-- Uplifting default quotes -->
+    <string name="uplifting_quote_default_01">HI#सफलता छोटे प्रयासों की यात्रा का योगदान है जो दिन-प्रतिदिन दोहराए जाते हैं</string>
+    <string name="uplifting_quote_default_02">HI#आशा और आत्मविश्वास के बिना कुछ भी संभव नहीं है।</string>
+    <string name="uplifting_quote_default_03">HI#जितनी भी धीमी चलो, तब तक नहीं रुको जब तक आप नहीं रुकते</string>
+    <string name="uplifting_quote_default_04">HI#आप वही बन सकते हैं जो आप हो सकते थे</string>
+    <string name="uplifting_quote_default_05">HI#कठिनाइयाँ सामान्य लोगों को असाधारण भविष्य के लिए तैयार करती हैं</string>
+    <string name="uplifting_quote_default_06">HI#कभी भी आगमन के समय का इंतजार मत करें, बस वहां शुरू करें जहां आप हैं, जितना है और जो कुछ कर सकते हैं!</string>
+    <string name="uplifting_quote_default_07">HI#सफलता खुशी का चाबी नहीं है। खुशी सफलता का चाबी है। यदि आप वह कर रहे हैं जो आप पसंद करते हैं, तो आपको सफलता मिलेगी</string>
+    <string name="uplifting_quote_default_08">HI#खुद पर विश्वास करें और सब कुछ संभव होगा</string>
+    <string name="uplifting_quote_default_09">HI#असंभव और संभव के बीच का अंतर एक व्यक्ति के संकल्प में है</string>
+    <string name="uplifting_quote_default_10">HI#आप कितनी बार गिरें, इससे ज्यादा महत्वपूर्ण है कि आप कितनी बार उठते हैं</string>
+
 </resources>
