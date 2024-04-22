@@ -98,7 +98,7 @@ android {
             applicationIdSuffix = ".biblical"
             buildConfigField("String", "DB_VERSION", "\"biblical_db_update_version\"")
             buildConfigField("String", "APP_TITLE", "\"app_name_biblical\"")
-            buildConfigField("String", "DB_COLLECTION", "\"uplifting_quotes\"")
+            buildConfigField("String", "DB_COLLECTION", "\"biblical_quotes\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF2C4263")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF486C89")
             buildConfigField("int", "TERTIARY_COLOR", "0xFFA4A7B2")
