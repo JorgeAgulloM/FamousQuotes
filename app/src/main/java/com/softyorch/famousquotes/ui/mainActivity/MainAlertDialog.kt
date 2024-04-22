@@ -22,14 +22,14 @@ fun MainAlertDialog(onAction: (AlertState) -> Unit) {
     val appName = stringResource(R.string.app_name)
     AlertDialog(
         onDismissRequest = { onAction(AlertState.Dismiss) },
-        dismissButton = { AlertButton("Salir de la APP") { onAction(AlertState.Dismiss) } },
-        confirmButton = { AlertButton("Actualizar") { onAction(AlertState.Update) } },
-        title = { Text(text = "Actualización Necesaria!!") },
-        text = { Text(text = "¡$appName ha recibido una actualización importante!\nTe recomendamos que actualices la aplicación para continuar disfrutando de todas sus funciones.\n¡No te pierdas las nuevas características y mejoras!\nActualiza ahora para asegurarte de que puedas acceder a tu aplicación sin problemas.") },
+        dismissButton = { AlertButton(stringResource(R.string.update_dialog_exit_btn)) { onAction(AlertState.Dismiss) } },
+        confirmButton = { AlertButton(text = stringResource(R.string.update_dialog_update_btn)) { onAction(AlertState.Update) } },
+        title = { Text(text = stringResource(R.string.update_dialog_title)) },
+        text = { Text(text = stringResource(R.string.update_dialog_body, appName)) },
         icon = {
             Icon(
                 imageVector = Icons.Outlined.Update,
-                contentDescription = "Update",
+                contentDescription = stringResource(R.string.update_dialog_icon_cont_desc),
                 modifier = Modifier.size(48.dp)
             )
         },

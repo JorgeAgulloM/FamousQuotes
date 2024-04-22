@@ -49,19 +49,6 @@ class DatabaseServiceImpl @Inject constructor(
 
     private suspend fun setUpdate(quotes: List<QuoteResponse>) {
 
-        val images = listOf(
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_1.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_2.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_3.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_4.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_5.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_6.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_7.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_8.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_9.webp",
-            "gs://famousquotes-79dd0.appspot.com/temporal/famous_quotes/historical_quotes/bg_image_10.webp"
-        )
-
         var day = 1
         quotes.forEach { quote ->
             val id = getIdFromCalendarStartZero(day)
@@ -72,7 +59,7 @@ class DatabaseServiceImpl @Inject constructor(
                 "id" to id,
                 "owner" to quote.owner,
                 "quote" to listOf(quote.quote[0]),
-                "imageUrl" to images.random(),
+                "imageUrl" to "",
                 "date" to date
             )
 
