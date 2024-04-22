@@ -47,6 +47,6 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesDefaultDatabase():
-            IDefaultDatabase = DefaultDatabaseImpl()
+    fun providesDefaultDatabase(@ApplicationContext context: Context):
+            IDefaultDatabase = DefaultDatabaseImpl(context)
 }
