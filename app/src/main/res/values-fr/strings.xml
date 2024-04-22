@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Citations célèbres</string>
+    <string name="app_name_historical">Citations historiques</string>
+    <string name="app_name_biblical">Citations bibliques</string>
+    <string name="app_name_uplifting">Citations inspirantes</string>
+
+    <!-- Chaînes principales -->
+    <string name="main_icon_content_desc_info">Info</string>
+    <string name="main_icon_content_desc_buy_image">Acheter une image</string>
+    <string name="main_icon_content_desc_other_quote">Autre citation</string>
+    <string name="main_icon_content_desc_share">Partager</string>
+    <string name="main_info_dialog_text_info">Informations sur les icônes de l\'application</string>
+    <string name="main_info_dialog_text_buy_image">Si vous aimez l\'image, vous pouvez visiter notre boutique sur Etsy.com pour l\'acheter.</string>
+    <string name="main_info_dialog_text_other_quote">Cliquez sur cet icône si vous voulez voir une autre image.</string>
+    <string name="main_info_dialog_text_">Partagez votre citation du jour avec vos amis et votre famille.</string>
+    <string name="main_content_desc_image">Image</string>
+
+    <!-- Chaînes de la boîte de dialogue de mise à jour -->
+    <string name="update_dialog_exit_btn">Quitter l\'application</string>
+    <string name="update_dialog_update_btn">Mettre à jour</string>
+    <string name="update_dialog_title">Mise à jour nécessaire !</string>
+    <string name="update_dialog_body">¡%1$s a reçu une mise à jour importante!\nNous vous recommandons de mettre à jour l\'application pour continuer à profiter de toutes ses fonctionnalités.\nNe manquez pas les nouvelles fonctionnalités et améliorations !\nMettez à jour maintenant pour vous assurer que vous pouvez accéder à votre application sans problème.</string>
+    <string name="update_dialog_icon_cont_desc">Mettre à jour</string>
+</resources>

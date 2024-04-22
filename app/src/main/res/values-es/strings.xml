@@ -4,4 +4,23 @@
     <string name="app_name_historical">Frases Históricas</string>
     <string name="app_name_biblical">Frases Biblicas</string>
     <string name="app_name_uplifting">Frases Positivas</string>
+
+    <!-- Cadenas principales -->
+    <string name="main_icon_content_desc_info">Información</string>
+    <string name="main_icon_content_desc_buy_image">Comprar imagen</string>
+    <string name="main_icon_content_desc_other_quote">Otra cita</string>
+    <string name="main_icon_content_desc_share">Compartir</string>
+    <string name="main_info_dialog_text_info">Información sobre los íconos de la aplicación</string>
+    <string name="main_info_dialog_text_buy_image">Si te gusta la imagen, puedes ir a nuestra tienda en Etsy.com para comprarla.</string>
+    <string name="main_info_dialog_text_other_quote">Haz clic en este ícono si quieres ver otra imagen.</string>
+    <string name="main_info_dialog_text_">Comparte tu cita del día con tus amigos y familiares.</string>
+    <string name="main_content_desc_image">Imagen</string>
+
+    <!-- Cadenas del diálogo de actualización -->
+    <string name="update_dialog_exit_btn">Salir de la aplicación</string>
+    <string name="update_dialog_update_btn">Actualizar</string>
+    <string name="update_dialog_title">¡Necesitas actualizar!</string>
+    <string name="update_dialog_body">¡%1$s ha recibido una actualización importante!\nTe recomendamos que actualices la aplicación para seguir disfrutando de todas sus funciones.\n¡No te pierdas las nuevas características y mejoras!\nActualiza ahora para asegurarte de que puedas acceder a tu aplicación sin problemas.</string>
+    <string name="update_dialog_icon_cont_desc">Actualizar</string>
+
 </resources>
