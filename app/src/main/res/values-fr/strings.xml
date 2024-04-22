@@ -29,7 +29,7 @@
     <string name="historical_quote_default_03">FR#Soyez le changement que vous voulez voir dans le monde</string>
     <string name="historical_quote_default_04">FR#Rien dans la vie ne doit être craint, mais seulement compris</string>
     <string name="historical_quote_default_05">FR#L\'apprentissage ne vide jamais l\'esprit</string>
-    <string name="historical_quote_default_06">FR#Le succès n\'est pas final, l\'échec n\'est pas fatal : c'est le courage de continuer qui compte</string>
+    <string name="historical_quote_default_06">IT#Il successo è la capacità di passare da un fallimento all\'altro senza perdere l\'entusiasmo</string>
     <string name="historical_quote_default_07">FR#La vraie mesure d\'un homme n\'est pas où il se tient dans des moments de confort et de commodité, mais où il se tient dans des temps de controverse et de défi</string>
     <string name="historical_quote_default_08">FR#Le secret de faire des progrès est de commencer</string>
     <string name="historical_quote_default_09">FR#Pieds, à quoi bon vous ai-je si j\'ai des ailes pour voler</string>
@@ -56,7 +56,7 @@
     <string name="uplifting_quote_default_06">FR#N\'attendez pas le moment parfait, commencez là où vous êtes, avec ce que vous avez, et faites ce que vous pouvez</string>
     <string name="uplifting_quote_default_07">FR#Le succès n\'est pas la clé du bonheur. Le bonheur est la clé du succès. Si vous aimez ce que vous faites, vous réussirez</string>
     <string name="uplifting_quote_default_08">FR#Crois en toi-même et tout sera possible</string>
-    <string name="uplifting_quote_default_09">FR#La différence entre l\'impossible et le possible réside dans la détermination d'une personne</string>
+    <string name="uplifting_quote_default_09">FR#La différence entre l\'impossible et le possible réside dans la détermination d\'une personne</string>
     <string name="uplifting_quote_default_10">FR#Ce n\'est pas combien de fois vous tombez qui compte, mais combien de fois vous vous relevez</string>
 
 </resources>
