@@ -5,12 +5,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.data.datastore.DatastoreImpl
+import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.ConfigServiceImpl
 import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
 import com.softyorch.famousquotes.data.network.StorageServiceImpl
 import com.softyorch.famousquotes.domain.interfaces.IConfigService
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
+import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import dagger.Module
 import dagger.Provides
@@ -42,4 +44,9 @@ object DataModule {
     @Provides
     fun providesConfigService(remoteConfig: FirebaseRemoteConfig):
             IConfigService = ConfigServiceImpl(remoteConfig)
+
+    @Singleton
+    @Provides
+    fun providesDefaultDatabase():
+            IDefaultDatabase = DefaultDatabaseImpl()
 }
