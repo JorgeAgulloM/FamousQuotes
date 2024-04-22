@@ -70,16 +70,16 @@ class SelectRandomQuote @Inject constructor(
 
     private fun getImageFromMemory(): String {
         val listImages = listOf(
-            "bg_image_1.webp",
-            "bg_image_2.webp",
-            "bg_image_3.webp",
-            "bg_image_4.webp",
-            "bg_image_5.webp",
-            "bg_image_6.webp",
-            "bg_image_7.webp",
-            "bg_image_8.webp",
-            "bg_image_9.webp",
-            "bg_image_10.webp",
+            "bg_image_1",
+            "bg_image_2",
+            "bg_image_3",
+            "bg_image_4",
+            "bg_image_5",
+            "bg_image_6",
+            "bg_image_7",
+            "bg_image_8",
+            "bg_image_9",
+            "bg_image_10",
         )
 
         return listImages.random()
