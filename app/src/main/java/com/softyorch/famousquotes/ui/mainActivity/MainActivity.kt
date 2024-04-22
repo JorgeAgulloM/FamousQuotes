@@ -46,3 +46,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+//Mover textos a strings resources
+//Cinco idiomas
+//Modificar icono Uplifting flavor
+//Revisar colores en todos los flavors
+//Mejorar la animación de entrada de la imagen
+//Implementar actualziaciones automáticas
+//Añadir Tests unitarios
+//Añadir Tests de implementación
+//Añadir CD/CI con github
+
+//Crear capturas, videos, textos... y subir apps

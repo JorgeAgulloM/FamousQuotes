@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -160,20 +161,20 @@ fun Controls(disabledReload: Boolean, onAction: (HomeActions) -> Unit) {
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
     ) {
         IconButtonMenu(
-            text = "Info",
+            cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info
         ) { onAction(HomeActions.Info) }
         IconButtonMenu(
-            text = "Buy image",
+            cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
             icon = Icons.Outlined.LocalMall
         ) { onAction(HomeActions.Buy) }
         IconButtonMenu(
-            text = "Otra frase",
+            cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
             icon = Icons.Outlined.RestartAlt,
             isEnabled = !disabledReload
         ) { onAction(HomeActions.New) }
         IconButtonMenu(
-            text = "Compartir",
+            cDescription = stringResource(R.string.main_icon_content_desc_share),
             icon = Icons.Outlined.Share
         ) {
             onAction(
@@ -185,7 +186,7 @@ fun Controls(disabledReload: Boolean, onAction: (HomeActions) -> Unit) {
 
 @Composable
 fun IconButtonMenu(
-    text: String,
+    cDescription: String,
     icon: ImageVector,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
@@ -196,7 +197,7 @@ fun IconButtonMenu(
         ),
         enabled = isEnabled
     ) {
-        Icon(imageVector = icon, contentDescription = text)
+        Icon(imageVector = icon, contentDescription = cDescription)
     }
 }
 
@@ -257,21 +258,21 @@ fun InfoDialog(onAction: () -> Unit) {
                 shape = MaterialTheme.shapes.extraLarge
             ).padding(16.dp)
         ) {
-            InfoIcons(icon = Icons.Outlined.Info, text = "Información sobre los iconos de la app")
+            InfoIcons(icon = Icons.Outlined.Info, text = stringResource(R.string.main_info_dialog_text_info))
             SpacerHeight(height = 32)
             InfoIcons(
                 icon = Icons.Outlined.LocalMall,
-                text = "Si te gusta la imagen, puedes acceder a nuestra tienda de Etsy.com para comprarla."
+                text = stringResource(R.string.main_info_dialog_text_buy_image)
             )
             SpacerHeight()
             InfoIcons(
                 icon = Icons.Outlined.RestartAlt,
-                text = "Pulsa en este icono si te gustaría ver otra imagen."
+                text = stringResource(R.string.main_info_dialog_text_other_quote)
             )
             SpacerHeight()
             InfoIcons(
                 icon = Icons.Outlined.Share,
-                text = "Comprate tu frase del día con tus amigos y familiares."
+                text = stringResource(R.string.main_info_dialog_text_)
             )
         }
     }
@@ -306,7 +307,7 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
     ) {
         Image(
             painter = painter,
-            contentDescription = "Image",
+            contentDescription = stringResource(R.string.main_content_desc_image),
             modifier = modifier,
             contentScale = scale
         )
