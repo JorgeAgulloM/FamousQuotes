@@ -58,7 +58,7 @@ import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
-import com.softyorch.famousquotes.ui.utils.extFunc.getResourceStringComposable
+import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -90,7 +90,8 @@ fun BackgroundImage(uri: String) {
 
         val context = LocalContext.current
 
-        val data = if (uri.startsWith("http")) uri else context.getResourceStringComposable(uri)
+        val data = if (uri.startsWith("http")) uri
+        else context.getResourceDrawableIdentifier(uri)
 
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(context)
