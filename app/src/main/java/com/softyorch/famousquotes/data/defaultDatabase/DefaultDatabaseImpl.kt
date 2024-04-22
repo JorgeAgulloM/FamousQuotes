@@ -1,10 +1,15 @@
 package com.softyorch.famousquotes.data.defaultDatabase
 
+import android.content.Context
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class DefaultDatabaseImpl @Inject constructor() : IDefaultDatabase {
+class DefaultDatabaseImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+) : IDefaultDatabase {
 
     companion object {
         const val HISTORICAL_FLAVOUR = "historical"
@@ -22,44 +27,44 @@ class DefaultDatabaseImpl @Inject constructor() : IDefaultDatabase {
     private fun getDefaultHistoricalDatabase(): List<DefaultModel> {
         return listOf(
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Albert Einstein",
+                quote = listOf(context.getString(R.string.historical_quote_default_01))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Isaac Newton",
+                quote = listOf(context.getString(R.string.historical_quote_default_02))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Mahatma Gandhi",
+                quote = listOf(context.getString(R.string.historical_quote_default_03))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Marie Curie",
+                quote = listOf(context.getString(R.string.historical_quote_default_04))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Leonardo da Vinci",
+                quote = listOf(context.getString(R.string.historical_quote_default_05))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Winston Churchill",
+                quote = listOf(context.getString(R.string.historical_quote_default_06))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Martin Luther King Jr.",
+                quote = listOf(context.getString(R.string.historical_quote_default_07))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Mark Twain",
+                quote = listOf(context.getString(R.string.historical_quote_default_08))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Frida Kahlo",
+                quote = listOf(context.getString(R.string.historical_quote_default_09))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Steve Jobs",
+                quote = listOf(context.getString(R.string.historical_quote_default_10))
             ),
         )
     }
@@ -67,44 +72,44 @@ class DefaultDatabaseImpl @Inject constructor() : IDefaultDatabase {
     private fun getDefaultBiblicalDatabase(): List<DefaultModel> {
         return listOf(
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Salmo 23:1",
+                quote = listOf(context.getString(R.string.biblical_quote_default_01))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Mateo 22:39",
+                quote = listOf(context.getString(R.string.biblical_quote_default_02))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Proverbios 3:5",
+                quote = listOf(context.getString(R.string.biblical_quote_default_03))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Juan 3:16",
+                quote = listOf(context.getString(R.string.biblical_quote_default_04))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Juan 4:8",
+                quote = listOf(context.getString(R.string.biblical_quote_default_05))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Isaías 41:10",
+                quote = listOf(context.getString(R.string.biblical_quote_default_06))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Éxodo 20:12",
+                quote = listOf(context.getString(R.string.biblical_quote_default_07))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Salmo 111:10",
+                quote = listOf(context.getString(R.string.biblical_quote_default_08))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Salmo 27:1",
+                quote = listOf(context.getString(R.string.biblical_quote_default_09))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Mateo 5:6",
+                quote = listOf(context.getString(R.string.biblical_quote_default_10))
             ),
         )
     }
@@ -112,46 +117,45 @@ class DefaultDatabaseImpl @Inject constructor() : IDefaultDatabase {
     private fun getDefaultUpliftingDatabase(): List<DefaultModel> {
         return listOf(
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Robert Collier",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_01))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Helen Keller",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_02))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Confucio",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_03))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "George Eliot",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_04))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "C.S. Lewis",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_05))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Theodore Roosevelt",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_06))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Albert Schweitzer",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_07))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Anónimo",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_08))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Tommy Lasorda",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_09))
             ),
             DefaultModel(
-                owner = "",
-                quote = listOf()
+                owner = "Anónimo",
+                quote = listOf(context.getString(R.string.uplifting_quote_default_10))
             ),
         )
     }
-
 }
