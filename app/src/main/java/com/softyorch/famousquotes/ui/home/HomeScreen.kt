@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.home
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -23,8 +24,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalMall
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -37,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -60,6 +64,7 @@ import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
@@ -78,7 +83,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     Box(contentAlignment = Alignment.Center) {
         BackgroundImage(uri = state.quote.imageUrl)
-        CardQuote(state = state) { action -> viewModel.onActions(action) }
+        CardQuote(state = state) { action ->
+            viewModel.onActions(action)
+        }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
     }
@@ -119,6 +126,9 @@ fun CardQuote(
     state: HomeState,
     onAction: (HomeActions) -> Unit,
 ) {
+    val context = LocalContext.current
+    val toastMsg = stringResource(R.string.main_info_dialog_connection)
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f))
         ElevatedCard(
@@ -137,7 +147,21 @@ fun CardQuote(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Controls(state.showInterstitial) { onAction(it) }
+                    Controls(
+                        disabledReload = state.showInterstitial,
+                        hasConnection = state.hasConnection
+                    ) { action ->
+                        when (action) {
+                            HomeActions.Buy -> if (state.hasConnection) onAction(action)
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            HomeActions.New -> if (state.hasConnection) onAction(action)
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            HomeActions.Owner -> if (state.hasConnection) onAction(action)
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            HomeActions.Info -> onAction(action)
+                            HomeActions.Send -> onAction(action)
+                        }
+                    }
                     TextBody(text = state.quote.body)
                     SpacerHeight(height = 24)
                     Box(
@@ -145,7 +169,8 @@ fun CardQuote(
                         contentAlignment = Alignment.CenterEnd
                     ) {
                         TextOwner(text = state.quote.owner) {
-                            onAction(HomeActions.Owner)
+                            if (state.hasConnection) onAction(HomeActions.Owner)
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
                         }
                     }
                 }
@@ -156,11 +181,16 @@ fun CardQuote(
 }
 
 @Composable
-fun Controls(disabledReload: Boolean, onAction: (HomeActions) -> Unit) {
+fun Controls(disabledReload: Boolean, hasConnection: Boolean, onAction: (HomeActions) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(end = 16.dp),
         horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
     ) {
+        if (!hasConnection) IconButtonMenu(
+            cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
+            color = MaterialTheme.colorScheme.error,
+            icon = Icons.Outlined.WifiOff
+        ) { onAction(HomeActions.New) }
         IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info
@@ -189,12 +219,13 @@ fun Controls(disabledReload: Boolean, onAction: (HomeActions) -> Unit) {
 fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
+    color: Color = PrimaryColor,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     IconButton(
         onClick = { onClick() }, colors = IconButtonDefaults.iconButtonColors(
-            contentColor = PrimaryColor
+            contentColor = color
         ),
         enabled = isEnabled
     ) {
@@ -259,7 +290,10 @@ fun InfoDialog(onAction: () -> Unit) {
                 shape = MaterialTheme.shapes.extraLarge
             ).padding(16.dp)
         ) {
-            InfoIcons(icon = Icons.Outlined.Info, text = stringResource(R.string.main_info_dialog_text_info))
+            InfoIcons(
+                icon = Icons.Outlined.Info,
+                text = stringResource(R.string.main_info_dialog_text_info)
+            )
             SpacerHeight(height = 32)
             InfoIcons(
                 icon = Icons.Outlined.LocalMall,
@@ -275,14 +309,25 @@ fun InfoDialog(onAction: () -> Unit) {
                 icon = Icons.Outlined.Share,
                 text = stringResource(R.string.main_info_dialog_text_)
             )
+            SpacerHeight()
+            InfoIcons(
+                icon = Icons.Outlined.Person,
+                text = stringResource(R.string.main_info_dialog_owner)
+            )
+            SpacerHeight()
+            InfoIcons(
+                icon = Icons.Outlined.WifiOff,
+                tint = MaterialTheme.colorScheme.error,
+                text = stringResource(R.string.main_info_dialog_connection)
+            )
         }
     }
 }
 
 @Composable
-fun InfoIcons(icon: ImageVector, text: String) {
+fun InfoIcons(icon: ImageVector, tint: Color = PrimaryColor, text: String) {
     Row {
-        Icon(imageVector = icon, contentDescription = text, tint = PrimaryColor)
+        Icon(imageVector = icon, contentDescription = text, tint = tint)
         TextInfo(text)
     }
 }
