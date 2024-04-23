@@ -7,4 +7,5 @@ data class HomeState(
     val showInfo: Boolean = false,
     val showInterstitial: Boolean = false,
     val isLoading: Boolean = false,
+    val hasConnection: Boolean = false
 )
