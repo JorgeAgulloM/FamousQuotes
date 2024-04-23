@@ -264,8 +264,7 @@ fun TextOwner(text: String, onClick: () -> Unit) {
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
             style = MyTypography.labelLarge,
-            textDecoration = TextDecoration.Underline,
-            color = PrimaryColor
+            textDecoration = TextDecoration.Underline
         )
     }
 }
