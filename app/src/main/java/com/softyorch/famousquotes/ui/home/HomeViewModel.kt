@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Intents
+import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val selectQuote: SelectRandomQuote,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
     private val send: Send,
+    private val hasConnection: InternetConnection,
     private val intents: Intents
 ): ViewModel() {
 
@@ -29,6 +31,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getQuote()
+        hasConnectionFlow()
     }
 
     fun onActions(action: HomeActions) {
@@ -92,6 +95,14 @@ class HomeViewModel @Inject constructor(
             }
             if (quote != null)
                 _uiState.update { it.copy(isLoading = false, quote = quote) }
+        }
+    }
+
+    private fun hasConnectionFlow() {
+        viewModelScope.launch(dispatcherIO) {
+            hasConnection.isConnectedFlow().collect{ connection ->
+                _uiState.update { it.copy(hasConnection = connection) }
+            }
         }
     }
 }
