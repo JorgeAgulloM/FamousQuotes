@@ -15,6 +15,9 @@
     <string name="main_info_dialog_text_other_quote">Cliquez sur cet icône si vous voulez voir une autre image.</string>
     <string name="main_info_dialog_text_">Partagez votre citation du jour avec vos amis et votre famille.</string>
     <string name="main_content_desc_image">Image</string>
+    <string name="main_icon_content_desc_lost_connection">Vous n\'êtes pas connecté à Internet</string>
+    <string name="main_info_dialog_owner">En cliquant sur le nom du personnage qui a prononcé la phrase, nous vous redirigerons vers des informations détaillées à son sujet dans votre navigateur.</string>
+    <string name="main_info_dialog_connection">Actuellement, il n\'y a pas de connexion Internet, donc nous ne pouvons pas charger de nouvelles phrases et images.</string>
 
     <!-- Chaînes de la boîte de dialogue de mise à jour -->
     <string name="update_dialog_exit_btn">Quitter l\'application</string>

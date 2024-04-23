@@ -15,6 +15,9 @@
     <string name="main_info_dialog_text_other_quote">Haz clic en este ícono si quieres ver otra imagen.</string>
     <string name="main_info_dialog_text_">Comparte tu cita del día con tus amigos y familiares.</string>
     <string name="main_content_desc_image">Imagen</string>
+    <string name="main_icon_content_desc_lost_connection">No tienes conexión a internet</string>
+    <string name="main_info_dialog_owner">Al hacer clic en el nombre del personaje que pronunció la frase, te llevaremos a su información detallada en tu navegador.</string>
+    <string name="main_info_dialog_connection">Actualmente no hay conexión a internet, por lo que no podemos cargar nuevas frases e imágenes.</string>
 
     <!-- Cadenas del diálogo de actualización -->
     <string name="update_dialog_exit_btn">Salir de la aplicación</string>

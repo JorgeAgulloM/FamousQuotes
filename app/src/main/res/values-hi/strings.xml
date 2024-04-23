@@ -15,6 +15,9 @@
     <string name="main_info_dialog_text_other_quote">इस आइकन पर क्लिक करें यदि आप किसी और छवि देखना चाहते हैं।</string>
     <string name="main_info_dialog_text_">अपने दिन के उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
     <string name="main_content_desc_image">छवि</string>
+    <string name="main_icon_content_desc_lost_connection">आप इंटरनेट से जुड़े नहीं हैं</string>
+    <string name="main_info_dialog_owner">उस व्यक्ति के नाम पर क्लिक करके, जिसने यह वाक्य कहा था, हम आपको उसकी विस्तृत जानकारी अपने ब्राउज़र में दिखाएंगे।</string>
+    <string name="main_info_dialog_connection">वर्तमान में कोई इंटरनेट कनेक्शन नहीं है, इसलिए हम नए वाक्य और छवियों को नहीं लोड कर सकते।</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">ऐप बंद करें</string>

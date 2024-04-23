@@ -15,6 +15,9 @@
     <string name="main_info_dialog_text_other_quote">Fai clic su questa icona se vuoi vedere un\'altra immagine.</string>
     <string name="main_info_dialog_text_">Condividi la tua citazione del giorno con i tuoi amici e la tua famiglia.</string>
     <string name="main_content_desc_image">Immagine</string>
+    <string name="main_icon_content_desc_lost_connection">Non sei connesso a Internet</string>
+    <string name="main_info_dialog_owner">Cliccando sul nome del personaggio che ha coniato la frase, ti mostreremo informazioni dettagliate su di lui nel tuo browser.</string>
+    <string name="main_info_dialog_connection">Attualmente non c\'è connessione Internet, quindi non possiamo caricare nuove frasi e immagini.</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Esci dall\'app</string>
