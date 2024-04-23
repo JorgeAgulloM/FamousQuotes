@@ -1,6 +1,8 @@
 package com.softyorch.famousquotes.utils
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 
 fun writeLog(level: LevelLog, text: String) {
     when (level) {
@@ -12,3 +14,7 @@ fun writeLog(level: LevelLog, text: String) {
 }
 
 enum class LevelLog { ERROR, WARN, INFO, DEBUG }
+
+fun Context.showToast(msg: String, time: Int = Toast.LENGTH_SHORT) = Toast.makeText(
+    this, msg, time
+).show()
