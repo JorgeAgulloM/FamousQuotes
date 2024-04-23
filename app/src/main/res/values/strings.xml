@@ -14,6 +14,9 @@
     <string name="main_info_dialog_text_other_quote">Click on this icon if you would like to see another image.</string>
     <string name="main_info_dialog_text_">Share your quote of the day with your friends and family.</string>
     <string name="main_content_desc_image">Image</string>
+    <string name="main_icon_content_desc_lost_connection">You are not connected to the internet</string>
+    <string name="main_info_dialog_owner">By clicking on the name of the character who coined the phrase, we will take you to detailed information about them in your browser.</string>
+    <string name="main_info_dialog_connection">Currently, there is no internet connection, so we cannot load new phrases and images.</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Quit the app</string>
