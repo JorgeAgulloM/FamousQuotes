@@ -1,13 +1,18 @@
 package com.softyorch.famousquotes.ui.home
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,15 +43,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -60,6 +71,7 @@ import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
+import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
@@ -83,9 +95,12 @@ fun HomeScreen(viewModel: HomeViewModel) {
     }
 
     Box(contentAlignment = Alignment.Center) {
+        if (state.isLoading) LoadingCircle()
         BackgroundImage(uri = state.quote.imageUrl)
-        CardQuote(state = state) { action ->
-            viewModel.onActions(action)
+        AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
+            CardQuote(state = state) { action ->
+                viewModel.onActions(action)
+            }
         }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
@@ -114,10 +129,6 @@ fun BackgroundImage(uri: String) {
         AnimatedImage(
             isVisible = state is AsyncImagePainter.State.Success,
             painter = painter
-        )
-        AnimatedImage(
-            isVisible = state !is AsyncImagePainter.State.Success,
-            painter = painterResource(R.drawable.loading_1)
         )
     }
 }
@@ -155,10 +166,13 @@ fun CardQuote(
                         when (action) {
                             HomeActions.Buy -> if (state.hasConnection) onAction(action)
                             else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
                             HomeActions.New -> if (state.hasConnection) onAction(action)
                             else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
                             HomeActions.Owner -> if (state.hasConnection) onAction(action)
                             else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
                             HomeActions.Info -> onAction(action)
                             HomeActions.Send -> onAction(action)
                         }
@@ -346,11 +360,9 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
-            animationSpec = spring(1f, 12f)
+            animationSpec = spring(1f, 20f)
         ) + fadeIn(animationSpec = tween(durationMillis = 1000)),
-        exit = shrinkVertically(
-            animationSpec = spring(1f, 12f)
-        ) + fadeOut(animationSpec = tween(durationMillis = 1000))
+        exit = fadeOut(animationSpec = tween(durationMillis = 1000))
     ) {
         Image(
             painter = painter,
@@ -359,4 +371,48 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
             contentScale = scale
         )
     }
+}
+
+@Composable
+fun AnimatedContentHome(isActive: Boolean, content: @Composable () -> Unit) {
+    AnimatedContent(
+        targetState = isActive,
+        label = "",
+        transitionSpec = {
+            (slideInVertically(
+                animationSpec = spring(1f, stiffness = 20f),
+                initialOffsetY = { it / 2 })).togetherWith(
+                fadeOut(animationSpec = spring(1f, stiffness = 40f))
+            )
+        }
+    ) { show -> if (show) content() }
+}
+
+@Composable
+fun LoadingCircle() {
+    val value by rememberInfiniteTransition(label = "LoadingCircle").animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing)
+        ), label = "LoadingCircleInfinite"
+    )
+
+    val gradientBrush by remember {
+        mutableStateOf(
+            Brush.horizontalGradient(
+                colors = listOf(PrimaryColor, BackgroundColor, PrimaryColor),
+                startX = -10.0f,
+                endX = 400.0f,
+                tileMode = TileMode.Repeated
+            )
+        )
+    }
+
+    Box(modifier = Modifier
+        .drawBehind {
+            rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
+        }
+        .size(128.dp)
+    )
 }
