@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -162,6 +163,7 @@ fun CardQuote(
                             HomeActions.Send -> onAction(action)
                         }
                     }
+                    SpacerHeight(height = 24)
                     TextBody(text = state.quote.body)
                     SpacerHeight(height = 24)
                     Box(
@@ -224,12 +226,12 @@ fun IconButtonMenu(
     onClick: () -> Unit,
 ) {
     IconButton(
-        onClick = { onClick() }, colors = IconButtonDefaults.iconButtonColors(
-            contentColor = color
-        ),
+        onClick = { onClick() },
+        colors = IconButtonDefaults.iconButtonColors(contentColor = color),
+        modifier = Modifier.padding(end = 4.dp),
         enabled = isEnabled
     ) {
-        Icon(imageVector = icon, contentDescription = cDescription)
+        Icon(imageVector = icon, contentDescription = cDescription, modifier = Modifier.size(32.dp))
     }
 }
 
