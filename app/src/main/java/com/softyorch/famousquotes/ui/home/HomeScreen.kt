@@ -1,7 +1,6 @@
 package com.softyorch.famousquotes.ui.home
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -12,7 +11,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -375,17 +373,13 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
 
 @Composable
 fun AnimatedContentHome(isActive: Boolean, content: @Composable () -> Unit) {
-    AnimatedContent(
-        targetState = isActive,
-        label = "",
-        transitionSpec = {
-            (slideInVertically(
-                animationSpec = spring(1f, stiffness = 20f),
-                initialOffsetY = { it / 2 })).togetherWith(
-                fadeOut(animationSpec = spring(1f, stiffness = 40f))
-            )
-        }
-    ) { show -> if (show) content() }
+    AnimatedVisibility(
+        visible = isActive,
+        enter = slideInVertically(
+            animationSpec = spring(1f, 20f),
+            initialOffsetY = { it / 2 }
+        ) + fadeIn(animationSpec = tween(durationMillis = 1000))
+    ) { content() }
 }
 
 @Composable
