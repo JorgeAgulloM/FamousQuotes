@@ -124,6 +124,10 @@ android {
 
 dependencies {
 
+    //App-update
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
+
     // Material Icons
     implementation(libs.androidx.material.icons.extended)
 
