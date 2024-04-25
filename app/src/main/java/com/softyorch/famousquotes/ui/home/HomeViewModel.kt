@@ -5,8 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
-import com.softyorch.famousquotes.domain.useCases.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
+import com.softyorch.famousquotes.domain.useCases.SelectRandomQuote
+import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
+import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
+import com.softyorch.famousquotes.ui.home.model.LikesUiDTO
+import com.softyorch.famousquotes.ui.home.model.LikesUiDTO.Companion.toDomain
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -20,14 +26,19 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val selectQuote: SelectRandomQuote,
+    private val getLikes: GetQuoteLikes,
+    private val setLike: SetQuoteLike,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
     private val send: Send,
     private val hasConnection: InternetConnection,
-    private val intents: Intents
-): ViewModel() {
+    private val intents: Intents,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel("", "", "")))
     val uiState: StateFlow<HomeState> = _uiState
+
+    private val _likeState = MutableStateFlow(QuoteLikesState())
+    val likesState: StateFlow<QuoteLikesState> = _likeState
 
     init {
         getQuote()
@@ -36,11 +47,21 @@ class HomeViewModel @Inject constructor(
 
     fun onActions(action: HomeActions) {
         when (action) {
-            HomeActions.Info -> { showInfoDialog() }
-            HomeActions.New -> { loadNewRandomQuote() }
-            HomeActions.Send -> { shareQuote() }
-            HomeActions.Buy -> { goToBuyImage() }
-            HomeActions.Owner -> { goToSearchOwner() }
+            HomeActions.Info -> showInfoDialog()
+            HomeActions.New -> loadNewRandomQuote()
+            HomeActions.Send -> shareQuote()
+            HomeActions.Buy -> goToBuyImage()
+            HomeActions.Owner -> goToSearchOwner()
+            HomeActions.Like -> setQuoteLike()
+        }
+    }
+
+    private fun setQuoteLike() {
+        viewModelScope.launch(dispatcherIO) {
+            val isLike = !_likeState.value.isLike
+            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
+            val updateLikes = LikesUiDTO(isLike = isLike)
+            setLike(updateLikes.toDomain())
         }
     }
 
@@ -83,6 +104,21 @@ class HomeViewModel @Inject constructor(
             }
             if (quote != null)
                 _uiState.update { it.copy(isLoading = false, quote = quote) }
+
+            getLikesQuote()
+        }
+    }
+
+    private fun getLikesQuote() {
+        viewModelScope.launch(dispatcherIO) {
+            getLikes().collect { likes ->
+                _likeState.update {
+                    it.copy(
+                        likes = likes?.likes ?: 0,
+                        isLike = likes?.isLike ?: false
+                    )
+                }
+            }
         }
     }
 
@@ -100,7 +136,7 @@ class HomeViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
-            hasConnection.isConnectedFlow().collect{ connection ->
+            hasConnection.isConnectedFlow().collect { connection ->
                 _uiState.update { it.copy(hasConnection = connection) }
             }
         }
