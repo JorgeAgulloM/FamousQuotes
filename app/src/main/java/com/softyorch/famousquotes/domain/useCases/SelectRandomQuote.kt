@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.domain
+package com.softyorch.famousquotes.domain.useCases
 
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
