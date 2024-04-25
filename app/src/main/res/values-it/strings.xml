@@ -62,4 +62,8 @@
     <string name="uplifting_quote_default_09">IT#La differenza tra l\'impossibile e il possibile sta nella determinazione di una persona</string>
     <string name="uplifting_quote_default_10">IT#Non importa quante volte cadi, ciò che conta è quante volte ti rialzi</string>
 
+    <!-- Firebase Notifications Channels -->
+    <string name="fbm_message_title">La tua frase quotidiana ti aspetta</string>
+    <string name="fbm_message_body">Ricorda che ha una frase diversa ogni giorno, non perdertela.</string>
+
 </resources>

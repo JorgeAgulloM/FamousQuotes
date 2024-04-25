@@ -62,4 +62,8 @@
     <string name="uplifting_quote_default_09">ZH#不可能与可能之间的区别在于一个人的决心</string>
     <string name="uplifting_quote_default_10">ZH#重要的不是你倒下了多少次，而是你站起来的次数</string>
 
+    <!-- Firebase Notifications Channels -->
+    <string name="fbm_message_title">你的每日語錄在等著你</string>
+    <string name="fbm_message_body">記住，它每天都有一個不同的語錄，不要錯過。</string>
+
 </resources>

@@ -1,4 +1,9 @@
 <resources>
+
+    <!-- Firebase Notifications Channels -->
+    <string name="default_channel" translatable="false">generic</string>
+
+    <!-- Names -->
     <string name="app_name">famousQuotes</string>
     <string name="app_name_historical">Historical Quotes</string>
     <string name="app_name_biblical">Biblical Quotes</string>
@@ -60,5 +65,9 @@
     <string name="uplifting_quote_default_08">EN#Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle</string>
     <string name="uplifting_quote_default_09">EN#The difference between the impossible and the possible lies in a person\'s determination</string>
     <string name="uplifting_quote_default_10">EN#It\'s not how many times you fall, but how many times you get up that counts</string>
+
+    <!-- Firebase Notifications Channels -->
+    <string name="fbm_message_title">Your daily quote awaits you</string>
+    <string name="fbm_message_body">Remember it has a different phrase every day, don\'t miss it.</string>
 
 </resources>
