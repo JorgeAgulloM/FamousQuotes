@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material.icons.outlined.Person
@@ -82,6 +84,7 @@ import com.softyorch.famousquotes.utils.writeLog
 fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
+    val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
 
     if (state.showInterstitial) Interstitial(true) {
         if (it is InterstitialAdState.Showed ||
@@ -96,7 +99,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (state.isLoading) LoadingCircle()
         BackgroundImage(uri = state.quote.imageUrl)
         AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
-            CardQuote(state = state) { action ->
+            CardQuote(state = state, stateLikes = stateLikes) { action ->
                 viewModel.onActions(action)
             }
         }
@@ -134,6 +137,7 @@ fun BackgroundImage(uri: String) {
 @Composable
 fun CardQuote(
     state: HomeState,
+    stateLikes: QuoteLikesState,
     onAction: (HomeActions) -> Unit,
 ) {
     val context = LocalContext.current
@@ -158,6 +162,7 @@ fun CardQuote(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Controls(
+                        stateLikes = stateLikes,
                         disabledReload = state.showInterstitial,
                         hasConnection = state.hasConnection
                     ) { action ->
@@ -173,6 +178,7 @@ fun CardQuote(
 
                             HomeActions.Info -> onAction(action)
                             HomeActions.Send -> onAction(action)
+                            HomeActions.Like -> onAction(action)
                         }
                     }
                     SpacerHeight(height = 24)
@@ -195,36 +201,55 @@ fun CardQuote(
 }
 
 @Composable
-fun Controls(disabledReload: Boolean, hasConnection: Boolean, onAction: (HomeActions) -> Unit) {
+fun Controls(
+    stateLikes: QuoteLikesState,
+    disabledReload: Boolean,
+    hasConnection: Boolean,
+    onAction: (HomeActions) -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(end = 16.dp),
-        horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top
+        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        if (!hasConnection) IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
-            color = MaterialTheme.colorScheme.error,
-            icon = Icons.Outlined.WifiOff
-        ) { onAction(HomeActions.New) }
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_info),
-            icon = Icons.Outlined.Info
-        ) { onAction(HomeActions.Info) }
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-            icon = Icons.Outlined.LocalMall
-        ) { onAction(HomeActions.Buy) }
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
-            icon = Icons.Outlined.RestartAlt,
-            isEnabled = !disabledReload
-        ) { onAction(HomeActions.New) }
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_share),
-            icon = Icons.Outlined.Share
-        ) {
-            onAction(
-                HomeActions.Send
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val iconLike = if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+            val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
+
+            IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_info),
+                color = colorIconLike,
+                icon = iconLike
+            ) { onAction(HomeActions.Like) }
+            Text(text = stateLikes.likes.toString())
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (!hasConnection) IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
+                color = MaterialTheme.colorScheme.error,
+                icon = Icons.Outlined.WifiOff
+            ) { onAction(HomeActions.New) }
+            IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_info),
+                icon = Icons.Outlined.Info
+            ) { onAction(HomeActions.Info) }
+            IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
+                icon = Icons.Outlined.LocalMall
+            ) { onAction(HomeActions.Buy) }
+            IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
+                icon = Icons.Outlined.RestartAlt,
+                isEnabled = !disabledReload
+            ) { onAction(HomeActions.New) }
+            IconButtonMenu(
+                cDescription = stringResource(R.string.main_icon_content_desc_share),
+                icon = Icons.Outlined.Share
+            ) {
+                onAction(
+                    HomeActions.Send
+                )
+            }
         }
     }
 }
