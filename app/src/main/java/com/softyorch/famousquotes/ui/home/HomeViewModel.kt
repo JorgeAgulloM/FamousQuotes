@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
-import com.softyorch.famousquotes.domain.SelectRandomQuote
+import com.softyorch.famousquotes.domain.useCases.SelectRandomQuote
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
