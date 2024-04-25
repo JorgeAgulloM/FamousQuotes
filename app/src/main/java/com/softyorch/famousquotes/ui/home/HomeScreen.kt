@@ -91,7 +91,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
 
-    if (state.showInterstitial) Interstitial(true) {
+    Interstitial(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
