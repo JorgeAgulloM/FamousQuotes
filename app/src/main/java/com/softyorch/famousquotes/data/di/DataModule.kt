@@ -27,8 +27,8 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesDatabaseService(firestore: FirebaseFirestore):
-            IDatabaseService = DatabaseServiceImpl(firestore)
+    fun providesDatabaseService(firestore: FirebaseFirestore, @ApplicationContext context: Context):
+            IDatabaseService = DatabaseServiceImpl(firestore, context)
 
     @Singleton
     @Provides
