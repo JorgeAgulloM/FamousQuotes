@@ -62,4 +62,8 @@
     <string name="uplifting_quote_default_09">FR#La différence entre l\'impossible et le possible réside dans la détermination d\'une personne</string>
     <string name="uplifting_quote_default_10">FR#Ce n\'est pas combien de fois vous tombez qui compte, mais combien de fois vous vous relevez</string>
 
+    <!-- Firebase Notifications Channels -->
+    <string name="fbm_message_title">Votre phrase quotidienne vous attend</string>
+    <string name="fbm_message_body">N\'oubliez pas qu\'elle a une phrase différente chaque jour, ne la manquez pas.</string>
+
 </resources>

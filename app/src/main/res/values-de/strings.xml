@@ -62,4 +62,8 @@
     <string name="uplifting_quote_default_09">DE#Der Unterschied zwischen dem Unmöglichen und dem Möglichen liegt in der Entschlossenheit einer Person</string>
     <string name="uplifting_quote_default_10">DE#Es kommt nicht darauf an, wie oft du fällst, sondern wie oft du aufstehst</string>
 
+    <!-- Firebase Notifications Channels -->
+    <string name="fbm_message_title">Dein tägliches Zitat wartet auf dich</string>
+    <string name="fbm_message_body">Denke daran, es hat jeden Tag ein anderes Zitat, verpass es nicht.</string>
+
 </resources>
