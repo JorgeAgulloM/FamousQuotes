@@ -20,6 +20,7 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.ui.home.HomeScreen
 import com.softyorch.famousquotes.ui.home.HomeViewModel
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
+import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,8 +37,12 @@ class MainActivity : ComponentActivity() {
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         if (!BuildConfig.DEBUG) checkForAppUpdates()
 
+        val requestConsent = RequestGrantedProtectionData(this)
+
         setContent {
             FamousQuotesTheme {
+                requestConsent.get { }
+
                 viewModel = hiltViewModel<MainViewModel>()
 
                 val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
@@ -81,10 +86,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-//Implementar actualziaciones automáticas
-//Preparar recepción de notificaciones
-//Implementar "Like" + recuento + lista de likes????????
+//Permiso de notificaciones
 //Traducir las frases que ya tengo
 //Generar imagenes
 //Generar script python para cargar frases a firebase
