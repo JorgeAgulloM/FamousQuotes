@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -34,8 +35,11 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.WifiOff
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -61,6 +65,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
@@ -200,28 +205,45 @@ fun CardQuote(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Controls(
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     hasConnection: Boolean,
-    onAction: (HomeActions) -> Unit
+    onAction: (HomeActions) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth().wrapContentHeight()
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val iconLike = if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+            val iconLike =
+                if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
             val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
 
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_info),
-                color = colorIconLike,
-                icon = iconLike
-            ) { onAction(HomeActions.Like) }
-            Text(text = stateLikes.likes.toString())
+            BadgedBox(
+                badge = {
+                    Badge(
+                        containerColor = PrimaryColor,
+                        modifier = Modifier.offset((-16).dp, (16).dp)
+                    ) {
+                        Text(
+                            text = stateLikes.likes.toString(),
+                            fontSize = 16.sp,
+                            color = Color.DarkGray
+                        )
+                    }
+                }
+            ) {
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_info),
+                    color = colorIconLike,
+                    icon = iconLike
+                ) { onAction(HomeActions.Like) }
+            }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (!hasConnection) IconButtonMenu(
