@@ -10,12 +10,12 @@ data class FamousQuoteModel(
 ) {
     companion object {
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
-            owner = owner,
-            body = getBodyLocal(quote),
+            owner = getDataLocal(owner),
+            body = getDataLocal(quote),
             imageUrl = imageUrl
         )
 
-        private fun getBodyLocal(quotes: List<String>): String = try {
+        private fun getDataLocal(quotes: List<String>): String = try {
             val local = Locale.getDefault().toString().split("_")[0].uppercase()
             quotes.first { it.startsWith(local) }.split("#")[1]
         } catch (ex: Exception) {
