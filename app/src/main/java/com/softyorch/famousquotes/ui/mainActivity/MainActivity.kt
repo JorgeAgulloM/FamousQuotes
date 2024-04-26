@@ -1,8 +1,14 @@
 package com.softyorch.famousquotes.ui.mainActivity
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,10 +23,15 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.home.HomeScreen
 import com.softyorch.famousquotes.ui.home.HomeViewModel
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
+import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
+import com.softyorch.famousquotes.utils.sdk26AndUp
+import com.softyorch.famousquotes.utils.sdk33AndUp
+import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +48,10 @@ class MainActivity : ComponentActivity() {
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         if (!BuildConfig.DEBUG) checkForAppUpdates()
 
+        // Permission Notifications
+        sdk33AndUp { PermissionNotifications() }
+
+        // Protection Data Consent
         val requestConsent = RequestGrantedProtectionData(this)
 
         setContent {
@@ -64,6 +79,33 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun PermissionNotifications() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                writeLog(LevelLog.INFO, "PERMISSION POST_NOTIFICATIONS GRANTED")
+                sdk26AndUp { CreatedChannelNotifications() }
+            } else {
+                writeLog(LevelLog.WARN, "PERMISSION POST_NOTIFICATIONS DENIED")
+            }
+        }
+
+        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun CreatedChannelNotifications() {
+        val channelId = getString(R.string.default_channel)
+        val chName = "${BuildConfig.APP_TITLE}_Promotion"
+        val notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        val channel = NotificationChannel(channelId, chName, NotificationManager.IMPORTANCE_DEFAULT)
+        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onResume() {
