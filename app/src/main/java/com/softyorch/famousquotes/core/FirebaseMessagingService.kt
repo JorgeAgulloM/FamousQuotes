@@ -1,13 +1,11 @@
 package com.softyorch.famousquotes.core
 
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -15,13 +13,13 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Inject
 
 class FirebaseMessagingService @Inject constructor() : FirebaseMessagingService() {
 
     private val code = 999
-    private val chName = "${BuildConfig.APP_TITLE}_Promotion"
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -52,9 +50,10 @@ class FirebaseMessagingService @Inject constructor() : FirebaseMessagingService(
 
         val title = getString(R.string.fbm_message_title)
         val body = getString(R.string.fbm_message_body)
+        val icon = this.getResourceDrawableIdentifier(BuildConfig.ICON) ?: R.drawable.default_icon
 
         val notificationBuilder = NotificationCompat.Builder(this, "")
-            .setSmallIcon(R.drawable.bg_image_1)
+            .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
@@ -65,16 +64,6 @@ class FirebaseMessagingService @Inject constructor() : FirebaseMessagingService(
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Create channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId, chName, NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
         notificationManager.notify(0, notificationBuilder.build())
-
     }
-
 }
