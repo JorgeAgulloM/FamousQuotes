@@ -4,10 +4,12 @@ import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesDTO.Companion.toData
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -22,6 +24,11 @@ class SetQuoteLikeTest {
     fun onBefore() {
         MockKAnnotations.init(this)
         setQuoteLike = SetQuoteLike(dbService)
+    }
+
+    @After
+    fun onAfter() {
+        clearAllMocks()
     }
 
     @Test
