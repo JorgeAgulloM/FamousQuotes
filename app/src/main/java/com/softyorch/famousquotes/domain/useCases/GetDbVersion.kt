@@ -5,8 +5,6 @@ import com.softyorch.famousquotes.domain.interfaces.IDatastore
 import com.softyorch.famousquotes.domain.utils.emptyVersionList
 import com.softyorch.famousquotes.domain.utils.versionList
 import com.softyorch.famousquotes.domain.utils.versionToString
-import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -23,11 +21,11 @@ class GetDbVersion @Inject constructor(
         val dbCurrentVersion = withContext(dispatcherIO) { getDbVersionCurrent() }
         val dbUpdateVersion = getUpdateDbVersion()
 
-        val needUpdate = dbCurrentVersion.zip(dbUpdateVersion).all {
-            (dbV, upV) -> dbV < upV
+        val needUpdate = !dbCurrentVersion.zip(dbUpdateVersion).all {
+            (dbV, upV) -> dbV == upV
         }
 
-        writeLog(LevelLog.INFO, "[GetDbVersion] -> needUpdate: $needUpdate")
+        //writeLog(LevelLog.INFO, "[GetDbVersion] -> needUpdate: $needUpdate")
 
         if (needUpdate) setDbVersion(dbUpdateVersion)
 
