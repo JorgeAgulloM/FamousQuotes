@@ -5,6 +5,7 @@ import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.model.LikesQuote.Companion.toDomain
 import com.softyorch.famousquotes.domain.utils.getTodayId
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -27,6 +29,11 @@ class GetQuoteLikesTest {
     fun onBefore() {
         MockKAnnotations.init(this)
         getLikeQuotes = GetQuoteLikes(dbService)
+    }
+
+    @After
+    fun onAfter() {
+        clearAllMocks()
     }
 
     @Test
