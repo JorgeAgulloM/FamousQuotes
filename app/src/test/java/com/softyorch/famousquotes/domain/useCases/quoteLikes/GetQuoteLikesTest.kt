@@ -31,9 +31,10 @@ class GetQuoteLikesTest {
 
     @Test
     fun `When Getting Likes From Service And Return Data`() = runBlocking {
-        // Prepare test
+        //Prepare test
         val id = getTodayId()
-        val returnFlow: Flow<LikeQuoteResponse?> = flowOf(LikeQuoteResponse(id = id, likes = 3, like = true))
+        val returnFlow: Flow<LikeQuoteResponse?> =
+            flowOf(LikeQuoteResponse(id = id, likes = 3, like = true))
 
         //Given
         coEvery { dbService.getLikeQuoteFlow(id) } returns returnFlow
@@ -44,6 +45,34 @@ class GetQuoteLikesTest {
         //Then
         val fakeResult = returnFlow.first()
         assert(result.first() == fakeResult?.toDomain())
-        coVerify(exactly = 1) { dbService.getLikeQuoteFlow(id) }
+    }
+
+    @Test
+    fun `When Getting Likes From Service And Return Null`() = runBlocking {
+        //Prepare test
+        val returnFlow = flowOf(null)
+
+        //Given
+        coEvery { dbService.getLikeQuoteFlow(any()) } returns returnFlow
+
+        //When
+        val result = getLikeQuotes()
+
+        //Then
+        val fakeResult = returnFlow.first()
+        assert(result.first() == fakeResult)
+    }
+
+
+    @Test
+    fun `When Getting Likes From Services And Only Called Once`() = runBlocking {
+        //Given
+        coEvery { dbService.getLikeQuoteFlow(any()) } returns flowOf()
+
+        //When
+        getLikeQuotes()
+
+        //Then
+        coVerify(exactly = 1) { dbService.getLikeQuoteFlow(any()) }
     }
 }
