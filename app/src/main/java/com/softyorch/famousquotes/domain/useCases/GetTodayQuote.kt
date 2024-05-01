@@ -12,7 +12,7 @@ import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class SelectRandomQuote @Inject constructor(
+class GetTodayQuote @Inject constructor(
     private val dbService: IDatabaseService,
     private val storageService: IStorageService,
     private val datastore: IDatastore,
