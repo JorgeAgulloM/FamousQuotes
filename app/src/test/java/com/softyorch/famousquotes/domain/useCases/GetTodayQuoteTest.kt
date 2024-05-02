@@ -5,6 +5,7 @@ import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.utils.getTodayId
+import com.softyorch.famousquotes.utils.IsTestMode
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -30,6 +31,7 @@ class GetTodayQuoteTest {
 
     @Before
     fun onBefore() {
+        IsTestMode.isTest = true
         MockKAnnotations.init(this)
         getTodayQuote = GetTodayQuote(dbService, storageService, datastore)
     }
