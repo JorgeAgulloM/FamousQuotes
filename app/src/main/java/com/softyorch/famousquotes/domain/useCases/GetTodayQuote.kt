@@ -17,8 +17,7 @@ class GetTodayQuote @Inject constructor(
     private val storageService: IStorageService,
     private val datastore: IDatastore,
 ) {
-    suspend operator fun invoke(): FamousQuoteModel? {
-        val id = getTodayId()
+    suspend operator fun invoke(id: String = getTodayId()): FamousQuoteModel? {
         val image = getImage()
 
         val quote = dbService.getQuote(id) ?: getRandomQuoteFromDb().also {
