@@ -7,12 +7,17 @@ import android.util.Log
 import android.widget.Toast
 
 fun writeLog(level: LevelLog = LevelLog.INFO, text: String) {
+    val isTest = !IsTestMode.isTest
     when (level) {
-        LevelLog.ERROR -> Log.e("LOGTAG", text)
-        LevelLog.WARN -> Log.w("LOGTAG", text)
-        LevelLog.INFO -> Log.i("LOGTAG", text)
-        LevelLog.DEBUG -> Log.d("LOGTAG", text)
+        LevelLog.ERROR -> if (isTest) Log.e("LOGTAG", text)
+        LevelLog.WARN -> if (isTest) Log.w("LOGTAG", text)
+        LevelLog.INFO -> if (isTest) Log.i("LOGTAG", text)
+        LevelLog.DEBUG -> if (isTest) Log.d("LOGTAG", text)
     }
+}
+
+object IsTestMode {
+    var isTest: Boolean = false
 }
 
 enum class LevelLog { ERROR, WARN, INFO, DEBUG }
