@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.domain.useCases.utils
+package com.softyorch.famousquotes.utils
 
 import com.softyorch.famousquotes.utils.IsTestMode
 
