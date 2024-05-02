@@ -41,6 +41,10 @@ class HomeViewModel @Inject constructor(
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
     init {
+        onCreate()
+    }
+
+    fun onCreate() {
         getQuote()
         hasConnectionFlow()
     }
@@ -140,5 +144,14 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(hasConnection = connection) }
             }
         }
+    }
+
+    /**
+     * Function only for TESTING!!!
+     *
+     * ¡¡ Not call form UI !!
+     */
+    fun showInterstitialOnlyForTesting() {
+        _uiState.update { it.copy(showInterstitial = true) }
     }
 }
