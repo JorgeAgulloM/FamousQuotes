@@ -4,6 +4,7 @@ import com.softyorch.famousquotes.domain.useCases.GetDbVersionTest
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuoteTest
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikesTest
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLikeTest
+import com.softyorch.famousquotes.ui.home.HomeViewModelTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import org.junit.runners.Suite.SuiteClasses
@@ -14,5 +15,6 @@ import org.junit.runners.Suite.SuiteClasses
     SetQuoteLikeTest::class,
     GetDbVersionTest::class,
     GetTodayQuoteTest::class,
+    HomeViewModelTest::class,
 )
 class MainTest
