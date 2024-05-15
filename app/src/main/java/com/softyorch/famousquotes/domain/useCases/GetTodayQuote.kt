@@ -33,7 +33,9 @@ class GetTodayQuote @Inject constructor(
 
     private suspend fun getImage(url: String? = null): String {
         if (url != null) storageService.getImage(url).let {
-            return it
+            return it ?: getImageFromMemory().also {
+                writeLog(WARN, "[SelectRandomQuote] -> getImage(): Image from Memory")
+            }
         }
 
         return getImageFromMemory().also {
