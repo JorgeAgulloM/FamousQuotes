@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
 
 
 @Composable
@@ -33,7 +33,7 @@ fun Banner() {
                         )
                     )
                     adUnitId = BuildConfig.ID_BANNER_HOME
-                    loadAd(AdRequest.Builder().build())
+                    loadAd(adRequest)
                 }
             },
             modifier = Modifier.fillMaxWidth()
