@@ -18,7 +18,7 @@ class DatastoreImpl @Inject constructor(
 
     companion object {
         private val Context.datastore by preferencesDataStore(
-            name = if (BuildConfig.DEBUG) "DailyElectricCostDev" else "DailyElectricCost"
+            name = if (BuildConfig.DEBUG) "${BuildConfig.APP_TITLE}_dev" else BuildConfig.APP_TITLE
         )
 
         private const val IMAGES_KEY = "ds_images"
