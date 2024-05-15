@@ -128,11 +128,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//Permiso de notificaciones
-//Traducir las frases que ya tengo
-//Generar imagenes
-//Generar script python para cargar frases a firebase
-//Añadir Tests unitarios
 //Añadir Tests de implementación
 //Añadir CD/CI con github
 
