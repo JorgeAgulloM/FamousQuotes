@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -100,13 +101,16 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) LoadingCircle()
-        BackgroundImage(uri = state.quote.imageUrl)
-        AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
+        Box(contentAlignment = Alignment.TopCenter) {
+            BackgroundImage(uri = state.quote.imageUrl)
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             CardQuote(state = state, stateLikes = stateLikes) { action ->
-                viewModel.onActions(action)
-            }
+                    viewModel.onActions(action)
+                }
+
         }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
@@ -115,28 +119,25 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
 @Composable
 fun BackgroundImage(uri: String) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    val context = LocalContext.current
 
-        val context = LocalContext.current
+    val data = if (uri.startsWith("http")) uri
+    else context.getResourceDrawableIdentifier(uri)
 
-        val data = if (uri.startsWith("http")) uri
-        else context.getResourceDrawableIdentifier(uri)
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(data)
+            .crossfade(true)
+            .size(Size.ORIGINAL) // Set the target size to load the image at.
+            .build()
+    )
 
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(context)
-                .data(data)
-                .crossfade(true)
-                .size(Size.ORIGINAL) // Set the target size to load the image at.
-                .build()
-        )
+    val state = painter.state
 
-        val state = painter.state
-
-        AnimatedImage(
-            isVisible = state is AsyncImagePainter.State.Success,
-            painter = painter
-        )
-    }
+    AnimatedImage(
+        isVisible = state is AsyncImagePainter.State.Success,
+        painter = painter
+    )
 }
 
 @Composable
@@ -148,25 +149,26 @@ fun CardQuote(
     val context = LocalContext.current
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f))
-        ElevatedCard(
-            modifier = Modifier.fillMaxWidth().weight(2f),
-            shape = MaterialTheme.shapes.extraLarge,
-            elevation = CardDefaults.cardElevation(2.dp)
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.extraLarge.copy(
+            bottomStart = ZeroCornerSize,
+            bottomEnd = ZeroCornerSize
+        ),
+        elevation = CardDefaults.cardElevation(2.dp)
+    ) {
+        Column(
+            modifier = Modifier.background(brush = brushBackGround()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                modifier = Modifier
-                    .background(brush = brushBackGround())
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
+            AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Controls(
+                        hasText = state.quote.body,
                         stateLikes = stateLikes,
                         disabledReload = state.showInterstitial,
                         hasConnection = state.hasConnection
@@ -199,8 +201,9 @@ fun CardQuote(
                         }
                     }
                 }
-                Banner()
             }
+            SpacerHeight(height = 24)
+            Banner()
         }
     }
 }
@@ -208,71 +211,75 @@ fun CardQuote(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Controls(
+    hasText: String,
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     hasConnection: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val iconLike =
-                if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-            val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
+    AnimatedTextHome(hasText) {
+        Row(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val iconLike =
+                    if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+                val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
 
-            BadgedBox(
-                badge = {
-                    Badge(
-                        containerColor = PrimaryColor,
-                        modifier = Modifier.offset((-16).dp, (16).dp)
-                    ) {
-                        Text(
-                            text = stateLikes.likes.toString(),
-                            fontSize = 16.sp,
-                            color = Color.DarkGray
-                        )
+                BadgedBox(
+                    badge = {
+                        Badge(
+                            containerColor = PrimaryColor,
+                            modifier = Modifier.offset((-16).dp, (16).dp)
+                        ) {
+                            Text(
+                                text = stateLikes.likes.toString(),
+                                fontSize = 16.sp,
+                                color = Color.DarkGray
+                            )
+                        }
                     }
+                ) {
+                    IconButtonMenu(
+                        cDescription = stringResource(R.string.main_icon_content_desc_info),
+                        color = colorIconLike,
+                        icon = iconLike
+                    ) { onAction(HomeActions.Like) }
                 }
-            ) {
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (!hasConnection) IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
+                    color = MaterialTheme.colorScheme.error,
+                    icon = Icons.Outlined.WifiOff
+                ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
-                    color = colorIconLike,
-                    icon = iconLike
-                ) { onAction(HomeActions.Like) }
+                    icon = Icons.Outlined.Info
+                ) { onAction(HomeActions.Info) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
+                    icon = Icons.Outlined.LocalMall
+                ) { onAction(HomeActions.Buy) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
+                    icon = Icons.Outlined.RestartAlt,
+                    isEnabled = !disabledReload
+                ) { onAction(HomeActions.New) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_share),
+                    icon = Icons.Outlined.Share
+                ) {
+                    onAction(
+                        HomeActions.Send
+                    )
+                }
             }
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!hasConnection) IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
-                color = MaterialTheme.colorScheme.error,
-                icon = Icons.Outlined.WifiOff
-            ) { onAction(HomeActions.New) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_info),
-                icon = Icons.Outlined.Info
-            ) { onAction(HomeActions.Info) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                icon = Icons.Outlined.LocalMall
-            ) { onAction(HomeActions.Buy) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
-                icon = Icons.Outlined.RestartAlt,
-                isEnabled = !disabledReload
-            ) { onAction(HomeActions.New) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_share),
-                icon = Icons.Outlined.Share
-            ) {
-                onAction(
-                    HomeActions.Send
-                )
-            }
-        }
+
     }
 }
 
@@ -309,7 +316,7 @@ fun TextInfo(text: String) {
 fun TextBody(text: String) {
     AnimatedTextHome(text) {
         Text(
-            text = "\"$text\"",
+            text = "\"${text.trim()}\"",
             modifier = Modifier.padding(horizontal = 16.dp),
             style = MyTypography.displayLarge
         )
@@ -320,7 +327,7 @@ fun TextBody(text: String) {
 fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
-            text = text,
+            text = text.trim(),
             modifier = Modifier.padding(horizontal = 16.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
@@ -399,14 +406,12 @@ fun SpacerHeight(height: Int = 16) {
 
 @Composable
 fun AnimatedImage(isVisible: Boolean, painter: Painter) {
-    val modifier = Modifier.fillMaxWidth().height(300.dp)
+    val modifier = Modifier.fillMaxWidth()
     val scale = ContentScale.Crop
 
     AnimatedVisibility(
         visible = isVisible,
-        enter = slideInVertically(
-            animationSpec = spring(1f, 20f)
-        ) + fadeIn(animationSpec = tween(durationMillis = 1000)),
+        enter = fadeIn(animationSpec = tween(durationMillis = 2000)),
         exit = fadeOut(animationSpec = tween(durationMillis = 1000))
     ) {
         Image(
@@ -450,10 +455,12 @@ fun LoadingCircle() {
         )
     }
 
-    Box(modifier = Modifier
-        .drawBehind {
-            rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
-        }
-        .size(128.dp)
-    )
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier
+            .drawBehind {
+                rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
+            }
+            .size(128.dp)
+        )
+    }
 }
