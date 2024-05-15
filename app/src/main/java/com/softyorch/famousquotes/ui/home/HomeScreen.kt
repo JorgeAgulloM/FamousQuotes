@@ -316,7 +316,7 @@ fun TextInfo(text: String) {
 fun TextBody(text: String) {
     AnimatedTextHome(text) {
         Text(
-            text = "\"${text.trim()}\"",
+            text = text,
             modifier = Modifier.padding(horizontal = 16.dp),
             style = MyTypography.displayLarge
         )
@@ -327,7 +327,7 @@ fun TextBody(text: String) {
 fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
-            text = text.trim(),
+            text = text,
             modifier = Modifier.padding(horizontal = 16.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
