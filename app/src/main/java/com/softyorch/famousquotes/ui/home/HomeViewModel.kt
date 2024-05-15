@@ -6,7 +6,7 @@ import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.domain.useCases.SelectRandomQuote
+import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.ui.home.model.LikesUiDTO
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val selectQuote: SelectRandomQuote,
+    private val selectQuote: GetTodayQuote,
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
@@ -41,6 +41,10 @@ class HomeViewModel @Inject constructor(
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
     init {
+        onCreate()
+    }
+
+    fun onCreate() {
         getQuote()
         hasConnectionFlow()
     }
@@ -140,5 +144,14 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(hasConnection = connection) }
             }
         }
+    }
+
+    /**
+     * Function only for TESTING!!!
+     *
+     * ¡¡ Not call form UI !!
+     */
+    fun showInterstitialOnlyForTesting() {
+        _uiState.update { it.copy(showInterstitial = true) }
     }
 }
