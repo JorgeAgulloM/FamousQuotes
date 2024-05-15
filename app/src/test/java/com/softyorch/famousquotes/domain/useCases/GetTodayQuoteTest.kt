@@ -25,16 +25,13 @@ class GetTodayQuoteTest {
     @RelaxedMockK
     private lateinit var storageService: IStorageService
 
-    @RelaxedMockK
-    private lateinit var datastore: IDatastore
-
     private lateinit var getTodayQuote: GetTodayQuote
 
     @Before
     fun onBefore() {
         TestUtils()
         MockKAnnotations.init(this)
-        getTodayQuote = GetTodayQuote(dbService, storageService, datastore)
+        getTodayQuote = GetTodayQuote(dbService, storageService)
     }
 
     @After
@@ -56,7 +53,6 @@ class GetTodayQuoteTest {
 
         //Given
         coEvery { dbService.getQuote(id) } returns quoteResponse
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         val result = getTodayQuote()
@@ -80,7 +76,6 @@ class GetTodayQuoteTest {
         //Given
         coEvery { dbService.getQuote(id) } returns null
         coEvery { dbService.getRandomQuote() } returns quoteResponse
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         val result = getTodayQuote(id)
@@ -97,7 +92,6 @@ class GetTodayQuoteTest {
         //Given
         coEvery { dbService.getQuote(id) } returns null
         coEvery { dbService.getRandomQuote() } returns null
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         val result = getTodayQuote(id)
@@ -120,7 +114,6 @@ class GetTodayQuoteTest {
 
         //Given
         coEvery { dbService.getQuote(id) } returns quoteResponse
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         val result = dbService.getQuote(id)
@@ -136,7 +129,6 @@ class GetTodayQuoteTest {
         //Given
         coEvery { dbService.getQuote(any()) } returns null
         coEvery { dbService.getRandomQuote() } returns null
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         getTodayQuote()
@@ -151,7 +143,6 @@ class GetTodayQuoteTest {
         //Given
         coEvery { dbService.getQuote(any()) } returns null
         coEvery { dbService.getRandomQuote() } returns null
-        coEvery { datastore.getImageSet() } returns flowOf(setOf())
 
         //When
         getTodayQuote()
