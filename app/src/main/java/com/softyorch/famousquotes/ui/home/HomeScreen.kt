@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.home
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -177,7 +178,7 @@ fun CardQuote(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
             ) {
                 Controls(
                     hasText = state.quote.body,
@@ -359,7 +360,7 @@ fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = text.isNotBlank(),
         enter = fadeIn(
-            animationSpec = spring(0.8f, 0.8f),
+            animationSpec = spring(0.8f, 20f),
             initialAlpha = 0f
         )
     ) { content() }
