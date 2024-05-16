@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <!-- Names -->
     <string name="app_name">Frases Famosas</string>
     <string name="app_name_historical">Frases Históricas</string>
     <string name="app_name_biblical">Frases Biblicas</string>
@@ -11,13 +15,13 @@
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
     <string name="main_info_dialog_text_info">Información sobre los íconos de la aplicación</string>
-    <string name="main_info_dialog_text_buy_image">Si te gusta la imagen, puedes ir a nuestra tienda en Etsy.com para comprarla.</string>
-    <string name="main_info_dialog_text_other_quote">Haz clic en este ícono si quieres ver otra imagen.</string>
+    <string name="main_info_dialog_text_buy_image">¿Te gusta la imagen?, puedes verla en nuestra tienda de Etsy.com entre 1 y 5 días más adelante.</string>
+    <string name="main_info_dialog_text_other_quote">Ver otra frase/imagen. La imagen puede no tener relación con la fase.</string>
     <string name="main_info_dialog_text_">Comparte tu cita del día con tus amigos y familiares.</string>
     <string name="main_content_desc_image">Imagen</string>
-    <string name="main_icon_content_desc_lost_connection">No tienes conexión a internet</string>
-    <string name="main_info_dialog_owner">Al hacer clic en el nombre del personaje que pronunció la frase, te llevaremos a su información detallada en tu navegador.</string>
-    <string name="main_info_dialog_connection">Actualmente no hay conexión a internet, por lo que no podemos cargar nuevas frases e imágenes.</string>
+    <string name="main_icon_content_desc_lost_connection">Sin conexión a internet</string>
+    <string name="main_info_dialog_owner">Al hacer clic en el nombre del autor, para ver más información sobre este.</string>
+    <string name="main_info_dialog_connection">Sin conexión a internet, por lo que no podemos cargar nuevas frases e imágenes.</string>
 
     <!-- Cadenas del diálogo de actualización -->
     <string name="update_dialog_exit_btn">Salir de la aplicación</string>

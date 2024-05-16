@@ -14,14 +14,14 @@
     <string name="main_icon_content_desc_buy_image">Buy image</string>
     <string name="main_icon_content_desc_other_quote">Other quote</string>
     <string name="main_icon_content_desc_share">Share</string>
-    <string name="main_info_dialog_text_info">Information about the app icons</string>
-    <string name="main_info_dialog_text_buy_image">If you like the image, you can go to our Etsy.com shop to buy it.</string>
-    <string name="main_info_dialog_text_other_quote">Click on this icon if you would like to see another image.</string>
+    <string name="main_info_dialog_text_info">Information about the application icons</string>
+    <string name="main_info_dialog_text_buy_image">Do you like the image? You can view it in our Etsy.com store within 1 to 5 days.</string>
+    <string name="main_info_dialog_text_other_quote">See another quote/image. The image may not be related to the quote.</string>
     <string name="main_info_dialog_text_">Share your quote of the day with your friends and family.</string>
     <string name="main_content_desc_image">Image</string>
-    <string name="main_icon_content_desc_lost_connection">You are not connected to the internet</string>
-    <string name="main_info_dialog_owner">By clicking on the name of the character who coined the phrase, we will take you to detailed information about them in your browser.</string>
-    <string name="main_info_dialog_connection">Currently, there is no internet connection, so we cannot load new phrases and images.</string>
+    <string name="main_icon_content_desc_lost_connection">No internet connection</string>
+    <string name="main_info_dialog_owner">By clicking on the author\'s name, you can view more information about them.</string>
+    <string name="main_info_dialog_connection">No internet connection, so we cannot load new quotes and images.</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Quit the app</string>
