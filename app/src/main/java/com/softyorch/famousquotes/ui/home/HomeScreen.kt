@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.home
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -91,6 +92,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
+    val showImageMsg = "Pulsa de nuevo en la imagen ver la frase!"
+    val context = LocalContext.current
 
     Interstitial(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
@@ -103,14 +106,20 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) LoadingCircle()
-        Box(contentAlignment = Alignment.TopCenter) {
+        Box(
+            modifier = Modifier.clickable {
+                viewModel.onActions(HomeActions.ShowImage).also {
+                    if (!state.showImage) context.showToast(showImageMsg, Toast.LENGTH_LONG)
+                }
+            },
+            contentAlignment = Alignment.TopCenter
+        ) {
             BackgroundImage(uri = state.quote.imageUrl)
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            CardQuote(state = state, stateLikes = stateLikes) { action ->
-                    viewModel.onActions(action)
-                }
-
+            CardQuote(state = state, stateLikes = stateLikes, context = context) { action ->
+                viewModel.onActions(action)
+            }
         }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
@@ -144,9 +153,9 @@ fun BackgroundImage(uri: String) {
 fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
+    context: Context,
     onAction: (HomeActions) -> Unit,
 ) {
-    val context = LocalContext.current
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
 
     ElevatedCard(
@@ -162,7 +171,8 @@ fun CardQuote(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
+            val isActive = state.quote.body.isNotBlank() && !state.showImage
+            AnimatedContentHome(isActive = isActive) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
@@ -186,6 +196,7 @@ fun CardQuote(
                             HomeActions.Info -> onAction(action)
                             HomeActions.Send -> onAction(action)
                             HomeActions.Like -> onAction(action)
+                            HomeActions.ShowImage -> onAction(action)
                         }
                     }
                     SpacerHeight(height = 24)
