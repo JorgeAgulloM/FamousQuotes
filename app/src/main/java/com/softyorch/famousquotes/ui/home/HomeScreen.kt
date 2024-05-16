@@ -1,7 +1,9 @@
 package com.softyorch.famousquotes.ui.home
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -79,6 +82,8 @@ import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
+import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog
@@ -90,6 +95,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Interstitial(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
@@ -100,11 +106,18 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) LoadingCircle()
-        BackgroundImage(uri = state.quote.imageUrl)
-        AnimatedContentHome(isActive = state.quote.body.isNotBlank()) {
-            CardQuote(state = state, stateLikes = stateLikes) { action ->
+        Box(
+            modifier = Modifier.clickable {
+                viewModel.onActions(HomeActions.ShowImage)
+            },
+            contentAlignment = Alignment.TopCenter
+        ) {
+            BackgroundImage(uri = state.quote.imageUrl)
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            CardQuote(state = state, stateLikes = stateLikes, context = context) { action ->
                 viewModel.onActions(action)
             }
         }
@@ -115,92 +128,97 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
 @Composable
 fun BackgroundImage(uri: String) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    val context = LocalContext.current
 
-        val context = LocalContext.current
+    val data = if (uri.startsWith("http")) uri
+    else context.getResourceDrawableIdentifier(uri)
 
-        val data = if (uri.startsWith("http")) uri
-        else context.getResourceDrawableIdentifier(uri)
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(data)
+            .crossfade(true)
+            .size(Size.ORIGINAL) // Set the target size to load the image at.
+            .build()
+    )
 
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(context)
-                .data(data)
-                .crossfade(true)
-                .size(Size.ORIGINAL) // Set the target size to load the image at.
-                .build()
-        )
+    val state = painter.state
 
-        val state = painter.state
-
-        AnimatedImage(
-            isVisible = state is AsyncImagePainter.State.Success,
-            painter = painter
-        )
-    }
+    AnimatedImage(
+        isVisible = state is AsyncImagePainter.State.Success,
+        painter = painter
+    )
 }
 
 @Composable
 fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
+    context: Context,
     onAction: (HomeActions) -> Unit,
 ) {
-    val context = LocalContext.current
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f))
-        ElevatedCard(
-            modifier = Modifier.fillMaxWidth().weight(2f),
-            shape = MaterialTheme.shapes.extraLarge,
-            elevation = CardDefaults.cardElevation(2.dp)
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.extraLarge.copy(
+            bottomStart = ZeroCornerSize,
+            bottomEnd = ZeroCornerSize
+        ),
+        elevation = CardDefaults.cardElevation(2.dp)
+    ) {
+        Column(
+            modifier = Modifier.background(brush = brushBackGround()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
+            val isActive = state.quote.body.isNotBlank() && !state.showImage
+
             Column(
-                modifier = Modifier
-                    .background(brush = brushBackGround())
-                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Controls(
-                        stateLikes = stateLikes,
-                        disabledReload = state.showInterstitial,
-                        hasConnection = state.hasConnection
-                    ) { action ->
-                        when (action) {
-                            HomeActions.Buy -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                Controls(
+                    hasText = state.quote.body,
+                    stateLikes = stateLikes,
+                    disabledReload = state.showInterstitial,
+                    hasConnection = state.hasConnection,
+                    isImageExt = state.quote.imageUrl.startsWith("http")
+                ) { action ->
+                    when (action) {
+                        HomeActions.Buy -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.New -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        HomeActions.New -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.Owner -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        HomeActions.Owner -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.Info -> onAction(action)
-                            HomeActions.Send -> onAction(action)
-                            HomeActions.Like -> onAction(action)
-                        }
+                        HomeActions.Info -> onAction(action)
+                        HomeActions.Send -> onAction(action)
+                        HomeActions.Like -> onAction(action)
+                        HomeActions.ShowImage -> onAction(action)
                     }
-                    SpacerHeight(height = 24)
-                    TextBody(text = state.quote.body)
-                    SpacerHeight(height = 24)
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        TextOwner(text = state.quote.owner) {
-                            if (state.hasConnection) onAction(HomeActions.Owner)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                }
+                AnimatedContentHome(isActive = isActive) {
+                    Column {
+                        TextBody(text = state.quote.body)
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            TextOwner(text = state.quote.owner) {
+                                if (state.hasConnection) onAction(HomeActions.Owner)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            }
                         }
                     }
                 }
-                Banner()
+                AnimatedContentHome(isActive = state.showImage) {
+                    TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
+                }
             }
+            Banner()
         }
     }
 }
@@ -208,71 +226,77 @@ fun CardQuote(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Controls(
+    hasText: String,
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     hasConnection: Boolean,
+    isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val iconLike =
-                if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-            val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
+    AnimatedTextHome(hasText) {
+        Row(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val iconLike =
+                    if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+                val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
 
-            BadgedBox(
-                badge = {
-                    Badge(
-                        containerColor = PrimaryColor,
-                        modifier = Modifier.offset((-16).dp, (16).dp)
-                    ) {
-                        Text(
-                            text = stateLikes.likes.toString(),
-                            fontSize = 16.sp,
-                            color = Color.DarkGray
-                        )
+                BadgedBox(
+                    badge = {
+                        Badge(
+                            containerColor = SecondaryColor,
+                            modifier = Modifier.offset((-16).dp, (16).dp)
+                        ) {
+                            Text(
+                                text = stateLikes.likes.toString(),
+                                fontSize = 16.sp,
+                                color = Color.DarkGray
+                            )
+                        }
                     }
+                ) {
+                    IconButtonMenu(
+                        cDescription = stringResource(R.string.main_icon_content_desc_info),
+                        color = colorIconLike,
+                        icon = iconLike
+                    ) { onAction(HomeActions.Like) }
                 }
-            ) {
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (!hasConnection) IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
+                    color = MaterialTheme.colorScheme.error,
+                    icon = Icons.Outlined.WifiOff
+                ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
-                    color = colorIconLike,
-                    icon = iconLike
-                ) { onAction(HomeActions.Like) }
+                    icon = Icons.Outlined.Info
+                ) { onAction(HomeActions.Info) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
+                    icon = Icons.Outlined.LocalMall,
+                    isEnabled = isImageExt
+                ) { onAction(HomeActions.Buy) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
+                    icon = Icons.Outlined.RestartAlt,
+                    isEnabled = !disabledReload
+                ) { onAction(HomeActions.New) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_share),
+                    icon = Icons.Outlined.Share
+                ) {
+                    onAction(
+                        HomeActions.Send
+                    )
+                }
             }
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!hasConnection) IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
-                color = MaterialTheme.colorScheme.error,
-                icon = Icons.Outlined.WifiOff
-            ) { onAction(HomeActions.New) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_info),
-                icon = Icons.Outlined.Info
-            ) { onAction(HomeActions.Info) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                icon = Icons.Outlined.LocalMall
-            ) { onAction(HomeActions.Buy) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
-                icon = Icons.Outlined.RestartAlt,
-                isEnabled = !disabledReload
-            ) { onAction(HomeActions.New) }
-            IconButtonMenu(
-                cDescription = stringResource(R.string.main_icon_content_desc_share),
-                icon = Icons.Outlined.Share
-            ) {
-                onAction(
-                    HomeActions.Send
-                )
-            }
-        }
+
     }
 }
 
@@ -280,7 +304,7 @@ fun Controls(
 fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
-    color: Color = PrimaryColor,
+    color: Color = SecondaryColor,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
@@ -309,8 +333,8 @@ fun TextInfo(text: String) {
 fun TextBody(text: String) {
     AnimatedTextHome(text) {
         Text(
-            text = "\"$text\"",
-            modifier = Modifier.padding(horizontal = 16.dp),
+            text = text,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
             style = MyTypography.displayLarge
         )
     }
@@ -321,7 +345,7 @@ fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
             style = MyTypography.labelLarge,
@@ -331,11 +355,22 @@ fun TextOwner(text: String, onClick: () -> Unit) {
 }
 
 @Composable
+fun TextToClick(text: String) {
+    AnimatedTextHome(text) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            style = MyTypography.labelMedium
+        )
+    }
+}
+
+@Composable
 fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = text.isNotBlank(),
         enter = fadeIn(
-            animationSpec = spring(0.8f, 0.8f),
+            animationSpec = spring(0.8f, 20f),
             initialAlpha = 0f
         )
     ) { content() }
@@ -344,42 +379,44 @@ fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
 @Composable
 fun InfoDialog(onAction: () -> Unit) {
     Dialog(onDismissRequest = { onAction() }) {
-        Column(
-            modifier = Modifier.background(
-                brush = brushBackGround(),
-                shape = MaterialTheme.shapes.extraLarge
-            ).padding(16.dp)
-        ) {
-            InfoIcons(
-                icon = Icons.Outlined.Info,
-                text = stringResource(R.string.main_info_dialog_text_info)
-            )
-            SpacerHeight(height = 32)
-            InfoIcons(
-                icon = Icons.Outlined.LocalMall,
-                text = stringResource(R.string.main_info_dialog_text_buy_image)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.RestartAlt,
-                text = stringResource(R.string.main_info_dialog_text_other_quote)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.Share,
-                text = stringResource(R.string.main_info_dialog_text_)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.Person,
-                text = stringResource(R.string.main_info_dialog_owner)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.WifiOff,
-                tint = MaterialTheme.colorScheme.error,
-                text = stringResource(R.string.main_info_dialog_connection)
-            )
+        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)) {
+            Column(
+                modifier = Modifier.background(
+                    brush = brushBackGround(),
+                    shape = MaterialTheme.shapes.extraLarge
+                ).padding(16.dp)
+            ) {
+                InfoIcons(
+                    icon = Icons.Outlined.Info,
+                    text = stringResource(R.string.main_info_dialog_text_info)
+                )
+                SpacerHeight(height = 32)
+                InfoIcons(
+                    icon = Icons.Outlined.LocalMall,
+                    text = stringResource(R.string.main_info_dialog_text_buy_image)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.RestartAlt,
+                    text = stringResource(R.string.main_info_dialog_text_other_quote)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.Share,
+                    text = stringResource(R.string.main_info_dialog_text_)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.Person,
+                    text = stringResource(R.string.main_info_dialog_owner)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.WifiOff,
+                    tint = MaterialTheme.colorScheme.error,
+                    text = stringResource(R.string.main_info_dialog_connection)
+                )
+            }
         }
     }
 }
@@ -399,14 +436,12 @@ fun SpacerHeight(height: Int = 16) {
 
 @Composable
 fun AnimatedImage(isVisible: Boolean, painter: Painter) {
-    val modifier = Modifier.fillMaxWidth().height(300.dp)
+    val modifier = Modifier.fillMaxWidth()
     val scale = ContentScale.Crop
 
     AnimatedVisibility(
         visible = isVisible,
-        enter = slideInVertically(
-            animationSpec = spring(1f, 20f)
-        ) + fadeIn(animationSpec = tween(durationMillis = 1000)),
+        enter = fadeIn(animationSpec = tween(durationMillis = 1000)),
         exit = fadeOut(animationSpec = tween(durationMillis = 1000))
     ) {
         Image(
@@ -450,10 +485,12 @@ fun LoadingCircle() {
         )
     }
 
-    Box(modifier = Modifier
-        .drawBehind {
-            rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
-        }
-        .size(128.dp)
-    )
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier
+            .drawBehind {
+                rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
+            }
+            .size(128.dp)
+        )
+    }
 }
