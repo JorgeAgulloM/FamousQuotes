@@ -95,7 +95,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
-    val showImageMsg = "Pulsa de nuevo en la imagen ver la frase!"
     val context = LocalContext.current
 
     Interstitial(state.showInterstitial) {
@@ -111,9 +110,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (state.isLoading) LoadingCircle()
         Box(
             modifier = Modifier.clickable {
-                viewModel.onActions(HomeActions.ShowImage).also {
-                    if (!state.showImage) context.showToast(showImageMsg, Toast.LENGTH_LONG)
-                }
+                viewModel.onActions(HomeActions.ShowImage)
             },
             contentAlignment = Alignment.TopCenter
         ) {
@@ -184,7 +181,8 @@ fun CardQuote(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
-                    hasConnection = state.hasConnection
+                    hasConnection = state.hasConnection,
+                    isImageExt = state.quote.imageUrl.startsWith("http")
                 ) { action ->
                     when (action) {
                         HomeActions.Buy -> if (state.hasConnection) onAction(action)
@@ -204,9 +202,7 @@ fun CardQuote(
                 }
                 AnimatedContentHome(isActive = isActive) {
                     Column {
-                        SpacerHeight(height = 24)
                         TextBody(text = state.quote.body)
-                        SpacerHeight(height = 24)
                         Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.CenterEnd
@@ -216,11 +212,12 @@ fun CardQuote(
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
                             }
                         }
-                        SpacerHeight(height = 24)
                     }
                 }
+                AnimatedContentHome(isActive = state.showImage) {
+                    TextToClick(text = "Pulsa de nuevo en la imagen ver la frase!")
+                }
             }
-            if (!isActive) SpacerHeight()
             Banner()
         }
     }
@@ -233,12 +230,13 @@ fun Controls(
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     hasConnection: Boolean,
+    isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -280,7 +278,8 @@ fun Controls(
                 ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                    icon = Icons.Outlined.LocalMall
+                    icon = Icons.Outlined.LocalMall,
+                    isEnabled = isImageExt
                 ) { onAction(HomeActions.Buy) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
@@ -335,7 +334,7 @@ fun TextBody(text: String) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
             style = MyTypography.displayLarge
         )
     }
@@ -346,11 +345,22 @@ fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
             style = MyTypography.labelLarge,
             textDecoration = TextDecoration.Underline
+        )
+    }
+}
+
+@Composable
+fun TextToClick(text: String) {
+    AnimatedTextHome(text) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            style = MyTypography.labelMedium
         )
     }
 }
