@@ -66,6 +66,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -359,8 +360,9 @@ fun TextToClick(text: String) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-            style = MyTypography.labelMedium
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            style = MyTypography.labelMedium,
+            textAlign = TextAlign.Center
         )
     }
 }
