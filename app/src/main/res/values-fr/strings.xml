@@ -20,7 +20,7 @@
     <string name="main_info_dialog_text_">Partagez votre citation du jour avec vos amis et votre famille.</string>
     <string name="main_content_desc_image">Image</string>
     <string name="main_icon_content_desc_lost_connection">Pas de connexion Internet</string>
-    <string name="main_info_dialog_owner">En cliquant sur le nom de l\'auteur, vous pouvez voir plus d'informations à son sujet.</string>
+    <string name="main_info_dialog_owner">En cliquant sur le nom de l\'auteur, vous pouvez voir plus d\'informations à son sujet.</string>
     <string name="main_info_dialog_connection">Pas de connexion Internet, nous ne pouvons donc pas charger de nouvelles citations et images.</string>
 
     <!-- Chaînes de la boîte de dialogue de mise à jour -->
