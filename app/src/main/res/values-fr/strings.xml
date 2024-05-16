@@ -22,6 +22,7 @@
     <string name="main_icon_content_desc_lost_connection">Pas de connexion Internet</string>
     <string name="main_info_dialog_owner">En cliquant sur le nom de l\'auteur, vous pouvez voir plus d\'informations à son sujet.</string>
     <string name="main_info_dialog_connection">Pas de connexion Internet, nous ne pouvons donc pas charger de nouvelles citations et images.</string>
+    <string name="main_info_click_another_on_image">Appuyez à nouveau sur l\'image pour voir la citation!</string>
 
     <!-- Chaînes de la boîte de dialogue de mise à jour -->
     <string name="update_dialog_exit_btn">Quitter l\'application</string>
