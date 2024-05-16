@@ -172,48 +172,52 @@ fun CardQuote(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             val isActive = state.quote.body.isNotBlank() && !state.showImage
-            AnimatedContentHome(isActive = isActive) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Controls(
-                        hasText = state.quote.body,
-                        stateLikes = stateLikes,
-                        disabledReload = state.showInterstitial,
-                        hasConnection = state.hasConnection
-                    ) { action ->
-                        when (action) {
-                            HomeActions.Buy -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.New -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Controls(
+                    hasText = state.quote.body,
+                    stateLikes = stateLikes,
+                    disabledReload = state.showInterstitial,
+                    hasConnection = state.hasConnection
+                ) { action ->
+                    when (action) {
+                        HomeActions.Buy -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.Owner -> if (state.hasConnection) onAction(action)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        HomeActions.New -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                            HomeActions.Info -> onAction(action)
-                            HomeActions.Send -> onAction(action)
-                            HomeActions.Like -> onAction(action)
-                            HomeActions.ShowImage -> onAction(action)
-                        }
+                        HomeActions.Owner -> if (state.hasConnection) onAction(action)
+                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                        HomeActions.Info -> onAction(action)
+                        HomeActions.Send -> onAction(action)
+                        HomeActions.Like -> onAction(action)
+                        HomeActions.ShowImage -> onAction(action)
                     }
-                    SpacerHeight(height = 24)
-                    TextBody(text = state.quote.body)
-                    SpacerHeight(height = 24)
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        TextOwner(text = state.quote.owner) {
-                            if (state.hasConnection) onAction(HomeActions.Owner)
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                }
+                AnimatedContentHome(isActive = isActive) {
+                    Column {
+                        SpacerHeight(height = 24)
+                        TextBody(text = state.quote.body)
+                        SpacerHeight(height = 24)
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            TextOwner(text = state.quote.owner) {
+                                if (state.hasConnection) onAction(HomeActions.Owner)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            }
                         }
+                        SpacerHeight(height = 24)
                     }
                 }
             }
-            SpacerHeight(height = 24)
+            if (!isActive) SpacerHeight()
             Banner()
         }
     }
