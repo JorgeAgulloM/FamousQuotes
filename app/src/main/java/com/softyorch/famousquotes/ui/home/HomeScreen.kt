@@ -215,7 +215,7 @@ fun CardQuote(
                     }
                 }
                 AnimatedContentHome(isActive = state.showImage) {
-                    TextToClick(text = "Pulsa de nuevo en la imagen ver la frase!")
+                    TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
                 }
             }
             Banner()
