@@ -57,7 +57,12 @@ class HomeViewModel @Inject constructor(
             HomeActions.Buy -> goToBuyImage()
             HomeActions.Owner -> goToSearchOwner()
             HomeActions.Like -> setQuoteLike()
+            HomeActions.ShowImage -> showImage()
         }
+    }
+
+    private fun showImage() {
+        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
     }
 
     private fun setQuoteLike() {
