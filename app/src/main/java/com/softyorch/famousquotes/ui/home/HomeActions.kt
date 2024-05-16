@@ -7,4 +7,5 @@ sealed class HomeActions {
     data object Buy: HomeActions()
     data object Owner: HomeActions()
     data object Like: HomeActions()
+    data object ShowImage: HomeActions()
 }
