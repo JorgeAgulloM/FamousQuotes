@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <!-- Names -->
     <string name="app_name">Berühmte Zitate</string>
     <string name="app_name_historical">Historische Zitate</string>
     <string name="app_name_biblical">Biblische Zitate</string>
@@ -10,14 +14,14 @@
     <string name="main_icon_content_desc_buy_image">Bild kaufen</string>
     <string name="main_icon_content_desc_other_quote">Anderes Zitat</string>
     <string name="main_icon_content_desc_share">Teilen</string>
-    <string name="main_info_dialog_text_info">Informationen zu den App-Symbolen</string>
-    <string name="main_info_dialog_text_buy_image">Wenn Ihnen das Bild gefällt, können Sie es in unserem Etsy.com-Shop kaufen.</string>
-    <string name="main_info_dialog_text_other_quote">Klicken Sie auf dieses Symbol, wenn Sie ein anderes Bild sehen möchten.</string>
+    <string name="main_info_dialog_text_info">Informationen zu den Anwendungs-Symbolen</string>
+    <string name="main_info_dialog_text_buy_image">Gefällt Ihnen das Bild? Sie können es in unserem Etsy.com-Shop in 1 bis 5 Tagen sehen.</string>
+    <string name="main_info_dialog_text_other_quote">Siehe ein anderes Zitat/Bild. Das Bild muss nicht unbedingt mit dem Zitat zusammenhängen.</string>
     <string name="main_info_dialog_text_">Teilen Sie Ihr Zitat des Tages mit Ihren Freunden und Ihrer Familie.</string>
     <string name="main_content_desc_image">Bild</string>
-    <string name="main_icon_content_desc_lost_connection">Sie sind nicht mit dem Internet verbunden</string>
-    <string name="main_info_dialog_owner">Wenn Sie auf den Namen der Person klicken, die den Satz geprägt hat, zeigen wir Ihnen Informationen darüber in Ihrem Browser an.</string>
-    <string name="main_info_dialog_connection">Derzeit besteht keine Internetverbindung, daher können wir keine neuen Sätze und Bilder laden.</string>
+    <string name="main_icon_content_desc_lost_connection">Keine Internetverbindung</string>
+    <string name="main_info_dialog_owner">Durch Klicken auf den Namen des Autors können Sie weitere Informationen über ihn anzeigen.</string>
+    <string name="main_info_dialog_connection">Keine Internetverbindung, daher können wir keine neuen Zitate und Bilder laden.</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">App beenden</string>

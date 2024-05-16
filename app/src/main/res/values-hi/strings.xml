@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <!-- Names -->
     <string name="app_name">प्रसिद्ध उध्धरण</string>
     <string name="app_name_historical">ऐतिहासिक उध्धरण</string>
     <string name="app_name_biblical">धार्मिक उध्धरण</string>
@@ -10,14 +14,14 @@
     <string name="main_icon_content_desc_buy_image">छवि खरीदें</string>
     <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
     <string name="main_icon_content_desc_share">शेयर करें</string>
-    <string name="main_info_dialog_text_info">ऐप आइकन्स के बारे में जानकारी</string>
-    <string name="main_info_dialog_text_buy_image">यदि आपको छवि पसंद है, तो आप इसे खरीद सकते हैं।</string>
-    <string name="main_info_dialog_text_other_quote">इस आइकन पर क्लिक करें यदि आप किसी और छवि देखना चाहते हैं।</string>
+    <string name="main_info_dialog_text_info">ऐप्लिकेशन आइकॉन के बारे में जानकारी</string>
+    <string name="main_info_dialog_text_buy_image">क्या आपको छवि पसंद है? आप हमारे Etsy.com स्टोर में 1 से 5 दिनों के भीतर देख सकते हैं।</string>
+    <string name="main_info_dialog_text_other_quote">एक और उद्धरण/छवि देखें। छवि उद्धरण से संबंधित नहीं हो सकती है।</string>
     <string name="main_info_dialog_text_">अपने दिन के उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
     <string name="main_content_desc_image">छवि</string>
-    <string name="main_icon_content_desc_lost_connection">आप इंटरनेट से जुड़े नहीं हैं</string>
-    <string name="main_info_dialog_owner">उस व्यक्ति के नाम पर क्लिक करके, जिसने यह वाक्य कहा था, हम आपको उसकी विस्तृत जानकारी अपने ब्राउज़र में दिखाएंगे।</string>
-    <string name="main_info_dialog_connection">वर्तमान में कोई इंटरनेट कनेक्शन नहीं है, इसलिए हम नए वाक्य और छवियों को नहीं लोड कर सकते।</string>
+    <string name="main_icon_content_desc_lost_connection">इंटरनेट कनेक्शन नहीं है</string>
+    <string name="main_info_dialog_owner">लेखक के नाम पर क्लिक करके, आप उनके बारे में अधिक जानकारी देख सकते हैं।</string>
+    <string name="main_info_dialog_connection">इंटरनेट कनेक्शन नहीं है, इसलिए हम नए उद्धरण और छवियों को लोड नहीं कर सकते।</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">ऐप बंद करें</string>
