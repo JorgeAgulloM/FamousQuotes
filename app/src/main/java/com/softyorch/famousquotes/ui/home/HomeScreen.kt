@@ -81,6 +81,8 @@ import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
+import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog
@@ -247,7 +249,7 @@ fun Controls(
                 BadgedBox(
                     badge = {
                         Badge(
-                            containerColor = PrimaryColor,
+                            containerColor = SecondaryColor,
                             modifier = Modifier.offset((-16).dp, (16).dp)
                         ) {
                             Text(
@@ -302,7 +304,7 @@ fun Controls(
 fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
-    color: Color = PrimaryColor,
+    color: Color = SecondaryColor,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
@@ -366,42 +368,44 @@ fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
 @Composable
 fun InfoDialog(onAction: () -> Unit) {
     Dialog(onDismissRequest = { onAction() }) {
-        Column(
-            modifier = Modifier.background(
-                brush = brushBackGround(),
-                shape = MaterialTheme.shapes.extraLarge
-            ).padding(16.dp)
-        ) {
-            InfoIcons(
-                icon = Icons.Outlined.Info,
-                text = stringResource(R.string.main_info_dialog_text_info)
-            )
-            SpacerHeight(height = 32)
-            InfoIcons(
-                icon = Icons.Outlined.LocalMall,
-                text = stringResource(R.string.main_info_dialog_text_buy_image)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.RestartAlt,
-                text = stringResource(R.string.main_info_dialog_text_other_quote)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.Share,
-                text = stringResource(R.string.main_info_dialog_text_)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.Person,
-                text = stringResource(R.string.main_info_dialog_owner)
-            )
-            SpacerHeight()
-            InfoIcons(
-                icon = Icons.Outlined.WifiOff,
-                tint = MaterialTheme.colorScheme.error,
-                text = stringResource(R.string.main_info_dialog_connection)
-            )
+        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)) {
+            Column(
+                modifier = Modifier.background(
+                    brush = brushBackGround(),
+                    shape = MaterialTheme.shapes.extraLarge
+                ).padding(16.dp)
+            ) {
+                InfoIcons(
+                    icon = Icons.Outlined.Info,
+                    text = stringResource(R.string.main_info_dialog_text_info)
+                )
+                SpacerHeight(height = 32)
+                InfoIcons(
+                    icon = Icons.Outlined.LocalMall,
+                    text = stringResource(R.string.main_info_dialog_text_buy_image)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.RestartAlt,
+                    text = stringResource(R.string.main_info_dialog_text_other_quote)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.Share,
+                    text = stringResource(R.string.main_info_dialog_text_)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.Person,
+                    text = stringResource(R.string.main_info_dialog_owner)
+                )
+                SpacerHeight()
+                InfoIcons(
+                    icon = Icons.Outlined.WifiOff,
+                    tint = MaterialTheme.colorScheme.error,
+                    text = stringResource(R.string.main_info_dialog_connection)
+                )
+            }
         }
     }
 }
