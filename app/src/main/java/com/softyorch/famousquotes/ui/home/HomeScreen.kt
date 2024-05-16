@@ -76,6 +76,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
@@ -217,6 +218,7 @@ fun CardQuote(
                 }
                 AnimatedContentHome(isActive = state.showImage) {
                     TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
+                    // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
             Banner()
@@ -418,6 +420,8 @@ fun InfoDialog(onAction: () -> Unit) {
                     tint = MaterialTheme.colorScheme.error,
                     text = stringResource(R.string.main_info_dialog_connection)
                 )
+                SpacerHeight()
+                TextToClick(text = "V: ${BuildConfig.VERSION_NAME}")
             }
         }
     }
