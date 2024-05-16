@@ -430,7 +430,7 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
 
     AnimatedVisibility(
         visible = isVisible,
-        enter = fadeIn(animationSpec = tween(durationMillis = 2000)),
+        enter = fadeIn(animationSpec = tween(durationMillis = 1000)),
         exit = fadeOut(animationSpec = tween(durationMillis = 1000))
     ) {
         Image(
