@@ -33,7 +33,9 @@ class GetTodayQuote @Inject constructor(
 
     private suspend fun getImage(url: String? = null): String {
         if (url != null) storageService.getImage(url).let {
-            return it
+            return it ?: getImageFromMemory().also {
+                writeLog(WARN, "[SelectRandomQuote] -> getImage(): Image from Memory")
+            }
         }
 
         return getImageFromMemory().also {
@@ -43,16 +45,18 @@ class GetTodayQuote @Inject constructor(
 
     private fun getImageFromMemory(): String {
         val listImages = listOf(
-            "bg_image_1",
-            "bg_image_2",
-            "bg_image_3",
-            "bg_image_4",
-            "bg_image_5",
-            "bg_image_6",
-            "bg_image_7",
-            "bg_image_8",
-            "bg_image_9",
+            "bg_image_01",
+            "bg_image_02",
+            "bg_image_03",
+            "bg_image_04",
+            "bg_image_05",
+            "bg_image_06",
+            "bg_image_07",
+            "bg_image_08",
+            "bg_image_09",
             "bg_image_10",
+            "bg_image_11",
+            "bg_image_12",
         )
 
         return listImages.random()
