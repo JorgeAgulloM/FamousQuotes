@@ -41,7 +41,7 @@ fun brushBackGround(): Brush = Brush.linearGradient(
         BackgroundColor.copy(alpha = 0.4f),
         BackgroundColor,
         BackgroundColor,
+        BackgroundColor.copy(alpha = 0.6f),
         BackgroundColor.copy(alpha = 0.4f),
-        BackgroundColor.copy(alpha = 0.2f),
     )
 )
