@@ -18,7 +18,7 @@ import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
 
 @Composable
 fun Banner() {
-    val currentWidth = LocalConfiguration.current.screenWidthDp + 80
+    val currentWidth = LocalConfiguration.current.screenWidthDp
     ElevatedCard(
         modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
         shape = MaterialTheme.shapes.large,
