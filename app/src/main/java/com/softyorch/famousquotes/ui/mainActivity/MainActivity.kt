@@ -27,6 +27,7 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.home.HomeScreen
 import com.softyorch.famousquotes.ui.home.HomeViewModel
+import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        else -> {}
+                        MainState.Loading -> LoadingCircle()
                     }
                 }
             }
