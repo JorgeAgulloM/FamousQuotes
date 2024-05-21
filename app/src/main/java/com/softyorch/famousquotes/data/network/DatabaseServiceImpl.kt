@@ -15,7 +15,6 @@ import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -105,34 +104,19 @@ class DatabaseServiceImpl @Inject constructor(
 
                 result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike ) }
             }
-        } ?: flowOf(null)
+        } ?: flowOf(LikeQuoteResponse())
     }
 
-    private suspend fun getLikeQuote(id: String): LikeQuoteResponse? =
-        withTimeoutOrNull(TIMEOUT) {
-            suspendCancellableCoroutine { cancelableCoroutine ->
-                firestore.collection(COLLECTION_LIKES).document(id).get()
-                    .addOnSuccessListener {
-                        getUserIsLike(id, cancelableCoroutine)
-                    }.addOnFailureListener {
-                        cancelableCoroutine.resumeWithException(it)
-                    }
-            }
-        }
+    private suspend fun getLikeQuote(id: String): LikeQuoteResponse? {
+        val document = firestore.collection(COLLECTION_LIKES).document(id)
+        val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
+        return likeQuote?.copy(like = getUserIsLike(id).like.also { writeLog(INFO, "[getUserIsLike] -> $it") })
+    }
 
-    private fun getUserIsLike(
-        id: String,
-        cancelableCoroutine: CancellableContinuation<LikeQuoteResponse?>,
-    ) {
-        firestore.collection(COLLECTION_LIKES)
+    private suspend fun getUserIsLike(id: String): LikeResponse {
+        return firestore.collection(COLLECTION_LIKES)
             .document(id)
             .collection(COLLECTION_USERS_LIKE)
-            .document(userId).get().addOnSuccessListener {
-                cancelableCoroutine.resume(
-                    it.toObject(LikeQuoteResponse::class.java) ?: LikeQuoteResponse()
-                )
-            }.addOnFailureListener {
-                cancelableCoroutine.resumeWithException(it)
-            }
+            .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
     }
 }

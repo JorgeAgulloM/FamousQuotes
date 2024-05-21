@@ -11,6 +11,8 @@
 
     <!-- Cadenas principales -->
     <string name="main_icon_content_desc_info">Información</string>
+    <string name="main_icon_content_desc_like_use">Toca para Me gusta</string>
+    <string name="main_icon_content_desc_likes">A los usuarios les gusta</string>
     <string name="main_icon_content_desc_buy_image">Comprar imagen</string>
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
@@ -71,6 +73,6 @@
 
     <!-- Firebase Notifications Channels -->
     <string name="fbm_message_title">Tu frase diaria te espera</string>
-    <string name="fbm_message_body">Recuerda que tiene una frase diferente cada día, no te la pierdas.</string>
+    <string name="fbm_message_body">Recuerda que tienes una frase diferente cada día, no te la pierdas.</string>
 
 </resources>

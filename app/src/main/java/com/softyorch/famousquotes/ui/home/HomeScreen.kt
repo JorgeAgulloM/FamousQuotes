@@ -65,6 +65,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,6 +75,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
@@ -215,6 +217,7 @@ fun CardQuote(
                 }
                 AnimatedContentHome(isActive = state.showImage) {
                     TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
+                    // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
             Banner()
@@ -258,7 +261,7 @@ fun Controls(
                     }
                 ) {
                     IconButtonMenu(
-                        cDescription = stringResource(R.string.main_icon_content_desc_info),
+                        cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                         color = colorIconLike,
                         icon = iconLike,
                         isEnabled = hasConnection
@@ -349,8 +352,8 @@ fun TextOwner(text: String, onClick: () -> Unit) {
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
-            style = MyTypography.labelLarge,
-            textDecoration = TextDecoration.Underline
+            style = MyTypography.labelLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+            textDecoration = TextDecoration.Underline,
         )
     }
 }
@@ -360,8 +363,9 @@ fun TextToClick(text: String) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-            style = MyTypography.labelMedium
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            style = MyTypography.labelMedium,
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -417,6 +421,8 @@ fun InfoDialog(onAction: () -> Unit) {
                     tint = MaterialTheme.colorScheme.error,
                     text = stringResource(R.string.main_info_dialog_connection)
                 )
+                SpacerHeight()
+                TextToClick(text = "V: ${BuildConfig.VERSION_NAME}")
             }
         }
     }
