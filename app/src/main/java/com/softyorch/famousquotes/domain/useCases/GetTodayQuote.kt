@@ -26,10 +26,10 @@ class GetTodayQuote @Inject constructor(
     }
 
     suspend fun getRandomQuote(): FamousQuoteModel {
-        val quote = quoteFromDefaultDb()
-        val image = getImage(url = quote.imageUrl)
+        val quote = dbService.getRandomQuote()?.toDomain()
+        val image = getImage(url = quote?.imageUrl)
 
-        return quote.copy(imageUrl = image)
+        return quote?.copy(imageUrl = image) ?: quoteFromDefaultDb()
     }
 
     private fun quoteFromDefaultDb() = defaultDatabase.getDefaultQuote().toDomain()
