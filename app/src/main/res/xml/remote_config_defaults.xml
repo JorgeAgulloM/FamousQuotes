@@ -2,18 +2,18 @@
 <defaults>
   <entry>
     <key>historical_db_update_version</key>
-    <value>1.0.0</value>
+    <value>0.0.1</value>
   </entry>
   <entry>
     <key>biblical_db_update_version</key>
-    <value>1.0.0</value>
+    <value>0.0.1</value>
   </entry>
   <entry>
     <key>uplifting_db_update_version</key>
-    <value>1.0.0</value>
+    <value>0.0.1</value>
   </entry>
   <entry>
     <key>app_min_version</key>
-    <value>1.0.0</value>
+    <value>0.0.1</value>
   </entry>
 </defaults>
