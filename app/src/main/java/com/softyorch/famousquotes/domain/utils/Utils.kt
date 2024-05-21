@@ -1,7 +1,5 @@
 package com.softyorch.famousquotes.domain.utils
 
-import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.writeLog
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -12,15 +10,11 @@ fun getTodayId(): String {
     calendar.set(Calendar.SECOND, 0)
     calendar.set(Calendar.MILLISECOND, 0)
     val oneHourInMillis = 1000 * 60 * 60
-    return (calendar.timeInMillis - oneHourInMillis).toString().also {
-        writeLog(LevelLog.INFO, "Id generated: $it")
-    }
+    return (calendar.timeInMillis - oneHourInMillis).toString()
 }
 
 fun versionList(nameVersion: String): List<Int> =
-    nameVersion.split(".").map { it.toInt() }.also {
-        writeLog(LevelLog.INFO, "[versionList] -> nameVersion: $nameVersion")
-    }
+    nameVersion.split(".").map { it.toInt() }
 
 fun emptyVersionList(): List<Int> = listOf(0, 0, 0)
 

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <!-- Names -->
     <string name="app_name">Citazioni Famose</string>
     <string name="app_name_historical">Citazioni Storiche</string>
     <string name="app_name_biblical">Citazioni Bibliche</string>
@@ -10,14 +14,15 @@
     <string name="main_icon_content_desc_buy_image">Acquista immagine</string>
     <string name="main_icon_content_desc_other_quote">Altra citazione</string>
     <string name="main_icon_content_desc_share">Condividi</string>
-    <string name="main_info_dialog_text_info">Informazioni sulle icone dell\'app</string>
-    <string name="main_info_dialog_text_buy_image">Se ti piace l\'immagine, puoi acquistarla nel nostro negozio Etsy.com.</string>
-    <string name="main_info_dialog_text_other_quote">Fai clic su questa icona se vuoi vedere un\'altra immagine.</string>
-    <string name="main_info_dialog_text_">Condividi la tua citazione del giorno con i tuoi amici e la tua famiglia.</string>
+    <string name="main_info_dialog_text_info">Informazioni sugli icone dell\'applicazione</string>
+    <string name="main_info_dialog_text_buy_image">Ti piace l\'immagine? Puoi vederla nel nostro negozio su Etsy.com tra 1 e 5 giorni.</string>
+    <string name="main_info_dialog_text_other_quote">Guarda un\'altra citazione/immagine. L\'immagine potrebbe non essere correlata alla citazione.</string>
+    <string name="main_info_dialog_text_">Condividi la tua citazione del giorno con amici e familiari.</string>
     <string name="main_content_desc_image">Immagine</string>
-    <string name="main_icon_content_desc_lost_connection">Non sei connesso a Internet</string>
-    <string name="main_info_dialog_owner">Cliccando sul nome del personaggio che ha coniato la frase, ti mostreremo informazioni dettagliate su di lui nel tuo browser.</string>
-    <string name="main_info_dialog_connection">Attualmente non c\'è connessione Internet, quindi non possiamo caricare nuove frasi e immagini.</string>
+    <string name="main_icon_content_desc_lost_connection">Nessuna connessione Internet</string>
+    <string name="main_info_dialog_owner">Cliccando sul nome dell\'autore, è possibile visualizzare ulteriori informazioni su di lui/lei.</string>
+    <string name="main_info_dialog_connection">Nessuna connessione Internet, quindi non possiamo caricare nuove citazioni e immagini.</string>
+    <string name="main_info_click_another_on_image">Premi di nuovo sull\'immagine per vedere la citazione!</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Esci dall\'app</string>

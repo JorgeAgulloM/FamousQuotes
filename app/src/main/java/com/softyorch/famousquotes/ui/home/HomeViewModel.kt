@@ -6,7 +6,7 @@ import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.domain.useCases.SelectRandomQuote
+import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.ui.home.model.LikesUiDTO
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val selectQuote: SelectRandomQuote,
+    private val selectQuote: GetTodayQuote,
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
@@ -41,6 +41,10 @@ class HomeViewModel @Inject constructor(
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
     init {
+        onCreate()
+    }
+
+    fun onCreate() {
         getQuote()
         hasConnectionFlow()
     }
@@ -53,7 +57,12 @@ class HomeViewModel @Inject constructor(
             HomeActions.Buy -> goToBuyImage()
             HomeActions.Owner -> goToSearchOwner()
             HomeActions.Like -> setQuoteLike()
+            HomeActions.ShowImage -> showImage()
         }
+    }
+
+    private fun showImage() {
+        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
     }
 
     private fun setQuoteLike() {
@@ -102,8 +111,15 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote()
             }
-            if (quote != null)
-                _uiState.update { it.copy(isLoading = false, quote = quote) }
+            val reviewQuote = quote.copy(
+                body = quote.body.trim(),
+                owner = if ("'" in quote.owner) {
+                    quote.owner.trim().replace("'", "")
+                } else {
+                    quote.owner.trim()
+                }
+            )
+            _uiState.update { it.copy(isLoading = false, quote = reviewQuote) }
 
             getLikesQuote()
         }
@@ -129,8 +145,7 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote.getRandomQuote()
             }
-            if (quote != null)
-                _uiState.update { it.copy(isLoading = false, quote = quote) }
+            _uiState.update { it.copy(isLoading = false, quote = quote) }
         }
     }
 
@@ -140,5 +155,14 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(hasConnection = connection) }
             }
         }
+    }
+
+    /**
+     * Function only for TESTING!!!
+     *
+     * ¡¡ Not call form UI !!
+     */
+    fun showInterstitialOnlyForTesting() {
+        _uiState.update { it.copy(showInterstitial = true) }
     }
 }

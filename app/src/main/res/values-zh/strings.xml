@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <!-- Names -->
     <string name="app_name">名言警句</string>
     <string name="app_name_historical">歷史名言</string>
     <string name="app_name_biblical">聖經名言</string>
@@ -10,14 +14,15 @@
     <string name="main_icon_content_desc_buy_image">購買圖片</string>
     <string name="main_icon_content_desc_other_quote">其他引用</string>
     <string name="main_icon_content_desc_share">分享</string>
-    <string name="main_info_dialog_text_info">有關應用程式圖示的資訊</string>
-    <string name="main_info_dialog_text_buy_image">如果您喜歡這幅圖片，您可以前往我們的 Etsy.com 商店購買。</string>
-    <string name="main_info_dialog_text_other_quote">如果您想查看其他圖片，請點擊此圖示。</string>
-    <string name="main_info_dialog_text_">與您的朋友和家人分享您的每日引用。</string>
-    <string name="main_content_desc_image">圖片</string>
-    <string name="main_icon_content_desc_lost_connection">您未连接到互联网</string>
-    <string name="main_info_dialog_owner">点击发出该短语的人物名称，我们将在您的浏览器中向您展示有关其详细信息。</string>
-    <string name="main_info_dialog_connection">当前没有互联网连接，因此我们无法加载新的短语和图片。</string>
+    <string name="main_info_dialog_text_info">关于应用程序图标的信息</string>
+    <string name="main_info_dialog_text_buy_image">喜欢这张图片吗？您可以在我们的Etsy.com商店1到5天内看到它。</string>
+    <string name="main_info_dialog_text_other_quote">查看其他引语/图片。图片可能与引语无关。</string>
+    <string name="main_info_dialog_text_">与朋友和家人分享你的每日引语。</string>
+    <string name="main_content_desc_image">图片</string>
+    <string name="main_icon_content_desc_lost_connection">无网络连接</string>
+    <string name="main_info_dialog_owner">点击作者姓名，可以查看更多关于他/她的信息。</string>
+    <string name="main_info_dialog_connection">没有网络连接，因此无法加载新的引语和图片。</string>
+    <string name="main_info_click_another_on_image">再次点击图片查看引语！</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">退出應用程式</string>
