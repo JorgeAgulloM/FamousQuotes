@@ -42,7 +42,6 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -172,7 +171,7 @@ fun CardQuote(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             val isActive = state.quote.body.isNotBlank() && !state.showImage
-
+            val hasConnection = state.hasConnection == true
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
@@ -181,17 +180,17 @@ fun CardQuote(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
-                    hasConnection = state.hasConnection,
+                    hasConnection = hasConnection,
                     isImageExt = state.quote.imageUrl.startsWith("http")
                 ) { action ->
                     when (action) {
-                        HomeActions.Buy -> if (state.hasConnection) onAction(action)
+                        HomeActions.Buy -> if (hasConnection) onAction(action)
                         else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                        HomeActions.New -> if (state.hasConnection) onAction(action)
+                        HomeActions.New -> if (hasConnection) onAction(action)
                         else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                        HomeActions.Owner -> if (state.hasConnection) onAction(action)
+                        HomeActions.Owner -> if (hasConnection) onAction(action)
                         else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                         HomeActions.Info -> onAction(action)
@@ -208,7 +207,7 @@ fun CardQuote(
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             TextOwner(text = state.quote.owner) {
-                                if (state.hasConnection) onAction(HomeActions.Owner)
+                                if (hasConnection) onAction(HomeActions.Owner)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
                             }
                         }
@@ -223,7 +222,6 @@ fun CardQuote(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Controls(
     hasText: String,
@@ -262,7 +260,8 @@ fun Controls(
                     IconButtonMenu(
                         cDescription = stringResource(R.string.main_icon_content_desc_info),
                         color = colorIconLike,
-                        icon = iconLike
+                        icon = iconLike,
+                        isEnabled = hasConnection
                     ) { onAction(HomeActions.Like) }
                 }
             }
@@ -274,21 +273,23 @@ fun Controls(
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
-                    icon = Icons.Outlined.Info
+                    icon = Icons.Outlined.Info,
+                    isEnabled = hasConnection
                 ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = Icons.Outlined.LocalMall,
-                    isEnabled = isImageExt
+                    isEnabled = isImageExt && hasConnection
                 ) { onAction(HomeActions.Buy) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
-                    isEnabled = !disabledReload
+                    isEnabled = !disabledReload && hasConnection
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
-                    icon = Icons.Outlined.Share
+                    icon = Icons.Outlined.Share,
+                    isEnabled = hasConnection
                 ) {
                     onAction(
                         HomeActions.Send

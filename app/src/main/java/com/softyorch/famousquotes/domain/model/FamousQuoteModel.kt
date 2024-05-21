@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.domain.model
 
+import com.softyorch.famousquotes.data.defaultDatabase.DefaultModel
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import java.util.Locale
 
@@ -11,6 +12,12 @@ data class FamousQuoteModel(
     companion object {
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             owner = getDataLocal(owner),
+            body = getDataLocal(quote),
+            imageUrl = imageUrl
+        )
+
+        fun DefaultModel.toDomain(): FamousQuoteModel = FamousQuoteModel(
+            owner = owner,
             body = getDataLocal(quote),
             imageUrl = imageUrl
         )
