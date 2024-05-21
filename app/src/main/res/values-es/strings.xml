@@ -71,6 +71,6 @@
 
     <!-- Firebase Notifications Channels -->
     <string name="fbm_message_title">Tu frase diaria te espera</string>
-    <string name="fbm_message_body">Recuerda que tiene una frase diferente cada día, no te la pierdas.</string>
+    <string name="fbm_message_body">Recuerda que tienes una frase diferente cada día, no te la pierdas.</string>
 
 </resources>
