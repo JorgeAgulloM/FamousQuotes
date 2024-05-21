@@ -261,7 +261,7 @@ fun Controls(
                     }
                 ) {
                     IconButtonMenu(
-                        cDescription = stringResource(R.string.main_icon_content_desc_info),
+                        cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                         color = colorIconLike,
                         icon = iconLike,
                         isEnabled = hasConnection
@@ -352,8 +352,8 @@ fun TextOwner(text: String, onClick: () -> Unit) {
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
-            style = MyTypography.labelLarge,
-            textDecoration = TextDecoration.Underline
+            style = MyTypography.labelLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+            textDecoration = TextDecoration.Underline,
         )
     }
 }
