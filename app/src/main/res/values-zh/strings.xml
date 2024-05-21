@@ -11,6 +11,8 @@
 
     <!-- Main strings -->
     <string name="main_icon_content_desc_info">資訊</string>
+    <string name="main_icon_content_desc_like_use">点击喜欢</string>
+    <string name="main_icon_content_desc_likes">用户喜欢</string>
     <string name="main_icon_content_desc_buy_image">購買圖片</string>
     <string name="main_icon_content_desc_other_quote">其他引用</string>
     <string name="main_icon_content_desc_share">分享</string>
