@@ -11,6 +11,8 @@
 
     <!-- Main strings -->
     <string name="main_icon_content_desc_info">Info</string>
+    <string name="main_icon_content_desc_like_use">Tocca per Mi piace</string>
+    <string name="main_icon_content_desc_likes">Agli utenti piace</string>
     <string name="main_icon_content_desc_buy_image">Acquista immagine</string>
     <string name="main_icon_content_desc_other_quote">Altra citazione</string>
     <string name="main_icon_content_desc_share">Condividi</string>

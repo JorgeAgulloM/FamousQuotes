@@ -11,6 +11,8 @@
 
     <!-- Cadenas principales -->
     <string name="main_icon_content_desc_info">Información</string>
+    <string name="main_icon_content_desc_like_use">Toca para Me gusta</string>
+    <string name="main_icon_content_desc_likes">A los usuarios les gusta</string>
     <string name="main_icon_content_desc_buy_image">Comprar imagen</string>
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
