@@ -33,10 +33,11 @@ import com.softyorch.famousquotes.ui.theme.brushBackGround
 
 @Composable
 fun InfoDialog(onAction: () -> Unit) {
+    val infoText = stringResource(R.string.main_info_dialog_text_info)
     Dialog(onDismissRequest = { onAction() }) {
         Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)
             .clearAndSetSemantics {
-                testTag = stringResource(R.string.main_info_dialog_text_info)
+                testTag = infoText
             }
         ) {
             Column(
@@ -47,7 +48,7 @@ fun InfoDialog(onAction: () -> Unit) {
             ) {
                 InfoIcons(
                     icon = Icons.Outlined.Info,
-                    text = stringResource(R.string.main_info_dialog_text_info)
+                    text = infoText
                 )
                 SpacerHeight(height = 32)
                 InfoIcons(
