@@ -11,6 +11,8 @@
 
     <!-- Main strings -->
     <string name="main_icon_content_desc_info">जानकारी</string>
+    <string name="main_icon_content_desc_like_use">पसंद करने के लिए स्पर्श करें</string>
+    <string name="main_icon_content_desc_likes">उपयोगकर्ताओं को पसंद है</string>
     <string name="main_icon_content_desc_buy_image">छवि खरीदें</string>
     <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
     <string name="main_icon_content_desc_share">शेयर करें</string>
