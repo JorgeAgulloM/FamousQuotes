@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
@@ -15,15 +13,18 @@ import com.softyorch.famousquotes.data.network.response.LikeResponse
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.utils.LevelLog.INFO
-import com.softyorch.famousquotes.utils.LevelLog.WARN
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
-import java.util.Calendar
-import java.util.TimeZone
+import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class DatabaseServiceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -34,29 +35,39 @@ class DatabaseServiceImpl @Inject constructor(
         const val COLLECTION = BuildConfig.DB_COLLECTION
         private const val COLLECTION_LIKES = "${COLLECTION}_likes"
         private const val COLLECTION_USERS_LIKE = "users_like"
+        private const val TIMEOUT: Long = 4000L
     }
 
     //Provisional
     @SuppressLint("HardwareIds")
     private val userId = Settings.Secure.getString(context.contentResolver, ANDROID_ID)
 
-    override suspend fun getQuote(id: String): QuoteResponse? {
-//      getAllQuotes()
-
-        val document = firestore.collection(COLLECTION).document(id)
-
-        return try {
-            document.get(Source.CACHE).await().toObject(QuoteResponse::class.java)
-        } catch (ex: Exception) {
-            writeLog(WARN, "Fail to get image $id from cache!!")
-            document.get().await().toObject(QuoteResponse::class.java)
+    override suspend fun getQuote(id: String): QuoteResponse? =
+        withTimeoutOrNull(TIMEOUT) {
+            suspendCancellableCoroutine { cancelableCoroutine ->
+                val document = firestore.collection(COLLECTION).document(id)
+                document.get().addOnSuccessListener {
+                    cancelableCoroutine.resume(it.toObject(QuoteResponse::class.java))
+                }.addOnFailureListener {
+                    cancelableCoroutine.resumeWithException(it)
+                }
+            }
         }
-    }
 
-    override suspend fun getRandomQuote(): QuoteResponse? {
-        val document = getAllQuotes()
-        return document.random()
-    }
+    override suspend fun getRandomQuote(): QuoteResponse? =
+        withTimeoutOrNull(TIMEOUT) {
+            suspendCancellableCoroutine { cancelableCoroutine ->
+                firestore.collection(COLLECTION).orderBy("id").get().addOnSuccessListener {
+                    cancelableCoroutine.resume(
+                        it.map { snapshot ->
+                            snapshot.toObject(QuoteResponse::class.java)
+                        }.random()
+                    )
+                }.addOnFailureListener {
+                    cancelableCoroutine.resumeWithException(it)
+                }
+            }
+        }
 
     override suspend fun likeDislikeQuote(updateLikes: LikesDataDTO) {
         val quoteLikes = getLikeQuote(updateLikes.id)
@@ -83,70 +94,45 @@ class DatabaseServiceImpl @Inject constructor(
     }
 
     override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
-        val document = firestore.collection(COLLECTION_LIKES).document(id)
-        return document.snapshots().map { doc ->
-            val result = doc.toObject(LikeQuoteResponse::class.java)
-            val isLike = document.collection(COLLECTION_USERS_LIKE)
-                .document(userId)
-                .get()
-                .await().toObject(LikeResponse::class.java)?.like ?: false
+        return withTimeoutOrNull(TIMEOUT) {
+            val document = firestore.collection(COLLECTION_LIKES).document(id)
+            document.snapshots().map { doc ->
+                val result = doc.toObject(LikeQuoteResponse::class.java)
+                val isLike = document.collection(COLLECTION_USERS_LIKE)
+                    .document(userId)
+                    .get()
+                    .await().toObject(LikeResponse::class.java)?.like ?: false
 
-            result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike ) }
+                result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike ) }
+            }
+        } ?: flowOf(null)
+    }
+
+    private suspend fun getLikeQuote(id: String): LikeQuoteResponse? =
+        withTimeoutOrNull(TIMEOUT) {
+            suspendCancellableCoroutine { cancelableCoroutine ->
+                firestore.collection(COLLECTION_LIKES).document(id).get()
+                    .addOnSuccessListener {
+                        getUserIsLike(id, cancelableCoroutine)
+                    }.addOnFailureListener {
+                        cancelableCoroutine.resumeWithException(it)
+                    }
+            }
         }
-    }
 
-    private suspend fun getLikeQuote(id: String): LikeQuoteResponse? {
-        val document = firestore.collection(COLLECTION_LIKES).document(id)
-        val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
-        return likeQuote?.copy(like = getUserIsLike(id).like.also { writeLog(INFO, "[getUserIsLike] -> $it") })
-    }
-
-    private suspend fun getUserIsLike(id: String): LikeResponse {
-        return firestore.collection(COLLECTION_LIKES)
+    private fun getUserIsLike(
+        id: String,
+        cancelableCoroutine: CancellableContinuation<LikeQuoteResponse?>,
+    ) {
+        firestore.collection(COLLECTION_LIKES)
             .document(id)
             .collection(COLLECTION_USERS_LIKE)
-            .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
+            .document(userId).get().addOnSuccessListener {
+                cancelableCoroutine.resume(
+                    it.toObject(LikeQuoteResponse::class.java) ?: LikeQuoteResponse()
+                )
+            }.addOnFailureListener {
+                cancelableCoroutine.resumeWithException(it)
+            }
     }
-
-    private suspend fun getAllQuotes(): List<QuoteResponse?> {
-        val document = firestore.collection(COLLECTION).orderBy("id").get().await().map {
-            it.toObject(QuoteResponse::class.java)
-        }
-//      setUpdate(document)
-        return document
-    }
-
-    private suspend fun setUpdate(quotes: List<QuoteResponse>) {
-
-        var day = 1
-        quotes.forEach { quote ->
-            val id = getIdFromCalendarStartZero(day)
-            val date = getToday(id.toLong())
-
-            day += 1
-            val newData = hashMapOf(
-                "id" to id,
-                "owner" to quote.owner,
-                "quote" to listOf(quote.quote[0]),
-                "imageUrl" to "",
-                "date" to date
-            )
-
-            firestore.collection(COLLECTION).document(id).set(newData).await()
-        }
-    }
-
-    private fun getToday(timeInMillis: Long) = Timestamp((timeInMillis / 1000), 0)
-
-    private fun getIdFromCalendarStartZero(day: Int): String {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.set(Calendar.DAY_OF_YEAR, day)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val oneHourInMillis = 1000 * 60 * 60
-        return (calendar.timeInMillis - oneHourInMillis).toString()
-    }
-
 }
