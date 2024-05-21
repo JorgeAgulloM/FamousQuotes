@@ -111,17 +111,15 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote()
             }
-            if (quote != null) {
-                val reviewQuote = quote.copy(
-                    body = quote.body.trim(),
-                    owner = if ("'" in quote.owner) {
-                        quote.owner.trim().replace("'", "")
-                    } else {
-                        quote.owner.trim()
-                    }
-                )
-                _uiState.update { it.copy(isLoading = false, quote = reviewQuote) }
-            }
+            val reviewQuote = quote.copy(
+                body = quote.body.trim(),
+                owner = if ("'" in quote.owner) {
+                    quote.owner.trim().replace("'", "")
+                } else {
+                    quote.owner.trim()
+                }
+            )
+            _uiState.update { it.copy(isLoading = false, quote = reviewQuote) }
 
             getLikesQuote()
         }
@@ -147,8 +145,7 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote.getRandomQuote()
             }
-            if (quote != null)
-                _uiState.update { it.copy(isLoading = false, quote = quote) }
+            _uiState.update { it.copy(isLoading = false, quote = quote) }
         }
     }
 
