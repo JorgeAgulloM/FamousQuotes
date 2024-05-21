@@ -261,7 +261,7 @@ fun Controls(
                     }
                 ) {
                     IconButtonMenu(
-                        cDescription = stringResource(R.string.main_icon_content_desc_info),
+                        cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                         color = colorIconLike,
                         icon = iconLike,
                         isEnabled = hasConnection
