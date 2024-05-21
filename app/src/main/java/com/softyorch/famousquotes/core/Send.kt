@@ -10,10 +10,12 @@ import javax.inject.Inject
 class Send @Inject constructor(@ApplicationContext private val context: Context) {
 
     private val name = context.getResourceString(BuildConfig.APP_TITLE)
+    private val pkgName = BuildConfig.DB_COLLECTION.replace("_quotes", "")
 
     fun sendDataTo(data: String) {
-        val sendFrom = "Compartir desde"
-        val sendText = "$sendFrom $name\n\n$data"
+        val htmlFormattedMessage = "https://play.google.com/store/apps/details?id=com.softyorch.famousquotes.$pkgName"
+        val sendText = "$data\n\n$name\n\n$htmlFormattedMessage"
+
         context.startActivity(
             Intent.createChooser(
                 Intent(
@@ -21,7 +23,7 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
                 ).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TEXT, sendText)
-                }, "Frase del día"
+                }, "Today quote"
             ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }
