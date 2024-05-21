@@ -17,12 +17,14 @@ class DefaultDatabaseImpl @Inject constructor(
         //const val UPLIFTING_FLAVOUR = "uplifting"
     }
 
-    override fun getDefaultDatabase(): List<DefaultModel> =
+    override fun getDefaultQuote(): DefaultModel =
         if (BuildConfig.APP_TITLE.contains(HISTORICAL_FLAVOUR))
-            getDefaultHistoricalDatabase()
+            getDefaultHistoricalDatabase().random().copy(imageUrl = getImageFromMemory())
         else if (BuildConfig.APP_TITLE.contains(BIBLICAL_FLAVOUR))
-            getDefaultBiblicalDatabase()
-        else getDefaultUpliftingDatabase()
+            getDefaultBiblicalDatabase().random().copy(imageUrl = getImageFromMemory())
+        else getDefaultUpliftingDatabase().random().copy(imageUrl = getImageFromMemory())
+
+    override fun getDefaultImage(): String = getImageFromMemory()
 
     private fun getDefaultHistoricalDatabase(): List<DefaultModel> {
         return listOf(
@@ -157,5 +159,24 @@ class DefaultDatabaseImpl @Inject constructor(
                 quote = listOf(context.getString(R.string.uplifting_quote_default_10))
             ),
         )
+    }
+
+    private fun getImageFromMemory(): String {
+        val listImages = listOf(
+            "bg_image_01",
+            "bg_image_02",
+            "bg_image_03",
+            "bg_image_04",
+            "bg_image_05",
+            "bg_image_06",
+            "bg_image_07",
+            "bg_image_08",
+            "bg_image_09",
+            "bg_image_10",
+            "bg_image_11",
+            "bg_image_12",
+        )
+
+        return listImages.random()
     }
 }
