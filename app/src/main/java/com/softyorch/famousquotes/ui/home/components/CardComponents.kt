@@ -161,13 +161,3 @@ fun IconButtonMenu(
     }
 }
 
-@Composable
-fun TextInfo(text: String) {
-    AnimatedTextHome(text) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = MyTypography.labelLarge
-        )
-    }
-}
