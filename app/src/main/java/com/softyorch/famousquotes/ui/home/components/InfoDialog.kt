@@ -14,6 +14,8 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.WifiOff
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -22,24 +24,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoDialog(onAction: () -> Unit) {
     val infoText = stringResource(R.string.main_info_dialog_text_info)
-    Dialog(onDismissRequest = { onAction() }) {
-        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)
-            .clearAndSetSemantics {
-                testTag = infoText
-            }
-        ) {
+    BasicAlertDialog(onDismissRequest = { onAction() }, modifier = Modifier.clearAndSetSemantics {
+        text = AnnotatedString(text = infoText)
+    }) {
+        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)) {
             Column(
                 modifier = Modifier.background(
                     brush = brushBackGround(),
