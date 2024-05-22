@@ -58,19 +58,7 @@ class HomeViewModel @Inject constructor(
             HomeActions.Owner -> goToSearchOwner()
             HomeActions.Like -> setQuoteLike()
             HomeActions.ShowImage -> showImage()
-        }
-    }
-
-    private fun showImage() {
-        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
-    }
-
-    private fun setQuoteLike() {
-        viewModelScope.launch(dispatcherIO) {
-            val isLike = !_likeState.value.isLike
-            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
-            val updateLikes = LikesUiDTO(isLike = isLike)
-            setLike(updateLikes.toDomain())
+            HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
         }
     }
 
@@ -104,6 +92,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun setQuoteLike() {
+        viewModelScope.launch(dispatcherIO) {
+            val isLike = !_likeState.value.isLike
+            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
+            val updateLikes = LikesUiDTO(isLike = isLike)
+            setLike(updateLikes.toDomain())
+        }
+    }
+
+    private fun showImage() {
+        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
+    }
+
+
+    private fun showConnectionDialog() {
+        _uiState.update { it.copy(showDialogNoConnection = true) }
+    }
+
     private fun getQuote() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -119,7 +125,13 @@ class HomeViewModel @Inject constructor(
                     quote.owner.trim()
                 }
             )
-            _uiState.update { it.copy(isLoading = false, quote = reviewQuote) }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    quote = reviewQuote,
+                    showDialogNoConnection = if (it.hasConnection != true) false else null
+                )
+            }
 
             getLikesQuote()
         }
@@ -152,7 +164,12 @@ class HomeViewModel @Inject constructor(
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
             hasConnection.isConnectedFlow().collect { connection ->
-                _uiState.update { it.copy(hasConnection = connection) }
+                _uiState.update {
+                    it.copy(
+                        hasConnection = connection,
+                        showDialogNoConnection = if (!connection) false else null
+                    )
+                }
             }
         }
     }
