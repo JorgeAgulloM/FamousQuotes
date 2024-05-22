@@ -127,7 +127,10 @@ android {
 
 dependencies {
 
-    //App-update
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // App-update
     implementation(libs.app.update)
     implementation(libs.app.update.ktx)
 
@@ -157,6 +160,10 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
