@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,19 +59,8 @@ class HomeViewModel @Inject constructor(
             HomeActions.Owner -> goToSearchOwner()
             HomeActions.Like -> setQuoteLike()
             HomeActions.ShowImage -> showImage()
-        }
-    }
-
-    private fun showImage() {
-        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
-    }
-
-    private fun setQuoteLike() {
-        viewModelScope.launch(dispatcherIO) {
-            val isLike = !_likeState.value.isLike
-            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
-            val updateLikes = LikesUiDTO(isLike = isLike)
-            setLike(updateLikes.toDomain())
+            HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
+            HomeActions.ReConnection -> getQuote()
         }
     }
 
@@ -104,6 +94,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun setQuoteLike() {
+        viewModelScope.launch(dispatcherIO) {
+            val isLike = !_likeState.value.isLike
+            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
+            val updateLikes = LikesUiDTO(isLike = isLike)
+            setLike(updateLikes.toDomain())
+        }
+    }
+
+    private fun showImage() {
+        _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
+    }
+
+
+    private fun showConnectionDialog() {
+        _uiState.update { it.copy(showDialogNoConnection = true) }
+    }
+
     private fun getQuote() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -119,7 +127,13 @@ class HomeViewModel @Inject constructor(
                     quote.owner.trim()
                 }
             )
-            _uiState.update { it.copy(isLoading = false, quote = reviewQuote) }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    quote = reviewQuote,
+                    showDialogNoConnection = if (it.hasConnection != true) false else null
+                )
+            }
 
             getLikesQuote()
         }
@@ -151,8 +165,18 @@ class HomeViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
-            hasConnection.isConnectedFlow().collect { connection ->
-                _uiState.update { it.copy(hasConnection = connection) }
+            hasConnection.isConnectedFlow().onEach { connection ->
+                if (_uiState.value.hasConnection != true && connection)
+                    onActions(HomeActions.ReConnection)
+                if (_uiState.value.showImage)
+                    onActions(HomeActions.ShowImage)
+            }.collect { connection ->
+                _uiState.update {
+                    it.copy(
+                        hasConnection = connection,
+                        showDialogNoConnection = if (!connection) false else null
+                    )
+                }
             }
         }
     }

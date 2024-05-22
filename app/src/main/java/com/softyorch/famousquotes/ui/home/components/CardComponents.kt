@@ -38,6 +38,7 @@ import com.softyorch.famousquotes.ui.home.HomeActions
 import com.softyorch.famousquotes.ui.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @Composable
 fun Controls(
@@ -63,11 +64,11 @@ fun Controls(
                 BadgedBox(
                     badge = {
                         Badge(
-                            containerColor = SecondaryColor,
+                            containerColor = if (hasConnection) SecondaryColor else WhiteSmoke,
                             modifier = Modifier.offset((-16).dp, (16).dp)
                         ) {
                             Text(
-                                text = stateLikes.likes.toString(),
+                                text = if (hasConnection) stateLikes.likes.toString() else "0",
                                 fontSize = 16.sp,
                                 color = Color.DarkGray
                             )
@@ -76,7 +77,7 @@ fun Controls(
                 ) {
                     IconButtonMenu(
                         cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                        color = colorIconLike,
+                        color = if (hasConnection) colorIconLike else WhiteSmoke,
                         icon = iconLike,
                         isEnabled = hasConnection
                     ) { onAction(HomeActions.Like) }
