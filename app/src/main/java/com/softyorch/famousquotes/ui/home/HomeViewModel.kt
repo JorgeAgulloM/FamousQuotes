@@ -168,6 +168,8 @@ class HomeViewModel @Inject constructor(
             hasConnection.isConnectedFlow().onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
                     onActions(HomeActions.ReConnection)
+                if (_uiState.value.showImage)
+                    onActions(HomeActions.ShowImage)
             }.collect { connection ->
                 _uiState.update {
                     it.copy(
