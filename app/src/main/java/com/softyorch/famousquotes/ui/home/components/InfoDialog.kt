@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,7 @@ import com.softyorch.famousquotes.ui.theme.brushBackGround
 @Composable
 fun InfoDialog(onAction: () -> Unit) {
     val infoText = stringResource(R.string.main_info_dialog_text_info)
-    BasicAlertDialog(onDismissRequest = { onAction() }, modifier = Modifier.clearAndSetSemantics {
+    BasicAlertDialog(onDismissRequest = { onAction() }, modifier = Modifier.semantics {
         text = AnnotatedString(text = infoText)
     }) {
         Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)) {
