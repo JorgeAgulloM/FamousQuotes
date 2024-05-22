@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,6 +60,7 @@ class HomeViewModel @Inject constructor(
             HomeActions.Like -> setQuoteLike()
             HomeActions.ShowImage -> showImage()
             HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
+            HomeActions.ReConnection -> getQuote()
         }
     }
 
@@ -163,7 +165,10 @@ class HomeViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
-            hasConnection.isConnectedFlow().collect { connection ->
+            hasConnection.isConnectedFlow().onEach { connection ->
+                if (_uiState.value.hasConnection != true && connection)
+                    onActions(HomeActions.ReConnection)
+            }.collect { connection ->
                 _uiState.update {
                     it.copy(
                         hasConnection = connection,
