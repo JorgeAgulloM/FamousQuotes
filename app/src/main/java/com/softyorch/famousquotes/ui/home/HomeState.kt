@@ -8,5 +8,6 @@ data class HomeState(
     val showImage: Boolean = false,
     val showInterstitial: Boolean = false,
     val isLoading: Boolean = false,
-    val hasConnection: Boolean? = null
+    val hasConnection: Boolean? = null,
+    val showDialogNoConnection: Boolean? = null,
 )
