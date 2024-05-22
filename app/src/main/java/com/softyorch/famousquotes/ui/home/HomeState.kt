@@ -10,4 +10,5 @@ data class HomeState(
     val isLoading: Boolean = false,
     val hasConnection: Boolean? = null,
     val showDialogNoConnection: Boolean? = null,
+    val reConnect: Boolean? = null,
 )
