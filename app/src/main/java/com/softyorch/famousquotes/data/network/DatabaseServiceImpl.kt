@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
@@ -45,10 +46,14 @@ class DatabaseServiceImpl @Inject constructor(
         withTimeoutOrNull(TIMEOUT) {
             suspendCancellableCoroutine { cancelableCoroutine ->
                 val document = firestore.collection(COLLECTION).document(id)
-                document.get().addOnSuccessListener {
-                    cancelableCoroutine.resume(it.toObject(QuoteResponse::class.java))
+                document.get(Source.CACHE).addOnSuccessListener { snapshot ->
+                    cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
                 }.addOnFailureListener {
-                    cancelableCoroutine.resumeWithException(it)
+                    document.get().addOnSuccessListener { snapshot ->
+                        cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
+                    }.addOnFailureListener { ex ->
+                        cancelableCoroutine.resumeWithException(ex)
+                    }
                 }
             }
         }
