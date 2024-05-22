@@ -35,6 +35,7 @@ import com.softyorch.famousquotes.ui.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.home.components.Controls
 import com.softyorch.famousquotes.ui.home.components.InfoDialog
+import com.softyorch.famousquotes.ui.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.home.components.TextBody
 import com.softyorch.famousquotes.ui.home.components.TextOwner
 import com.softyorch.famousquotes.ui.home.components.TextToClick
@@ -80,6 +81,10 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
+
+        if (state.showDialogNoConnection == false) NoConnectionDialog {
+            viewModel.onActions(HomeActions.ShowNoConnectionDialog)
+        }
     }
 }
 
@@ -151,10 +156,7 @@ fun CardQuote(
                         HomeActions.Owner -> if (hasConnection) onAction(action)
                         else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                        HomeActions.Info -> onAction(action)
-                        HomeActions.Send -> onAction(action)
-                        HomeActions.Like -> onAction(action)
-                        HomeActions.ShowImage -> onAction(action)
+                        else -> onAction(action)
                     }
                 }
                 AnimatedContentHome(isActive = isActive) {
