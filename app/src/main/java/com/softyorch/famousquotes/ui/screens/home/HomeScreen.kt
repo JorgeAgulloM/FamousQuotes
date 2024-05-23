@@ -27,6 +27,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
@@ -47,7 +48,7 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel) {
+fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel, startAdView: AdView) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
@@ -75,7 +76,12 @@ fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel) {
                 BackgroundImage(uri = state.quote.imageUrl)
             }
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                CardQuote(state = state, stateLikes = stateLikes, context = context) { action ->
+                CardQuote(
+                    state = state,
+                    stateLikes = stateLikes,
+                    context = context,
+                    startAdView = startAdView
+                ) { action ->
                     viewModel.onActions(action)
                 }
             }
@@ -117,6 +123,7 @@ fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
     context: Context,
+    startAdView: AdView,
     onAction: (HomeActions) -> Unit,
 ) {
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
@@ -180,7 +187,7 @@ fun CardQuote(
                     // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
-            Banner()
+            Banner(startAdView)
         }
     }
 }
