@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
@@ -17,26 +18,33 @@ import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
 
 
 @Composable
-fun Banner() {
-    val currentWidth = LocalConfiguration.current.screenWidthDp
+fun Banner(adView: AdView? = null) {
+    val selectAdView = adView ?: startAdView()
+
     ElevatedCard(
         modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.elevatedCardElevation(2.dp)
     ) {
         AndroidView(
-            factory = { context ->
-                AdView(context).apply {
-                    setAdSize(
-                        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                            context, currentWidth
-                        )
-                    )
-                    adUnitId = BuildConfig.ID_BANNER_HOME
-                    loadAd(adRequest)
-                }
-            },
+            factory = { _ -> selectAdView },
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+fun startAdView(): AdView {
+    val context = LocalContext.current
+    val currentWidth = LocalConfiguration.current.screenWidthDp
+
+    return AdView(context).apply {
+        setAdSize(
+            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                context, currentWidth
+            )
+        )
+        adUnitId = BuildConfig.ID_BANNER_HOME
+        loadAd(adRequest)
     }
 }
