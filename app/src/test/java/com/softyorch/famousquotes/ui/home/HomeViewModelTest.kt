@@ -9,6 +9,8 @@ import com.softyorch.famousquotes.domain.model.LikesQuote
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
+import com.softyorch.famousquotes.ui.screens.home.HomeActions
+import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.utils.TestUtils
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
