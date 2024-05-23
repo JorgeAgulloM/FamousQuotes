@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -141,7 +142,9 @@ class HomeViewModel @Inject constructor(
 
     private fun getLikesQuote() {
         viewModelScope.launch(dispatcherIO) {
-            getLikes().collect { likes ->
+            getLikes().catch {
+                writeLog(LevelLog.ERROR, "Error from getting likes: ${it.cause}")
+            }.collect { likes ->
                 _likeState.update {
                     it.copy(
                         likes = likes?.likes ?: 0,
@@ -165,7 +168,9 @@ class HomeViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
-            hasConnection.isConnectedFlow().onEach { connection ->
+            hasConnection.isConnectedFlow().catch {
+                writeLog(LevelLog.ERROR, "Error getting connection state: ${it.cause}")
+            }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
                     onActions(HomeActions.ReConnection)
                 if (_uiState.value.showImage)
