@@ -27,7 +27,7 @@ class Banner {
     private var adView: AdView? = null
     @Composable
     fun Show() {
-        if (adView == null) startAdView()
+        if (adView == null) StartAdView()
 
         ElevatedCard(
             modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
@@ -42,7 +42,7 @@ class Banner {
     }
 
     @Composable
-    fun startAdView() {
+    fun StartAdView() {
         val context = LocalContext.current
         val currentWidth = LocalConfiguration.current.screenWidthDp
 

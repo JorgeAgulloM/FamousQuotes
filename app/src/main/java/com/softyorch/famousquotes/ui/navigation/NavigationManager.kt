@@ -13,7 +13,7 @@ import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
 
 @Composable
 fun NavigationManager(navHost: NavHostController = rememberNavController()) {
-    Banner.bannerInstance.startAdView()
+    Banner.bannerInstance.StartAdView()
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
 
