@@ -1,21 +1,42 @@
 package com.softyorch.famousquotes.ui.splashActivity
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.sdk26AndUp
+import com.softyorch.famousquotes.utils.sdk33AndUp
+import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class StartActivity : ComponentActivity() {
 
     private lateinit var viewModel: StartViewModel
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
+    private val channel = 1111
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val screenSplash = installSplashScreen()
@@ -23,7 +44,14 @@ class StartActivity : ComponentActivity() {
 
         screenSplash.setKeepOnScreenCondition { true }
 
-        enableEdgeToEdge()
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        if (!BuildConfig.DEBUG) checkForAppUpdates()
+
+        // ScreenShoot blocked
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
         setContent {
             viewModel = hiltViewModel<StartViewModel>()
@@ -37,6 +65,31 @@ class StartActivity : ComponentActivity() {
                     startActivity(intent)
                     finish()
                 }
+                StartState.TimeToUpdate -> MainAlertDialog { alertState ->
+                    when (alertState) {
+                        AlertState.Dismiss -> finish()
+                        AlertState.Update -> viewModel.goToUpdateApp()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!BuildConfig.DEBUG) appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
+            }
+        }
+    }
+
+    private fun checkForAppUpdates() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            val isUpdateAllowed = info.isImmediateUpdateAllowed
+            if (isUpdateAvailable && isUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
             }
         }
     }
