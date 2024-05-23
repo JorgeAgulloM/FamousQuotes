@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.splashActivity
+package com.softyorch.famousquotes.ui.mainActivity
 
 sealed class AlertState {
     data object Update: AlertState()
