@@ -64,9 +64,10 @@ android {
         }
 
         variant.outputs.all {
+            variant.mergedFlavor.manifestPlaceholders["ID_ADMOB_APP"] = "${appLabelMap[flavor]}"
+
             if (buildType == "release") {
                 println("Active flavor in release buildType: $flavor")
-                variant.mergedFlavor.manifestPlaceholders["ID_ADMOB_APP"] = "${appLabelMap[flavor]}"
 
                 when (flavor) {
                     "historical" -> {
