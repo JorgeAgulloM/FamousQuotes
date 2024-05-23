@@ -5,9 +5,11 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +21,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 
@@ -44,12 +49,24 @@ fun LoadingCircle() {
         )
     }
 
+    val icon = painterResource(
+        when (BuildConfig.ICON) {
+            "historical_icon" -> R.drawable.historical_icon
+            "uplifting_icon" -> R.drawable.uplifting_icon
+            "biblical_icon" -> R.drawable.biblical_icon
+            else -> R.drawable.default_icon
+        }
+    )
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(modifier = Modifier
             .drawBehind {
                 rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
             }
-            .size(128.dp)
-        )
+            .size(128.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(painter = icon, contentDescription = null, modifier = Modifier.size(80.dp))
+        }
     }
 }
