@@ -1,16 +1,10 @@
 package com.softyorch.famousquotes.ui.splashActivity
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,12 +16,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.softyorch.famousquotes.BuildConfig
-import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
-import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.sdk26AndUp
-import com.softyorch.famousquotes.utils.sdk33AndUp
-import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
