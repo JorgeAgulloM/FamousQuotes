@@ -9,7 +9,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,12 +20,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.BuildConfig
-import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
+import com.softyorch.famousquotes.utils.appIcon
 
 @Composable
 fun LoadingCircle() {
@@ -49,14 +46,7 @@ fun LoadingCircle() {
         )
     }
 
-    val icon = painterResource(
-        when (BuildConfig.ICON) {
-            "historical_icon" -> R.drawable.historical_icon
-            "uplifting_icon" -> R.drawable.uplifting_icon
-            "biblical_icon" -> R.drawable.biblical_icon
-            else -> R.drawable.default_icon
-        }
-    )
+    val icon = appIcon()
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(modifier = Modifier
