@@ -10,15 +10,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.home.HomeScreen
 import com.softyorch.famousquotes.ui.home.HomeViewModel
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
@@ -30,14 +35,22 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private lateinit var viewModel: MainViewModel
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
+    private val channel = 1111
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Protection Data Consent
-        val requestConsent = RequestGrantedProtectionData(this)
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        if (!BuildConfig.DEBUG) checkForAppUpdates()
 
         // Permission Notifications
         sdk33AndUp { PermissionNotifications() }
+
+        // Protection Data Consent
+        val requestConsent = RequestGrantedProtectionData(this)
 
         // ScreenShoot blocked
         window.setFlags(
@@ -49,11 +62,21 @@ class MainActivity : ComponentActivity() {
             FamousQuotesTheme {
                 requestConsent.get { }
 
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = BackgroundColor
-                ) {
-                     HomeScreen(hiltViewModel<HomeViewModel>())
+                val homeViewModel = hiltViewModel<HomeViewModel>()
+                viewModel = hiltViewModel<MainViewModel>()
+
+                val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
+
+                when (state) {
+                    MainState.Home -> HomeScreen(viewModel = homeViewModel)
+                    MainState.TimeToUpdate -> MainAlertDialog { alertState ->
+                        when (alertState) {
+                            AlertState.Dismiss -> finish()
+                            AlertState.Update -> viewModel.goToUpdateApp()
+                        }
+                    }
+
+                    MainState.Loading -> LoadingCircle()
                 }
             }
         }
@@ -84,6 +107,25 @@ class MainActivity : ComponentActivity() {
 
         val channel = NotificationChannel(channelId, chName, NotificationManager.IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(channel)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!BuildConfig.DEBUG) appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
+            }
+        }
+    }
+
+    private fun checkForAppUpdates() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            val isUpdateAllowed = info.isImmediateUpdateAllowed
+            if (isUpdateAvailable && isUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
+            }
+        }
     }
 }
 
