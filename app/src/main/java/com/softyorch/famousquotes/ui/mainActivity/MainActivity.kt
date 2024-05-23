@@ -21,9 +21,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.components.LoadingCircle
-import com.softyorch.famousquotes.ui.home.HomeScreen
-import com.softyorch.famousquotes.ui.home.HomeViewModel
+import com.softyorch.famousquotes.ui.navigation.NavigationManager
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
@@ -62,21 +60,18 @@ class MainActivity : ComponentActivity() {
             FamousQuotesTheme {
                 requestConsent.get { }
 
-                val homeViewModel = hiltViewModel<HomeViewModel>()
                 viewModel = hiltViewModel<MainViewModel>()
 
                 val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
                 when (state) {
-                    MainState.Home -> HomeScreen(viewModel = homeViewModel)
+                    MainState.Home -> NavigationManager()
                     MainState.TimeToUpdate -> MainAlertDialog { alertState ->
                         when (alertState) {
                             AlertState.Dismiss -> finish()
                             AlertState.Update -> viewModel.goToUpdateApp()
                         }
                     }
-
-                    MainState.Loading -> LoadingCircle()
                 }
             }
         }
