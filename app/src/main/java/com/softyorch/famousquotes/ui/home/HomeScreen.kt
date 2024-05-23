@@ -35,6 +35,7 @@ import com.softyorch.famousquotes.ui.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.home.components.Controls
 import com.softyorch.famousquotes.ui.home.components.InfoDialog
+import com.softyorch.famousquotes.ui.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.home.components.TextBody
 import com.softyorch.famousquotes.ui.home.components.TextOwner
 import com.softyorch.famousquotes.ui.home.components.TextToClick
@@ -60,23 +61,30 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (state.isLoading) LoadingCircle()
-        Box(
-            modifier = Modifier.clickable {
-                viewModel.onActions(HomeActions.ShowImage)
-            },
-            contentAlignment = Alignment.TopCenter
-        ) {
-            BackgroundImage(uri = state.quote.imageUrl)
-        }
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            CardQuote(state = state, stateLikes = stateLikes, context = context) { action ->
-                viewModel.onActions(action)
+    Box(modifier = Modifier.fillMaxSize().background(brushBackGround())) {
+        if (state.isLoading) {
+            LoadingCircle()
+        } else {
+            Box(
+                modifier = Modifier.clickable {
+                    viewModel.onActions(HomeActions.ShowImage)
+                },
+                contentAlignment = Alignment.TopCenter
+            ) {
+                BackgroundImage(uri = state.quote.imageUrl)
+            }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                CardQuote(state = state, stateLikes = stateLikes, context = context) { action ->
+                    viewModel.onActions(action)
+                }
             }
         }
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
+
+        if (state.showDialogNoConnection == false) NoConnectionDialog {
+            viewModel.onActions(HomeActions.ShowNoConnectionDialog)
+        }
     }
 }
 
@@ -148,10 +156,7 @@ fun CardQuote(
                         HomeActions.Owner -> if (hasConnection) onAction(action)
                         else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                        HomeActions.Info -> onAction(action)
-                        HomeActions.Send -> onAction(action)
-                        HomeActions.Like -> onAction(action)
-                        HomeActions.ShowImage -> onAction(action)
+                        else -> onAction(action)
                     }
                 }
                 AnimatedContentHome(isActive = isActive) {
