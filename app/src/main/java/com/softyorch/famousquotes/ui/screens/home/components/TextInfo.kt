@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home.components
+package com.softyorch.famousquotes.ui.screens.home.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text

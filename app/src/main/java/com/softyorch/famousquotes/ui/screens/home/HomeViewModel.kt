@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home
+package com.softyorch.famousquotes.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +9,8 @@ import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
-import com.softyorch.famousquotes.ui.home.model.LikesUiDTO
-import com.softyorch.famousquotes.ui.home.model.LikesUiDTO.Companion.toDomain
+import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
+import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel

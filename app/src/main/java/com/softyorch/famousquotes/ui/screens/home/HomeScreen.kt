@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home
+package com.softyorch.famousquotes.ui.screens.home
 
 import android.content.Context
 import android.widget.Toast
@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -31,14 +32,14 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
-import com.softyorch.famousquotes.ui.home.components.AnimatedContentHome
-import com.softyorch.famousquotes.ui.home.components.AnimatedImage
-import com.softyorch.famousquotes.ui.home.components.Controls
-import com.softyorch.famousquotes.ui.home.components.InfoDialog
-import com.softyorch.famousquotes.ui.home.components.NoConnectionDialog
-import com.softyorch.famousquotes.ui.home.components.TextBody
-import com.softyorch.famousquotes.ui.home.components.TextOwner
-import com.softyorch.famousquotes.ui.home.components.TextToClick
+import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
+import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
+import com.softyorch.famousquotes.ui.screens.home.components.Controls
+import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
+import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
+import com.softyorch.famousquotes.ui.screens.home.components.TextBody
+import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
+import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog
@@ -46,7 +47,7 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()

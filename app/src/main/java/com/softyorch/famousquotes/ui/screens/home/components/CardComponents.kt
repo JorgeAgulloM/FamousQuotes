@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home.components
+package com.softyorch.famousquotes.ui.screens.home.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +34,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.home.HomeActions
-import com.softyorch.famousquotes.ui.home.QuoteLikesState
+import com.softyorch.famousquotes.ui.screens.home.HomeActions
+import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
