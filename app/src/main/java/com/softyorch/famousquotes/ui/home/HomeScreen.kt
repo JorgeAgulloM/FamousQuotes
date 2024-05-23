@@ -135,6 +135,7 @@ fun CardQuote(
         ) {
             val isActive = state.quote.body.isNotBlank() && !state.showImage
             val hasConnection = state.hasConnection == true
+            val imageFromWeb = state.quote.imageUrl.startsWith("http")
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
@@ -143,8 +144,8 @@ fun CardQuote(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
-                    hasConnection = hasConnection,
-                    isImageExt = state.quote.imageUrl.startsWith("http")
+                    isEnabled = hasConnection && imageFromWeb,
+                    isImageExt = imageFromWeb
                 ) { action ->
                     when (action) {
                         HomeActions.Buy -> if (hasConnection) onAction(action)
