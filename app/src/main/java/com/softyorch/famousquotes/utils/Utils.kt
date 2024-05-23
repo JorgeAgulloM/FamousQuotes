@@ -29,6 +29,9 @@ fun Context.showToast(msg: String, time: Int = Toast.LENGTH_SHORT) = Toast.makeT
 inline fun <T> sdk33AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) onSdk() else null
 
+inline fun <T> sdk29AndUp(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) onSdk() else null
+
 inline fun <T> sdk26AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) onSdk() else null
 
