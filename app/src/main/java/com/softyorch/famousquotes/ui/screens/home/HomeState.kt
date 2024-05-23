@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home
+package com.softyorch.famousquotes.ui.screens.home
 
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 

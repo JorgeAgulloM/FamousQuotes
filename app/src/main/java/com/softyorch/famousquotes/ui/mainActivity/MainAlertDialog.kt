@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.splashActivity
+package com.softyorch.famousquotes.ui.mainActivity
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
