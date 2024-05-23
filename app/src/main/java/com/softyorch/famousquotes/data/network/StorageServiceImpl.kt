@@ -1,7 +1,10 @@
 package com.softyorch.famousquotes.data.network
 
+import com.google.firebase.FirebaseException
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
@@ -15,7 +18,12 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun getImage(url: String): String? = try {
         withTimeoutOrNull(TIMEOUT) {
-            storage.reference.child(url).downloadUrl.await().toString()
+            try {
+                storage.reference.child(url).downloadUrl.await().toString()
+            } catch (ex: FirebaseException) {
+                writeLog(LevelLog.ERROR, "Error from Firebase Storage: ${ex.cause}")
+                null
+            }
         }
     } catch (ex: Exception) {
         null
