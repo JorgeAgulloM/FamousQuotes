@@ -43,6 +43,52 @@ android {
         }
     }
 
+    applicationVariants.all {
+
+        val variant = this
+        val flavor = this.productFlavors[0].name
+        val buildType = variant.buildType.name
+
+        val appLabelMap = when (this.buildType.name) {
+            "release" -> mapOf(
+                "historical" to adMobProperties["HISTORICAL_RELEASE_KEY_ID_ADMOB_APP"],
+                "uplifting" to adMobProperties["UPLIFTING_RELEASE_KEY_ID_ADMOB_APP"],
+                "biblical" to adMobProperties["BIBLICAL_RELEASE_KEY_ID_ADMOB_APP"]
+            )
+
+            else -> mapOf(
+                "historical" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"],
+                "uplifting" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"],
+                "biblical" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"]
+            )
+        }
+
+        variant.outputs.all {
+            if (buildType == "release") {
+                println("Active flavor in release buildType: $flavor")
+                variant.mergedFlavor.manifestPlaceholders["ID_ADMOB_APP"] = "${appLabelMap[flavor]}"
+
+                when (flavor) {
+                    "historical" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                    "uplifting" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                    "biblical" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                }
+            } else {
+                buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -51,15 +97,9 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
-            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["RELEASE_KEY_ID_ADMOB_APP"] ?: ""
-            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["RELEASE_KEY_ID_BANNER_HOME"].toString())
-            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
         debug {
             applicationIdSuffix = ".dev"
-            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"] ?: ""
-            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
-            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
     }
 
