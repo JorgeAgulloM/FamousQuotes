@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.snapshots
@@ -13,6 +14,7 @@ import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
 import com.softyorch.famousquotes.data.network.response.LikeResponse
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -44,17 +46,22 @@ class DatabaseServiceImpl @Inject constructor(
 
     override suspend fun getQuote(id: String): QuoteResponse? =
         withTimeoutOrNull(TIMEOUT) {
-            suspendCancellableCoroutine { cancelableCoroutine ->
-                val document = firestore.collection(COLLECTION).document(id)
-                document.get(Source.CACHE).addOnSuccessListener { snapshot ->
-                    cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
-                }.addOnFailureListener {
-                    document.get().addOnSuccessListener { snapshot ->
+            try {
+                suspendCancellableCoroutine { cancelableCoroutine ->
+                    val document = firestore.collection(COLLECTION).document(id)
+                    document.get(Source.CACHE).addOnSuccessListener { snapshot ->
                         cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
-                    }.addOnFailureListener { ex ->
-                        cancelableCoroutine.resumeWithException(ex)
+                    }.addOnFailureListener {
+                        document.get().addOnSuccessListener { snapshot ->
+                            cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
+                        }.addOnFailureListener { ex ->
+                            cancelableCoroutine.resumeWithException(ex)
+                        }
                     }
                 }
+            } catch (ex: FirebaseException) {
+                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                null
             }
         }
 

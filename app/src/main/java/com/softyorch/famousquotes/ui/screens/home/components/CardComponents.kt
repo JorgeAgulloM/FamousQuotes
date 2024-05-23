@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home.components
+package com.softyorch.famousquotes.ui.screens.home.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +34,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.home.HomeActions
-import com.softyorch.famousquotes.ui.home.QuoteLikesState
+import com.softyorch.famousquotes.ui.screens.home.HomeActions
+import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
@@ -45,7 +45,7 @@ fun Controls(
     hasText: String,
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
-    hasConnection: Boolean,
+    isEnabled: Boolean,
     isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
@@ -64,11 +64,11 @@ fun Controls(
                 BadgedBox(
                     badge = {
                         Badge(
-                            containerColor = if (hasConnection) SecondaryColor else WhiteSmoke,
+                            containerColor = if (isEnabled) SecondaryColor else WhiteSmoke,
                             modifier = Modifier.offset((-16).dp, (16).dp)
                         ) {
                             Text(
-                                text = if (hasConnection) stateLikes.likes.toString() else "0",
+                                text = if (isEnabled) stateLikes.likes.toString() else "0",
                                 fontSize = 16.sp,
                                 color = Color.DarkGray
                             )
@@ -77,14 +77,14 @@ fun Controls(
                 ) {
                     IconButtonMenu(
                         cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                        color = if (hasConnection) colorIconLike else WhiteSmoke,
+                        color = if (isEnabled) colorIconLike else WhiteSmoke,
                         icon = iconLike,
-                        isEnabled = hasConnection
+                        isEnabled = isEnabled
                     ) { onAction(HomeActions.Like) }
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (!hasConnection) IconButtonMenu(
+                if (!isEnabled) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
                     color = MaterialTheme.colorScheme.error,
                     icon = Icons.Outlined.WifiOff
@@ -92,22 +92,22 @@ fun Controls(
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
                     icon = Icons.Outlined.Info,
-                    isEnabled = hasConnection
+                    isEnabled = isEnabled
                 ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = Icons.Outlined.LocalMall,
-                    isEnabled = isImageExt && hasConnection
+                    isEnabled = isImageExt && isEnabled
                 ) { onAction(HomeActions.Buy) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
-                    isEnabled = !disabledReload && hasConnection
+                    isEnabled = !disabledReload && isEnabled
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
                     icon = Icons.Outlined.Share,
-                    isEnabled = hasConnection
+                    isEnabled = isEnabled
                 ) {
                     onAction(
                         HomeActions.Send
