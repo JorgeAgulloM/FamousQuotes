@@ -15,36 +15,45 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
+import javax.inject.Singleton
 
+@Singleton
+class Banner {
 
-@Composable
-fun Banner(adView: AdView? = null) {
-    val selectAdView = adView ?: startAdView()
-
-    ElevatedCard(
-        modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
-        shape = MaterialTheme.shapes.large,
-        elevation = CardDefaults.elevatedCardElevation(2.dp)
-    ) {
-        AndroidView(
-            factory = { _ -> selectAdView },
-            modifier = Modifier.fillMaxWidth()
-        )
+    companion object {
+        val bannerInstance: Banner = Banner()
     }
-}
 
-@Composable
-fun startAdView(): AdView {
-    val context = LocalContext.current
-    val currentWidth = LocalConfiguration.current.screenWidthDp
+    private var adView: AdView? = null
+    @Composable
+    fun Show() {
+        if (adView == null) startAdView()
 
-    return AdView(context).apply {
-        setAdSize(
-            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                context, currentWidth
+        ElevatedCard(
+            modifier = Modifier.padding(start = 2.dp, end = 2.dp, bottom = 24.dp),
+            shape = MaterialTheme.shapes.large,
+            elevation = CardDefaults.elevatedCardElevation(2.dp)
+        ) {
+            AndroidView(
+                factory = { _ -> adView!! },
+                modifier = Modifier.fillMaxWidth()
             )
-        )
-        adUnitId = BuildConfig.ID_BANNER_HOME
-        loadAd(adRequest)
+        }
+    }
+
+    @Composable
+    fun startAdView() {
+        val context = LocalContext.current
+        val currentWidth = LocalConfiguration.current.screenWidthDp
+
+        adView = AdView(context).apply {
+            setAdSize(
+                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                    context, currentWidth
+                )
+            )
+            adUnitId = BuildConfig.ID_BANNER_HOME
+            loadAd(adRequest)
+        }
     }
 }
