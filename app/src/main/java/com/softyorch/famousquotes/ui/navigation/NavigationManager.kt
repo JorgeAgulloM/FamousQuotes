@@ -6,22 +6,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.softyorch.famousquotes.ui.admob.startAdView
+import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
 
 @Composable
 fun NavigationManager(navHost: NavHostController = rememberNavController()) {
+    Banner.bannerInstance.startAdView()
+
     val homeViewModel = hiltViewModel<HomeViewModel>()
-    val startAdView = startAdView()
 
     NavHost(navController = navHost, startDestination = NavigationRoutes.SplashScreen.route) {
         composable(route = NavigationRoutes.SplashScreen.route) {
             SplashScreen(navHost = navHost)
         }
         composable(route = NavigationRoutes.HomeScreen.route) {
-            HomeScreen(navHost = navHost, viewModel = homeViewModel, startAdView = startAdView)
+            HomeScreen(navHost = navHost, viewModel = homeViewModel)
         }
     }
 }
