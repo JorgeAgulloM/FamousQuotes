@@ -10,6 +10,7 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
+import com.softyorch.famousquotes.utils.sdk32AndUp
 
 @Composable
 fun NavigationManager(navHost: NavHostController = rememberNavController()) {
@@ -17,7 +18,10 @@ fun NavigationManager(navHost: NavHostController = rememberNavController()) {
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
 
-    NavHost(navController = navHost, startDestination = NavigationRoutes.SplashScreen.route) {
+    val startDestination =
+        sdk32AndUp { NavigationRoutes.HomeScreen.route } ?: NavigationRoutes.SplashScreen.route
+
+    NavHost(navController = navHost, startDestination = startDestination) {
         composable(route = NavigationRoutes.SplashScreen.route) {
             SplashScreen(navHost = navHost)
         }
