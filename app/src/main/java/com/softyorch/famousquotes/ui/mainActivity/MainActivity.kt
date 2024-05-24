@@ -64,23 +64,20 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            FamousQuotesTheme {
-                requestConsent.get { }
+            requestConsent.get { }
 
-                viewModel = hiltViewModel<MainViewModel>()
+            viewModel = hiltViewModel<MainViewModel>()
 
-                val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
+            val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
-                when (state) {
-                    MainState.Home -> NavigationManager()
-                    MainState.TimeToUpdate -> MainAlertDialog { alertState ->
-                        when (alertState) {
-                            AlertState.Dismiss -> finish()
-                            AlertState.Update -> viewModel.goToUpdateApp()
-                        }
-                    }
+            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
+                when (alertState) {
+                    AlertState.Dismiss -> finish()
+                    AlertState.Update -> viewModel.goToUpdateApp()
                 }
             }
+
+            FamousQuotesTheme { NavigationManager() }
         }
     }
 
