@@ -19,6 +19,10 @@ import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.navigation.NavigationManager
@@ -44,6 +48,9 @@ class MainActivity : ComponentActivity() {
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         if (!BuildConfig.DEBUG) checkForAppUpdates()
 
+        // Start Chashlytics
+        firebaseInit()
+
         // Permission Notifications
         sdk33AndUp { PermissionNotifications() }
 
@@ -57,23 +64,20 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            FamousQuotesTheme {
-                requestConsent.get { }
+            requestConsent.get { }
 
-                viewModel = hiltViewModel<MainViewModel>()
+            viewModel = hiltViewModel<MainViewModel>()
 
-                val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
+            val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
-                when (state) {
-                    MainState.Home -> NavigationManager()
-                    MainState.TimeToUpdate -> MainAlertDialog { alertState ->
-                        when (alertState) {
-                            AlertState.Dismiss -> finish()
-                            AlertState.Update -> viewModel.goToUpdateApp()
-                        }
-                    }
+            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
+                when (alertState) {
+                    AlertState.Dismiss -> finish()
+                    AlertState.Update -> viewModel.goToUpdateApp()
                 }
             }
+
+            FamousQuotesTheme { NavigationManager() }
         }
     }
 
@@ -121,6 +125,13 @@ class MainActivity : ComponentActivity() {
                 appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
             }
         }
+    }
+
+    private fun firebaseInit() {
+        // Firebase Crashlytics
+        FirebaseApp.initializeApp(this)
+        Firebase.analytics.setAnalyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
     }
 }
 
