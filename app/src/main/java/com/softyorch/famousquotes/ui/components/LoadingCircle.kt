@@ -9,6 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +27,7 @@ import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.utils.appIcon
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingCircle() {
     val value by rememberInfiniteTransition(label = "LoadingCircle").animateFloat(
@@ -48,15 +51,17 @@ fun LoadingCircle() {
 
     val icon = appIcon()
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Box(modifier = Modifier
-            .drawBehind {
-                rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
+    BasicAlertDialog(onDismissRequest = {}) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier
+                .drawBehind {
+                    rotate(value) { drawCircle(gradientBrush, style = Stroke(width = 24.dp.value)) }
+                }
+                .size(128.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(painter = icon, contentDescription = null, modifier = Modifier.size(80.dp))
             }
-            .size(128.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(painter = icon, contentDescription = null, modifier = Modifier.size(80.dp))
         }
     }
 }

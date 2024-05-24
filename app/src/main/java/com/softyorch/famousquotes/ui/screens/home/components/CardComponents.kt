@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material.icons.outlined.RestartAlt
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -64,12 +65,12 @@ fun Controls(
                 BadgedBox(
                     badge = {
                         Badge(
-                            containerColor = if (isEnabled) SecondaryColor else WhiteSmoke,
-                            modifier = Modifier.offset((-16).dp, (16).dp)
+                            containerColor = if (isImageExt) SecondaryColor.copy(alpha = 0.8f) else WhiteSmoke,
+                            modifier = Modifier.offset((-16).dp, (4).dp)
                         ) {
                             Text(
-                                text = if (isEnabled) stateLikes.likes.toString() else "0",
-                                fontSize = 16.sp,
+                                text = if (isImageExt) stateLikes.likes.toString() else "0",
+                                fontSize = 14.sp,
                                 color = Color.DarkGray
                             )
                         }
@@ -77,9 +78,9 @@ fun Controls(
                 ) {
                     IconButtonMenu(
                         cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                        color = if (isEnabled) colorIconLike else WhiteSmoke,
+                        color = if (isImageExt) colorIconLike else WhiteSmoke,
                         icon = iconLike,
-                        isEnabled = isEnabled
+                        isEnabled = isEnabled && isImageExt
                     ) { onAction(HomeActions.Like) }
                 }
             }
@@ -106,13 +107,9 @@ fun Controls(
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
-                    icon = Icons.Outlined.Share,
+                    icon = Icons.AutoMirrored.Outlined.Send,
                     isEnabled = isEnabled
-                ) {
-                    onAction(
-                        HomeActions.Send
-                    )
-                }
+                ) { onAction(HomeActions.Send) }
             }
         }
 

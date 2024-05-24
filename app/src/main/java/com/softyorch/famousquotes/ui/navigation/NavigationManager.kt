@@ -26,7 +26,7 @@ fun NavigationManager(navHost: NavHostController = rememberNavController()) {
             SplashScreen(navHost = navHost)
         }
         composable(route = NavigationRoutes.HomeScreen.route) {
-            HomeScreen(navHost = navHost, viewModel = homeViewModel)
+            HomeScreen(viewModel = homeViewModel)
         }
     }
 }
