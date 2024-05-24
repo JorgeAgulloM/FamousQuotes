@@ -33,6 +33,9 @@ fun Context.showToast(msg: String, time: Int = Toast.LENGTH_SHORT) = Toast.makeT
 inline fun <T> sdk33AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) onSdk() else null
 
+inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) onSdk() else null
+
 inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null
 
