@@ -7,6 +7,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.androidHilt)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.crashlytics)
 }
 
 val keystorePropertiesFile: File = file("../signing/signing.properties")
@@ -194,6 +195,7 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
