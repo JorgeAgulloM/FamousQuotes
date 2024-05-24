@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.data.network
 
+import com.google.firebase.FirebaseException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.domain.interfaces.IConfigService
@@ -23,5 +24,9 @@ class ConfigServiceImpl @Inject constructor(
 
     override fun getUpdateDbVersion(): String = getStringFromService(DB_VERSION)
 
-    private fun getStringFromService(string: String) = configService.getString(string)
+    private fun getStringFromService(string: String) = try {
+        configService.getString(string)
+    } catch (ex: FirebaseException) {
+        "0.0.0"
+    }
 }
