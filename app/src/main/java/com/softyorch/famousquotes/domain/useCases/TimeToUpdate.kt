@@ -1,26 +1,18 @@
 package com.softyorch.famousquotes.domain.useCases
 
-import android.content.Context
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.domain.interfaces.IConfigService
 import com.softyorch.famousquotes.domain.utils.emptyVersionList
 import com.softyorch.famousquotes.domain.utils.versionList
-import com.softyorch.famousquotes.ui.utils.extFunc.packageNameApp
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class TimeToUpdate @Inject constructor(
-    private val configService: IConfigService,
-    @ApplicationContext private val context: Context,
-) {
+class TimeToUpdate @Inject constructor(private val configService: IConfigService) {
 
-    suspend operator fun invoke(): Boolean =
-        !getAppVersionCurrent().zip(getMinVersion()).all { (appV, minV) -> appV >= minV }
+    suspend operator fun invoke(): Boolean {
+        val minVersionAllowed = listVersionToInt(getMinVersion())
+        val appVersion = listVersionToInt(getAppVersionCurrent())
 
-    private fun getAppVersionCurrent(): List<Int> = try {
-        val packageInfo = context.packageNameApp()
-        versionList(packageInfo.versionName)
-    } catch (ex: Exception) {
-        emptyVersionList()
+        return minVersionAllowed > appVersion
     }
 
     private suspend fun getMinVersion(): List<Int> = try {
@@ -29,4 +21,13 @@ class TimeToUpdate @Inject constructor(
     } catch (ex: Exception) {
         emptyVersionList()
     }
+
+    private fun getAppVersionCurrent(): List<Int> = try {
+        versionList(BuildConfig.VERSION_NAME)
+    } catch (ex: Exception) {
+        emptyVersionList()
+    }
+
+    private fun listVersionToInt(v: List<Int>): Int =
+        v.joinToString(separator = "").toIntOrNull() ?: 0
 }
