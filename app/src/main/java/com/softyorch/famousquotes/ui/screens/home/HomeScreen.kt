@@ -149,7 +149,7 @@ fun CardQuote(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
-                    isEnabled = hasConnection && imageFromWeb,
+                    isEnabled = hasConnection,
                     isImageExt = imageFromWeb
                 ) { action ->
                     when (action) {
