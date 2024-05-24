@@ -20,6 +20,7 @@ mockk = "1.13.9"
 mockkAndroid = "1.12.2"
 playServicesAds = "23.1.0"
 services = "4.4.1"
+crash = "2.9.9"
 hilt = "2.48"
 uiTextGoogleFonts = "1.6.5"
 userMessagingPlatform = "2.2.0"
@@ -70,5 +71,5 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "services" }
-androidHilt = { id= "com.google.dagger.hilt.android", version.ref = "hilt" }
-
+androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crash" }
