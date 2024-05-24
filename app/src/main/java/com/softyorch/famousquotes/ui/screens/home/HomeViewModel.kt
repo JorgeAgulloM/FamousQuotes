@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadNewRandomQuote() {
         if (!_uiState.value.showInterstitial) {
-            _uiState.update { it.copy(showInterstitial = true) }
+            _uiState.update { it.copy(showInterstitial = true, isLoading = true) }
         } else {
             getRandomQuote()
             _uiState.update { it.copy(showInterstitial = false) }
@@ -80,18 +80,33 @@ class HomeViewModel @Inject constructor(
 
     private fun shareQuote() {
         val dataToSend = "${_uiState.value.quote.body} - ${_uiState.value.quote.owner}"
-        send.sendDataTo(dataToSend)
+
+        _uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            withContext(dispatcherIO) {
+                send.sendDataTo(dataToSend)
+            }
+            _uiState.update { it.copy(isLoading = false) }
+        }
     }
 
     private fun goToBuyImage() {
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            intents.goToWebShopImages()
+            withContext(dispatcherIO) {
+                intents.goToWebShopImages()
+            }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
     private fun goToSearchOwner() {
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            intents.goToSearchOwnerInBrowser(_uiState.value.quote.owner)
+            withContext(dispatcherIO) {
+                intents.goToSearchOwnerInBrowser(_uiState.value.quote.owner)
+            }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -107,7 +122,6 @@ class HomeViewModel @Inject constructor(
     private fun showImage() {
         _uiState.update { it.copy(showImage = !_uiState.value.showImage) }
     }
-
 
     private fun showConnectionDialog() {
         _uiState.update { it.copy(showDialogNoConnection = true) }
