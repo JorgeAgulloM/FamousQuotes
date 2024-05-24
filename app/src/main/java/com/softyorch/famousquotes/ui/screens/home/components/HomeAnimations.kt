@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home.components
+package com.softyorch.famousquotes.ui.screens.home.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring

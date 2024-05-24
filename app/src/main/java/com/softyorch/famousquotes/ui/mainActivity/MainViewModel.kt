@@ -21,10 +21,9 @@ class MainViewModel @Inject constructor(
     private val timeToUpdate: TimeToUpdate,
     private val intents: Intents,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-) : ViewModel() {
-
-    private val _timeToUpdate = MutableStateFlow<MainState>(MainState.Loading)
-    val mainState: StateFlow<MainState> = _timeToUpdate
+): ViewModel() {
+    private val _uiState = MutableStateFlow<MainState>(MainState.Home)
+    val mainState: StateFlow<MainState> = _uiState
 
     init {
         isTimeToUpdate()
@@ -42,9 +41,7 @@ class MainViewModel @Inject constructor(
                 timeToUpdate()
             }
             writeLog(LevelLog.INFO, "Is time to Update?: $needUpdateApp")
-            _timeToUpdate.update {
-                if (needUpdateApp) MainState.TimeToUpdate else MainState.Home
-            }
+            if (needUpdateApp) _uiState.update { MainState.TimeToUpdate }
         }
     }
 }

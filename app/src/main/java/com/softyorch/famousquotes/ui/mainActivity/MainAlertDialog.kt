@@ -22,8 +22,12 @@ fun MainAlertDialog(onAction: (AlertState) -> Unit) {
     val appName = stringResource(R.string.app_name)
     AlertDialog(
         onDismissRequest = { onAction(AlertState.Dismiss) },
-        dismissButton = { AlertButton(stringResource(R.string.update_dialog_exit_btn)) { onAction(AlertState.Dismiss) } },
-        confirmButton = { AlertButton(text = stringResource(R.string.update_dialog_update_btn)) { onAction(AlertState.Update) } },
+        dismissButton = { AlertButton(stringResource(R.string.update_dialog_exit_btn)) { onAction(
+            AlertState.Dismiss
+        ) } },
+        confirmButton = { AlertButton(text = stringResource(R.string.update_dialog_update_btn)) { onAction(
+            AlertState.Update
+        ) } },
         title = { Text(text = stringResource(R.string.update_dialog_title)) },
         text = { Text(text = stringResource(R.string.update_dialog_body, appName)) },
         icon = {

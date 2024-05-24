@@ -25,8 +25,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
-        versionName = "0.5.8"
+        versionCode = 8
+        versionName = "0.7.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -43,6 +43,53 @@ android {
         }
     }
 
+    applicationVariants.all {
+
+        val variant = this
+        val flavor = this.productFlavors[0].name
+        val buildType = variant.buildType.name
+
+        val appLabelMap = when (this.buildType.name) {
+            "release" -> mapOf(
+                "historical" to adMobProperties["HISTORICAL_RELEASE_KEY_ID_ADMOB_APP"],
+                "uplifting" to adMobProperties["UPLIFTING_RELEASE_KEY_ID_ADMOB_APP"],
+                "biblical" to adMobProperties["BIBLICAL_RELEASE_KEY_ID_ADMOB_APP"]
+            )
+
+            else -> mapOf(
+                "historical" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"],
+                "uplifting" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"],
+                "biblical" to adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"]
+            )
+        }
+
+        variant.outputs.all {
+            variant.mergedFlavor.manifestPlaceholders["ID_ADMOB_APP"] = "${appLabelMap[flavor]}"
+
+            if (buildType == "release") {
+                println("Active flavor in release buildType: $flavor")
+
+                when (flavor) {
+                    "historical" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                    "uplifting" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                    "biblical" -> {
+                        buildConfigField("String", "ID_BANNER_HOME", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                        buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                    }
+                }
+            } else {
+                buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
+                buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -51,15 +98,9 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
-            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["RELEASE_KEY_ID_ADMOB_APP"] ?: ""
-            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["RELEASE_KEY_ID_BANNER_HOME"].toString())
-            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
         debug {
             applicationIdSuffix = ".dev"
-            manifestPlaceholders["ID_ADMOB_APP"] = adMobProperties["FAKE_RELEASE_KEY_ID_ADMOB_APP"] ?: ""
-            buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
-            buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
         }
     }
 
@@ -160,23 +201,27 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.hilt.android)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Material
+    implementation(libs.material)
+    implementation(libs.androidx.material3)
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
 
     // Testing
     testImplementation(libs.junit)

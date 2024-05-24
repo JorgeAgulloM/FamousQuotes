@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.home.model
+package com.softyorch.famousquotes.ui.screens.home.model
 
 import com.softyorch.famousquotes.domain.model.LikesDTO
 
