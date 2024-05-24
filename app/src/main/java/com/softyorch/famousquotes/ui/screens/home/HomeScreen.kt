@@ -62,33 +62,33 @@ fun HomeScreen(viewModel: HomeViewModel) {
     }
 
     Box(modifier = Modifier.fillMaxSize().background(brushBackGround())) {
-        if (state.isLoading) {
-            LoadingCircle()
-        } else {
-            Box(
-                modifier = Modifier.clickable {
-                    viewModel.onActions(HomeActions.ShowImage)
-                },
-                contentAlignment = Alignment.TopCenter
-            ) {
-                BackgroundImage(uri = state.quote.imageUrl)
-            }
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                CardQuote(
-                    state = state,
-                    stateLikes = stateLikes,
-                    context = context
-                ) { action ->
-                    viewModel.onActions(action)
-                }
+
+        Box(
+            modifier = Modifier.clickable {
+                viewModel.onActions(HomeActions.ShowImage)
+            },
+            contentAlignment = Alignment.TopCenter
+        ) {
+            BackgroundImage(uri = state.quote.imageUrl)
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            CardQuote(
+                state = state,
+                stateLikes = stateLikes,
+                context = context
+            ) { action ->
+                viewModel.onActions(action)
             }
         }
+
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
 
         if (state.showDialogNoConnection == false) NoConnectionDialog {
             viewModel.onActions(HomeActions.ShowNoConnectionDialog)
         }
+
+        if (state.isLoading) LoadingCircle()
     }
 }
 
