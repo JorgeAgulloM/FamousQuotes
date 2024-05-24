@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -47,7 +46,7 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: HomeViewModel) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
@@ -63,33 +62,33 @@ fun HomeScreen(navHost: NavHostController, viewModel: HomeViewModel) {
     }
 
     Box(modifier = Modifier.fillMaxSize().background(brushBackGround())) {
-        if (state.isLoading) {
-            LoadingCircle()
-        } else {
-            Box(
-                modifier = Modifier.clickable {
-                    viewModel.onActions(HomeActions.ShowImage)
-                },
-                contentAlignment = Alignment.TopCenter
-            ) {
-                BackgroundImage(uri = state.quote.imageUrl)
-            }
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                CardQuote(
-                    state = state,
-                    stateLikes = stateLikes,
-                    context = context
-                ) { action ->
-                    viewModel.onActions(action)
-                }
+
+        Box(
+            modifier = Modifier.clickable {
+                viewModel.onActions(HomeActions.ShowImage)
+            },
+            contentAlignment = Alignment.TopCenter
+        ) {
+            BackgroundImage(uri = state.quote.imageUrl)
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            CardQuote(
+                state = state,
+                stateLikes = stateLikes,
+                context = context
+            ) { action ->
+                viewModel.onActions(action)
             }
         }
+
         if (state.showInfo)
             InfoDialog { viewModel.onActions(HomeActions.Info) }
 
         if (state.showDialogNoConnection == false) NoConnectionDialog {
             viewModel.onActions(HomeActions.ShowNoConnectionDialog)
         }
+
+        if (state.isLoading) LoadingCircle()
     }
 }
 
@@ -149,7 +148,7 @@ fun CardQuote(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
-                    isEnabled = hasConnection && imageFromWeb,
+                    isEnabled = hasConnection,
                     isImageExt = imageFromWeb
                 ) { action ->
                     when (action) {
