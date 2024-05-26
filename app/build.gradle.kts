@@ -200,6 +200,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     // Dagger Hilt
     implementation(libs.hilt.android)
