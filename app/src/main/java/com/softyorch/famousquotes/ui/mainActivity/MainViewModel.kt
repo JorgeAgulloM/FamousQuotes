@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.mainActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Intents
+import com.softyorch.famousquotes.data.network.IAuthService
 import com.softyorch.famousquotes.domain.useCases.TimeToUpdate
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val authService: IAuthService,
     private val timeToUpdate: TimeToUpdate,
     private val intents: Intents,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
@@ -26,6 +28,7 @@ class MainViewModel @Inject constructor(
     val mainState: StateFlow<MainState> = _uiState
 
     init {
+        anonymousAuthentication()
         isTimeToUpdate()
     }
 
@@ -42,6 +45,19 @@ class MainViewModel @Inject constructor(
             }
             writeLog(LevelLog.INFO, "Is time to Update?: $needUpdateApp")
             if (needUpdateApp) _uiState.update { MainState.TimeToUpdate }
+        }
+    }
+
+    private fun anonymousAuthentication() {
+        viewModelScope.launch{
+            withContext(dispatcherIO) {
+                authService.getAnonymousAuth()
+            }.also {
+                if (it)
+                    writeLog(LevelLog.INFO, "Anonymous Authentication is Success!!")
+                else
+                    writeLog(LevelLog.ERROR, "Error: Anonymous Authentication is Failed")
+            }
         }
     }
 }
