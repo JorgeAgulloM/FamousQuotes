@@ -26,8 +26,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 102
-        versionName = "1.0.2"
+        versionCode = 103
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -200,6 +200,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     // Dagger Hilt
     implementation(libs.hilt.android)

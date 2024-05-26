@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.data.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -36,4 +37,8 @@ object NetworkModule {
         setDefaultsAsync(R.xml.remote_config_defaults)
         fetchAndActivate()
     }
+
+    @Singleton
+    @Provides
+    fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }
