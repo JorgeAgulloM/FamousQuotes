@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -25,8 +26,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.navigation.NavigationManager
-import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
+import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import com.softyorch.famousquotes.utils.sdk26AndUp
@@ -43,31 +43,19 @@ class MainActivity : ComponentActivity() {
     private val channel = 1111
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
-        if (!BuildConfig.DEBUG) checkForAppUpdates()
+        splash.setKeepOnScreenCondition { true }
 
-        // Start Chashlytics
-        firebaseInit()
-
-        // Permission Notifications
+        StartUpdateManager()
+        StartFirebaseCrashlytics()
         sdk33AndUp { PermissionNotifications() }
-
-        // Protection Data Consent
-        val requestConsent = RequestGrantedProtectionData(this)
-
-        // ScreenShoot blocked
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+        RequestGrantedProtectionData(this).getConsent()
+        SetBlockedScreenShoot()
 
         setContent {
-            requestConsent.get { }
-
             viewModel = hiltViewModel<MainViewModel>()
-
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
             if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
@@ -77,8 +65,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            FamousQuotesTheme { NavigationManager() }
+            MainApp()
+            splash.setKeepOnScreenCondition { false }
         }
+    }
+
+    private fun StartUpdateManager() {
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        if (!BuildConfig.DEBUG) checkForAppUpdates()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -127,15 +121,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun firebaseInit() {
-        // Firebase Crashlytics
+    private fun StartFirebaseCrashlytics() {
+        // Start Firebase Crashlytics
         FirebaseApp.initializeApp(this)
         Firebase.analytics.setAnalyticsCollectionEnabled(true)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+    }
+
+    private fun SetBlockedScreenShoot() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 }
 
 //Añadir Tests de implementación
 //Añadir CD/CI con github
-
-//Crear capturas, videos, textos... y subir apps
