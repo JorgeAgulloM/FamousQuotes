@@ -8,7 +8,7 @@ import kotlin.coroutines.resume
 class AuthServiceImpl @Inject constructor(private val auth: FirebaseAuth) : IAuthService {
     override suspend fun getAnonymousAuth(): Boolean =
         suspendCancellableCoroutine { cancelableCoroutine ->
-            auth.signInAnonymously().addOnCompleteListener {
+            auth.signInAnonymously().addOnSuccessListener {
                 cancelableCoroutine.resume(true)
             }.addOnFailureListener {
                 cancelableCoroutine.resume(false)
