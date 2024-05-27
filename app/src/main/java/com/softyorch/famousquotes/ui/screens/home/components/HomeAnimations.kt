@@ -5,6 +5,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +23,11 @@ fun AnimatedContentHome(isActive: Boolean, content: @Composable () -> Unit) {
         enter = slideInVertically(
             animationSpec = spring(1f, 20f),
             initialOffsetY = { it / 2 }
-        ) + fadeIn(animationSpec = tween(durationMillis = 1000))
+        ) + fadeIn(animationSpec = tween(durationMillis = 1000)),
+        exit = shrinkVertically(
+            animationSpec = spring(1f, 20f),
+            targetHeight = { -it / 2 }
+        ) + fadeOut(animationSpec = tween(durationMillis = 1000))
     ) { content() }
 }
 
