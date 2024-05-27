@@ -13,7 +13,7 @@ class RequestGrantedProtectionData(private val mainActivity: MainActivity) {
     private val consent = "Consent"
     private val notConsent = "Not consent"
 
-    fun get(callBack: (String) -> Unit) {
+    fun getConsent() {
         if (isMobileAdsInitializedCalled.get()) {
             writeLog(LevelLog.INFO, "[RequestGrantedProtectionData] -> $consent")
             return
@@ -33,11 +33,9 @@ class RequestGrantedProtectionData(private val mainActivity: MainActivity) {
                     if (consentInformation.canRequestAds()) {
                         isMobileAdsInitializedCalled.set(true)
                         writeLog(LevelLog.INFO, "[RequestGrantedProtectionData] -> $consent")
-                        callBack(consent)
                     } else {
                         isMobileAdsInitializedCalled.set(false)
                         writeLog(LevelLog.INFO, "[RequestGrantedProtectionData] -> $notConsent")
-                        callBack(notConsent)
                     }
                 }
             },
