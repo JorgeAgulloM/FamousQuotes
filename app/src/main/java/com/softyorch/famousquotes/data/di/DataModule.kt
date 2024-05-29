@@ -35,8 +35,8 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesStorageService(storage: FirebaseStorage, @ApplicationContext context: Context):
-            IStorageService = StorageServiceImpl(storage, context)
+    fun providesStorageService(storage: FirebaseStorage):
+            IStorageService = StorageServiceImpl(storage)
 
     @Singleton
     @Provides
