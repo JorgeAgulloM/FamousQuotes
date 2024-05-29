@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
@@ -27,29 +28,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
 fun Controls(
     hasText: String,
+    isPurchased: Int?,
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     isEnabled: Boolean,
     isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
+    writeLog(LevelLog.INFO, "Image of $hasText is purchased?: $isPurchased")
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
@@ -97,9 +102,13 @@ fun Controls(
                 ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                    icon = Icons.Outlined.LocalMall,
+                    icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
                     isEnabled = isImageExt && isEnabled
-                ) { onAction(HomeActions.Buy) }
+                ) {
+                    if (isPurchased == Purchase.PurchaseState.PURCHASED)
+                        onAction(HomeActions.DownloadImage)
+                    else onAction(HomeActions.Buy)
+                }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
