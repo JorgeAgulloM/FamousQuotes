@@ -41,7 +41,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
-import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -56,7 +56,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
-            writeLog(LevelLog.INFO, "itState: $it")
+            writeLog(INFO, "itState: $it")
             viewModel.onActions(HomeActions.New)
         }
     }
@@ -146,6 +146,7 @@ fun CardQuote(
             ) {
                 Controls(
                     hasText = state.quote.body,
+                    isPurchased = state.purchasedOk,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
                     isEnabled = hasConnection,
