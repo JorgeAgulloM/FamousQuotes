@@ -28,7 +28,9 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
     private val purchaseUpdateListener = PurchasesUpdatedListener { billingResult, purchases ->
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             purchases.forEach {
-                handlePurchase(it) { purchaseState -> this.purchaseState = purchaseState }
+                handlePurchase(it) {
+                    purchaseState -> this.purchaseState = purchaseState
+                }
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             writeLog(WARN, "BillingService: PurchasesUpdatedListener -> UserCanceled")
@@ -44,25 +46,32 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
     private var skuDetailsList: List<SkuDetails>? = null
 
     private fun handlePurchase(purchase: Purchase, getAccessToWallpaper: (Int) -> Unit) {
-        when (purchase.purchaseState) {
-            Purchase.PurchaseState.PURCHASED -> {
-                getAccessToWallpaper(Purchase.PurchaseState.PURCHASED)
-                if (!purchase.isAcknowledged) {
-                    val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                    billingClient.acknowledgePurchase(acknowledgePurchaseParams) {
-                        writeLog(INFO, "BillingService: handlePurchase -> acknowledgePurchase: $it")
-                    }
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+
+            writeLog(INFO, "BillingService: handlePurchase -> handlePurchase: PURCHASED")
+            getAccessToWallpaper(Purchase.PurchaseState.PURCHASED)
+
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
+                    getAccessToWallpaper(billingResult.responseCode)
+                    writeLog(INFO, "BillingService: handlePurchase -> acknowledgePurchase: $billingResult")
                 }
+            } else {
+                writeLog(INFO, "BillingService: handlePurchase -> isAcknowledged: ${purchase.isAcknowledged}")
             }
-            else -> getAccessToWallpaper(purchase.purchaseState)
+
+        } else {
+            getAccessToWallpaper(purchase.purchaseState)
+            writeLog(WARN, "BillingService: handlePurchase -> handlePurchase: ${purchase.purchaseState}")
         }
     }
 
-    override fun getPurchaseState(): Flow<Int> = flowOf(purchaseState)
+    override suspend fun getPurchaseState(): Flow<Int> = flowOf(purchaseState)
 
     override fun getSkuDetails(productId: String): SkuDetails? {
+        writeLog(WARN, "BillingService: getSkuDetails -> skuDetailsList: $skuDetailsList")
         return skuDetailsList?.find { it.sku == productId }
     }
 
@@ -74,8 +83,8 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
+                writeLog(INFO, "BillingService: onBillingSetupFinished -> BillingResponseCode: ${billingResult.responseCode}")
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    writeLog(INFO, "BillingService: onBillingSetupFinished -> BillingResponseCode.OK")
                     hasConnection(true)
                 }
             }
@@ -83,34 +92,67 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
     }
 
     override fun queryAvailableProducts() {
-        val skuList = listOf("1716764400000")
+        val skuList = listOf("1716764400000", "1716850800000", "1716937200000")
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailList ->
+            writeLog(WARN, "BillingService: queryAvailableProducts -> BillingResponseCode: ${billingResult.responseCode}")
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailList != null) {
                 this.skuDetailsList = skuDetailList
-                writeLog(INFO, "BillingService: queryAvailableProducts -> BillingResponseCode.OK")
-                writeLog(INFO, "BillingService: queryAvailableProducts -> skuDetailsList: $skuDetailList")
-            } else {
-                writeLog(WARN, "BillingService: queryAvailableProducts -> BillingResponseCode: ${billingResult.responseCode}")
-                writeLog(WARN, "BillingService: queryAvailableProducts -> skuDetailsList: $skuDetailList")
+                skuDetailList.forEach {
+                    writeLog(INFO, "BillingService: queryAvailableProducts -> skuDetailsList: $it")
+                }
             }
         }
     }
 
-    override fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails) {
+    override fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int {
         val flowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetails)
             .build()
-        billingClient.launchBillingFlow(activity, flowParams)
+        val launch = billingClient.launchBillingFlow(activity, flowParams)
+        writeLog(INFO, "BillingService: launchPurchaseFlow -> LaunchBillingFlow: $ ${launch.responseCode}")
+        return launch.responseCode
+    }
+
+    override fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit) {
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && !purchase.isAcknowledged) {
+            val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+            billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
+                acknowledgePurchases(billingResult)
+                writeLog(INFO, "BillingService: acknowledgePurchase -> billingResult: $ $billingResult")
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    acknowledgePurchases(billingResult)
+                }
+            }
+        }
+    }
+
+    override fun queryPurchases(purchasesList: (List<Purchase>) -> Unit) {
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                purchasesList(purchases)
+                purchases.forEach { purchase ->
+                    handlePurchase(purchase) {
+                        writeLog(INFO, "BillingService: queryPurchases -> purchase: is $it >>> $purchase")
+                    }
+                }
+            } else {
+                purchasesList(emptyList())
+            }
+        }
     }
 
 }
 
 interface IBilling {
-    fun getPurchaseState(): Flow<Int>
+    suspend fun getPurchaseState(): Flow<Int>
     fun getSkuDetails(productId: String): SkuDetails?
     fun startConnection(hasConnection: (Boolean) -> Unit)
     fun queryAvailableProducts()
-    fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails)
+    fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int
+    fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit)
+    fun queryPurchases(purchasesList: (List<Purchase>) -> Unit)
 }
