@@ -11,4 +11,5 @@ data class HomeState(
     val hasConnection: Boolean? = null,
     val showDialogNoConnection: Boolean? = null,
     val reConnect: Boolean? = null,
+    val purchasedOk: Int? = null,
 )
