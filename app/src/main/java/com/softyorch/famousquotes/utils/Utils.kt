@@ -39,7 +39,8 @@ inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
 inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null
 
-val isSdk31OrUp = sdk31AndUp { true } ?: false
+inline fun <T> sdk30AndDown(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) onSdk() else null
 
 inline fun <T> sdk26AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) onSdk() else null
