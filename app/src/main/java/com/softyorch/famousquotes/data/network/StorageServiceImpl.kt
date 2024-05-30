@@ -25,6 +25,7 @@ class StorageServiceImpl @Inject constructor(
         private const val TIMEOUT: Long = 4000L
     }
 
+    private val imagesUrl = "/images/famous_quotes/biblical_quotes/"
     private val appName = BuildConfig.APP_TITLE.split("_")[2]
 
     override suspend fun getImage(url: String): String? = try {
@@ -38,6 +39,18 @@ class StorageServiceImpl @Inject constructor(
         }
     } catch (ex: Exception) {
         null
+    }
+
+    override suspend fun getImageList(): List<String>? {
+        return withTimeoutOrNull(TIMEOUT) {
+            try {
+                val storageRef = storage.reference.child(imagesUrl)
+                storageRef.listAll().await().prefixes.toList().map { it.name }
+            } catch (ex: FirebaseException) {
+                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
+                null
+            }
+        }
     }
 
     override suspend fun downloadImage(imageId: String, result: (Boolean) -> Unit) {
