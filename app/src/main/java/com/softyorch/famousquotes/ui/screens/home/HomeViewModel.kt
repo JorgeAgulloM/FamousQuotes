@@ -2,16 +2,23 @@ package com.softyorch.famousquotes.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
+import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
+import com.softyorch.famousquotes.domain.useCases.billing.BillingModel
+import com.softyorch.famousquotes.domain.useCases.billing.BillingPurchase
+import com.softyorch.famousquotes.domain.useCases.billing.BillingStart
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
-import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.LevelLog.ERROR
+import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,17 +37,23 @@ class HomeViewModel @Inject constructor(
     private val selectQuote: GetTodayQuote,
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
+    private val billingStartUseCase: BillingStart,
+    private val billingLaunchPurchase: BillingPurchase,
+    private val storage: IStorageService,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
     private val send: Send,
     private val hasConnection: InternetConnection,
     private val intents: Intents,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel("", "", "")))
+    private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel.emptyModel()))
     val uiState: StateFlow<HomeState> = _uiState
 
     private val _likeState = MutableStateFlow(QuoteLikesState())
     val likesState: StateFlow<QuoteLikesState> = _likeState
+
+    private val _billingData = MutableStateFlow(BillingModel.empty())
+    //val billingData: StateFlow<BillingModel> = _billingData
 
     init {
         onCreate()
@@ -56,12 +69,14 @@ class HomeViewModel @Inject constructor(
             HomeActions.Info -> showInfoDialog()
             HomeActions.New -> loadNewRandomQuote()
             HomeActions.Send -> shareQuote()
-            HomeActions.Buy -> goToBuyImage()
+            HomeActions.Buy -> purchaseLaunch()
             HomeActions.Owner -> goToSearchOwner()
             HomeActions.Like -> setQuoteLike()
             HomeActions.ShowImage -> showImage()
             HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
             HomeActions.ReConnection -> getQuote()
+            HomeActions.DownloadImage -> downloadImage()
+            HomeActions.ShowToastDownload -> showDownloadToast()
         }
     }
 
@@ -90,13 +105,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun goToBuyImage() {
-        _uiState.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            withContext(dispatcherIO) {
-                intents.goToWebShopImages()
+    private fun purchaseLaunch() {
+        MainActivity.getPermissionStorage { hasPermission ->
+            if (hasPermission) viewModelScope.launch(dispatcherIO) {
+                billingLaunchPurchase(
+                    _uiState.value.quote.id,
+                    MainActivity.instance
+                ).let { purchase ->
+                    _uiState.update { state -> state.copy(purchasedOk = purchase) }
+                }
             }
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -113,7 +131,7 @@ class HomeViewModel @Inject constructor(
     private fun setQuoteLike() {
         viewModelScope.launch(dispatcherIO) {
             val isLike = !_likeState.value.isLike
-            writeLog(LevelLog.INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
+            writeLog(INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
             val updateLikes = LikesUiDTO(isLike = isLike)
             setLike(updateLikes.toDomain())
         }
@@ -151,13 +169,26 @@ class HomeViewModel @Inject constructor(
             }
 
             getLikesQuote()
+            connectToBilling()
         }
+    }
+
+    private fun downloadImage() {
+        viewModelScope.launch(dispatcherIO) {
+            storage.downloadImage(_uiState.value.quote.id) { downloadResult ->
+                _uiState.update { it.copy(downloadImage = downloadResult) }
+            }
+        }
+    }
+
+    private fun showDownloadToast() {
+        _uiState.update { it.copy(downloadImage = false) }
     }
 
     private fun getLikesQuote() {
         viewModelScope.launch(dispatcherIO) {
             getLikes().catch {
-                writeLog(LevelLog.ERROR, "Error from getting likes: ${it.cause}")
+                writeLog(ERROR, "Error from getting likes: ${it.cause}")
             }.collect { likes ->
                 _likeState.update {
                     it.copy(
@@ -183,7 +214,7 @@ class HomeViewModel @Inject constructor(
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
             hasConnection.isConnectedFlow().catch {
-                writeLog(LevelLog.ERROR, "Error getting connection state: ${it.cause}")
+                writeLog(ERROR, "Error getting connection state: ${it.cause}")
             }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
                     onActions(HomeActions.ReConnection)
@@ -195,6 +226,22 @@ class HomeViewModel @Inject constructor(
                         hasConnection = connection,
                         showDialogNoConnection = if (!connection) false else null
                     )
+                }
+            }
+        }
+    }
+
+    private fun connectToBilling() {
+        viewModelScope.launch {
+            val resultModel = withContext(dispatcherIO) {
+                billingStartUseCase()
+            }
+            _billingData.update { resultModel }
+
+            resultModel.productsPurchased.forEach { productId ->
+                if (productId == _uiState.value.quote.id) {
+                    _uiState.update { it.copy(purchasedOk = Purchase.PurchaseState.PURCHASED) }
+                    return@forEach
                 }
             }
         }
