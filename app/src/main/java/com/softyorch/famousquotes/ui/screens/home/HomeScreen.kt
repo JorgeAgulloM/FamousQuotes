@@ -8,12 +8,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,6 +43,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.Controls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
+import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.theme.brushBackGround
@@ -45,6 +52,7 @@ import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
 
@@ -57,7 +65,16 @@ fun HomeScreen(viewModel: HomeViewModel) {
             it is InterstitialAdState.Error
         ) {
             writeLog(INFO, "itState: $it")
-            viewModel.onActions(HomeActions.New)
+            if (!state.imageIsDownloadAlready)
+                viewModel.onActions(HomeActions.New)
+        }
+
+        if (it is InterstitialAdState.Clicked ||
+            it is InterstitialAdState.Close ||
+            it is InterstitialAdState.Error
+        ) {
+            if (state.imageIsDownloadAlready)
+                viewModel.onActions(HomeActions.SureDownloadImageAgain)
         }
     }
 
@@ -94,6 +111,40 @@ fun HomeScreen(viewModel: HomeViewModel) {
             context.showToast("Imagen descargada")
             viewModel.onActions(HomeActions.ShowToastDownload)
         }
+
+        if (state.imageIsDownloadAlready)
+            BasicAlertDialog(
+                onDismissRequest = { viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain) },
+                modifier = Modifier.background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = MaterialTheme.shapes.extraLarge
+                )
+            ) {
+                Column(
+                    modifier = Modifier.background(
+                        brush = brushBackGround(),
+                        shape = MaterialTheme.shapes.extraLarge
+                    ).padding(8.dp)
+                ) {
+                    TextInfo("Ya has bajado la imagen.\n¿Estás seguro de querer descargarla de nuevo?")
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Button(
+                            onClick = { viewModel.onActions(HomeActions.SureDownloadImageAgain) }
+                        ) {
+                            Text(text = "SI")
+                        }
+                        Button(
+                            onClick = { viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain) }
+                        ) {
+                            Text(text = "NO")
+                        }
+                    }
+                }
+            }
     }
 }
 
