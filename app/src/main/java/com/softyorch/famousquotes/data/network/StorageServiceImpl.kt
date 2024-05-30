@@ -6,10 +6,10 @@ import android.net.Uri
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import com.google.firebase.FirebaseException
 import com.google.firebase.storage.FirebaseStorage
-import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.core.APP_NAME
+import com.softyorch.famousquotes.core.URL_STORAGE_PROJECT
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
-import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.tasks.await
@@ -24,9 +24,6 @@ class StorageServiceImpl @Inject constructor(
     companion object {
         private const val TIMEOUT: Long = 4000L
     }
-
-    private val imagesUrl = "/images/famous_quotes/biblical_quotes/"
-    private val appName = BuildConfig.APP_TITLE.split("_")[2]
 
     override suspend fun getImage(url: String): String? = try {
         withTimeoutOrNull(TIMEOUT) {
@@ -44,7 +41,7 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun getImageList(): List<String>? {
         return withTimeoutOrNull(TIMEOUT) {
             try {
-                val storageRef = storage.reference.child(imagesUrl)
+                val storageRef = storage.reference.child(URL_STORAGE_PROJECT)
                 storageRef.listAll().await().prefixes.toList().map { it.name }
             } catch (ex: FirebaseException) {
                 writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
@@ -56,17 +53,15 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun downloadImage(imageId: String, result: (Boolean) -> Unit) {
         withTimeoutOrNull(30000) {
             try {
-                val imageName = "$appName-$imageId.png"
-                val url = "/images/famous_quotes/historical_quotes/$imageId/$imageId.png"
+                val imageName = "$APP_NAME-$imageId.png"
+                val url = "$URL_STORAGE_PROJECT$imageId/$imageId.png"
                 val storageRef = storage.reference.child(url)
 
                 storageRef.downloadUrl.addOnSuccessListener {
-                    writeLog(INFO, "downloadImage-> is Success ImageId: $imageId")
                     downloadFile(imageName, it.toString()) {
                         result(true)
                     }
                 }.addOnFailureListener {
-                    writeLog(ERROR, "downloadImage-> ImageId: $imageId. Error: ${it.cause}")
                     result(false)
                 }
 
