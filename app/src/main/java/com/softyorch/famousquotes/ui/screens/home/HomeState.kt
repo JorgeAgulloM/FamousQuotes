@@ -13,4 +13,5 @@ data class HomeState(
     val reConnect: Boolean? = null,
     val purchasedOk: Int? = null,
     val downloadImage: Boolean = false,
+    val imageIsDownloadAlready: Boolean = false,
 )
