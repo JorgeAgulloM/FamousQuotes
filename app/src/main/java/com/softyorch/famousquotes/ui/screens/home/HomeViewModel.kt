@@ -19,10 +19,12 @@ import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
+import com.softyorch.famousquotes.utils.doesDownloadPathFileExist
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -77,6 +79,8 @@ class HomeViewModel @Inject constructor(
             HomeActions.ReConnection -> getQuote()
             HomeActions.DownloadImage -> downloadImage()
             HomeActions.ShowToastDownload -> showDownloadToast()
+            HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
+            HomeActions.SureDownloadImageAgain -> downloadImageAgain()
         }
     }
 
@@ -175,14 +179,47 @@ class HomeViewModel @Inject constructor(
 
     private fun downloadImage() {
         viewModelScope.launch(dispatcherIO) {
-            storage.downloadImage(_uiState.value.quote.id) { downloadResult ->
-                _uiState.update { it.copy(downloadImage = downloadResult) }
+            val imageName = uiState.value.quote.id
+            val imageIsExist = _uiState.value.imageIsDownloadAlready
+
+            if (!imageIsExist && doesDownloadPathFileExist(imageName)) {
+                _uiState.update { it.copy(imageIsDownloadAlready = true) }
+            } else {
+                storage.downloadImage(imageName) { downloadResult ->
+                    _uiState.update { it.copy(downloadImage = downloadResult) }
+                }
             }
         }
     }
 
     private fun showDownloadToast() {
         _uiState.update { it.copy(downloadImage = false) }
+    }
+
+    private fun closeDownloadImageAgain() {
+        _uiState.update { it.copy(imageIsDownloadAlready = false) }
+    }
+
+    private fun downloadImageAgain() {
+        viewModelScope.launch {
+            if (!_uiState.value.showInterstitial) {
+                _uiState.update { it.copy(
+                    showInterstitial = true,
+                    isLoading = true
+                ) }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        showInterstitial = false,
+                        imageIsDownloadAlready = false,
+                        isLoading = false
+                    )
+                }
+                storage.downloadImage(_uiState.value.quote.id) { downloadResult ->
+                    _uiState.update { it.copy(downloadImage = downloadResult) }
+                }
+            }
+        }
     }
 
     private fun getLikesQuote() {
