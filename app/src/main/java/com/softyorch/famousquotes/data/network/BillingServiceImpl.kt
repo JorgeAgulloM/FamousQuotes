@@ -19,7 +19,9 @@ import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 class BillingServiceImpl @Inject constructor(@ApplicationContext private val context: Context): IBilling {
 
@@ -47,8 +49,6 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
 
     private fun handlePurchase(purchase: Purchase, getAccessToWallpaper: (Int) -> Unit) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-
-            writeLog(INFO, "BillingService: handlePurchase -> handlePurchase: PURCHASED")
             getAccessToWallpaper(Purchase.PurchaseState.PURCHASED)
 
             if (!purchase.isAcknowledged) {
@@ -83,37 +83,43 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                writeLog(INFO, "BillingService: onBillingSetupFinished -> BillingResponseCode: ${billingResult.responseCode}")
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     hasConnection(true)
+                    writeLog(INFO, "BillingService: onBillingSetupFinished -> startConnection: 0 (OK)")
+                } else {
+                    writeLog(INFO, "BillingService: onBillingSetupFinished -> startConnection: ${billingResult.responseCode} (BAD)")
                 }
             }
         })
     }
 
-    override fun queryAvailableProducts() {
-        val skuList = listOf("1716764400000", "1716850800000", "1716937200000")
-        val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-        billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailList ->
-            writeLog(WARN, "BillingService: queryAvailableProducts -> BillingResponseCode: ${billingResult.responseCode}")
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailList != null) {
-                this.skuDetailsList = skuDetailList
-                skuDetailList.forEach {
-                    writeLog(INFO, "BillingService: queryAvailableProducts -> skuDetailsList: $it")
+    override suspend fun queryAvailableProducts(productsInApp: List<String>): List<SkuDetails> =
+        suspendCancellableCoroutine { cancelableCoroutine ->
+            val params = SkuDetailsParams.newBuilder()
+            params.setSkusList(productsInApp).setType(BillingClient.SkuType.INAPP)
+            billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailList ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailList != null) {
+                    this.skuDetailsList = skuDetailList
+                    cancelableCoroutine.resume(skuDetailList.toList())
+                } else {
+                    cancelableCoroutine.resume(emptyList())
                 }
             }
         }
-    }
 
-    override fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int {
-        val flowParams = BillingFlowParams.newBuilder()
-            .setSkuDetails(skuDetails)
-            .build()
-        val launch = billingClient.launchBillingFlow(activity, flowParams)
-        writeLog(INFO, "BillingService: launchPurchaseFlow -> LaunchBillingFlow: $ ${launch.responseCode}")
-        return launch.responseCode
-    }
+    override suspend fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int =
+        suspendCancellableCoroutine { cancelableCoroutine ->
+            try {
+                val flowParams = BillingFlowParams.newBuilder()
+                    .setSkuDetails(skuDetails)
+                    .build()
+                val launch = billingClient.launchBillingFlow(activity, flowParams)
+                writeLog(INFO, "BillingService: launchPurchaseFlow -> LaunchBillingFlow: $ ${launch.responseCode}")
+                cancelableCoroutine.resume(launch.responseCode)
+            } catch (ex: Exception) {
+                cancelableCoroutine.resume(-1)
+            }
+        }
 
     override fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && !purchase.isAcknowledged) {
@@ -130,20 +136,21 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
         }
     }
 
-    override fun queryPurchases(purchasesList: (List<Purchase>) -> Unit) {
-        billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchasesList(purchases)
-                purchases.forEach { purchase ->
-                    handlePurchase(purchase) {
-                        writeLog(INFO, "BillingService: queryPurchases -> purchase: is $it >>> $purchase")
+    override suspend fun queryPurchases(): List<Purchase> =
+        suspendCancellableCoroutine { cancelableCoroutine ->
+            billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    purchases.forEach { purchase ->
+                        handlePurchase(purchase) {
+                            writeLog(INFO, "BillingService: queryPurchases -> purchase: is $it >>> $purchase")
+                        }
                     }
+                    cancelableCoroutine.resume(purchases.toList())
+                } else {
+                    cancelableCoroutine.resume(emptyList())
                 }
-            } else {
-                purchasesList(emptyList())
             }
         }
-    }
 
 }
 
@@ -151,8 +158,20 @@ interface IBilling {
     suspend fun getPurchaseState(): Flow<Int>
     fun getSkuDetails(productId: String): SkuDetails?
     fun startConnection(hasConnection: (Boolean) -> Unit)
-    fun queryAvailableProducts()
-    fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int
+    suspend fun queryAvailableProducts(productsInApp: List<String>): List<SkuDetails>
+    suspend fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int
     fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit)
-    fun queryPurchases(purchasesList: (List<Purchase>) -> Unit)
+    suspend fun queryPurchases(): List<Purchase>
 }
+
+/**
+ * 0 (BillingClient.BillingResponseCode.OK): La solicitud fue exitosa.
+ * 1 (BillingClient.BillingResponseCode.USER_CANCELED): El usuario canceló la operación.
+ * 2 (BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE): El servicio de facturación no está disponible (por ejemplo, problemas de red).
+ * 3 (BillingClient.BillingResponseCode.BILLING_UNAVAILABLE): La facturación en Google Play no está disponible.
+ * 4 (BillingClient.BillingResponseCode.ITEM_UNAVAILABLE): El artículo solicitado no está disponible para la compra.
+ * 5 (BillingClient.BillingResponseCode.DEVELOPER_ERROR): Error del desarrollador (por ejemplo, parámetros no válidos).
+ * 6 (BillingClient.BillingResponseCode.ERROR): Error irrecuperable durante la operación.
+ * 7 (BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED): El artículo ya está comprado.
+ * 8 (BillingClient.BillingResponseCode.ITEM_NOT_OWNED): El artículo no está comprado por el usuario.
+ * */
