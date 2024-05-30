@@ -89,6 +89,11 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
 
         if (state.isLoading) LoadingCircle()
+
+        if (state.downloadImage) {
+            context.showToast("Imagen descargada")
+            viewModel.onActions(HomeActions.ShowToastDownload)
+        }
     }
 }
 
