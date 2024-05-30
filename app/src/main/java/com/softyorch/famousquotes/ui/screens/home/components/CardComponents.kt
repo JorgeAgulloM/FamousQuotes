@@ -41,8 +41,6 @@ import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
-import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
 fun Controls(
@@ -54,7 +52,6 @@ fun Controls(
     isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
-    writeLog(LevelLog.INFO, "Image of $hasText is purchased?: $isPurchased")
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
