@@ -202,10 +202,12 @@ class HomeViewModel @Inject constructor(
     private fun downloadImageAgain() {
         viewModelScope.launch {
             if (!_uiState.value.showInterstitial) {
-                _uiState.update { it.copy(
-                    showInterstitial = true,
-                    isLoading = true
-                ) }
+                _uiState.update {
+                    it.copy(
+                        showInterstitial = true,
+                        isLoading = true
+                    )
+                }
             } else {
                 _uiState.update {
                     it.copy(
