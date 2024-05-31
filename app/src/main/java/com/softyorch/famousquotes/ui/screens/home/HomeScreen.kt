@@ -8,18 +8,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,20 +33,21 @@ import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
+import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
 import com.softyorch.famousquotes.ui.screens.home.components.Controls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
-import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.theme.brushBackGround
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
 
@@ -113,38 +108,30 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
 
         if (state.imageIsDownloadAlready)
-            BasicAlertDialog(
-                onDismissRequest = { viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain) },
-                modifier = Modifier.background(
-                    color = MaterialTheme.colorScheme.background,
-                    shape = MaterialTheme.shapes.extraLarge
-                )
-            ) {
-                Column(
-                    modifier = Modifier.background(
-                        brush = brushBackGround(),
-                        shape = MaterialTheme.shapes.extraLarge
-                    ).padding(8.dp)
-                ) {
-                    TextInfo("Ya has bajado la imagen.\n¿Estás seguro de querer descargarla de nuevo?")
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Button(
-                            onClick = { viewModel.onActions(HomeActions.SureDownloadImageAgain) }
-                        ) {
-                            Text(text = "SI")
-                        }
-                        Button(
-                            onClick = { viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain) }
-                        ) {
-                            Text(text = "NO")
-                        }
-                    }
+            BasicDialogApp(
+                text = "Ya has bajado la imagen.\n¿Estás seguro de querer descargarla de nuevo?",
+                textBtnOne = "Descargar",
+                textBtnTwo = "Cancelar",
+            ) { action ->
+                val homeAction = when (action) {
+                    POSITIVE -> HomeActions.SureDownloadImageAgain
+                    NEGATIVE -> HomeActions.CloseDialogDownLoadImageAgain
                 }
+                viewModel.onActions(homeAction)
             }
+
+        /*        if (state.applyWritePermission == NEED_RATIONALE)
+                    BasicDialogApp(
+                        text = "Para comprar y descargar la imagen, necesitamos permiso para poder escribir en el almacenamiento de tu dispositivo",
+                        auxText = "No has concedido el permiso de escritura ¿Deseas concederlo ahora para poder comprar y descargar tu imagen?",
+                        textBtnOne = "Conceder",
+                        textBtnTwo = "Denegar",
+                    ) { action ->
+                        when (action) {
+                            POSITIVE -> launcher.launch(permission)
+                            NEGATIVE -> viewModel.onActions(HomeActions.ClosePermissionDialog)
+                        }
+                    }*/
     }
 }
 
