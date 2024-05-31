@@ -107,7 +107,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
             viewModel.onActions(HomeActions.ShowToastDownload)
         }
 
-        if (state.purchasedOk == -1) context.showToast("Que mal! la imagen no está disponible para comprar.")
+        //if (state.purchasedOk == -1) context.showToast("Que mal! la imagen no está disponible para comprar.")
 
         if (state.imageIsDownloadAlready)
             BasicDialogApp(
