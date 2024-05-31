@@ -71,7 +71,9 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
     override suspend fun getPurchaseState(): Flow<Int> = flowOf(purchaseState)
 
     override fun getSkuDetails(productId: String): SkuDetails? {
-        writeLog(WARN, "BillingService: getSkuDetails -> skuDetailsList: $skuDetailsList")
+        skuDetailsList?.forEachIndexed { index, skuDetails ->
+            writeLog(WARN, "BillingService: getSkuDetails -> skuDetails: ($index) $skuDetails")
+        }
         return skuDetailsList?.find { it.sku == productId }
     }
 
