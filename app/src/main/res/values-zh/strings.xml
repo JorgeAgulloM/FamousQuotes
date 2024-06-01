@@ -73,4 +73,16 @@
     <string name="fbm_message_title">你的每日語錄在等著你</string>
     <string name="fbm_message_body">記住，它每天都有一個不同的語錄，不要錯過。</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_permision_rationale_text">要购买和下载图片，我们需要获得写入设备存储的权限</string>
+    <string name="dialog_permision_rationale_aux_text">您尚未授予写入权限。是否现在授予权限以购买和下载您的图片？</string>
+    <string name="dialog_permision_rationale_ok">授予</string>
+    <string name="dialog_permision_rationale_denied">拒绝</string>
+    <string name="dialog_permision_rationale_denied_toast">您尚未授予写入权限</string>
+    <string name="dialog_image_download_again_text">您已经下载了这张图片。\n确定要再次下载吗？</string>
+    <string name="dialog_image_download_again_download">下载</string>
+    <string name="dialog_image_download_again_cancel">取消</string>
+    <string name="image_download_toast_success">图片已下载</string>
+
+
 </resources>

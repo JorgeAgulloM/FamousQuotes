@@ -73,4 +73,16 @@
     <string name="fbm_message_title">Dein tägliches Zitat wartet auf dich</string>
     <string name="fbm_message_body">Denke daran, es hat jeden Tag ein anderes Zitat, verpass es nicht.</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_permision_rationale_text">Um das Bild zu kaufen und herunterzuladen, benötigen wir die Erlaubnis, auf den Speicher Ihres Geräts zu schreiben</string>
+    <string name="dialog_permision_rationale_aux_text">Sie haben keine Schreibberechtigung erteilt. Möchten Sie sie jetzt erteilen, um Ihr Bild zu kaufen und herunterzuladen?</string>
+    <string name="dialog_permision_rationale_ok">Erlauben</string>
+    <string name="dialog_permision_rationale_denied">Verweigern</string>
+    <string name="dialog_permision_rationale_denied_toast">Sie haben keine Schreibberechtigung erteilt</string>
+    <string name="dialog_image_download_again_text">Sie haben das Bild bereits heruntergeladen.\nMöchten Sie es wirklich erneut herunterladen?</string>
+    <string name="dialog_image_download_again_download">Herunterladen</string>
+    <string name="dialog_image_download_again_cancel">Abbrechen</string>
+    <string name="image_download_toast_success">Bild heruntergeladen</string>
+
+
 </resources>

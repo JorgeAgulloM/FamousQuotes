@@ -73,4 +73,15 @@
     <string name="fbm_message_title">Votre phrase quotidienne vous attend</string>
     <string name="fbm_message_body">N\'oubliez pas qu\'elle a une phrase différente chaque jour, ne la manquez pas.</string>
 
+    <!-- Dialog -->
+    <string name="dialog_permision_rationale_text">Pour acheter et télécharger l\'image, nous avons besoin de la permission d\'écrire sur le stockage de votre appareil</string>
+    <string name="dialog_permision_rationale_aux_text">Vous n\'avez pas accordé l\'autorisation d\'écriture. Voulez-vous l\'accorder maintenant pour acheter et télécharger votre image ?</string>
+    <string name="dialog_permision_rationale_ok">Accorder</string>
+    <string name="dialog_permision_rationale_denied">Refuser</string>
+    <string name="dialog_permision_rationale_denied_toast">Vous n\'avez pas accordé l\'autorisation d\'écriture</string>
+    <string name="dialog_image_download_again_text">Vous avez déjà téléchargé l\'image.\nÊtes-vous sûr de vouloir la télécharger à nouveau ?</string>
+    <string name="dialog_image_download_again_download">Télécharger</string>
+    <string name="dialog_image_download_again_cancel">Annuler</string>
+    <string name="image_download_toast_success">Image téléchargée</string>
+
 </resources>
