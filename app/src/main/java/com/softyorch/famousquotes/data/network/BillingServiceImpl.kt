@@ -12,6 +12,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.softyorch.famousquotes.domain.interfaces.IBilling
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.LevelLog.WARN
@@ -23,7 +24,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class BillingServiceImpl @Inject constructor(@ApplicationContext private val context: Context): IBilling {
+class BillingServiceImpl @Inject constructor(@ApplicationContext private val context: Context):
+    IBilling {
 
     private var purchaseState: Int = Purchase.PurchaseState.UNSPECIFIED_STATE
 
@@ -154,16 +156,6 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
             }
         }
 
-}
-
-interface IBilling {
-    suspend fun getPurchaseState(): Flow<Int>
-    fun getSkuDetails(productId: String): SkuDetails?
-    fun startConnection(hasConnection: (Boolean) -> Unit)
-    suspend fun queryAvailableProducts(productsInApp: List<String>): List<SkuDetails>
-    suspend fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int
-    fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit)
-    suspend fun queryPurchases(): List<Purchase>
 }
 
 /**

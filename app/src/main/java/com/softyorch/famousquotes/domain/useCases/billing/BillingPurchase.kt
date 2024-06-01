@@ -1,7 +1,7 @@
 package com.softyorch.famousquotes.domain.useCases.billing
 
 import android.app.Activity
-import com.softyorch.famousquotes.data.network.IBilling
+import com.softyorch.famousquotes.domain.interfaces.IBilling
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

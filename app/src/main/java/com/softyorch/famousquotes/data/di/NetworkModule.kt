@@ -12,7 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.data.network.BillingServiceImpl
-import com.softyorch.famousquotes.data.network.IBilling
+import com.softyorch.famousquotes.domain.interfaces.IBilling
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
