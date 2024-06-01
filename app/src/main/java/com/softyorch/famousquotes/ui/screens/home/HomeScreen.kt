@@ -103,17 +103,15 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (state.isLoading) LoadingCircle()
 
         if (state.downloadImage) {
-            context.showToast("Imagen descargada")
+            context.showToast(stringResource(R.string.image_download_toast_success))
             viewModel.onActions(HomeActions.ShowToastDownload)
         }
 
-        //if (state.purchasedOk == -1) context.showToast("Que mal! la imagen no está disponible para comprar.")
-
         if (state.imageIsDownloadAlready)
             BasicDialogApp(
-                text = "Ya has bajado la imagen.\n¿Estás seguro de querer descargarla de nuevo?",
-                textBtnOne = "Descargar",
-                textBtnTwo = "Cancelar",
+                text = stringResource(R.string.dialog_image_download_again_text),
+                textBtnOne = stringResource(R.string.dialog_image_download_again_download),
+                textBtnTwo = stringResource(R.string.dialog_image_download_again_cancel),
             ) { action ->
                 val homeAction = when (action) {
                     POSITIVE -> HomeActions.SureDownloadImageAgain
@@ -121,19 +119,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 }
                 viewModel.onActions(homeAction)
             }
-
-        /*        if (state.applyWritePermission == NEED_RATIONALE)
-                    BasicDialogApp(
-                        text = "Para comprar y descargar la imagen, necesitamos permiso para poder escribir en el almacenamiento de tu dispositivo",
-                        auxText = "No has concedido el permiso de escritura ¿Deseas concederlo ahora para poder comprar y descargar tu imagen?",
-                        textBtnOne = "Conceder",
-                        textBtnTwo = "Denegar",
-                    ) { action ->
-                        when (action) {
-                            POSITIVE -> launcher.launch(permission)
-                            NEGATIVE -> viewModel.onActions(HomeActions.ClosePermissionDialog)
-                        }
-                    }*/
     }
 }
 
