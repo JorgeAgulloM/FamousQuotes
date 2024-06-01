@@ -25,8 +25,8 @@ fun BasicDialogApp(
     text: String,
     auxText: String? = null,
     title: String? = null,
-    textBtnOne: String? = null,
-    textBtnTwo: String? = null,
+    textBtnPositive: String? = null,
+    textBtnNegative: String? = null,
     blackDismissActions: Boolean = false,
     onActions: (DialogCloseAction) -> Unit,
 ) {
@@ -62,10 +62,10 @@ fun BasicDialogApp(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (textBtnOne != null) ButtonApp(text = textBtnOne) {
+                if (textBtnPositive != null) ButtonApp(text = textBtnPositive, primary = true) {
                     onActions(POSITIVE)
                 }
-                if (textBtnTwo != null) ButtonApp(text = textBtnTwo, primary = true) {
+                if (textBtnNegative != null) ButtonApp(text = textBtnNegative) {
                     onActions(NEGATIVE)
                 }
             }
