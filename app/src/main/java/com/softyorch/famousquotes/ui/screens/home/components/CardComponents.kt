@@ -86,14 +86,14 @@ fun Controls(
     }
 
     if (showPermissionRationaleDialog) BasicDialogApp(
-        text = stringResource(R.string.dialog_permision_rationale_text),
-        auxText = stringResource(R.string.dialog_permision_rationale_aux_text),
-        textBtnOne = stringResource(R.string.dialog_permision_rationale_ok),
-        textBtnTwo = stringResource(R.string.dialog_permision_rationale_denied),
+        text = stringResource(R.string.dialog_permission_rationale_text),
+        auxText = stringResource(R.string.dialog_permission_rationale_aux_text),
+        textBtnOne = stringResource(R.string.dialog_permission_rationale_ok),
+        textBtnTwo = stringResource(R.string.dialog_permission_rationale_denied),
     ) { action ->
         when (action) {
             POSITIVE -> launcher.launch(permission)
-            NEGATIVE -> context.showToast(context.getString(R.string.dialog_permision_rationale_denied_toast))
+            NEGATIVE -> context.showToast(context.getString(R.string.dialog_permission_rationale_denied_toast))
         }
         showPermissionRationaleDialog = false
     }

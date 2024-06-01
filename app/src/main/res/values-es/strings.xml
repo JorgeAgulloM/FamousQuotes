@@ -76,11 +76,11 @@
     <string name="fbm_message_body">Recuerda que tienes una frase diferente cada día, no te la pierdas.</string>
 
     <!-- Dialogs -->
-    <string name="dialog_permision_rationale_text">Para comprar y descargar la imagen, necesitamos permiso para poder escribir en el almacenamiento de tu dispositivo</string>
-    <string name="dialog_permision_rationale_aux_text">No has concedido el permiso de escritura ¿Deseas concederlo ahora para poder comprar y descargar tu imagen?</string>
-    <string name="dialog_permision_rationale_ok">Conceder</string>
-    <string name="dialog_permision_rationale_denied">Denegar</string>
-    <string name="dialog_permision_rationale_denied_toast">No has concedido el permiso de escritura</string>
+    <string name="dialog_permission_rationale_text">Para comprar y descargar la imagen, necesitamos permiso para poder escribir en el almacenamiento de tu dispositivo</string>
+    <string name="dialog_permission_rationale_aux_text">No has concedido el permiso de escritura ¿Deseas concederlo ahora para poder comprar y descargar tu imagen?</string>
+    <string name="dialog_permission_rationale_ok">Conceder</string>
+    <string name="dialog_permission_rationale_denied">Denegar</string>
+    <string name="dialog_permission_rationale_denied_toast">No has concedido el permiso de escritura</string>
     <string name="dialog_image_download_again_text">Ya has bajado la imagen.\n¿Seguro que quieres descargarla de nuevo?</string>
     <string name="dialog_image_download_again_download">Descargar</string>
     <string name="dialog_image_download_again_cancel">Cancelar</string>
