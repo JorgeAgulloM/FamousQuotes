@@ -109,14 +109,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun purchaseLaunch() {
-        MainActivity.getPermissionStorage { hasPermission ->
-            if (hasPermission) viewModelScope.launch(dispatcherIO) {
-                billingLaunchPurchase(
-                    _uiState.value.quote.id,
-                    MainActivity.instance
-                ).let { purchase ->
-                    _uiState.update { state -> state.copy(purchasedOk = purchase) }
-                }
+        viewModelScope.launch(dispatcherIO) {
+            billingLaunchPurchase(
+                _uiState.value.quote.id,
+                MainActivity.instance
+            ).let { purchase ->
+                _uiState.update { state -> state.copy(purchasedOk = purchase) }
             }
         }
     }
