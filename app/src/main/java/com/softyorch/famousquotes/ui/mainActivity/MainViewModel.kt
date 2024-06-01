@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
     private val intents: Intents,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<MainState>(MainState.Home)
+    private val _uiState = MutableStateFlow<MainState>(MainState.Unauthorized)
     val mainState: StateFlow<MainState> = _uiState
 
     init {
@@ -54,10 +54,13 @@ class MainViewModel @Inject constructor(
             withContext(dispatcherIO) {
                 authService()
             }.also {
-                if (it)
+                if (it) {
+                    _uiState.update { MainState.Home }
                     writeLog(LevelLog.INFO, "Anonymous Authentication is Success!!")
-                else
+                } else {
+                    anonymousAuthentication()
                     writeLog(LevelLog.ERROR, "Error: Anonymous Authentication is Failed")
+                }
             }
         }
     }
