@@ -2,8 +2,9 @@ package com.softyorch.famousquotes.ui.mainActivity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.BuildConfig
 import com.softyorch.famousquotes.core.Intents
-import com.softyorch.famousquotes.data.network.IAuthService
+import com.softyorch.famousquotes.domain.useCases.AuthConnection
 import com.softyorch.famousquotes.domain.useCases.TimeToUpdate
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
@@ -19,11 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authService: IAuthService,
+    private val authService: AuthConnection,
     private val timeToUpdate: TimeToUpdate,
     private val intents: Intents,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(MainState.Home)
     val mainState: StateFlow<MainState> = _uiState
 
@@ -39,7 +40,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun isTimeToUpdate() {
-        viewModelScope.launch {
+        if (!BuildConfig.DEBUG) viewModelScope.launch {
             val needUpdateApp = withContext(dispatcherIO) {
                 timeToUpdate()
             }
@@ -49,9 +50,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun anonymousAuthentication() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             withContext(dispatcherIO) {
-                authService.getAnonymousAuth()
+                authService()
             }.also {
                 if (it)
                     writeLog(LevelLog.INFO, "Anonymous Authentication is Success!!")
