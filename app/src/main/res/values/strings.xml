@@ -73,4 +73,16 @@
     <string name="fbm_message_title">Your daily quote awaits you</string>
     <string name="fbm_message_body">Remember it has a different phrase every day, don\'t miss it.</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_permision_rationale_text">To purchase and download the image, we need permission to write to your device's storage</string>
+    <string name="dialog_permision_rationale_aux_text">You have not granted write permission. Would you like to grant it now to purchase and download your image?</string>
+    <string name="dialog_permision_rationale_ok">Grant</string>
+    <string name="dialog_permision_rationale_denied">Deny</string>
+    <string name="dialog_permision_rationale_denied_toast">You have not granted write permission</string>
+    <string name="dialog_image_download_again_text">You have already downloaded the image.\nAre you sure you want to download it again?</string>
+    <string name="dialog_image_download_again_download">Download</string>
+    <string name="dialog_image_download_again_cancel">Cancel</string>
+    <string name="image_download_toast_success">Image downloaded</string>
+
+
 </resources>

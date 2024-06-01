@@ -73,4 +73,16 @@
     <string name="fbm_message_title">आपकी दैनिक वाक्य सदा के लिए आपका इंतजार कर रहा है</string>
     <string name="fbm_message_body">याद रखें कि यह हर दिन एक अलग वाक्य है, इसे न छोड़ें।</string>
 
+    <!-- Dialog -->
+    <string name="dialog_permision_rationale_text">चित्र खरीदने और डाउनलोड करने के लिए, हमें आपके डिवाइस के स्टोरेज में लिखने की अनुमति चाहिए</string>
+    <string name="dialog_permision_rationale_aux_text">आपने लिखने की अनुमति नहीं दी है। क्या आप अपनी छवि खरीदने और डाउनलोड करने के लिए अब अनुमति देना चाहेंगे?</string>
+    <string name="dialog_permision_rationale_ok">अनुमति दें</string>
+    <string name="dialog_permision_rationale_denied">अस्वीकार करें</string>
+    <string name="dialog_permision_rationale_denied_toast">आपने लिखने की अनुमति नहीं दी है</string>
+    <string name="dialog_image_download_again_text">आपने पहले ही यह चित्र डाउनलोड कर लिया है।\nक्या आप वाकई इसे फिर से डाउनलोड करना चाहते हैं?</string>
+    <string name="dialog_image_download_again_download">डाउनलोड करें</string>
+    <string name="dialog_image_download_again_cancel">रद्द करें</string>
+    <string name="image_download_toast_success">चित्र डाउनलोड किया गया</string>
+
+
 </resources>
