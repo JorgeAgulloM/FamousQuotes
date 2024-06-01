@@ -3,17 +3,14 @@ package com.softyorch.famousquotes.ui.mainActivity
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
-import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,11 +26,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import com.softyorch.famousquotes.utils.sdk26AndUp
-import com.softyorch.famousquotes.utils.sdk30AndDown
 import com.softyorch.famousquotes.utils.sdk33AndUp
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,13 +40,10 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         lateinit var instance: MainActivity
-        fun getPermissionStorage(isGranted: (Boolean) -> Unit) =
-            instance.getPermissionStorage { isGranted(it) }
     }
 
     private lateinit var viewModel: MainViewModel
     private lateinit var appUpdateManager: AppUpdateManager
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
     private val channel = 1111
 
@@ -66,22 +60,22 @@ class MainActivity : ComponentActivity() {
         sdk33AndUp { PermissionNotifications() }
         RequestGrantedProtectionData(this).getConsent()
         SetBlockedScreenShoot()
-        SetLauncherPermissions()
-        getPermissionStorage { }
 
         setContent {
             viewModel = hiltViewModel<MainViewModel>()
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
-            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
-                when (alertState) {
-                    AlertState.Dismiss -> finish()
-                    AlertState.Update -> viewModel.goToUpdateApp()
-                }
-            }
+            when (state) {
+                MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
+                MainState.TimeToUpdate -> MainAlertDialog { alertState ->
+                    when (alertState) {
+                        AlertState.Dismiss -> finish()
+                        AlertState.Update -> viewModel.goToUpdateApp()
+                    }
+                }.also { splash.setKeepOnScreenCondition { false } }
 
-            MainApp()
-            splash.setKeepOnScreenCondition { false }
+                MainState.Unauthorized -> LoadingCircle()
+            }
         }
     }
 
@@ -148,35 +142,6 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE
         )
-    }
-
-    private fun SetLauncherPermissions() {
-        requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { result ->
-            if (result) {
-                writeLog(LevelLog.INFO, "Storage permission granted")
-            } else {
-                writeLog(LevelLog.WARN, "Storage permission denied")
-            }
-        }
-    }
-
-    private fun getPermissionStorage(isGranted: (Boolean) -> Unit) {
-        sdk30AndDown {
-            when {
-                ContextCompat
-                    .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                        PackageManager.PERMISSION_GRANTED -> isGranted(true)
-
-                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ->
-                    writeLog(LevelLog.INFO, "shouldShowRequestPermissionRationale")
-                else -> {
-                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    writeLog(LevelLog.INFO, "requestPermissionLauncher")
-                }
-            }
-        } ?: isGranted(true)
     }
 }
 
