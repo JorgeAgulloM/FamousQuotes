@@ -107,11 +107,11 @@ fun HomeScreen(viewModel: HomeViewModel) {
             viewModel.onActions(HomeActions.ShowToastDownload)
         }
 
-        //if (state.imageIsDownloadAlready)
+        if (state.imageIsDownloadAlready)
             BasicDialogApp(
                 text = stringResource(R.string.dialog_image_download_again_text),
-                textBtnOne = stringResource(R.string.dialog_image_download_again_download),
-                textBtnTwo = stringResource(R.string.dialog_image_download_again_cancel),
+                textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
+                textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
             ) { action ->
                 val homeAction = when (action) {
                     POSITIVE -> HomeActions.SureDownloadImageAgain
