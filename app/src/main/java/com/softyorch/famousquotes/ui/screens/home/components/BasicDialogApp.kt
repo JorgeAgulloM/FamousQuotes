@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.softyorch.famousquotes.ui.theme.brushBackGround
+import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
@@ -33,7 +33,7 @@ fun BasicDialogApp(
     BasicAlertDialog(
         onDismissRequest = { onActions(NEGATIVE) },
         modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.background,
+            color = BackgroundColor,
             shape = MaterialTheme.shapes.extraLarge
         ),
         properties = DialogProperties(
@@ -42,10 +42,7 @@ fun BasicDialogApp(
         )
     ) {
         Column(
-            modifier = Modifier.background(
-                brush = brushBackGround(),
-                shape = MaterialTheme.shapes.extraLarge
-            ).padding(8.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
             if (title != null) {
                 TextInfo(title)
@@ -61,14 +58,14 @@ fun BasicDialogApp(
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                modifier = Modifier.fillMaxWidth().padding(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 if (textBtnOne != null) ButtonApp(text = textBtnOne) {
                     onActions(POSITIVE)
                 }
-                if (textBtnTwo != null) ButtonApp(text = textBtnTwo) {
+                if (textBtnTwo != null) ButtonApp(text = textBtnTwo, primary = true) {
                     onActions(NEGATIVE)
                 }
             }
