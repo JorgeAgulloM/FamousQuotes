@@ -1,6 +1,6 @@
 package com.softyorch.famousquotes.domain.useCases.billing
 
-import com.softyorch.famousquotes.data.network.IBilling
+import com.softyorch.famousquotes.domain.interfaces.IBilling
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import kotlinx.coroutines.delay
 import org.json.JSONObject
