@@ -10,7 +10,7 @@ import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.AuthServiceImpl
 import com.softyorch.famousquotes.data.network.ConfigServiceImpl
 import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
-import com.softyorch.famousquotes.data.network.IAuthService
+import com.softyorch.famousquotes.domain.interfaces.IAuthService
 import com.softyorch.famousquotes.data.network.StorageServiceImpl
 import com.softyorch.famousquotes.domain.interfaces.IConfigService
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
