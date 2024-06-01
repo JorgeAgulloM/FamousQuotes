@@ -14,12 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -85,14 +86,14 @@ fun Controls(
     }
 
     if (showPermissionRationaleDialog) BasicDialogApp(
-        text = "Para comprar y descargar la imagen, necesitamos permiso para poder escribir en el almacenamiento de tu dispositivo",
-        auxText = "No has concedido el permiso de escritura ¿Deseas concederlo ahora para poder comprar y descargar tu imagen?",
-        textBtnOne = "Conceder",
-        textBtnTwo = "Denegar",
+        text = stringResource(R.string.dialog_permision_rationale_text),
+        auxText = stringResource(R.string.dialog_permision_rationale_aux_text),
+        textBtnOne = stringResource(R.string.dialog_permision_rationale_ok),
+        textBtnTwo = stringResource(R.string.dialog_permision_rationale_denied),
     ) { action ->
         when (action) {
             POSITIVE -> launcher.launch(permission)
-            NEGATIVE -> context.showToast("No has concedido el permiso de escritura")
+            NEGATIVE -> context.showToast(context.getString(R.string.dialog_permision_rationale_denied_toast))
         }
         showPermissionRationaleDialog = false
     }
@@ -144,7 +145,7 @@ fun Controls(
                 ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                    icon = Icons.Outlined.Download,//if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
+                    icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
                     isEnabled = isImageExt && isEnabled
                 ) {
                     if (sdk29AndDown && permissionState != PackageManager.PERMISSION_GRANTED) {
@@ -154,10 +155,9 @@ fun Controls(
                             launcher.launch(permission)
                         }
                     } else {
-                        onAction(HomeActions.DownloadImage)
-/*                        if (isPurchased == Purchase.PurchaseState.PURCHASED)
+                        if (isPurchased == Purchase.PurchaseState.PURCHASED)
                             onAction(HomeActions.DownloadImage)
-                        else onAction(HomeActions.Buy)*/
+                        else onAction(HomeActions.Buy)
                     }
                 }
                 IconButtonMenu(
@@ -167,7 +167,7 @@ fun Controls(
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
-                    icon = Icons.AutoMirrored.Outlined.Send,
+                    icon = Icons.Outlined.Share,
                     isEnabled = isEnabled
                 ) { onAction(HomeActions.Send) }
             }
