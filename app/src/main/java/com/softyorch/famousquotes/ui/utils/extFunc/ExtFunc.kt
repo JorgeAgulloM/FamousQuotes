@@ -2,7 +2,6 @@ package com.softyorch.famousquotes.ui.utils.extFunc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageInfo
 import androidx.compose.runtime.Composable
 
 @SuppressLint("DiscouragedApi")
@@ -21,4 +20,4 @@ fun Context.getResourceString(name: String): String {
     return getString(intResource)
 }
 
-fun Context.packageNameApp(): PackageInfo = this.packageManager.getPackageInfo(this.packageName, 0)
+fun Context.packageNameApp(): String = this.packageManager.getPackageInfo(this.packageName, 0).packageName
