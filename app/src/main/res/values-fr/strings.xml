@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">Acheter une image</string>
     <string name="main_icon_content_desc_other_quote">Autre citation</string>
     <string name="main_icon_content_desc_share">Partager</string>
-    <string name="main_info_dialog_text_info">Informations sur les icônes de l\'application</string>
-    <string name="main_info_dialog_text_buy_image">Aimez-vous l\'image ? Vous pouvez la voir dans notre boutique Etsy.com dans 1 à 5 jours.</string>
+    <string name="main_info_dialog_text_info">Information</string>
+    <string name="main_info_dialog_text_buy_image">Acheter et télécharger l\'image générée par l\'IA.</string>
     <string name="main_info_dialog_text_other_quote">Voir une autre citation/image. L\'image peut ne pas être liée à la citation.</string>
-    <string name="main_info_dialog_text_">Partagez votre citation du jour avec vos amis et votre famille.</string>
+    <string name="main_info_dialog_text_">Partagez votre citation avec vos amis et votre famille.</string>
     <string name="main_content_desc_image">Image</string>
     <string name="main_icon_content_desc_lost_connection">Pas de connexion Internet</string>
-    <string name="main_info_dialog_owner">En cliquant sur le nom de l\'auteur, vous pouvez voir plus d\'informations à son sujet.</string>
-    <string name="main_info_dialog_connection">Pas de connexion Internet, nous ne pouvons donc pas charger de nouvelles citations et images.</string>
+    <string name="main_info_dialog_owner">Cliquez sur le nom de l\'auteur pour voir plus d\'informations à son sujet.</string>
+    <string name="main_info_dialog_connection">Pas de connexion Internet, nous ne pouvons pas charger de nouvelles citations et images.</string>
     <string name="main_info_click_another_on_image">Appuyez à nouveau sur l\'image pour voir la citation!</string>
 
     <!-- Chaînes de la boîte de dialogue de mise à jour -->
@@ -72,5 +72,16 @@
     <!-- Firebase Notifications Channels -->
     <string name="fbm_message_title">Votre phrase quotidienne vous attend</string>
     <string name="fbm_message_body">N\'oubliez pas qu\'elle a une phrase différente chaque jour, ne la manquez pas.</string>
+
+    <!-- Dialog -->
+    <string name="dialog_permission_rationale_text">Pour acheter et télécharger l\'image, nous avons besoin de la permission d\'écrire sur le stockage de votre appareil</string>
+    <string name="dialog_permission_rationale_aux_text">Vous n\'avez pas accordé l\'autorisation d\'écriture. Voulez-vous l\'accorder maintenant pour acheter et télécharger votre image ?</string>
+    <string name="dialog_permission_rationale_ok">Accorder</string>
+    <string name="dialog_permission_rationale_denied">Refuser</string>
+    <string name="dialog_permission_rationale_denied_toast">Vous n\'avez pas accordé l\'autorisation d\'écriture</string>
+    <string name="dialog_image_download_again_text">Vous avez déjà téléchargé l\'image.\nÊtes-vous sûr de vouloir la télécharger à nouveau ?</string>
+    <string name="dialog_image_download_again_download">Télécharger</string>
+    <string name="dialog_image_download_again_cancel">Annuler</string>
+    <string name="image_download_toast_success">Image téléchargée</string>
 
 </resources>

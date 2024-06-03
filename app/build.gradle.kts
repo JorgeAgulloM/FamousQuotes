@@ -26,8 +26,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 103
-        versionName = "1.0.3"
+        versionCode = 113
+        versionName = "1.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -168,6 +168,9 @@ android {
 }
 
 dependencies {
+
+    // Billing
+    implementation(libs.billing)
 
     // Splash
     implementation(libs.androidx.core.splashscreen)
