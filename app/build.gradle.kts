@@ -116,7 +116,7 @@ android {
             buildConfigField("String", "ICON", "\"historical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFFFFB005")
             buildConfigField("int", "SECONDARY_COLOR", "0xFFFFD966")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF8ECAE6")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xff08506e")
             android.buildFeatures.buildConfig = true
         }
 
