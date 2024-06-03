@@ -10,4 +10,8 @@ sealed class HomeActions {
     data object ShowImage: HomeActions()
     data object ShowNoConnectionDialog: HomeActions()
     data object ReConnection: HomeActions()
+    data object DownloadImage: HomeActions()
+    data object ShowToastDownload: HomeActions()
+    data object CloseDialogDownLoadImageAgain: HomeActions()
+    data object SureDownloadImageAgain: HomeActions()
 }

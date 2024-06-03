@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">Acquista immagine</string>
     <string name="main_icon_content_desc_other_quote">Altra citazione</string>
     <string name="main_icon_content_desc_share">Condividi</string>
-    <string name="main_info_dialog_text_info">Informazioni sugli icone dell\'applicazione</string>
-    <string name="main_info_dialog_text_buy_image">Ti piace l\'immagine? Puoi vederla nel nostro negozio su Etsy.com tra 1 e 5 giorni.</string>
-    <string name="main_info_dialog_text_other_quote">Guarda un\'altra citazione/immagine. L\'immagine potrebbe non essere correlata alla citazione.</string>
-    <string name="main_info_dialog_text_">Condividi la tua citazione del giorno con amici e familiari.</string>
+    <string name="main_info_dialog_text_info">Informazioni</string>
+    <string name="main_info_dialog_text_buy_image">Acquista e scarica l\'immagine generata dall\'IA.</string>
+    <string name="main_info_dialog_text_other_quote">Vedi un\'altra citazione/immagine. L\'immagine potrebbe non essere correlata alla citazione.</string>
+    <string name="main_info_dialog_text_">Condividi la tua citazione con amici e familiari.</string>
     <string name="main_content_desc_image">Immagine</string>
     <string name="main_icon_content_desc_lost_connection">Nessuna connessione Internet</string>
-    <string name="main_info_dialog_owner">Cliccando sul nome dell\'autore, è possibile visualizzare ulteriori informazioni su di lui/lei.</string>
-    <string name="main_info_dialog_connection">Nessuna connessione Internet, quindi non possiamo caricare nuove citazioni e immagini.</string>
+    <string name="main_info_dialog_owner">Clicca sul nome dell\'autore per vedere maggiori informazioni su di lui.</string>
+    <string name="main_info_dialog_connection">Nessuna connessione a Internet, non possiamo caricare nuove citazioni e immagini.</string>
     <string name="main_info_click_another_on_image">Premi di nuovo sull\'immagine per vedere la citazione!</string>
 
     <!-- Update dialog strings -->
@@ -72,5 +72,17 @@
     <!-- Firebase Notifications Channels -->
     <string name="fbm_message_title">La tua frase quotidiana ti aspetta</string>
     <string name="fbm_message_body">Ricorda che ha una frase diversa ogni giorno, non perdertela.</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_permission_rationale_text">Per acquistare e scaricare l\'immagine, abbiamo bisogno del permesso di scrivere nella memoria del tuo dispositivo</string>
+    <string name="dialog_permission_rationale_aux_text">Non hai concesso il permesso di scrittura. Vuoi concederlo ora per acquistare e scaricare l\'immagine?</string>
+    <string name="dialog_permission_rationale_ok">Concedi</string>
+    <string name="dialog_permission_rationale_denied">Nega</string>
+    <string name="dialog_permission_rationale_denied_toast">Non hai concesso il permesso di scrittura</string>
+    <string name="dialog_image_download_again_text">Hai già scaricato l\'immagine.\nSei sicuro di volerla scaricare di nuovo?</string>
+    <string name="dialog_image_download_again_download">Scarica</string>
+    <string name="dialog_image_download_again_cancel">Annulla</string>
+    <string name="image_download_toast_success">Immagine scaricata</string>
+
 
 </resources>

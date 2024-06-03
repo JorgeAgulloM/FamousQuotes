@@ -75,6 +75,12 @@ val MyTypography = Typography(
         fontSize = 24.sp,
         textAlign = TextAlign.Center,
         color = Color.DarkGray
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = FontMontserrat,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = Color.DarkGray
     )
 )
 
