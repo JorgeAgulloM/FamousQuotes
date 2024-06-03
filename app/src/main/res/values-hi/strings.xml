@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">छवि खरीदें</string>
     <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
     <string name="main_icon_content_desc_share">शेयर करें</string>
-    <string name="main_info_dialog_text_info">ऐप्लिकेशन आइकॉन के बारे में जानकारी</string>
-    <string name="main_info_dialog_text_buy_image">क्या आपको छवि पसंद है? आप हमारे Etsy.com स्टोर में 1 से 5 दिनों के भीतर देख सकते हैं।</string>
+    <string name="main_info_dialog_text_info">जानकारी</string>
+    <string name="main_info_dialog_text_buy_image">AI द्वारा उत्पन्न छवि खरीदें और डाउनलोड करें।</string>
     <string name="main_info_dialog_text_other_quote">एक और उद्धरण/छवि देखें। छवि उद्धरण से संबंधित नहीं हो सकती है।</string>
-    <string name="main_info_dialog_text_">अपने दिन के उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
+    <string name="main_info_dialog_text_">अपने उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
     <string name="main_content_desc_image">छवि</string>
-    <string name="main_icon_content_desc_lost_connection">इंटरनेट कनेक्शन नहीं है</string>
-    <string name="main_info_dialog_owner">लेखक के नाम पर क्लिक करके, आप उनके बारे में अधिक जानकारी देख सकते हैं।</string>
-    <string name="main_info_dialog_connection">इंटरनेट कनेक्शन नहीं है, इसलिए हम नए उद्धरण और छवियों को लोड नहीं कर सकते।</string>
+    <string name="main_icon_content_desc_lost_connection">कोई इंटरनेट कनेक्शन नहीं है</string>
+    <string name="main_info_dialog_owner">लेखक के बारे में अधिक जानकारी देखने के लिए उसके नाम पर क्लिक करें।</string>
+    <string name="main_info_dialog_connection">कोई इंटरनेट कनेक्शन नहीं है, हम नए उद्धरण और छवियों को लोड नहीं कर सकते।</string>
     <string name="main_info_click_another_on_image">चित्र पर फिर से दबाएं ताकि उद्धरण दिखाई दे!</string>
 
     <!-- Update dialog strings -->

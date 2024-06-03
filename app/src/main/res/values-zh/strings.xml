@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">購買圖片</string>
     <string name="main_icon_content_desc_other_quote">其他引用</string>
     <string name="main_icon_content_desc_share">分享</string>
-    <string name="main_info_dialog_text_info">关于应用程序图标的信息</string>
-    <string name="main_info_dialog_text_buy_image">喜欢这张图片吗？您可以在我们的Etsy.com商店1到5天内看到它。</string>
-    <string name="main_info_dialog_text_other_quote">查看其他引语/图片。图片可能与引语无关。</string>
-    <string name="main_info_dialog_text_">与朋友和家人分享你的每日引语。</string>
+    <string name="main_info_dialog_text_info">信息</string>
+    <string name="main_info_dialog_text_buy_image">购买并下载由AI生成的图片。</string>
+    <string name="main_info_dialog_text_other_quote">查看其他语录/图片。图片可能与语录无关。</string>
+    <string name="main_info_dialog_text_">与朋友和家人分享你的语录。</string>
     <string name="main_content_desc_image">图片</string>
     <string name="main_icon_content_desc_lost_connection">无网络连接</string>
-    <string name="main_info_dialog_owner">点击作者姓名，可以查看更多关于他/她的信息。</string>
-    <string name="main_info_dialog_connection">没有网络连接，因此无法加载新的引语和图片。</string>
+    <string name="main_info_dialog_owner">点击作者的名字，查看更多信息。</string>
+    <string name="main_info_dialog_connection">无网络连接，我们无法加载新的语录和图片。</string>
     <string name="main_info_click_another_on_image">再次点击图片查看引语！</string>
 
     <!-- Update dialog strings -->
