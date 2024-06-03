@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">Comprar imagen</string>
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
-    <string name="main_info_dialog_text_info">Información sobre los íconos de la aplicación</string>
-    <string name="main_info_dialog_text_buy_image">¿Te gusta la imagen?, puedes verla en nuestra tienda de Etsy.com entre 1 y 5 días más adelante.</string>
-    <string name="main_info_dialog_text_other_quote">Ver otra frase/imagen. La imagen puede no tener relación con la fase.</string>
-    <string name="main_info_dialog_text_">Comparte tu cita del día con tus amigos y familiares.</string>
+    <string name="main_info_dialog_text_info">Información</string>
+    <string name="main_info_dialog_text_buy_image">Comprar y descargar la imagen generada por IA.</string>
+    <string name="main_info_dialog_text_other_quote">Ver otra frase/imagen. La imagen podría no tener relación con la fase.</string>
+    <string name="main_info_dialog_text_">Comparte tu cita con tus amigos y familiares.</string>
     <string name="main_content_desc_image">Imagen</string>
     <string name="main_icon_content_desc_lost_connection">Sin conexión a internet</string>
-    <string name="main_info_dialog_owner">Al hacer clic en el nombre del autor, para ver más información sobre este.</string>
-    <string name="main_info_dialog_connection">Sin conexión a internet, por lo que no podemos cargar nuevas frases e imágenes.</string>
+    <string name="main_info_dialog_owner">Haz clic en el nombre del autor, para ver más información sobre este.</string>
+    <string name="main_info_dialog_connection">Sin conexión a internet, no podemos cargar nuevas frases e imágenes.</string>
     <string name="main_info_click_another_on_image">Pulsa de nuevo en la imagen ver la frase!</string>
 
     <!-- Cadenas del diálogo de actualización -->

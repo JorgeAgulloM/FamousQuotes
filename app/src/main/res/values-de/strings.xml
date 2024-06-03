@@ -16,14 +16,14 @@
     <string name="main_icon_content_desc_buy_image">Bild kaufen</string>
     <string name="main_icon_content_desc_other_quote">Anderes Zitat</string>
     <string name="main_icon_content_desc_share">Teilen</string>
-    <string name="main_info_dialog_text_info">Informationen zu den Anwendungs-Symbolen</string>
-    <string name="main_info_dialog_text_buy_image">Gefällt Ihnen das Bild? Sie können es in unserem Etsy.com-Shop in 1 bis 5 Tagen sehen.</string>
-    <string name="main_info_dialog_text_other_quote">Siehe ein anderes Zitat/Bild. Das Bild muss nicht unbedingt mit dem Zitat zusammenhängen.</string>
-    <string name="main_info_dialog_text_">Teilen Sie Ihr Zitat des Tages mit Ihren Freunden und Ihrer Familie.</string>
+    <string name="main_info_dialog_text_info">Information</string>
+    <string name="main_info_dialog_text_buy_image">Kaufen und herunterladen Sie das von KI generierte Bild.</string>
+    <string name="main_info_dialog_text_other_quote">Sieh dir ein weiteres Zitat/Bild an. Das Bild könnte nicht zum Zitat passen.</string>
+    <string name="main_info_dialog_text_">Teile dein Zitat mit deinen Freunden und deiner Familie.</string>
     <string name="main_content_desc_image">Bild</string>
     <string name="main_icon_content_desc_lost_connection">Keine Internetverbindung</string>
-    <string name="main_info_dialog_owner">Durch Klicken auf den Namen des Autors können Sie weitere Informationen über ihn anzeigen.</string>
-    <string name="main_info_dialog_connection">Keine Internetverbindung, daher können wir keine neuen Zitate und Bilder laden.</string>
+    <string name="main_info_dialog_owner">Klicke auf den Namen des Autors, um weitere Informationen über ihn zu sehen.</string>
+    <string name="main_info_dialog_connection">Keine Internetverbindung, wir können keine neuen Zitate und Bilder laden.</string>
     <string name="main_info_click_another_on_image">Drücken Sie erneut auf das Bild, um das Zitat zu sehen!</string>
 
     <!-- Update dialog strings -->
