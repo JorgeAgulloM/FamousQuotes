@@ -3,12 +3,15 @@ package com.softyorch.famousquotes.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.core.APP_NAME
+import java.io.File
 
 fun writeLog(level: LevelLog = LevelLog.INFO, text: String) {
     val isTest = !IsTestMode.isTest
@@ -39,7 +42,10 @@ inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
 inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null
 
-val isSdk31OrUp = sdk31AndUp { true } ?: false
+inline fun <T> sdk30AndDown(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) onSdk() else null
+
+val sdk29AndDown = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
 inline fun <T> sdk26AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) onSdk() else null
@@ -59,3 +65,11 @@ fun appIcon() = painterResource(
         else -> R.drawable.default_icon
     }
 )
+
+fun doesDownloadPathFileExist(fileName: String): Boolean {
+    val path =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+    val completePath = "$path/$APP_NAME-$fileName.png"
+
+    return File(completePath).exists()
+}

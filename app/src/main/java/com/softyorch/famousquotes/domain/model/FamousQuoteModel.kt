@@ -5,18 +5,23 @@ import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import java.util.Locale
 
 data class FamousQuoteModel(
+    val id: String,
     val owner: String,
     val body: String,
     val imageUrl: String,
 ) {
     companion object {
+        fun emptyModel(): FamousQuoteModel = FamousQuoteModel("", "", "", "")
+
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
+            id = id,
             owner = getDataLocal(owner),
             body = getDataLocal(quote),
             imageUrl = imageUrl
         )
 
         fun DefaultModel.toDomain(): FamousQuoteModel = FamousQuoteModel(
+            id = id,
             owner = owner,
             body = getDataLocal(quote),
             imageUrl = imageUrl

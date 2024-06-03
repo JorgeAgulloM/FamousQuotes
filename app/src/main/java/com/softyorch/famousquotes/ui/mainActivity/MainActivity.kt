@@ -26,6 +26,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
@@ -37,6 +38,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        lateinit var instance: MainActivity
+    }
+
     private lateinit var viewModel: MainViewModel
     private lateinit var appUpdateManager: AppUpdateManager
     private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
@@ -45,6 +50,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        instance = this
 
         splash.setKeepOnScreenCondition { true }
 
@@ -58,15 +65,17 @@ class MainActivity : ComponentActivity() {
             viewModel = hiltViewModel<MainViewModel>()
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
-            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
-                when (alertState) {
-                    AlertState.Dismiss -> finish()
-                    AlertState.Update -> viewModel.goToUpdateApp()
-                }
-            }
+            when (state) {
+                MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
+                MainState.TimeToUpdate -> MainAlertDialog { alertState ->
+                    when (alertState) {
+                        AlertState.Dismiss -> finish()
+                        AlertState.Update -> viewModel.goToUpdateApp()
+                    }
+                }.also { splash.setKeepOnScreenCondition { false } }
 
-            MainApp()
-            splash.setKeepOnScreenCondition { false }
+                MainState.Unauthorized -> LoadingCircle()
+            }
         }
     }
 

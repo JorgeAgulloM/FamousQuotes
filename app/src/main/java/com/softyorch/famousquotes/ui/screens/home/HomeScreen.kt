@@ -33,6 +33,7 @@ import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
+import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
 import com.softyorch.famousquotes.ui.screens.home.components.Controls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
@@ -40,8 +41,10 @@ import com.softyorch.famousquotes.ui.screens.home.components.TextBody
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.theme.brushBackGround
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
-import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -56,8 +59,17 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
-            writeLog(LevelLog.INFO, "itState: $it")
-            viewModel.onActions(HomeActions.New)
+            writeLog(INFO, "itState: $it")
+            if (!state.imageIsDownloadAlready)
+                viewModel.onActions(HomeActions.New)
+        }
+
+        if (it is InterstitialAdState.Clicked ||
+            it is InterstitialAdState.Close ||
+            it is InterstitialAdState.Error
+        ) {
+            if (state.imageIsDownloadAlready)
+                viewModel.onActions(HomeActions.SureDownloadImageAgain)
         }
     }
 
@@ -89,6 +101,24 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
 
         if (state.isLoading) LoadingCircle()
+
+        if (state.downloadImage) {
+            context.showToast(stringResource(R.string.image_download_toast_success))
+            viewModel.onActions(HomeActions.ShowToastDownload)
+        }
+
+        if (state.imageIsDownloadAlready)
+            BasicDialogApp(
+                text = stringResource(R.string.dialog_image_download_again_text),
+                textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
+                textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
+            ) { action ->
+                val homeAction = when (action) {
+                    POSITIVE -> HomeActions.SureDownloadImageAgain
+                    NEGATIVE -> HomeActions.CloseDialogDownLoadImageAgain
+                }
+                viewModel.onActions(homeAction)
+            }
     }
 }
 
@@ -146,6 +176,7 @@ fun CardQuote(
             ) {
                 Controls(
                     hasText = state.quote.body,
+                    isPurchased = state.purchasedOk,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
                     isEnabled = hasConnection,

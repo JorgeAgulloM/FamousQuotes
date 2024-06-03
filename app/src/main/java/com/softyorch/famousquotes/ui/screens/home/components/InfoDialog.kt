@@ -75,7 +75,7 @@ fun InfoDialog(onAction: () -> Unit) {
                 InfoIcons(
                     icon = Icons.Outlined.WifiOff,
                     tint = MaterialTheme.colorScheme.error,
-                    text = stringResource(R.string.main_info_dialog_connection)
+                    text = stringResource(R.string.main_icon_content_desc_lost_connection)
                 )
                 SpacerHeight()
                 TextToClick(text = "V: ${BuildConfig.VERSION_NAME}")
