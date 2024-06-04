@@ -12,11 +12,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -78,7 +83,14 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(brushBackGround())) {
+    Box(
+        modifier = Modifier.fillMaxSize().padding(top = 24.dp).background(
+            brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
+                bottomStart = ZeroCornerSize,
+                bottomEnd = ZeroCornerSize
+            )
+        )
+    ) {
 
         Box(modifier = Modifier.fillMaxWidth().zIndex(10f), contentAlignment = Alignment.TopEnd) {
             val toastMsg = stringResource(R.string.main_info_dialog_connection)
@@ -160,15 +172,20 @@ fun BackgroundImage(uri: String) {
             .data(data)
             .crossfade(true)
             .size(Size.ORIGINAL) // Set the target size to load the image at.
-            .build()
+            .build(),
+        contentScale = ContentScale.Fit
     )
 
     val state = painter.state
-
-    AnimatedImage(
-        isVisible = state is AsyncImagePainter.State.Success,
-        painter = painter
-    )
+    Card(
+        shape = MaterialTheme.shapes.extraLarge,
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp)
+    ) {
+        AnimatedImage(
+            isVisible = state is AsyncImagePainter.State.Success,
+            painter = painter
+        )
+    }
 }
 
 @Composable
