@@ -17,7 +17,7 @@ val Pink40 = Color(0xFF7D5260)
 /*
 val HistoricalPrimary = Color(0xFFFFB005)
 val HistoricalSecondary = Color(0xFFFFD966)
-val HistoricalBackground = Color(0xff08506e)
+val HistoricalBackground = Color(0xff00253a)
 
 val BiblicalPrimary = Color(0xFF3182BD)
 val BiblicalSecondary = Color(0xFF6BAED6)
