@@ -80,7 +80,7 @@ fun CardControls(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val iconLike =
                     if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-                val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
+                val colorIconLike = if (stateLikes.isLike) Color.Red else WhiteSmoke
                 BadgedBox(
                     badge = {
                         Badge(
