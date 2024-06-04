@@ -106,9 +106,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
                     HomeActions.Buy -> if (hasConnection) viewModel.onActions(action)
                     else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                    HomeActions.Send -> if (hasConnection) viewModel.onActions(action)
-                    else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
                     else -> viewModel.onActions(action)
                 }
             }
@@ -249,6 +246,9 @@ fun CardQuote(
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                                 HomeActions.Owner -> if (hasConnection) onAction(action)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                HomeActions.Send -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                                 else -> onAction(action)
