@@ -103,10 +103,10 @@ fun CardControls(
                     ) { onAction(HomeActions.Like) }
                 }
                 IconButtonMenu(
-                    cDescription = stringResource(R.string.main_icon_content_desc_info),
-                    icon = Icons.Outlined.Info,
+                    cDescription = stringResource(R.string.main_icon_content_desc_share),
+                    icon = Icons.Outlined.Share,
                     isEnabled = isEnabled
-                ) { onAction(HomeActions.Info) }
+                ) { onAction(HomeActions.Send) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
@@ -171,11 +171,11 @@ fun TopControls(
                     icon = Icons.Outlined.WifiOff
                 ) { onAction(HomeActions.New) }
                 IconButtonMenu(
-                    cDescription = stringResource(R.string.main_icon_content_desc_share),
-                    icon = Icons.Outlined.Share,
-                    shadowOn = true,
-                    isEnabled = isEnabled
-                ) { onAction(HomeActions.Send) }
+                    cDescription = stringResource(R.string.main_icon_content_desc_info),
+                    icon = Icons.Outlined.Info,
+                    isEnabled = isEnabled,
+                    shadowOn = true
+                ) { onAction(HomeActions.Info) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
