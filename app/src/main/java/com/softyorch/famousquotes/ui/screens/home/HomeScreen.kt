@@ -8,19 +8,24 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -34,13 +39,18 @@ import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
-import com.softyorch.famousquotes.ui.screens.home.components.Controls
+import com.softyorch.famousquotes.ui.screens.home.components.CardControls
+import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
+import com.softyorch.famousquotes.ui.screens.home.components.TextInfoApp
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
+import com.softyorch.famousquotes.ui.screens.home.components.TopControls
+import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
+import com.softyorch.famousquotes.ui.theme.brushBackGround2
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
@@ -73,8 +83,33 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(brushBackGround())) {
+    Box(
+        modifier = Modifier.fillMaxSize().padding(top = 24.dp).background(
+            brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
+                bottomStart = ZeroCornerSize,
+                bottomEnd = ZeroCornerSize
+            )
+        )
+    ) {
 
+        Box(modifier = Modifier.fillMaxWidth().zIndex(10f), contentAlignment = Alignment.TopEnd) {
+            val toastMsg = stringResource(R.string.main_info_dialog_connection)
+            val hasConnection = state.hasConnection == true
+            val imageFromWeb = state.quote.imageUrl.startsWith("http")
+            TopControls(
+                hasText = state.quote.body,
+                isPurchased = state.purchasedOk,
+                isEnabled = hasConnection,
+                isImageExt = imageFromWeb
+            ) { action ->
+                when (action) {
+                    HomeActions.Buy -> if (hasConnection) viewModel.onActions(action)
+                    else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                    else -> viewModel.onActions(action)
+                }
+            }
+        }
         Box(
             modifier = Modifier.clickable {
                 viewModel.onActions(HomeActions.ShowImage)
@@ -134,15 +169,20 @@ fun BackgroundImage(uri: String) {
             .data(data)
             .crossfade(true)
             .size(Size.ORIGINAL) // Set the target size to load the image at.
-            .build()
+            .build(),
+        contentScale = ContentScale.Fit
     )
 
     val state = painter.state
-
-    AnimatedImage(
-        isVisible = state is AsyncImagePainter.State.Success,
-        painter = painter
-    )
+    Card(
+        shape = MaterialTheme.shapes.extraLarge,
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp)
+    ) {
+        AnimatedImage(
+            isVisible = state is AsyncImagePainter.State.Success,
+            painter = painter
+        )
+    }
 }
 
 @Composable
@@ -154,67 +194,71 @@ fun CardQuote(
 ) {
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
 
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.extraLarge.copy(
-            bottomStart = ZeroCornerSize,
-            bottomEnd = ZeroCornerSize
-        ),
-        elevation = CardDefaults.cardElevation(2.dp)
+    Column(
+        modifier = Modifier.background(brush = brushBackGround2()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
+        val isActive = state.quote.body.isNotBlank() && !state.showImage
+        val hasConnection = state.hasConnection == true
+        val imageFromWeb = state.quote.id.length > 3 && !state.quote.id.startsWith('0')
         Column(
-            modifier = Modifier.background(brush = brushBackGround()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
         ) {
-            val isActive = state.quote.body.isNotBlank() && !state.showImage
-            val hasConnection = state.hasConnection == true
-            val imageFromWeb = state.quote.imageUrl.startsWith("http")
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
-            ) {
-                Controls(
-                    hasText = state.quote.body,
-                    isPurchased = state.purchasedOk,
-                    stateLikes = stateLikes,
-                    disabledReload = state.showInterstitial,
-                    isEnabled = hasConnection,
-                    isImageExt = imageFromWeb
-                ) { action ->
-                    when (action) {
-                        HomeActions.Buy -> if (hasConnection) onAction(action)
-                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                        HomeActions.New -> if (hasConnection) onAction(action)
-                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                        HomeActions.Owner -> if (hasConnection) onAction(action)
-                        else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                        else -> onAction(action)
+            AnimatedContentHome(isActive = isActive) {
+                Column {
+                    AppIcon()
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        TextInfoApp(
+                            text = stringResource(R.string.main_text_get_inspired),
+                            size = 22,
+                            color = SecondaryColor
+                        )
                     }
-                }
-                AnimatedContentHome(isActive = isActive) {
-                    Column {
-                        TextBody(text = state.quote.body)
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            TextOwner(text = state.quote.owner) {
-                                if (hasConnection) onAction(HomeActions.Owner)
+                    TextBody(text = state.quote.body)
+                    Row(
+                        modifier = Modifier.background(color = Color.Transparent)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CardControls(
+                            hasText = state.quote.body,
+                            stateLikes = stateLikes,
+                            disabledReload = state.showInterstitial,
+                            isEnabled = hasConnection,
+                            isQuoteFromService = imageFromWeb
+                        ) { action ->
+                            when (action) {
+                                HomeActions.New -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                HomeActions.Owner -> if (hasConnection) onAction(action)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                HomeActions.Send -> if (hasConnection) onAction(action)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                else -> onAction(action)
                             }
+                        }
+                        TextOwner(text = state.quote.owner) {
+                            if (hasConnection) onAction(HomeActions.Owner)
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
                         }
                     }
                 }
-                AnimatedContentHome(isActive = state.showImage) {
-                    TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
-                    // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
-                }
             }
-            Banner.bannerInstance.Show()
+            AnimatedContentHome(isActive = state.showImage) {
+                TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
+                // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
+            }
         }
+        Banner.bannerInstance.Show()
     }
 }

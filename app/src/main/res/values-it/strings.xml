@@ -25,6 +25,7 @@
     <string name="main_info_dialog_owner">Clicca sul nome dell\'autore per vedere maggiori informazioni su di lui.</string>
     <string name="main_info_dialog_connection">Nessuna connessione a Internet, non possiamo caricare nuove citazioni e immagini.</string>
     <string name="main_info_click_another_on_image">Premi di nuovo sull\'immagine per vedere la citazione!</string>
+    <string name="main_text_get_inspired">LA TUA ISPIRAZIONE</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Esci dall\'app</string>

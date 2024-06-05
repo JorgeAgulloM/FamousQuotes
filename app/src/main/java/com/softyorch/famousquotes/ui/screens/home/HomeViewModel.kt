@@ -133,7 +133,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcherIO) {
             val isLike = !_likeState.value.isLike
             writeLog(INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
-            val updateLikes = LikesUiDTO(isLike = isLike)
+            val id = _uiState.value.quote.id
+            val updateLikes = LikesUiDTO(id = id, isLike = isLike)
             setLike(updateLikes.toDomain())
         }
     }
@@ -169,7 +170,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
-            getLikesQuote()
+            getLikesQuote(quote.id)
             connectToBilling()
         }
     }
@@ -221,9 +222,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getLikesQuote() {
+    private fun getLikesQuote(id: String) {
         viewModelScope.launch(dispatcherIO) {
-            getLikes().catch {
+            getLikes(id).catch {
                 writeLog(ERROR, "Error from getting likes: ${it.cause}")
             }.collect { likes ->
                 _likeState.update {
@@ -243,6 +244,7 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote.getRandomQuote()
             }
+            getLikesQuote(quote.id)
             _uiState.update { it.copy(isLoading = false, quote = quote) }
         }
     }
