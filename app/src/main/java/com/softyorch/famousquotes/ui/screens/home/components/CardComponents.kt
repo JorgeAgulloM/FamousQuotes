@@ -101,18 +101,18 @@ fun CardControls(
                         color = colorIconLike,
                         icon = iconLike,
                         isEnabled = isEnabled
-                    ) { onAction(HomeActions.Like) }
+                    ) { onAction(HomeActions.Like()) }
                 }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
                     icon = Icons.Outlined.Share,
                     isEnabled = isEnabled
-                ) { onAction(HomeActions.Send) }
+                ) { onAction(HomeActions.Send()) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
                     isEnabled = !disabledReload && isEnabled
-                ) { onAction(HomeActions.New) }
+                ) { onAction(HomeActions.New()) }
             }
         }
     }
@@ -137,8 +137,8 @@ fun TopControls(
     ) { isGranted ->
         if (isGranted) {
             if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                onAction(HomeActions.DownloadImage)
-            else onAction(HomeActions.Buy)
+                onAction(HomeActions.DownloadImage())
+            else onAction(HomeActions.Buy())
         } else {
             showPermissionRationaleDialog = true
         }
@@ -170,13 +170,13 @@ fun TopControls(
                     cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
                     color = MaterialTheme.colorScheme.error,
                     icon = Icons.Outlined.WifiOff
-                ) { onAction(HomeActions.New) }
+                ) { onAction(HomeActions.New()) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
                     icon = Icons.Outlined.Info,
                     isEnabled = isEnabled,
                     shadowOn = true
-                ) { onAction(HomeActions.Info) }
+                ) { onAction(HomeActions.Info()) }
                 if (isImageExt) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
@@ -195,8 +195,8 @@ fun TopControls(
                         }
                     } else {
                         if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                            onAction(HomeActions.DownloadImage)
-                        else onAction(HomeActions.Buy)
+                            onAction(HomeActions.DownloadImage())
+                        else onAction(HomeActions.Buy())
                     }
                 }
             }
