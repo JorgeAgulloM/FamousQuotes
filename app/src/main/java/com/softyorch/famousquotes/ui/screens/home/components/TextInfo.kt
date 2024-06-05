@@ -33,7 +33,7 @@ fun TextInfo(text: String) {
 }
 
 @Composable
-fun TextInfoApp(text: String, size: Int, offsetY: Int, color: Color = Color.White) {
+fun TextInfoApp(text: String, size: Int, offsetY: Int = 0, color: Color = Color.White) {
     AnimatedTextHome(text) {
         Text(
             text = text,
