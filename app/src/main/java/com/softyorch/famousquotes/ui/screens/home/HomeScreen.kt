@@ -201,7 +201,7 @@ fun CardQuote(
     ) {
         val isActive = state.quote.body.isNotBlank() && !state.showImage
         val hasConnection = state.hasConnection == true
-        val imageFromWeb = state.quote.imageUrl.startsWith("http")
+        val imageFromWeb = state.quote.id.length > 3 && !state.quote.id.startsWith('0')
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
@@ -224,8 +224,7 @@ fun CardQuote(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        TextInfoApp(text = "TU INSPIRACION", 18, 4, SecondaryColor)
-                        TextInfoApp(text = "PARA HOY", 28, -4, SecondaryColor)
+                        TextInfoApp(text = "TU INSPIRACION", 22, 0, SecondaryColor)
                     }
                     TextBody(text = state.quote.body)
                     Row(
