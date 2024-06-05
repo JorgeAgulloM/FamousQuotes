@@ -11,10 +11,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
+import com.softyorch.famousquotes.core.Analytics
 import javax.inject.Singleton
 
 @Singleton
@@ -54,6 +56,18 @@ class Banner {
             )
             adUnitId = BuildConfig.ID_BANNER_HOME
             loadAd(adRequest)
+
+            adListener = object : AdListener() {
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    Analytics.sendAction(Analytics.Banner())
+                }
+
+                override fun onAdSwipeGestureClicked() {
+                    super.onAdSwipeGestureClicked()
+                    Analytics.sendAction(Analytics.Banner())
+                }
+            }
         }
     }
 }
