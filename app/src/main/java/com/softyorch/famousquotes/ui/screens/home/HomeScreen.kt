@@ -238,7 +238,7 @@ fun CardQuote(
                             stateLikes = stateLikes,
                             disabledReload = state.showInterstitial,
                             isEnabled = hasConnection,
-                            isImageExt = imageFromWeb
+                            isQuoteFromService = imageFromWeb
                         ) { action ->
                             when (action) {
                                 HomeActions.New -> if (hasConnection) onAction(action)
