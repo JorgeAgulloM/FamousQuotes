@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.domain.useCases.quoteLikes
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesDTO.Companion.toData
+import com.softyorch.famousquotes.domain.utils.getTodayId
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -34,7 +35,7 @@ class SetQuoteLikeTest {
     @Test
     fun `When Settings Like From User UI`() = runBlocking {
         //Prepare test
-        val updateLikes = LikesDTO(true)
+        val updateLikes = LikesDTO(getTodayId(), true)
 
         //Given
         coEvery { dbService.likeDislikeQuote(updateLikes.toData()) } returns Unit
