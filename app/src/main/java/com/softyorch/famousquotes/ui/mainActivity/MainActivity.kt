@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var appUpdateManager: AppUpdateManager
-    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
+    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
     private val channel = 1111
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,13 +71,6 @@ class MainActivity : ComponentActivity() {
 
             when (state) {
                 MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
-                MainState.TimeToUpdate -> MainAlertDialog { alertState ->
-                    when (alertState) {
-                        AlertState.Dismiss -> finish()
-                        AlertState.Update -> viewModel.goToUpdateApp()
-                    }
-                }.also { splash.setKeepOnScreenCondition { false } }
-
                 MainState.Unauthorized -> LoadingCircle()
             }
         }
