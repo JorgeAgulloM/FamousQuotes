@@ -40,7 +40,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
 import com.softyorch.famousquotes.ui.screens.home.components.CardControls
-import com.softyorch.famousquotes.ui.screens.home.components.IconApp
+import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
@@ -208,17 +208,7 @@ fun CardQuote(
         ) {
             AnimatedContentHome(isActive = isActive) {
                 Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        IconApp()
-                        Column(verticalArrangement = Arrangement.SpaceAround) {
-                            TextInfoApp(text = "FRASES", 12, 4)
-                            TextInfoApp(text = "HISTORICAS", 12, -4)
-                        }
-                    }
+                    AppIcon()
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
