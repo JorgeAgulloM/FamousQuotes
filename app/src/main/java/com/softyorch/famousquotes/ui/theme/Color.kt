@@ -17,7 +17,7 @@ val Pink40 = Color(0xFF7D5260)
 /*
 val HistoricalPrimary = Color(0xFFFFB005)
 val HistoricalSecondary = Color(0xFFFFD966)
-val HistoricalBackground = Color(0xFF8ECAE6)
+val HistoricalBackground = Color(0xff00253a)
 
 val BiblicalPrimary = Color(0xFF3182BD)
 val BiblicalSecondary = Color(0xFF6BAED6)
@@ -45,3 +45,16 @@ fun brushBackGround(): Brush = Brush.linearGradient(
         BackgroundColor.copy(alpha = 0.4f),
     )
 )
+
+@Composable
+fun brushBackGround2(): Brush = Brush.verticalGradient(
+    listOf(
+        Color.Transparent,
+        BackgroundColor,
+        BackgroundColor,
+        BackgroundColor,
+        BackgroundColor,
+        BackgroundColor,
+    )
+)
+

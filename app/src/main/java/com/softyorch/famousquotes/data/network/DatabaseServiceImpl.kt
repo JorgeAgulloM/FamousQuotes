@@ -9,11 +9,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.snapshots
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
 import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
 import com.softyorch.famousquotes.data.network.response.LikeResponse
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.utils.generateRandomId
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
@@ -37,7 +39,6 @@ class DatabaseServiceImpl @Inject constructor(
         const val COLLECTION = BuildConfig.DB_COLLECTION
         private const val COLLECTION_LIKES = "${COLLECTION}_likes"
         private const val COLLECTION_USERS_LIKE = "users_like"
-        private const val TIMEOUT: Long = 4000L
     }
 
     //Provisional
@@ -45,7 +46,7 @@ class DatabaseServiceImpl @Inject constructor(
     private val userId = Settings.Secure.getString(context.contentResolver, ANDROID_ID)
 
     override suspend fun getQuote(id: String): QuoteResponse? =
-        withTimeoutOrNull(TIMEOUT) {
+        withTimeoutOrNull(FIREBASE_TIMEOUT) {
             try {
                 suspendCancellableCoroutine { cancelableCoroutine ->
                     val document = firestore.collection(COLLECTION).document(id)
@@ -66,16 +67,22 @@ class DatabaseServiceImpl @Inject constructor(
         }
 
     override suspend fun getRandomQuote(): QuoteResponse? =
-        withTimeoutOrNull(TIMEOUT) {
+        withTimeoutOrNull(FIREBASE_TIMEOUT) {
             suspendCancellableCoroutine { cancelableCoroutine ->
-                firestore.collection(COLLECTION).orderBy("id").get().addOnSuccessListener {
-                    cancelableCoroutine.resume(
-                        it.map { snapshot ->
-                            snapshot.toObject(QuoteResponse::class.java)
-                        }.random()
-                    )
-                }.addOnFailureListener {
-                    cancelableCoroutine.resumeWithException(it)
+                try {
+                    val randomId = generateRandomId().also { writeLog(text = "randomId: $it") }
+                    firestore.collection(COLLECTION).document(randomId).get().addOnSuccessListener {
+                        cancelableCoroutine.resume(
+                            it.toObject(QuoteResponse::class.java)
+                        )
+                    }.addOnFailureListener {
+                        writeLog(ERROR, "Error listen from Firebase Firestore: ${it.cause}")
+                        cancelableCoroutine.resumeWithException(it)
+                    }
+                } catch (ex: FirebaseException) {
+                    writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                    cancelableCoroutine.resume(null)
+                    cancelableCoroutine.resumeWithException(ex)
                 }
             }
         }
@@ -105,7 +112,7 @@ class DatabaseServiceImpl @Inject constructor(
     }
 
     override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
-        return withTimeoutOrNull(TIMEOUT) {
+        return withTimeoutOrNull(FIREBASE_TIMEOUT) {
             val document = firestore.collection(COLLECTION_LIKES).document(id)
             document.snapshots().map { doc ->
                 val result = doc.toObject(LikeQuoteResponse::class.java)

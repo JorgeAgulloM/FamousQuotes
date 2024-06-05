@@ -25,6 +25,7 @@
     <string name="main_info_dialog_owner">Haz clic en el nombre del autor, para ver más información sobre este.</string>
     <string name="main_info_dialog_connection">Sin conexión a internet, no podemos cargar nuevas frases e imágenes.</string>
     <string name="main_info_click_another_on_image">Pulsa de nuevo en la imagen ver la frase!</string>
+    <string name="main_text_get_inspired">TU INSPIRACION</string>
 
     <!-- Cadenas del diálogo de actualización -->
     <string name="update_dialog_exit_btn">Salir de la aplicación</string>
