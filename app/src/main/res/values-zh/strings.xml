@@ -25,6 +25,7 @@
     <string name="main_info_dialog_owner">点击作者的名字，查看更多信息。</string>
     <string name="main_info_dialog_connection">无网络连接，我们无法加载新的语录和图片。</string>
     <string name="main_info_click_another_on_image">再次点击图片查看引语！</string>
+    <string name="main_text_get_inspired">你的灵感</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">退出應用程式</string>

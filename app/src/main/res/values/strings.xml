@@ -25,6 +25,7 @@
     <string name="main_info_dialog_owner">Click on the author\'s name to see more information about them.</string>
     <string name="main_info_dialog_connection">No internet connection, we cannot load new quotes and images.</string>
     <string name="main_info_click_another_on_image">Press again on the image to see the quote!</string>
+    <string name="main_text_get_inspired">YOUR INSPIRATION</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">Quit the app</string>
