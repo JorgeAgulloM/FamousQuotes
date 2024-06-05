@@ -25,6 +25,7 @@
     <string name="main_info_dialog_owner">लेखक के बारे में अधिक जानकारी देखने के लिए उसके नाम पर क्लिक करें।</string>
     <string name="main_info_dialog_connection">कोई इंटरनेट कनेक्शन नहीं है, हम नए उद्धरण और छवियों को लोड नहीं कर सकते।</string>
     <string name="main_info_click_another_on_image">चित्र पर फिर से दबाएं ताकि उद्धरण दिखाई दे!</string>
+    <string name="main_text_get_inspired">आपकी प्रेरणा</string>
 
     <!-- Update dialog strings -->
     <string name="update_dialog_exit_btn">ऐप बंद करें</string>
