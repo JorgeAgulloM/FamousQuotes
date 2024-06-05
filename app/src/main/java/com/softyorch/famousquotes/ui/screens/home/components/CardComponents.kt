@@ -73,7 +73,7 @@ fun CardControls(
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.wrapContentHeight()
-                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                .padding(start = 8.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -209,7 +209,7 @@ fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
+            modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
             style = MyTypography.labelLarge.copy(color = Color.White),
