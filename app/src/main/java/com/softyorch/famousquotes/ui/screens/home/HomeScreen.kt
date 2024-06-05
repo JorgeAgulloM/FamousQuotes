@@ -32,6 +32,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
@@ -71,7 +72,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         ) {
             writeLog(INFO, "itState: $it")
             if (!state.imageIsDownloadAlready)
-                viewModel.onActions(HomeActions.New)
+                viewModel.onActions(HomeActions.New())
         }
 
         if (it is InterstitialAdState.Clicked ||
@@ -79,7 +80,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
             it is InterstitialAdState.Error
         ) {
             if (state.imageIsDownloadAlready)
-                viewModel.onActions(HomeActions.SureDownloadImageAgain)
+                viewModel.onActions(HomeActions.SureDownloadImageAgain())
         }
     }
 
@@ -103,7 +104,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 isImageExt = imageFromWeb
             ) { action ->
                 when (action) {
-                    HomeActions.Buy -> if (hasConnection) viewModel.onActions(action)
+                    is HomeActions.Buy -> if (hasConnection) viewModel.onActions(action)
                     else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                     else -> viewModel.onActions(action)
@@ -112,7 +113,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
         Box(
             modifier = Modifier.clickable {
-                viewModel.onActions(HomeActions.ShowImage)
+                viewModel.onActions(HomeActions.ShowImage())
             },
             contentAlignment = Alignment.TopCenter
         ) {
@@ -129,17 +130,17 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
 
         if (state.showInfo)
-            InfoDialog { viewModel.onActions(HomeActions.Info) }
+            InfoDialog { viewModel.onActions(HomeActions.Info()) }
 
         if (state.showDialogNoConnection == false) NoConnectionDialog {
-            viewModel.onActions(HomeActions.ShowNoConnectionDialog)
+            viewModel.onActions(HomeActions.ShowNoConnectionDialog())
         }
 
         if (state.isLoading) LoadingCircle()
 
         if (state.downloadImage) {
             context.showToast(stringResource(R.string.image_download_toast_success))
-            viewModel.onActions(HomeActions.ShowToastDownload)
+            viewModel.onActions(HomeActions.ShowToastDownload())
         }
 
         if (state.imageIsDownloadAlready)
@@ -149,8 +150,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
             ) { action ->
                 val homeAction = when (action) {
-                    POSITIVE -> HomeActions.SureDownloadImageAgain
-                    NEGATIVE -> HomeActions.CloseDialogDownLoadImageAgain
+                    POSITIVE -> HomeActions.SureDownloadImageAgain()
+                    NEGATIVE -> HomeActions.CloseDialogDownLoadImageAgain()
                 }
                 viewModel.onActions(homeAction)
             }
@@ -235,20 +236,20 @@ fun CardQuote(
                             isQuoteFromService = imageFromWeb
                         ) { action ->
                             when (action) {
-                                HomeActions.New -> if (hasConnection) onAction(action)
+                                is HomeActions.New -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                                HomeActions.Owner -> if (hasConnection) onAction(action)
+                                is HomeActions.Owner -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                                HomeActions.Send -> if (hasConnection) onAction(action)
+                                is HomeActions.Send -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                                 else -> onAction(action)
                             }
                         }
                         TextOwner(text = state.quote.owner) {
-                            if (hasConnection) onAction(HomeActions.Owner)
+                            if (hasConnection) onAction(HomeActions.Owner())
                             else context.showToast(toastMsg, Toast.LENGTH_LONG)
                         }
                     }
