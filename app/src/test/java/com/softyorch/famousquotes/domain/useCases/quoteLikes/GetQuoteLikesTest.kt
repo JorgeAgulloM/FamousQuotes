@@ -47,7 +47,7 @@ class GetQuoteLikesTest {
         coEvery { dbService.getLikeQuoteFlow(id) } returns returnFlow
 
         //When
-        val result = getLikeQuotes()
+        val result = getLikeQuotes(getTodayId())
 
         //Then
         val fakeResult = returnFlow.first()
@@ -63,7 +63,7 @@ class GetQuoteLikesTest {
         coEvery { dbService.getLikeQuoteFlow(any()) } returns returnFlow
 
         //When
-        val result = getLikeQuotes()
+        val result = getLikeQuotes(getTodayId())
 
         //Then
         val fakeResult = returnFlow.first()
@@ -77,7 +77,7 @@ class GetQuoteLikesTest {
         coEvery { dbService.getLikeQuoteFlow(any()) } returns flowOf()
 
         //When
-        getLikeQuotes()
+        getLikeQuotes(getTodayId())
 
         //Then
         coVerify(exactly = 1) { dbService.getLikeQuoteFlow(any()) }
