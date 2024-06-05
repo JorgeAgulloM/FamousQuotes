@@ -1,10 +1,7 @@
 package com.softyorch.famousquotes.ui.screens.home.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,16 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextGeometricTransform
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.MyTypography
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @Composable
@@ -53,19 +46,6 @@ fun TextInfoApp(text: String, size: Int, offsetY: Int, color: Color = Color.Whit
                 textAlign = TextAlign.Center,
                 textGeometricTransform = TextGeometricTransform(1.2f)
             )
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IconApp() {
-    Column {
-        Icon(
-            painter = painterResource(R.drawable.icon_quote),
-            contentDescription = null,
-            modifier = Modifier.size(28.dp),
-            tint = SecondaryColor
         )
     }
 }
