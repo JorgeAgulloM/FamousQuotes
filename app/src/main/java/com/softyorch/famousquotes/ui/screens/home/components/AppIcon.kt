@@ -11,12 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 
 @Composable
 fun AppIcon() {
+    val appName = stringResource(R.string.app_name)
+    val firstName = appName.split(" ")[0].uppercase()
+    val secondName = appName.split(" ")[1].uppercase()
+
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -29,8 +35,8 @@ fun AppIcon() {
             tint = SecondaryColor
         )
         Column(verticalArrangement = Arrangement.SpaceAround) {
-            TextInfoApp(text = "FRASES", 12, 4)
-            TextInfoApp(text = "HISTORICAS", 12, -4)
+            TextInfoApp(text = firstName, 12, 4)
+            TextInfoApp(text = secondName, 12, -4)
         }
     }
 }
