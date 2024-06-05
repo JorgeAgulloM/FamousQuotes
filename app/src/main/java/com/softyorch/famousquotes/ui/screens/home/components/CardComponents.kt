@@ -67,7 +67,7 @@ fun CardControls(
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
     isEnabled: Boolean,
-    isImageExt: Boolean,
+    isQuoteFromService: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
     AnimatedTextHome(hasText) {
@@ -81,14 +81,15 @@ fun CardControls(
                 val iconLike =
                     if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
                 val colorIconLike = if (stateLikes.isLike) Color.Red else WhiteSmoke
-                BadgedBox(
+
+                if (isQuoteFromService) BadgedBox(
                     badge = {
                         Badge(
-                            containerColor = if (isImageExt) SecondaryColor.copy(alpha = 0.8f) else WhiteSmoke,
+                            containerColor = SecondaryColor.copy(alpha = 0.8f),
                             modifier = Modifier.offset((-16).dp, (4).dp)
                         ) {
                             Text(
-                                text = if (isImageExt) stateLikes.likes.toString() else "0",
+                                text = stateLikes.likes.toString(),
                                 fontSize = 14.sp,
                                 color = Color.DarkGray
                             )
@@ -97,9 +98,9 @@ fun CardControls(
                 ) {
                     IconButtonMenu(
                         cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                        color = if (isImageExt) colorIconLike else WhiteSmoke,
+                        color = colorIconLike,
                         icon = iconLike,
-                        isEnabled = isEnabled && isImageExt
+                        isEnabled = isEnabled
                     ) { onAction(HomeActions.Like) }
                 }
                 IconButtonMenu(
@@ -176,11 +177,11 @@ fun TopControls(
                     isEnabled = isEnabled,
                     shadowOn = true
                 ) { onAction(HomeActions.Info) }
-                IconButtonMenu(
+                if (isImageExt) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
                     shadowOn = true,
-                    isEnabled = isImageExt && isEnabled
+                    isEnabled = isEnabled
                 ) {
                     if (sdk29AndDown && permissionState != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(
