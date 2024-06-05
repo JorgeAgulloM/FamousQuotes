@@ -214,7 +214,11 @@ fun CardQuote(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        TextInfoApp(text = "TU INSPIRACION", 22, 0, SecondaryColor)
+                        TextInfoApp(
+                            text = stringResource(R.string.main_text_get_inspired),
+                            size = 22,
+                            color = SecondaryColor
+                        )
                     }
                     TextBody(text = state.quote.body)
                     Row(
