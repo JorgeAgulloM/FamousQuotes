@@ -38,18 +38,22 @@ val BackgroundColor = Color(BuildConfig.BACKGROUND_COLOR)
 @Composable
 fun brushBackGround(): Brush = Brush.linearGradient(
     listOf(
-        BackgroundColor.copy(alpha = 0.4f),
+        BackgroundColor.copy(alpha = 0.6f),
         BackgroundColor,
         BackgroundColor,
         BackgroundColor.copy(alpha = 0.6f),
-        BackgroundColor.copy(alpha = 0.4f),
     )
 )
 
 @Composable
 fun brushBackGround2(): Brush = Brush.verticalGradient(
     listOf(
-        Color.Transparent,
+        BackgroundColor.copy(alpha = 0f),
+        BackgroundColor.copy(alpha = 0.3f),
+        BackgroundColor.copy(alpha = 0.7f),
+        BackgroundColor.copy(alpha = 0.9f),
+        BackgroundColor,
+        //-------------- 50% ------------//
         BackgroundColor,
         BackgroundColor,
         BackgroundColor,
