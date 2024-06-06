@@ -26,8 +26,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 114
-        versionName = "1.1.4"
+        versionCode = 124
+        versionName = "1.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -116,7 +116,7 @@ android {
             buildConfigField("String", "ICON", "\"historical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFFFFB005")
             buildConfigField("int", "SECONDARY_COLOR", "0xFFFFD966")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF8ECAE6")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF00253A")
             android.buildFeatures.buildConfig = true
         }
 
@@ -163,6 +163,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE-notice.md"
+            excludes += "/META-INF/LICENSE.md"
         }
     }
 }
@@ -196,7 +198,7 @@ dependencies {
     implementation(libs.user.messaging.platform)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")

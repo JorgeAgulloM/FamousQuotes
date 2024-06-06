@@ -5,14 +5,17 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Favorite
@@ -59,11 +62,67 @@ import com.softyorch.famousquotes.utils.sdk29AndDown
 import com.softyorch.famousquotes.utils.showToast
 
 @Composable
-fun Controls(
+fun CardControls(
     hasText: String,
-    isPurchased: Int?,
     stateLikes: QuoteLikesState,
     disabledReload: Boolean,
+    isEnabled: Boolean,
+    isQuoteFromService: Boolean,
+    onAction: (HomeActions) -> Unit,
+) {
+    AnimatedTextHome(hasText) {
+        Row(
+            modifier = Modifier.wrapContentHeight()
+                .padding(start = 8.dp, bottom = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val iconLike =
+                    if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+                val colorIconLike = if (stateLikes.isLike) Color.Red else WhiteSmoke
+
+                if (isQuoteFromService) BadgedBox(
+                    badge = {
+                        Badge(
+                            containerColor = SecondaryColor.copy(alpha = 0.8f),
+                            modifier = Modifier.offset((-16).dp, (4).dp)
+                        ) {
+                            Text(
+                                text = stateLikes.likes.toString(),
+                                fontSize = 14.sp,
+                                color = Color.DarkGray
+                            )
+                        }
+                    }
+                ) {
+                    IconButtonMenu(
+                        cDescription = stringResource(R.string.main_icon_content_desc_like_use),
+                        color = colorIconLike,
+                        icon = iconLike,
+                        isEnabled = isEnabled
+                    ) { onAction(HomeActions.Like()) }
+                }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_share),
+                    icon = Icons.Outlined.Share,
+                    isEnabled = isEnabled
+                ) { onAction(HomeActions.Send()) }
+                IconButtonMenu(
+                    cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
+                    icon = Icons.Outlined.RestartAlt,
+                    isEnabled = !disabledReload && isEnabled
+                ) { onAction(HomeActions.New()) }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun TopControls(
+    hasText: String,
+    isPurchased: Int?,
     isEnabled: Boolean,
     isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
@@ -78,8 +137,8 @@ fun Controls(
     ) { isGranted ->
         if (isGranted) {
             if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                onAction(HomeActions.DownloadImage)
-            else onAction(HomeActions.Buy)
+                onAction(HomeActions.DownloadImage())
+            else onAction(HomeActions.Buy())
         } else {
             showPermissionRationaleDialog = true
         }
@@ -102,77 +161,46 @@ fun Controls(
         Row(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
                 .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val iconLike =
-                    if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-                val colorIconLike = if (stateLikes.isLike) Color.Red else Color.DarkGray
 
-                BadgedBox(
-                    badge = {
-                        Badge(
-                            containerColor = if (isImageExt) SecondaryColor.copy(alpha = 0.8f) else WhiteSmoke,
-                            modifier = Modifier.offset((-16).dp, (4).dp)
-                        ) {
-                            Text(
-                                text = if (isImageExt) stateLikes.likes.toString() else "0",
-                                fontSize = 14.sp,
-                                color = Color.DarkGray
-                            )
-                        }
-                    }
-                ) {
-                    IconButtonMenu(
-                        cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                        color = if (isImageExt) colorIconLike else WhiteSmoke,
-                        icon = iconLike,
-                        isEnabled = isEnabled && isImageExt
-                    ) { onAction(HomeActions.Like) }
-                }
-            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (!isEnabled) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_lost_connection),
                     color = MaterialTheme.colorScheme.error,
                     icon = Icons.Outlined.WifiOff
-                ) { onAction(HomeActions.New) }
+                ) { onAction(HomeActions.New()) }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_info),
                     icon = Icons.Outlined.Info,
-                    isEnabled = isEnabled
-                ) { onAction(HomeActions.Info) }
-                IconButtonMenu(
+                    isEnabled = isEnabled,
+                    shadowOn = true
+                ) { onAction(HomeActions.Info()) }
+                if (isImageExt) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
                     icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
-                    isEnabled = isImageExt && isEnabled
+                    shadowOn = true,
+                    isEnabled = isEnabled
                 ) {
                     if (sdk29AndDown && permissionState != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, permission)) {
-                           showPermissionRationaleDialog = true
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                context as Activity,
+                                permission
+                            )
+                        ) {
+                            showPermissionRationaleDialog = true
                         } else {
                             launcher.launch(permission)
                         }
                     } else {
                         if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                            onAction(HomeActions.DownloadImage)
-                        else onAction(HomeActions.Buy)
+                            onAction(HomeActions.DownloadImage())
+                        else onAction(HomeActions.Buy())
                     }
                 }
-                IconButtonMenu(
-                    cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
-                    icon = Icons.Outlined.RestartAlt,
-                    isEnabled = !disabledReload && isEnabled
-                ) { onAction(HomeActions.New) }
-                IconButtonMenu(
-                    cDescription = stringResource(R.string.main_icon_content_desc_share),
-                    icon = Icons.Outlined.Share,
-                    isEnabled = isEnabled
-                ) { onAction(HomeActions.Send) }
             }
         }
-
     }
 }
 
@@ -181,10 +209,10 @@ fun TextOwner(text: String, onClick: () -> Unit) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
+            modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
-            style = MyTypography.labelLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+            style = MyTypography.labelLarge.copy(color = Color.White),
             textDecoration = TextDecoration.Underline,
         )
     }
@@ -201,7 +229,9 @@ fun TextBody(text: String) {
                 top = 16.dp,
                 bottom = 24.dp
             ),
-            style = MyTypography.displayLarge
+            style = MyTypography.displayLarge.copy(
+                color = Color.White
+            )
         )
     }
 }
@@ -212,6 +242,7 @@ fun IconButtonMenu(
     icon: ImageVector,
     color: Color = SecondaryColor,
     isEnabled: Boolean = true,
+    shadowOn: Boolean = false,
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -220,11 +251,19 @@ fun IconButtonMenu(
         modifier = Modifier.padding(end = 4.dp),
         enabled = isEnabled
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = cDescription,
-            modifier = Modifier.size(32.dp)
-        )
+        Box(contentAlignment = Alignment.Center) {
+            if (shadowOn)  Box(
+                modifier = Modifier.background(
+                    color = Color.Black.copy(alpha = 0.4f),
+                    shape = CircleShape
+                ).size(40.dp)
+            )
+            Icon(
+                imageVector = icon,
+                contentDescription = cDescription,
+                modifier = Modifier.size(32.dp),
+            )
+        }
     }
 }
 

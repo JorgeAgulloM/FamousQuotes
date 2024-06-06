@@ -2,10 +2,7 @@ package com.softyorch.famousquotes.ui.mainActivity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.BuildConfig
-import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.domain.useCases.AuthConnection
-import com.softyorch.famousquotes.domain.useCases.TimeToUpdate
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val authService: AuthConnection,
-    private val timeToUpdate: TimeToUpdate,
-    private val intents: Intents,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(MainState.Unauthorized)
@@ -30,23 +25,6 @@ class MainViewModel @Inject constructor(
 
     init {
         anonymousAuthentication()
-        isTimeToUpdate()
-    }
-
-    fun goToUpdateApp() {
-        viewModelScope.launch {
-            intents.goToUpdateInGooglePlay()
-        }
-    }
-
-    private fun isTimeToUpdate() {
-        if (!BuildConfig.DEBUG) viewModelScope.launch {
-            val needUpdateApp = withContext(dispatcherIO) {
-                timeToUpdate()
-            }
-            writeLog(LevelLog.INFO, "Is time to Update?: $needUpdateApp")
-            if (needUpdateApp) _uiState.update { MainState.TimeToUpdate }
-        }
     }
 
     private fun anonymousAuthentication() {

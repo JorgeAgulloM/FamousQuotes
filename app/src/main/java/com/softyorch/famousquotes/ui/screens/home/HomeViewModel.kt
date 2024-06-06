@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.Purchase
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
@@ -66,20 +67,21 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onActions(action: HomeActions) {
+        Analytics.sendAction(Analytics.Action(action))
         when (action) {
-            HomeActions.Info -> showInfoDialog()
-            HomeActions.New -> loadNewRandomQuote()
-            HomeActions.Send -> shareQuote()
-            HomeActions.Buy -> purchaseLaunch()
-            HomeActions.Owner -> goToSearchOwner()
-            HomeActions.Like -> setQuoteLike()
-            HomeActions.ShowImage -> showImage()
-            HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
-            HomeActions.ReConnection -> getQuote()
-            HomeActions.DownloadImage -> downloadImage()
-            HomeActions.ShowToastDownload -> showDownloadToast()
-            HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
-            HomeActions.SureDownloadImageAgain -> downloadImageAgain()
+            is HomeActions.Info -> showInfoDialog()
+            is HomeActions.New -> loadNewRandomQuote()
+            is HomeActions.Send -> shareQuote()
+            is HomeActions.Buy -> purchaseLaunch()
+            is HomeActions.Owner -> goToSearchOwner()
+            is HomeActions.Like -> setQuoteLike()
+            is HomeActions.ShowImage -> showImage()
+            is HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
+            is HomeActions.ReConnection -> getQuote()
+            is HomeActions.DownloadImage -> downloadImage()
+            is HomeActions.ShowToastDownload -> showDownloadToast()
+            is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
+            is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
         }
     }
 
@@ -133,7 +135,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcherIO) {
             val isLike = !_likeState.value.isLike
             writeLog(INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
-            val updateLikes = LikesUiDTO(isLike = isLike)
+            val id = _uiState.value.quote.id
+            val updateLikes = LikesUiDTO(id = id, isLike = isLike)
             setLike(updateLikes.toDomain())
         }
     }
@@ -169,7 +172,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
-            getLikesQuote()
+            getLikesQuote(quote.id)
             connectToBilling()
         }
     }
@@ -221,9 +224,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getLikesQuote() {
+    private fun getLikesQuote(id: String) {
         viewModelScope.launch(dispatcherIO) {
-            getLikes().catch {
+            getLikes(id).catch {
                 writeLog(ERROR, "Error from getting likes: ${it.cause}")
             }.collect { likes ->
                 _likeState.update {
@@ -243,6 +246,7 @@ class HomeViewModel @Inject constructor(
             val quote = withContext(dispatcherIO) {
                 selectQuote.getRandomQuote()
             }
+            getLikesQuote(quote.id)
             _uiState.update { it.copy(isLoading = false, quote = quote) }
         }
     }
@@ -253,9 +257,9 @@ class HomeViewModel @Inject constructor(
                 writeLog(ERROR, "Error getting connection state: ${it.cause}")
             }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
-                    onActions(HomeActions.ReConnection)
+                    onActions(HomeActions.ReConnection())
                 if (_uiState.value.showImage)
-                    onActions(HomeActions.ShowImage)
+                    onActions(HomeActions.ShowImage())
             }.collect { connection ->
                 _uiState.update {
                     it.copy(
