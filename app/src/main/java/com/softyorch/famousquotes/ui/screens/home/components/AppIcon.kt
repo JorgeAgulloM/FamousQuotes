@@ -24,7 +24,7 @@ fun AppIcon() {
     val secondName = appName.split(" ")[1].uppercase()
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
