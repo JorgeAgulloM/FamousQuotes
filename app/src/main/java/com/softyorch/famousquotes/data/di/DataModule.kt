@@ -3,16 +3,13 @@ package com.softyorch.famousquotes.data.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.data.datastore.DatastoreImpl
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.AuthServiceImpl
-import com.softyorch.famousquotes.data.network.ConfigServiceImpl
 import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
-import com.softyorch.famousquotes.domain.interfaces.IAuthService
 import com.softyorch.famousquotes.data.network.StorageServiceImpl
-import com.softyorch.famousquotes.domain.interfaces.IConfigService
+import com.softyorch.famousquotes.domain.interfaces.IAuthService
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
@@ -44,11 +41,6 @@ object DataModule {
     @Provides
     fun providesDatastore(@ApplicationContext context: Context):
             IDatastore = DatastoreImpl(context)
-
-    @Singleton
-    @Provides
-    fun providesConfigService(remoteConfig: FirebaseRemoteConfig):
-            IConfigService = ConfigServiceImpl(remoteConfig)
 
     @Singleton
     @Provides

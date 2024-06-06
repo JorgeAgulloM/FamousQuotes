@@ -21,6 +21,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
@@ -40,11 +41,12 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         lateinit var instance: MainActivity
+        lateinit var firebaseAnalytics: FirebaseAnalytics
     }
 
     private lateinit var viewModel: MainViewModel
     private lateinit var appUpdateManager: AppUpdateManager
-    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.FLEXIBLE)
+    private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
     private val channel = 1111
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +54,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         instance = this
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         splash.setKeepOnScreenCondition { true }
 
@@ -67,13 +71,6 @@ class MainActivity : ComponentActivity() {
 
             when (state) {
                 MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
-                MainState.TimeToUpdate -> MainAlertDialog { alertState ->
-                    when (alertState) {
-                        AlertState.Dismiss -> finish()
-                        AlertState.Update -> viewModel.goToUpdateApp()
-                    }
-                }.also { splash.setKeepOnScreenCondition { false } }
-
                 MainState.Unauthorized -> LoadingCircle()
             }
         }

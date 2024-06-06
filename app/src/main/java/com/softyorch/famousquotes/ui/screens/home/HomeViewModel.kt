@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.Purchase
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.core.Send
@@ -66,20 +67,21 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onActions(action: HomeActions) {
+        Analytics.sendAction(Analytics.Action(action))
         when (action) {
-            HomeActions.Info -> showInfoDialog()
-            HomeActions.New -> loadNewRandomQuote()
-            HomeActions.Send -> shareQuote()
-            HomeActions.Buy -> purchaseLaunch()
-            HomeActions.Owner -> goToSearchOwner()
-            HomeActions.Like -> setQuoteLike()
-            HomeActions.ShowImage -> showImage()
-            HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
-            HomeActions.ReConnection -> getQuote()
-            HomeActions.DownloadImage -> downloadImage()
-            HomeActions.ShowToastDownload -> showDownloadToast()
-            HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
-            HomeActions.SureDownloadImageAgain -> downloadImageAgain()
+            is HomeActions.Info -> showInfoDialog()
+            is HomeActions.New -> loadNewRandomQuote()
+            is HomeActions.Send -> shareQuote()
+            is HomeActions.Buy -> purchaseLaunch()
+            is HomeActions.Owner -> goToSearchOwner()
+            is HomeActions.Like -> setQuoteLike()
+            is HomeActions.ShowImage -> showImage()
+            is HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
+            is HomeActions.ReConnection -> getQuote()
+            is HomeActions.DownloadImage -> downloadImage()
+            is HomeActions.ShowToastDownload -> showDownloadToast()
+            is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
+            is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
         }
     }
 
@@ -255,9 +257,9 @@ class HomeViewModel @Inject constructor(
                 writeLog(ERROR, "Error getting connection state: ${it.cause}")
             }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
-                    onActions(HomeActions.ReConnection)
+                    onActions(HomeActions.ReConnection())
                 if (_uiState.value.showImage)
-                    onActions(HomeActions.ShowImage)
+                    onActions(HomeActions.ShowImage())
             }.collect { connection ->
                 _uiState.update {
                     it.copy(

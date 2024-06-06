@@ -12,6 +12,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -57,6 +58,7 @@ private fun loadInter(context: Context, onAction: (InterstitialAdState) -> Unit)
                     override fun onAdClicked() {
                         super.onAdClicked()
                         onAction(InterstitialAdState.Clicked)
+                        Analytics.sendAction(Analytics.Interstitial())
                     }
 
                     override fun onAdShowedFullScreenContent() {
