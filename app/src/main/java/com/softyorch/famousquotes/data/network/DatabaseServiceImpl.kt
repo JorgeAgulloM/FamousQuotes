@@ -7,7 +7,7 @@ import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
-import com.google.firebase.firestore.ktx.snapshots
+import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
