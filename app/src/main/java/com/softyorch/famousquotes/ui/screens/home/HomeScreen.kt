@@ -65,7 +65,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    Interstitial(state.showInterstitial) {
+    Interstitial().Show(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
@@ -84,7 +84,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().padding(top = 24.dp).background(
+        modifier = Modifier.fillMaxSize().padding(top = 2.dp).background(
             brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
                 bottomStart = ZeroCornerSize,
                 bottomEnd = ZeroCornerSize

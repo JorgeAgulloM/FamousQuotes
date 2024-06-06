@@ -56,7 +56,7 @@ fun FamousQuotesTheme(
 
     val view = LocalView.current
     val window = (view.context as Activity).window
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(window, true)
     WindowInsetsControllerCompat(window, view).let { controller ->
         controller.hide(WindowInsetsCompat.Type.navigationBars())
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
