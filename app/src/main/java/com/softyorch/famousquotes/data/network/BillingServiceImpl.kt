@@ -10,6 +10,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.softyorch.famousquotes.domain.interfaces.IBilling
@@ -142,7 +143,11 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
 
     override suspend fun queryPurchases(): List<Purchase> =
         suspendCancellableCoroutine { cancelableCoroutine ->
-            billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
+            val queryPurchaseParams = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build()
+
+            billingClient.queryPurchasesAsync(queryPurchaseParams) { billingResult, purchases ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     purchases.forEach { purchase ->
                         handlePurchase(purchase) {
