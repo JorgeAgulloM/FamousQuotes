@@ -29,7 +29,7 @@ class BillingStart @Inject constructor(
 
     private suspend fun getAvailableProducts(productsInApp: List<String>): List<String> =
         billing.queryAvailableProducts(productsInApp)
-            .map { it.originalJson.jsonDetailsToProductId() }.toList()
+            .map { it.productId }.toList()
 
     private suspend fun queryPurchases(): List<String> = billing.queryPurchases()
         .map { it.originalJson.jsonDetailsToProductId() }.toList()
