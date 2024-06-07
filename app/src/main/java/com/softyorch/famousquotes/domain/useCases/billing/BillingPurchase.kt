@@ -12,7 +12,7 @@ class BillingPurchase @Inject constructor(
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) {
     suspend operator fun invoke(productId: String, activity: Activity): Int =
-        billing.getSkuDetails(productId)?.let { skuDetails ->
+        billing.getProductDetails(productId)?.let { skuDetails ->
             return withContext(dispatcherIO) {
                 billing.launchPurchaseFlow(activity, skuDetails)
             }
