@@ -8,10 +8,11 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.softyorch.famousquotes.domain.interfaces.IBilling
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
@@ -24,16 +25,18 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class BillingServiceImpl @Inject constructor(@ApplicationContext private val context: Context):
+class BillingServiceImpl @Inject constructor(@ApplicationContext private val context: Context) :
     IBilling {
 
     private var purchaseState: Int = Purchase.PurchaseState.UNSPECIFIED_STATE
+    private var productDetailsList: List<ProductDetails>? = null
 
     private val purchaseUpdateListener = PurchasesUpdatedListener { billingResult, purchases ->
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             purchases.forEach {
-                handlePurchase(it) {
-                    purchaseState -> this.purchaseState = purchaseState
+                handlePurchase(it) { purchaseState ->
+                    this.purchaseState = purchaseState
+                    productDetailsList
                 }
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
@@ -43,11 +46,14 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
         }
     }
 
-    private val pendingPurchaseParams = PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
+    private val pendingPurchaseParams =
+        PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
 
-    private val billingClient = BillingClient.newBuilder(context).setListener(purchaseUpdateListener).enablePendingPurchases(pendingPurchaseParams).build()
+    private val billingClient =
+        BillingClient.newBuilder(context).setListener(purchaseUpdateListener)
+            .enablePendingPurchases(pendingPurchaseParams).build()
 
-    private var skuDetailsList: List<SkuDetails>? = null
+
 
     private fun handlePurchase(purchase: Purchase, getAccessToWallpaper: (Int) -> Unit) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
@@ -72,14 +78,20 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
 
     override suspend fun getPurchaseState(): Flow<Int> = flowOf(purchaseState)
 
-    override fun getSkuDetails(productId: String): SkuDetails? {
-        skuDetailsList?.forEachIndexed { index, skuDetails ->
-            writeLog(WARN, "BillingService: getSkuDetails -> skuDetails: ($index) $skuDetails")
+    override fun getProductDetails(productId: String): ProductDetails? {
+        productDetailsList?.forEachIndexed { index, productDetails ->
+            writeLog(WARN, "BillingService: getProductDetails -> productDetails: ($index) $productDetails")
         }
-        return skuDetailsList?.find { it.sku == productId }
+        return productDetailsList?.find { it.productId == productId }
     }
 
     override fun startConnection(hasConnection: (Boolean) -> Unit) {
+
+        if (billingClient.connectionState == BillingClient.ConnectionState.CONNECTED) {
+            hasConnection(true)
+            return
+        }
+
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 writeLog(WARN, "BillingService: startConnection -> onBillingServiceDisconnected")
@@ -89,43 +101,63 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     hasConnection(true)
-                    writeLog(INFO, "BillingService: onBillingSetupFinished -> startConnection: 0 (OK)")
+                    writeLog(INFO, "BillingService -> startConnection: 0 (OK)")
                 } else {
-                    writeLog(INFO, "BillingService: onBillingSetupFinished -> startConnection: ${billingResult.responseCode} (BAD)")
+                    writeLog(INFO, "BillingService -> startConnection: ${billingResult.responseCode} (BAD)")
                 }
             }
         })
     }
 
-    override suspend fun queryAvailableProducts(productsInApp: List<String>): List<SkuDetails> =
+    override suspend fun queryAvailableProducts(productsInApp: List<String>): List<ProductDetails> =
         suspendCancellableCoroutine { cancelableCoroutine ->
-            val params = SkuDetailsParams.newBuilder()
-            params.setSkusList(productsInApp).setType(BillingClient.SkuType.INAPP)
-            billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailList ->
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailList != null) {
-                    this.skuDetailsList = skuDetailList
-                    cancelableCoroutine.resume(skuDetailList.toList())
+            val params = QueryProductDetailsParams.newBuilder()
+                .setProductList(
+                    productsInApp.map { productId ->
+                        QueryProductDetailsParams.Product.newBuilder()
+                            .setProductId(productId)
+                            .setProductType(BillingClient.ProductType.INAPP)
+                            .build()
+                    }
+                ).build()
+
+            billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    this.productDetailsList = productDetailsList
+                    cancelableCoroutine.resume(productDetailsList.toList())
                 } else {
                     cancelableCoroutine.resume(emptyList())
                 }
             }
         }
 
-    override suspend fun launchPurchaseFlow(activity: Activity, skuDetails: SkuDetails): Int =
+    override suspend fun launchPurchaseFlow(
+        activity: Activity,
+        productDetails: ProductDetails,
+    ): Int =
         suspendCancellableCoroutine { cancelableCoroutine ->
             try {
-                val flowParams = BillingFlowParams.newBuilder()
-                    .setSkuDetails(skuDetails)
+                val productDetailsParams = BillingFlowParams.ProductDetailsParams.newBuilder()
+                    .setProductDetails(productDetails)
                     .build()
-                val launch = billingClient.launchBillingFlow(activity, flowParams)
+
+                val billingFlowParams = BillingFlowParams.newBuilder()
+                    .setProductDetailsParamsList(listOf(productDetailsParams))
+                    .build()
+
+                val launch = billingClient.launchBillingFlow(activity, billingFlowParams)
                 writeLog(INFO, "BillingService: launchPurchaseFlow -> LaunchBillingFlow: $ ${launch.responseCode}")
+
                 cancelableCoroutine.resume(launch.responseCode)
             } catch (ex: Exception) {
                 cancelableCoroutine.resume(-1)
             }
         }
 
-    override fun acknowledgePurchase(purchase: Purchase, acknowledgePurchases: (BillingResult) -> Unit) {
+    override fun acknowledgePurchase(
+        purchase: Purchase,
+        acknowledgePurchases: (BillingResult) -> Unit,
+    ) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && !purchase.isAcknowledged) {
             val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                 .setPurchaseToken(purchase.purchaseToken)
@@ -142,7 +174,11 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
 
     override suspend fun queryPurchases(): List<Purchase> =
         suspendCancellableCoroutine { cancelableCoroutine ->
-            billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
+            val queryPurchaseParams = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build()
+
+            billingClient.queryPurchasesAsync(queryPurchaseParams) { billingResult, purchases ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     purchases.forEach { purchase ->
                         handlePurchase(purchase) {
@@ -155,7 +191,6 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
                 }
             }
         }
-
 }
 
 /**
