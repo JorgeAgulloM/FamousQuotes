@@ -86,6 +86,12 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
     }
 
     override fun startConnection(hasConnection: (Boolean) -> Unit) {
+
+        if (billingClient.connectionState == BillingClient.ConnectionState.CONNECTED) {
+            hasConnection(true)
+            return
+        }
+
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 writeLog(WARN, "BillingService: startConnection -> onBillingServiceDisconnected")
