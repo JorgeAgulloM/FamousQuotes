@@ -7,7 +7,7 @@ import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
-import com.google.firebase.firestore.ktx.snapshots
+import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
@@ -113,23 +113,44 @@ class DatabaseServiceImpl @Inject constructor(
 
     override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
         return withTimeoutOrNull(FIREBASE_TIMEOUT) {
-            val document = firestore.collection(COLLECTION_LIKES).document(id)
-            document.snapshots().map { doc ->
-                val result = doc.toObject(LikeQuoteResponse::class.java)
-                val isLike = document.collection(COLLECTION_USERS_LIKE)
-                    .document(userId)
-                    .get()
-                    .await().toObject(LikeResponse::class.java)?.like ?: false
+            try {
+                val document = firestore.collection(COLLECTION_LIKES).document(id)
 
-                result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike ) }
+                if (document.get().await().exists()) document.snapshots().map { doc ->
+                    val result = doc.toObject(LikeQuoteResponse::class.java)
+                    val isLike = document.collection(COLLECTION_USERS_LIKE)
+                        .document(userId)
+                        .get()
+                        .await().toObject(LikeResponse::class.java)?.like ?: false
+
+                    result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike) }
+                } else null
+
+            } catch (ex: Exception) {
+                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                null
             }
         } ?: flowOf(LikeQuoteResponse())
     }
 
     private suspend fun getLikeQuote(id: String): LikeQuoteResponse? {
-        val document = firestore.collection(COLLECTION_LIKES).document(id)
-        val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
-        return likeQuote?.copy(like = getUserIsLike(id).like.also { writeLog(INFO, "[getUserIsLike] -> $it") })
+        try {
+            val document = firestore.collection(COLLECTION_LIKES).document(id)
+
+            return if (document.get().await().exists()) {
+                val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
+                likeQuote?.copy(like = getUserIsLike(id).like.also {
+                    writeLog(
+                        INFO,
+                        "[getUserIsLike] -> $it"
+                    )
+                })
+            } else null
+
+        } catch (ex: Exception) {
+            writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+            return null
+        }
     }
 
     private suspend fun getUserIsLike(id: String): LikeResponse {
