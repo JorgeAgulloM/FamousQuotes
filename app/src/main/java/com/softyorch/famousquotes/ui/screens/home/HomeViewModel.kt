@@ -117,6 +117,7 @@ class HomeViewModel @Inject constructor(
                 MainActivity.instance
             ).let { purchase ->
                 _uiState.update { state -> state.copy(purchasedOk = purchase) }
+                billingStartUseCase()
             }
         }
     }
