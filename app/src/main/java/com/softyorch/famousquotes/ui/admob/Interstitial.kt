@@ -20,11 +20,14 @@ import javax.inject.Singleton
 class Interstitial {
 
     companion object {
-        lateinit var adRequest: AdRequest
-        lateinit var mInterstitialAd: InterstitialAd
+        lateinit var instance: Interstitial
     }
 
+    private lateinit var adRequest: AdRequest
+    private lateinit var mInterstitialAd: InterstitialAd
+
     init {
+        instance = this
         getAdRequest()
     }
 
@@ -34,6 +37,8 @@ class Interstitial {
         onAction: (InterstitialAdState) -> Unit,
     ) {
         val context = LocalContext.current
+
+        if (!::adRequest.isInitialized) getAdRequest()
 
         loadInter(context) { onAction(it) }
 
