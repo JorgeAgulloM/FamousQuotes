@@ -10,15 +10,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 
 @Composable
 fun AppIcon() {
-    val appName = stringResource(R.string.app_name)
+    val context = LocalContext.current
+
+    val appNameValue = context.getResourceString(BuildConfig.APP_TITLE)
+    val appName = if (appNameValue.contains("_"))
+        stringResource(R.string.app_name)
+    else appNameValue
+
     val firstName = appName.split(" ")[0].uppercase()
     val secondName = appName.split(" ")[1].uppercase()
 
