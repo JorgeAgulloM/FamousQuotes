@@ -139,6 +139,7 @@ class HomeViewModel @Inject constructor(
             val id = _uiState.value.quote.id
             val updateLikes = LikesUiDTO(id = id, isLike = isLike)
             setLike(updateLikes.toDomain())
+            getLikesQuote(id)
         }
     }
 
