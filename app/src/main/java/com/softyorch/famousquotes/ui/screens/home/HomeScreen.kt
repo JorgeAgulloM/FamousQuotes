@@ -61,11 +61,13 @@ import com.softyorch.famousquotes.utils.writeLog
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
 
+    val interstitial = Interstitial.instance
+
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    Interstitial().Show(state.showInterstitial) {
+    interstitial.Show(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
