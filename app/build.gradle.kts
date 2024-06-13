@@ -129,7 +129,7 @@ android {
             buildConfigField("String", "ICON", "\"uplifting_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF99CE00")
             buildConfigField("int", "SECONDARY_COLOR", "0xFFBAD56B")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF88ABC2")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF00253A")
             android.buildFeatures.buildConfig = true
         }
 
@@ -141,8 +141,8 @@ android {
             buildConfigField("String", "DB_COLLECTION", "\"biblical_quotes\"")
             buildConfigField("String", "ICON", "\"biblical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF3182BD")
-            buildConfigField("int", "SECONDARY_COLOR", "0xFF6BAED6")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFFC6DBEF")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFF3182BD")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF7FA0BB")
             android.buildFeatures.buildConfig = true
         }
     }
