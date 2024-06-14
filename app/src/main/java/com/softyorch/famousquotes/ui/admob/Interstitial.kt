@@ -12,7 +12,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.Analytics
-import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Singleton
