@@ -84,6 +84,9 @@
     <string name="dialog_image_download_again_download">Herunterladen</string>
     <string name="dialog_image_download_again_cancel">Abbrechen</string>
     <string name="image_download_toast_success">Bild heruntergeladen</string>
+    <string name="dialog_download_image_title">Lade dein Bild herunter</string>
+    <string name="dialog_download_image_btn_view_ad">Anzeige ansehen</string>
+    <string name="dialog_download_image_btn_buy">Für immer kaufen</string>
 
 
 </resources>
