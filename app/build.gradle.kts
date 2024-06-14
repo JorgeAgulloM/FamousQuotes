@@ -74,19 +74,24 @@ android {
                     "historical" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                     "uplifting" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                     "biblical" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                 }
             } else {
                 buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
                 buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["FAKE_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+
             }
         }
     }
