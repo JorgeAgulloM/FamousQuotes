@@ -15,14 +15,11 @@ class AuthServiceImpl @Inject constructor(private val auth: FirebaseAuth) : IAut
                 auth.signInAnonymously().addOnSuccessListener {
                     cancelableCoroutine.resume(true)
                 }.addOnFailureListener { ex ->
-                    cancelableCoroutine.resume(false)
                     cancelableCoroutine.resumeWithException(ex)
                 }
             } catch (fex: FirebaseAuthException) {
-                cancelableCoroutine.resume(false)
                 cancelableCoroutine.resumeWithException(fex)
             } catch (ex: Exception) {
-                cancelableCoroutine.resume(false)
                 cancelableCoroutine.resumeWithException(ex)
             }
         }
