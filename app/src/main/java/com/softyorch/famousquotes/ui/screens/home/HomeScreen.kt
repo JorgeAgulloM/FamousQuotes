@@ -172,9 +172,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
             }
 
         if (state.showBuyDialog) BuyImageDialog(
-            title = "Descarga la imagen",
-            textBtnPositive = "Ver un anuncio",
-            textBtnNegative = "Comprar para simpre",
+            title = stringResource(R.string.dialog_download_image_title),
+            textBtnPositive = stringResource(R.string.dialog_download_image_btn_view_ad),
+            textBtnNegative = stringResource(R.string.dialog_download_image_btn_buy),
         ) {
             when (it) {
                 BuyActions.BuyImage -> viewModel.apply{
