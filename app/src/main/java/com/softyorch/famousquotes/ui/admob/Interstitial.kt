@@ -13,6 +13,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Singleton
 
@@ -42,9 +43,14 @@ class Interstitial {
 
         loadInter(context) { onAction(it) }
 
-        if (isVisible) {
-            onAction(InterstitialAdState.Loading)
-            mInterstitialAd.show(context as Activity)
+        try {
+            if (isVisible) {
+                onAction(InterstitialAdState.Loading)
+                mInterstitialAd.show(context as Activity)
+            }
+        } catch (ex: Exception) {
+            writeLog(level = ERROR, text = "Error Show Interstitial ${ex.message}")
+            onAction(InterstitialAdState.Error)
         }
     }
 
@@ -57,7 +63,7 @@ class Interstitial {
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    writeLog(LevelLog.ERROR, "[Interstitial] -> Error Admob")
+                    writeLog(ERROR, "[Interstitial] -> Error Admob")
                     onAction(InterstitialAdState.Error)
                 }
 
