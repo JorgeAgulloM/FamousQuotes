@@ -43,13 +43,18 @@ class Bonified @Inject constructor() {
 
         loadBonified { onAction(it) }
 
-        if (isVisible) {
-            onAction(BonifiedAdState.Loading)
-            rewardedAd?.let { ad ->
-                ad.show(MainActivity.instance) { _ -> onAction(BonifiedAdState.Reward) }
-            } ?: run {
-                writeLog(level = LevelLog.ERROR, text = "The rewarded ad wasn't ready yet.")
+        try {
+            if (isVisible) {
+                onAction(BonifiedAdState.Loading)
+                rewardedAd?.let { ad ->
+                    ad.show(MainActivity.instance) { _ -> onAction(BonifiedAdState.Reward) }
+                } ?: run {
+                    writeLog(level = LevelLog.ERROR, text = "The rewarded ad wasn't ready yet.")
+                }
             }
+        } catch (ex: Exception) {
+            writeLog(level = LevelLog.ERROR, text = "Show Bonified error: ${ex.message}")
+            onAction(BonifiedAdState.Error)
         }
 
         RewardedAd.load(
