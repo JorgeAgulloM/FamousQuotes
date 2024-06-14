@@ -81,7 +81,6 @@ class DatabaseServiceImpl @Inject constructor(
                     }
                 } catch (ex: FirebaseException) {
                     writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
-                    cancelableCoroutine.resume(null)
                     cancelableCoroutine.resumeWithException(ex)
                 }
             }
