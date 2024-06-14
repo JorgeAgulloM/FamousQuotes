@@ -84,6 +84,9 @@
     <string name="dialog_image_download_again_download">下载</string>
     <string name="dialog_image_download_again_cancel">取消</string>
     <string name="image_download_toast_success">图片已下载</string>
+    <string name="dialog_download_image_title">下载你的图片</string>
+    <string name="dialog_download_image_btn_view_ad">观看广告</string>
+    <string name="dialog_download_image_btn_buy">永久购买</string>
 
 
 </resources>
