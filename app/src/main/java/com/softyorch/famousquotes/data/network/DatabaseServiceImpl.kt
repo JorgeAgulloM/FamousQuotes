@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
@@ -81,7 +82,6 @@ class DatabaseServiceImpl @Inject constructor(
                     }
                 } catch (ex: FirebaseException) {
                     writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
-                    cancelableCoroutine.resume(null)
                     cancelableCoroutine.resumeWithException(ex)
                 }
             }
@@ -126,8 +126,14 @@ class DatabaseServiceImpl @Inject constructor(
                     result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike) }
                 } else null
 
+            } catch (fex: FirebaseFirestoreException) {
+                writeLog(ERROR, "Error from Firebase Firestore: ${fex.cause}")
+                null
+            } catch (fex: FirebaseException) {
+                writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+                null
             } catch (ex: Exception) {
-                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                writeLog(ERROR, "Error Exception: ${ex.cause}")
                 null
             }
         } ?: flowOf(LikeQuoteResponse())
