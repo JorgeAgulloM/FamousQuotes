@@ -79,9 +79,27 @@ class HomeViewModel @Inject constructor(
             is HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
             is HomeActions.ReConnection -> getQuote()
             is HomeActions.DownloadImage -> downloadImage()
+            is HomeActions.ShowBuyDialog -> showBuyDialog()
+            is HomeActions.DownloadImageByBonifiedAd -> downloadImageByBonifiedAd()
             is HomeActions.ShowToastDownload -> showDownloadToast()
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
+        }
+    }
+
+    private fun showBuyDialog() {
+        _uiState.update { it.copy(showBuyDialog = !it.showBuyDialog) }
+    }
+
+    private fun downloadImageByBonifiedAd() {
+        if (!_uiState.value.showBonified) {
+            _uiState.update {
+                it.copy(
+                    showBuyDialog = false,
+                    showBonified = true,
+                    isLoading = true
+                )
+            }
         }
     }
 
@@ -182,13 +200,26 @@ class HomeViewModel @Inject constructor(
     private fun downloadImage() {
         viewModelScope.launch(dispatcherIO) {
             val imageName = uiState.value.quote.id
-            val imageIsExist = _uiState.value.imageIsDownloadAlready
 
-            if (!imageIsExist && doesDownloadPathFileExist(imageName)) {
-                _uiState.update { it.copy(imageIsDownloadAlready = true) }
-            } else {
+            if (_uiState.value.showBonified) {
                 storage.downloadImage(imageName) { downloadResult ->
-                    _uiState.update { it.copy(downloadImage = downloadResult) }
+                    _uiState.update {
+                        it.copy(
+                            showBonified = false,
+                            downloadImage = downloadResult,
+                            isLoading = false
+                        )
+                    }
+                }
+            } else {
+                val imageIsExist = _uiState.value.imageIsDownloadAlready
+
+                if (!imageIsExist && doesDownloadPathFileExist(imageName)) {
+                    _uiState.update { it.copy(imageIsDownloadAlready = true) }
+                } else {
+                    storage.downloadImage(imageName) { downloadResult ->
+                        _uiState.update { it.copy(downloadImage = downloadResult) }
+                    }
                 }
             }
         }
