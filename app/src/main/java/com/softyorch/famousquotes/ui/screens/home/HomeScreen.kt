@@ -33,6 +33,8 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
+import com.softyorch.famousquotes.ui.admob.Bonified
+import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
@@ -40,6 +42,8 @@ import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
+import com.softyorch.famousquotes.ui.screens.home.components.BuyActions
+import com.softyorch.famousquotes.ui.screens.home.components.BuyImageDialog
 import com.softyorch.famousquotes.ui.screens.home.components.CardControls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
@@ -62,6 +66,7 @@ import com.softyorch.famousquotes.utils.writeLog
 fun HomeScreen(viewModel: HomeViewModel) {
 
     val interstitial = Interstitial.instance
+    val bonified = Bonified.instance
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
@@ -82,6 +87,15 @@ fun HomeScreen(viewModel: HomeViewModel) {
         ) {
             if (state.imageIsDownloadAlready)
                 viewModel.onActions(HomeActions.SureDownloadImageAgain())
+        }
+    }
+
+    bonified.Show(state.showBonified) { bonifiedState ->
+        if (bonifiedState == BonifiedAdState.Reward) {
+            viewModel.onActions(HomeActions.DownloadImage())
+        }
+        if (bonifiedState == BonifiedAdState.Error || bonifiedState == BonifiedAdState.Close) {
+            writeLog(text = bonifiedState.toString())
         }
     }
 
@@ -140,7 +154,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (state.isLoading) LoadingCircle()
 
         if (state.downloadImage) {
-            context.showToast(stringResource(R.string.image_download_toast_success))
+            context.showToast(stringResource(R.string.image_download_toast_success), Toast.LENGTH_LONG)
             viewModel.onActions(HomeActions.ShowToastDownload())
         }
 
@@ -156,6 +170,21 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 }
                 viewModel.onActions(homeAction)
             }
+
+        if (state.showBuyDialog) BuyImageDialog(
+            title = "Descarga la imagen",
+            textBtnPositive = "Ver un anuncio",
+            textBtnNegative = "Comprar para simpre",
+        ) {
+            when (it) {
+                BuyActions.BuyImage -> viewModel.apply{
+                    onActions(HomeActions.Buy())
+                    onActions(HomeActions.ShowBuyDialog())
+                }
+                BuyActions.ViewAdd -> viewModel.onActions(HomeActions.DownloadImageByBonifiedAd())
+                BuyActions.Exit -> viewModel.onActions(HomeActions.ShowBuyDialog())
+            }
+        }
     }
 }
 
