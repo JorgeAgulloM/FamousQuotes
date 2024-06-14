@@ -84,5 +84,8 @@
     <string name="dialog_image_download_again_download">Télécharger</string>
     <string name="dialog_image_download_again_cancel">Annuler</string>
     <string name="image_download_toast_success">Image téléchargée</string>
+    <string name="dialog_download_image_title">Téléchargez votre image</string>
+    <string name="dialog_download_image_btn_view_ad">Voir une annonce</string>
+    <string name="dialog_download_image_btn_buy">Acheter pour toujours</string>
 
 </resources>
