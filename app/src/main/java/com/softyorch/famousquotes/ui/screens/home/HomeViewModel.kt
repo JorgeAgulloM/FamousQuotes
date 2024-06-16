@@ -84,6 +84,7 @@ class HomeViewModel @Inject constructor(
             is HomeActions.ShowToastDownload -> showDownloadToast()
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
+            is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
         }
     }
 
@@ -101,6 +102,10 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun closeOrErrorDownloadByBonifiedAd() {
+        _uiState.update { it.copy(showBuyDialog = false, showBonified = false, isLoading = false) }
     }
 
     private fun showInfoDialog() {

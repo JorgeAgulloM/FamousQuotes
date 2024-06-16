@@ -6,6 +6,7 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity.Companion.firebaseAnalytics
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
+import com.softyorch.famousquotes.utils.LevelLog.DEBUG
 import com.softyorch.famousquotes.utils.writeLog
 
 sealed class Analytics(val name: String) {
@@ -17,9 +18,11 @@ sealed class Analytics(val name: String) {
         fun sendAction(action: Analytics) {
             val bundle = Bundle()
             bundle.putString(action.name, "clicked")
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
-            writeLog(text = "send action to Analytics: ${action.name}")
-            writeLog(text = "Package Name: ${MainActivity.instance.packageName}")
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
+            writeLog(level = DEBUG, text = "[Analytics] -> send action from: ${
+                MainActivity.instance.packageName
+            } to Analytics: ${action.name}")
         }
 
         private const val FLAVOR = BuildConfig.FLAVOR
@@ -29,6 +32,7 @@ sealed class Analytics(val name: String) {
             is HomeActions.DownloadImage -> "${FLAVOR}_download_image"
             is HomeActions.ShowBuyDialog -> "${FLAVOR}_dialog_show"
             is HomeActions.DownloadImageByBonifiedAd -> "${FLAVOR}_download_image_by_bonified_ad"
+            is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> "${FLAVOR}_cancel_or_error_download_by_bonified_ad"
             is HomeActions.Info -> "${FLAVOR}_action_info"
             is HomeActions.Like -> "${FLAVOR}_action_like"
             is HomeActions.New -> "${FLAVOR}_action_new_quote"

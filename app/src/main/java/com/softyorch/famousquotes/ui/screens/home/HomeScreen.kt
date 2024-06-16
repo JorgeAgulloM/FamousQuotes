@@ -94,8 +94,13 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (bonifiedState == BonifiedAdState.Reward) {
             viewModel.onActions(HomeActions.DownloadImage())
         }
-        if (bonifiedState == BonifiedAdState.Error || bonifiedState == BonifiedAdState.Close) {
-            writeLog(text = bonifiedState.toString())
+        if (
+            bonifiedState == BonifiedAdState.Showed ||
+            bonifiedState == BonifiedAdState.Close ||
+            bonifiedState == BonifiedAdState.Error ||
+            bonifiedState == BonifiedAdState.OnDismissed
+        ) {
+            viewModel.onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
 
@@ -154,7 +159,10 @@ fun HomeScreen(viewModel: HomeViewModel) {
         if (state.isLoading) LoadingCircle()
 
         if (state.downloadImage) {
-            context.showToast(stringResource(R.string.image_download_toast_success), Toast.LENGTH_LONG)
+            context.showToast(
+                stringResource(R.string.image_download_toast_success),
+                Toast.LENGTH_LONG
+            )
             viewModel.onActions(HomeActions.ShowToastDownload())
         }
 
@@ -177,10 +185,11 @@ fun HomeScreen(viewModel: HomeViewModel) {
             textBtnNegative = stringResource(R.string.dialog_download_image_btn_buy),
         ) {
             when (it) {
-                BuyActions.BuyImage -> viewModel.apply{
+                BuyActions.BuyImage -> viewModel.apply {
                     onActions(HomeActions.Buy())
                     onActions(HomeActions.ShowBuyDialog())
                 }
+
                 BuyActions.ViewAdd -> viewModel.onActions(HomeActions.DownloadImageByBonifiedAd())
                 BuyActions.Exit -> viewModel.onActions(HomeActions.ShowBuyDialog())
             }

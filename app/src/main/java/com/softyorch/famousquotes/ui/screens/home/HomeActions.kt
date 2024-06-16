@@ -13,6 +13,7 @@ sealed class HomeActions {
     data class DownloadImage(val action: String = "DownloadImage"): HomeActions()
     data class ShowBuyDialog(val action: String = "ShowBuyDialog"): HomeActions()
     data class DownloadImageByBonifiedAd(val action: String = "ViewBonifiedAds"): HomeActions()
+    data class ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd(val action: String = "ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd"): HomeActions()
     data class ShowToastDownload(val action: String = "ShowToastDownload"): HomeActions()
     data class CloseDialogDownLoadImageAgain(val action: String = "CloseDialogDownLoadImageAgain"): HomeActions()
     data class SureDownloadImageAgain(val action: String = "SureDownloadImageAgain"): HomeActions()
