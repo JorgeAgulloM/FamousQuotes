@@ -105,7 +105,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun closeOrErrorDownloadByBonifiedAd() {
-        _uiState.update { it.copy(showBuyDialog = false, showBonified = false, isLoading = false) }
+        _uiState.update { it.copy(showBuyDialog = false, isLoading = false) }
     }
 
     private fun showInfoDialog() {
