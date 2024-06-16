@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.home
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.Purchase
@@ -57,6 +58,8 @@ class HomeViewModel @Inject constructor(
     private val _billingData = MutableStateFlow(BillingModel.empty())
     //val billingData: StateFlow<BillingModel> = _billingData
 
+    private var _image: Bitmap? = null
+
     init {
         onCreate()
     }
@@ -85,6 +88,13 @@ class HomeViewModel @Inject constructor(
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
+        }
+    }
+
+    fun saveImage(bitmap: Bitmap) {
+        viewModelScope.launch(dispatcherIO) {
+            writeLog(text = "[HomeViewModel] -> Save image")
+            _image = bitmap
         }
     }
 
@@ -127,7 +137,10 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                send.sendDataTo(dataToSend)
+                if (_image != null) {
+                    writeLog(text = "[HomeViewModel] -> Sending image")
+                    send.sendImageAndQuoteTo(dataToSend, _image!!)
+                }else send.sendDataTo(dataToSend)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
