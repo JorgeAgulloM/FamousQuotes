@@ -1,6 +1,7 @@
 package com.softyorch.famousquotes.ui.screens.home
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -137,7 +139,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
             },
             contentAlignment = Alignment.TopCenter
         ) {
-            BackgroundImage(uri = state.quote.imageUrl)
+            BackgroundImage(uri = state.quote.imageUrl) { bitmap ->
+                viewModel.saveImage(bitmap)
+            }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             CardQuote(
@@ -198,7 +202,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
 }
 
 @Composable
-fun BackgroundImage(uri: String) {
+fun BackgroundImage(uri: String, onGetImage: (Bitmap) -> Unit) {
     val context = LocalContext.current
 
     val data = if (uri.startsWith("http")) uri
@@ -210,7 +214,11 @@ fun BackgroundImage(uri: String) {
             .crossfade(true)
             .size(Size.ORIGINAL) // Set the target size to load the image at.
             .build(),
-        contentScale = ContentScale.Fit
+        contentScale = ContentScale.Fit,
+        onSuccess = { result ->
+            val drawable = result.result.drawable
+            onGetImage(drawable.toBitmap())
+        }
     )
 
     val state = painter.state
