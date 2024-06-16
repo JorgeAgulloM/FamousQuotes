@@ -18,6 +18,6 @@ class FamousQuotesApp: Application() {
         super.onCreate()
         MobileAds.initialize(this){}
         adRequest = AdRequest.Builder().build()
-        RequestConfiguration.Builder().setTestDeviceIds(listOf("593592E028848EA2BF3B8AEDC4D3D8EE", "5B0C38DF42C762016CCFB455D4473887"))
+        RequestConfiguration.Builder().setTestDeviceIds(listOf("593592E028848EA2BF3B8AEDC4D3D8EE", "5B0C38DF42C762016CCFB455D4473887", "9BAE37CC1123C50AD21A352FC5573000"))
     }
 }
