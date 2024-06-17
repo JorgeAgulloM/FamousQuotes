@@ -7,6 +7,7 @@ import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
+import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.core.InternetConnection
@@ -23,8 +24,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -125,24 +126,13 @@ class DatabaseServiceImpl @Inject constructor(
 
                 val document = firestore.collection(COLLECTION_LIKES).document(id)
 
-                flow {
-                    emit(document.get().await().let { snapshot ->
-                        if (snapshot == null || !snapshot.exists()) return@let null
+                if (document.get().await().exists()) document.snapshots().map { doc ->
+                    val result = doc.toObject(LikeQuoteResponse::class.java)
 
-                        val result = snapshot.toObject(LikeQuoteResponse::class.java)
-                        val docUser = document.collection(COLLECTION_USERS_LIKE)
-                            .document(userId)
-                            .get()
+                    val isLike = getUserIsLike(id).like
 
-                        docUser.await().let { snapshotUser ->
-                            val userLike =
-                                snapshotUser.toObject(LikeResponse::class.java)?.like ?: false
-                            result?.let {
-                                LikeQuoteResponse(id = it.id, likes = it.likes, like = userLike)
-                            }
-                        }
-                    })
-                }
+                    result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike) }
+                } else null
 
             } catch (fex: FirebaseException) {
                 writeLog(ERROR, "Error from Firebase: ${fex.cause}")
