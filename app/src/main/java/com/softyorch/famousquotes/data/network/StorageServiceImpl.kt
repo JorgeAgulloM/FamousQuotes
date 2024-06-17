@@ -14,6 +14,7 @@ import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -53,31 +54,16 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun getImageList(): List<String>? {
         return withTimeoutOrNull(FIREBASE_TIMEOUT) {
-            suspendCancellableCoroutine { cancelableCoroutine ->
-                try {
-                    if (imageList.size > 0) cancelableCoroutine.resume(imageList)
+            try {
+                if (imageList.size > 0) return@withTimeoutOrNull imageList
 
-                    val ref = storage.reference.child(URL_STORAGE_PROJECT)
-                    ref.listAll().addOnSuccessListener { result ->
-                        if (result != null && result.items.size > 0) {
-                            result.prefixes.toList().map {
-                                it.name
-                            }.apply {
-                                imageList.addAll(this)
-                            }
-                            cancelableCoroutine.resume(imageList)
-                        }
-                    }.addOnFailureListener {
-                        cancelableCoroutine.resume(imageList)
-                    }
-
-                } catch (ex: FirebaseException) {
-                    writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
-                    cancelableCoroutine.resumeWithException(ex)
-                } catch (ex: Exception) {
-                    writeLog(ERROR, "Error from Storage: ${ex.cause}")
-                    cancelableCoroutine.resumeWithException(ex)
+                val storageRef = storage.reference.child(URL_STORAGE_PROJECT)
+                storageRef.listAll().await().prefixes.toList().map { it.name }.apply {
+                    imageList.addAll(this)
                 }
+            } catch (ex: FirebaseException) {
+                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
+                null
             }
         }
     }
