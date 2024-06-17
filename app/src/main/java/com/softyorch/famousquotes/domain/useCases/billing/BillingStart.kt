@@ -28,8 +28,8 @@ class BillingStart @Inject constructor(
     private suspend fun getImageList(): List<String> = storage.getImageList() ?: listOf()
 
     private suspend fun getAvailableProducts(productsInApp: List<String>): List<String> =
-        billing.queryAvailableProducts(productsInApp)
-            .map { it.productId }.toList()
+        if (productsInApp.isEmpty()) emptyList()
+        else billing.queryAvailableProducts(productsInApp).map { it.productId }.toList()
 
     private suspend fun queryPurchases(): List<String> = billing.queryPurchases()
         .map { it.originalJson.jsonDetailsToProductId() }.toList()
