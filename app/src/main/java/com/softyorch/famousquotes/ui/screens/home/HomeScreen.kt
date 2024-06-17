@@ -100,6 +100,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
             bonifiedState == BonifiedAdState.Error ||
             bonifiedState == BonifiedAdState.OnDismissed
         ) {
+            writeLog(INFO, "[HomeScreen] -> bonifiedState: $bonifiedState")
             viewModel.onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
@@ -173,8 +174,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
             ) { action ->
                 val homeAction = when (action) {
-                    POSITIVE -> HomeActions.SureDownloadImageAgain()
-                    NEGATIVE -> HomeActions.CloseDialogDownLoadImageAgain()
+                    POSITIVE -> HomeActions.CloseDialogDownLoadImageAgain()
+                    NEGATIVE -> HomeActions.SureDownloadImageAgain()
                 }
                 viewModel.onActions(homeAction)
             }
