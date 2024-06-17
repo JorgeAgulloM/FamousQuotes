@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.datastore.DatastoreImpl
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.AuthServiceImpl
@@ -27,8 +28,12 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesDatabaseService(firestore: FirebaseFirestore, @ApplicationContext context: Context):
-            IDatabaseService = DatabaseServiceImpl(firestore, context)
+    fun providesDatabaseService(
+        firestore: FirebaseFirestore,
+        internetConnection: InternetConnection,
+        @ApplicationContext context: Context
+    ):
+            IDatabaseService = DatabaseServiceImpl(firestore, internetConnection, context)
 
     @Singleton
     @Provides
