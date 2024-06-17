@@ -61,7 +61,6 @@ class Bonified @Inject constructor() {
                             writeLog(text = "[BonifiedAd] -> on ad loaded: $ad")
                             rewardedAd = ad
                             rewardedAd?.let { adR ->
-                                onAction(BonifiedAdState.Showed)
                                 adR.show(MainActivity.instance) { rewardItem ->
                                     writeLog(text = "[BonifiedAd] -> onUserEarnedReward: $rewardItem")
                                     onAction(BonifiedAdState.Reward)
