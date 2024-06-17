@@ -6,11 +6,10 @@ import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Source
-import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
+import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
 import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
 import com.softyorch.famousquotes.data.network.response.LikeResponse
@@ -21,11 +20,14 @@ import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -33,6 +35,7 @@ import kotlin.coroutines.resumeWithException
 
 class DatabaseServiceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
+    private val internetConnection: InternetConnection,
     @ApplicationContext private val context: Context,
 ) : IDatabaseService {
 
@@ -114,27 +117,39 @@ class DatabaseServiceImpl @Inject constructor(
     override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
         return withTimeoutOrNull(FIREBASE_TIMEOUT) {
             try {
+                val haveConnection = withContext(Dispatchers.IO) {
+                    internetConnection.isConnectedFlow()
+                }
+
+                if (!haveConnection.first()) return@withTimeoutOrNull null
+
                 val document = firestore.collection(COLLECTION_LIKES).document(id)
 
-                if (document.get().await().exists()) document.snapshots().map { doc ->
-                    val result = doc.toObject(LikeQuoteResponse::class.java)
-                    val isLike = document.collection(COLLECTION_USERS_LIKE)
-                        .document(userId)
-                        .get()
-                        .await().toObject(LikeResponse::class.java)?.like ?: false
+                flow {
+                    emit(document.get().await().let { snapshot ->
+                        if (snapshot == null || !snapshot.exists()) return@let null
 
-                    result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike) }
-                } else null
+                        val result = snapshot.toObject(LikeQuoteResponse::class.java)
+                        val docUser = document.collection(COLLECTION_USERS_LIKE)
+                            .document(userId)
+                            .get()
 
-            } catch (fex: FirebaseFirestoreException) {
-                writeLog(ERROR, "Error from Firebase Firestore: ${fex.cause}")
-                null
+                        docUser.await().let { snapshotUser ->
+                            val userLike =
+                                snapshotUser.toObject(LikeResponse::class.java)?.like ?: false
+                            result?.let {
+                                LikeQuoteResponse(id = it.id, likes = it.likes, like = userLike)
+                            }
+                        }
+                    })
+                }
+
             } catch (fex: FirebaseException) {
                 writeLog(ERROR, "Error from Firebase: ${fex.cause}")
-                null
+                return@withTimeoutOrNull null
             } catch (ex: Exception) {
                 writeLog(ERROR, "Error Exception: ${ex.cause}")
-                null
+                return@withTimeoutOrNull null
             }
         } ?: flowOf(LikeQuoteResponse())
     }
@@ -146,10 +161,7 @@ class DatabaseServiceImpl @Inject constructor(
             return if (document.get().await().exists()) {
                 val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
                 likeQuote?.copy(like = getUserIsLike(id).like.also {
-                    writeLog(
-                        INFO,
-                        "[getUserIsLike] -> $it"
-                    )
+                    writeLog(INFO, "[getUserIsLike] -> $it")
                 })
             } else null
 
