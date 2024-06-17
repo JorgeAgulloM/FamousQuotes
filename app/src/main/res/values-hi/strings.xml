@@ -84,6 +84,9 @@
     <string name="dialog_image_download_again_download">डाउनलोड करें</string>
     <string name="dialog_image_download_again_cancel">रद्द करें</string>
     <string name="image_download_toast_success">चित्र डाउनलोड किया गया</string>
+    <string name="dialog_download_image_title">अपनी छवि डाउनलोड करें</string>
+    <string name="dialog_download_image_btn_view_ad">विज्ञापन देखें</string>
+    <string name="dialog_download_image_btn_buy">हमेशा के लिए खरीदें</string>
 
 
 </resources>

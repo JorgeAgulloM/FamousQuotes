@@ -196,7 +196,7 @@ fun TopControls(
                     } else {
                         if (isPurchased == Purchase.PurchaseState.PURCHASED)
                             onAction(HomeActions.DownloadImage())
-                        else onAction(HomeActions.Buy())
+                        else onAction(HomeActions.ShowBuyDialog())
                     }
                 }
             }

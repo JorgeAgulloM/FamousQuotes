@@ -26,8 +26,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 126
-        versionName = "1.2.6"
+        versionCode = 129
+        versionName = "1.2.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -74,19 +74,24 @@ android {
                     "historical" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                     "uplifting" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                     "biblical" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                        buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
                     }
                 }
             } else {
                 buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
                 buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
+                buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["FAKE_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+
             }
         }
     }
@@ -129,7 +134,7 @@ android {
             buildConfigField("String", "ICON", "\"uplifting_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF99CE00")
             buildConfigField("int", "SECONDARY_COLOR", "0xFFBAD56B")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF88ABC2")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF00253A")
             android.buildFeatures.buildConfig = true
         }
 
@@ -141,8 +146,8 @@ android {
             buildConfigField("String", "DB_COLLECTION", "\"biblical_quotes\"")
             buildConfigField("String", "ICON", "\"biblical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF3182BD")
-            buildConfigField("int", "SECONDARY_COLOR", "0xFF6BAED6")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFFC6DBEF")
+            buildConfigField("int", "SECONDARY_COLOR", "0xFF3182BD")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF7FA0BB")
             android.buildFeatures.buildConfig = true
         }
     }
