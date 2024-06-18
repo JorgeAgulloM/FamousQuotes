@@ -75,23 +75,26 @@ android {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
                         buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["HISTORICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+                        variant.mergedFlavor.manifestPlaceholders["ICON_NOTIFICATION_FLAVOUR"] = "@drawable/historical_icon"
                     }
                     "uplifting" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
                         buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["UPLIFTING_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+                        variant.mergedFlavor.manifestPlaceholders["ICON_NOTIFICATION_FLAVOUR"] = "@drawable/uplifting_icon"
                     }
                     "biblical" -> {
                         buildConfigField("String", "ID_BANNER_HOME", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BANNER_HOME"].toString())
                         buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
                         buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["BIBLICAL_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+                        variant.mergedFlavor.manifestPlaceholders["ICON_NOTIFICATION_FLAVOUR"] = "@drawable/biblical_icon"
                     }
                 }
             } else {
                 buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
                 buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
                 buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["FAKE_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
-
+                variant.mergedFlavor.manifestPlaceholders["ICON_NOTIFICATION_FLAVOUR"] = "@drawable/default_icon"
             }
         }
     }
