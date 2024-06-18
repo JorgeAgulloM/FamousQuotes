@@ -126,13 +126,18 @@ class DatabaseServiceImpl @Inject constructor(
 
                 val document = firestore.collection(COLLECTION_LIKES).document(id)
 
-                if (document.get().await().exists()) document.snapshots().map { doc ->
-                    val result = doc.toObject(LikeQuoteResponse::class.java)
+                if (document.get().await() != null)
+                    if (document.get().await().exists())
+                        document.snapshots().map { doc ->
+                            val result = doc.toObject(LikeQuoteResponse::class.java)
 
-                    val isLike = getUserIsLike(id).like
+                            val isLike = getUserIsLike(id).like
 
-                    result?.let { LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike) }
-                } else null
+                            result?.let {
+                                LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike)
+                            }
+                        } else null
+                else null
 
             } catch (fex: FirebaseException) {
                 writeLog(ERROR, "Error from Firebase: ${fex.cause}")
