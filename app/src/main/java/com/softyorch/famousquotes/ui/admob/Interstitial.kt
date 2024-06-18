@@ -62,7 +62,7 @@ class Interstitial {
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    writeLog(ERROR, "[Interstitial] -> Error Admob")
+                    writeLog(ERROR, "[Interstitial] -> Error Admob: ${error.message}of")
                     onAction(InterstitialAdState.Error)
                 }
 
