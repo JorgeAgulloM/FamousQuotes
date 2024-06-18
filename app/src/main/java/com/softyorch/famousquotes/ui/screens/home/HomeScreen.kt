@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -28,13 +29,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
-import com.softyorch.famousquotes.ui.screens.home.components.Controls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
@@ -145,7 +144,7 @@ fun CardQuote(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
             ) {
-                Controls(
+/*                Controls(
                     hasText = state.quote.body,
                     stateLikes = stateLikes,
                     disabledReload = state.showInterstitial,
@@ -164,7 +163,7 @@ fun CardQuote(
 
                         else -> onAction(action)
                     }
-                }
+                }*/
                 AnimatedContentHome(isActive = isActive) {
                     Column {
                         TextBody(text = state.quote.body)
@@ -182,9 +181,10 @@ fun CardQuote(
                 AnimatedContentHome(isActive = state.showImage) {
                     TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
                     // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
+                    Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
-            Banner.bannerInstance.Show()
+            //Banner.bannerInstance.Show()
         }
     }
 }
