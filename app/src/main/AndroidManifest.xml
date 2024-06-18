@@ -44,6 +44,14 @@
         </service>
 
         <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="${ICON_NOTIFICATION_FLAVOUR}" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/splash" />
+
+        <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="${ID_ADMOB_APP}" />
 
