@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
-        if (!BuildConfig.DEBUG) checkForAppUpdates()
+        //if (!BuildConfig.DEBUG) checkForAppUpdates()
 
         // Start Chashlytics
         firebaseInit()
@@ -70,12 +70,12 @@ class MainActivity : ComponentActivity() {
 
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
-            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
+/*            if (state == MainState.TimeToUpdate) MainAlertDialog { alertState ->
                 when (alertState) {
                     AlertState.Dismiss -> finish()
                     AlertState.Update -> viewModel.goToUpdateApp()
                 }
-            }
+            }*/
 
             FamousQuotesTheme { NavigationManager() }
         }
@@ -110,11 +110,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!BuildConfig.DEBUG) appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+/*        if (!BuildConfig.DEBUG) appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
             }
-        }
+        }*/
     }
 
     private fun checkForAppUpdates() {
