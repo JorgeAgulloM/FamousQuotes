@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import com.google.firebase.FirebaseException
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.core.APP_NAME
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
@@ -43,8 +42,8 @@ class StorageServiceImpl @Inject constructor(
                 } else {
                     cancelCoroutine.resume(null)
                 }
-            } catch (ex: FirebaseFirestoreException) {
-                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
+            } catch (ex: FirebaseException) {
+                writeLog(ERROR, "Error from Firebase: ${ex.cause}")
                 cancelCoroutine.resumeWithException(ex)
             } catch (ex: Exception) {
                 writeLog(ERROR, "Error Storage Service: ${ex.cause}")
@@ -56,9 +55,7 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun getImageList(): List<String>? {
         return withTimeoutOrNull(FIREBASE_TIMEOUT) {
             try {
-
-                if (imageList.size > 0)
-                    return@withTimeoutOrNull imageList
+                if (imageList.size > 0) return@withTimeoutOrNull imageList
 
                 val storageRef = storage.reference.child(URL_STORAGE_PROJECT)
                 storageRef.listAll().await().prefixes.toList().map { it.name }.apply {
