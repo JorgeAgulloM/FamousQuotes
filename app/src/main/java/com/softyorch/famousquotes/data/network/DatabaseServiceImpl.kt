@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.BuildConfig
@@ -100,19 +101,28 @@ class DatabaseServiceImpl @Inject constructor(
 
         writeLog(INFO, "Changed like to: $updateLikes")
 
-        val newData = hashMapOf(
-            "id" to id,
-            "likes" to newLikes
-        )
+        try {
+            val newData = hashMapOf(
+                "id" to id,
+                "likes" to newLikes
+            )
 
-        val document = firestore.collection(COLLECTION_LIKES).document(id)
-        document.set(newData)
+            val document = firestore.collection(COLLECTION_LIKES).document(id)
+            document.set(newData)
 
-        val userLike = hashMapOf(
-            "id" to userId,
-            "like" to isLike
-        )
-        document.collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
+            val userLike = hashMapOf(
+                "id" to userId,
+                "like" to isLike
+            )
+            document.collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
+        } catch (fFex: FirebaseFirestoreException) {
+            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}")
+        } catch (fex: Exception) {
+            writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+        } catch (ex: Exception) {
+            writeLog(ERROR, "Error from Database Service: ${ex.cause}")
+        }
+
     }
 
     override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
@@ -167,9 +177,21 @@ class DatabaseServiceImpl @Inject constructor(
     }
 
     private suspend fun getUserIsLike(id: String): LikeResponse {
-        return firestore.collection(COLLECTION_LIKES)
-            .document(id)
-            .collection(COLLECTION_USERS_LIKE)
-            .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
+        return try {
+            firestore.collection(COLLECTION_LIKES)
+                .document(id)
+                .collection(COLLECTION_USERS_LIKE)
+                .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
+
+        } catch (fFex: FirebaseFirestoreException) {
+            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}")
+            return LikeResponse()
+        } catch (fex: FirebaseException) {
+            writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+            return LikeResponse()
+        } catch (ex: Exception) {
+            writeLog(ERROR, "Error from Database Service: ${ex.cause}")
+            return LikeResponse()
+        }
     }
 }
