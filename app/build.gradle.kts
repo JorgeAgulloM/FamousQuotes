@@ -26,8 +26,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 24
         targetSdk = 34
-        versionCode = 130
-        versionName = "1.3.0"
+        versionCode = 131
+        versionName = "1.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -206,7 +206,7 @@ dependencies {
     implementation(libs.user.messaging.platform)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
