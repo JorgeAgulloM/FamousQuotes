@@ -1,7 +1,7 @@
 package com.softyorch.famousquotes.core
 
-import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity.Companion.firebaseAnalytics
@@ -16,9 +16,11 @@ sealed class Analytics(val name: String) {
 
     companion object {
         fun sendAction(action: Analytics) {
-            val bundle = Bundle()
-            bundle.putString(action.name, "clicked")
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                param(FirebaseAnalytics.Param.ITEM_ID, FLAVOR)
+                param(FirebaseAnalytics.Param.ITEM_NAME, action.name)
+                param(FirebaseAnalytics.Param.CONTENT_TYPE, "clicked")
+            }
 
             writeLog(level = DEBUG, text = "[Analytics] -> send action from: ${
                 MainActivity.instance.packageName
