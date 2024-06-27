@@ -20,7 +20,6 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
@@ -36,17 +35,27 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
     private val name = context.getResourceString(BuildConfig.APP_TITLE)
     private val pkgName = BuildConfig.DB_COLLECTION.replace("_quotes", "")
 
-    suspend fun sendDataTo(data: String, imageUri: String) {
+    suspend fun shareTextTo(data: String) {
         val htmlFormattedMessage =
             "https://play.google.com/store/apps/details?id=com.softyorch.famousquotes.$pkgName"
         val sendText = "$data\n\n$name\n\n$htmlFormattedMessage"
+
+        context.startActivity(
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, sendText)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        )
+    }
+
+    suspend fun shareImageTo(data: String, imageUri: String) {
         val subtitle = context.getResourceString("main_text_get_inspired")
         downloadImageAndSaveToTempFile(imageUri, name, data, subtitle)?.let { uri ->
             context.startActivity(
                 Intent(Intent.ACTION_SEND).apply {
                     type = "image/*"
                     putExtra(Intent.EXTRA_STREAM, uri)
-                    putExtra(Intent.EXTRA_TEXT, "Mira esto! $htmlFormattedMessage")
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
             )
@@ -57,7 +66,7 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
         imageUrl: String,
         titleToDraw: String,
         textToDraw: String,
-        subtitle: String
+        subtitle: String,
     ): Uri? {
         val imageLoader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
@@ -67,64 +76,73 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
         return withContext(Dispatchers.IO) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             if (result is BitmapDrawable) {
+
+                val titleTop = titleToDraw.split(" ")[0]
+                val titleBottom = titleToDraw.split(" ")[1]
+
                 // Crea una copia mutable del Bitmap
                 val mutableBitmap = result.bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
                 // Crea un Canvas para dibujar en el Bitmap mutable
                 val canvas = Canvas(mutableBitmap)
-                var x = mutableBitmap.width / 3.4f // Posición horizontal (centrado)
-                var y = mutableBitmap.height / 1.35f // Posición vertical (centrado)
 
-                val iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.icon_quote)
-                // Cambiar el color a rojo
-                val paint = Paint()
-                paint.colorFilter = PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
+                // Configuración del icono
+                val iconBitmap =
+                    BitmapFactory.decodeResource(context.resources, R.drawable.icon_quote)
+                val paintIcon = Paint().apply {
+                    colorFilter =
+                        PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
+                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+                }
 
-// Cambiar el tamaño
-                val newWidth = 60
-                val newHeight = 60
-                val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, newWidth, newHeight, true)
-
-
-/*// Dibujar el icono modificado
-                canvas.drawBitmap(scaledIconBitmap, x, y, paint)
-                canvas.restore()*/
-
-
+                val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
                 val iconWidth = scaledIconBitmap.width
 
-                val textBounds = Rect()
-                paint.getTextBounds(subtitle, 0, subtitle.length, textBounds)
-                canvas.drawBitmap(scaledIconBitmap, x, y, paint)
-
-                val titlePaint = Paint().apply {
-                    color = WhiteSmoke.toArgb() // Color del texto
-                    textSize = 60f // Tamaño del texto
-                    textAlign = Paint.Align.CENTER // Alineación del texto
+                // Configuración de los textos del título
+                val paintTitleTop = Paint().apply {
+                    color = WhiteSmoke.toArgb()
+                    textSize = 40f
+                    textAlign = Paint.Align.LEFT // Alineación a la izquierda
                     typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(10f, 2f, 2f, Color.Black.toArgb())
+                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
                 }
-                val textWidth = textBounds.width()
-                val spacing = 10
-                x = mutableBitmap.width / 1.8f
-                val yTextCenter = y + scaledIconBitmap.height / 1.3f + textBounds.height() / 1.3f
+                val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
+                    color = WhiteSmoke.toArgb()
+                    textSize = 40f
+                    textAlign = Paint.Align.LEFT
+                    typeface = Typeface.DEFAULT_BOLD
+                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+                }
 
-                canvas.drawText(titleToDraw, x, yTextCenter, titlePaint)
+
+                // Cálculo de posiciones para el título
+                val boundsTitleTop = Rect()
+                paintTitleTop.getTextBounds(titleTop, 0, titleTop.length, boundsTitleTop)
+                val boundsTitleBottom = Rect()
+                paintTitleBottom.getTextBounds(
+                    titleBottom,
+                    0,
+                    titleBottom.length,
+                    boundsTitleBottom
+                )
+
+                val xIcon = mutableBitmap.width / 2.7f // Posición del icono a la izquierda
+                val yIcon =
+                    mutableBitmap.height / 1.40f - (boundsTitleTop.height() + boundsTitleBottom.height()) / 2
+                // El icono se centra verticalmente entre las dos palabras del título
+
+                val xTitle =
+                    xIcon + iconWidth + 10 // Posición de las palabras a la derecha del icono
+                val yTitleTop = yIcon + boundsTitleTop.height()
+                val yTitleBottom = yTitleTop + boundsTitleBottom.height()
+
+                // Dibujar el icono y las palabras del título
+                canvas.drawBitmap(scaledIconBitmap, xIcon, yIcon, paintIcon)
+                canvas.drawText(titleTop, xTitle, yTitleTop, paintTitleTop)
+                canvas.drawText(titleBottom, xTitle, yTitleBottom, paintTitleBottom)
+
                 canvas.save()
 
-/*                // Configura el título para el texto
-                val titlePaint = Paint().apply {
-                    color = WhiteSmoke.toArgb() // Color del texto
-                    textSize = 60f // Tamaño del texto
-                    textAlign = Paint.Align.CENTER // Alineación del texto
-                    typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(10f, 2f, 2f, Color.Black.toArgb())
-                }
-
-                // Dibuja el texto en el Canvas
-                x = mutableBitmap.width / 1.8f // Posición horizontal (centrado)
-                y = mutableBitmap.height / 1.30f // Posición vertical (centrado)
-                canvas.drawText(titleToDraw, x, y, titlePaint)*/
 
                 // Configura el título para el texto
                 val subtitlePaint = Paint().apply {
@@ -136,14 +154,14 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
                 }
 
                 // Dibuja el texto en el Canvas
-                x = mutableBitmap.width / 2f // Posición horizontal (centrado)
-                y = mutableBitmap.height / 1.22f // Posición vertical (centrado)
+                var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
+                var y = mutableBitmap.height / 1.28f // Posición vertical (centrado)
                 canvas.drawText(subtitle, x, y, subtitlePaint)
 
 
                 val quotePaint = Paint().apply {
                     color = Color.White.toArgb() // Color del texto
-                    textSize = 70f // Tamaño del texto
+                    textSize = 60f // Tamaño del texto
                     textAlign = Paint.Align.CENTER // Alineación del texto
                     typeface = Typeface.DEFAULT_BOLD
                     setShadowLayer(10f, 1f, 1f, Color.Black.toArgb())
@@ -154,11 +172,11 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
                 var indice = 0
                 var decrementY = 0.0f
                 while (indice < palabras.size) {
-                    val grupo = palabras.subList(indice, minOf(indice + 5, palabras.size))
+                    val grupo = palabras.subList(indice, minOf(indice + 6, palabras.size))
                     x = mutableBitmap.width / 2f
-                    y = mutableBitmap.height / (1.14f + decrementY)
+                    y = mutableBitmap.height / (1.20f + decrementY)
                     canvas.drawText(grupo.joinToString(" "), x, y, quotePaint)
-                    indice += 5
+                    indice += 6
                     decrementY -= 0.05f
                 }
 
