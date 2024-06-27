@@ -122,12 +122,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun shareQuote() {
-        val dataToSend = "${_uiState.value.quote.body} - ${_uiState.value.quote.owner}"
+        val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
 
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                send.sendDataTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
+                send.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
