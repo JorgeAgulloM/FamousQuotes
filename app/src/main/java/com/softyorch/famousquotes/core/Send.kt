@@ -5,10 +5,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Shader
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -20,6 +23,7 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
@@ -82,6 +86,8 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
 
                 // Crea una copia mutable del Bitmap
                 val mutableBitmap = result.bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
+                var y = mutableBitmap.height / 1.28f // Posición vertical (centrado)
 
                 // Crea un Canvas para dibujar en el Bitmap mutable
                 val canvas = Canvas(mutableBitmap)
@@ -136,6 +142,46 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
                 val yTitleTop = yIcon + boundsTitleTop.height()
                 val yTitleBottom = yTitleTop + boundsTitleBottom.height()
 
+                val gradientColors = intArrayOf(
+                    Color.Transparent.toArgb(),
+                    BackgroundColor.toArgb(),
+                    BackgroundColor.toArgb(),
+                    BackgroundColor.toArgb(),
+                    BackgroundColor.toArgb(),
+                    BackgroundColor.toArgb()
+                ) // De negro semitransparente a transparente
+                val gradientPositions = floatArrayOf(
+                    0f,
+                    0.2f,
+                    0.4f,
+                    0.6f,
+                    0.8f,
+                    1f
+                ) // Posiciones de los colores en el degradado
+                val gradient = LinearGradient(
+                    0f,
+                    yTitleTop - 90f, // Coordenada x de inicio (izquierda)
+                    0f,
+                    y + mutableBitmap.height / 1.22f, // Coordenada y de fin (abajo)
+                    gradientColors,
+                    gradientPositions,
+                    Shader.TileMode.CLAMP
+                )
+
+// Configuración del Paint para el fondo
+                val paintBackground = Paint()
+                paintBackground.shader = gradient
+
+// Calcular el área que ocupan los textos (incluyendo el icono)
+                val left = 0f // Considerar la posición del texto más a la izquierda
+                val top = yTitleTop - 40f
+                val right = mutableBitmap.width.toFloat()
+                val bottom = y + mutableBitmap.height / 1.22f
+
+// Dibujar el fondo degradado
+                val rectBackground = RectF(left, top, right, bottom)
+                canvas.drawRect(rectBackground, paintBackground)
+
                 // Dibujar el icono y las palabras del título
                 canvas.drawBitmap(scaledIconBitmap, xIcon, yIcon, paintIcon)
                 canvas.drawText(titleTop, xTitle, yTitleTop, paintTitleTop)
@@ -154,8 +200,6 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
                 }
 
                 // Dibuja el texto en el Canvas
-                var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
-                var y = mutableBitmap.height / 1.28f // Posición vertical (centrado)
                 canvas.drawText(subtitle, x, y, subtitlePaint)
 
 
