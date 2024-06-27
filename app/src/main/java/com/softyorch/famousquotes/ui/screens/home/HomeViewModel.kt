@@ -127,7 +127,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                send.sendDataTo(dataToSend)
+                send.sendDataTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
