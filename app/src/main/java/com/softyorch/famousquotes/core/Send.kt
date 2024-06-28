@@ -1,5 +1,7 @@
 package com.softyorch.famousquotes.core
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -27,6 +29,8 @@ import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
+import com.softyorch.famousquotes.utils.showToast
+import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,13 +40,12 @@ import javax.inject.Inject
 
 class Send @Inject constructor(@ApplicationContext private val context: Context) {
 
-    private val name = context.getResourceString(BuildConfig.APP_TITLE)
-    private val pkgName = BuildConfig.DB_COLLECTION.replace("_quotes", "")
+    private val rawName = BuildConfig.APP_TITLE
+    private val name = context.getResourceString(rawName)
+    private val startLink = "https://softyorch.com"
 
     suspend fun shareTextTo(data: String) {
-        val htmlFormattedMessage =
-            "https://play.google.com/store/apps/details?id=com.softyorch.famousquotes.$pkgName"
-        val sendText = "$data\n\n$name\n\n$htmlFormattedMessage"
+        val sendText = "$data\n\n$name\n\n${selectLink()}"
 
         context.startActivity(
             Intent(Intent.ACTION_SEND).apply {
@@ -76,6 +79,8 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
         val request = ImageRequest.Builder(context)
             .data(imageUrl)
             .build()
+
+        appLinkCopyToClipBoard()
 
         return withContext(Dispatchers.IO) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
@@ -240,6 +245,26 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
             } else {
                 null
             }
+        }
+    }
+
+    private suspend fun appLinkCopyToClipBoard() {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("App Link", selectLink())
+        clipboard.setPrimaryClip(clip)
+        withContext(Dispatchers.Main) {
+            context.showToast("Hemos agrgado el enlace de la aplicación al portapapeles, por si te apetece compartirlo. Gracias!!")
+        }
+    }
+
+    private fun selectLink(): String {
+        return when (rawName) {
+            "app_name_historical" -> "$startLink/historicalQuotes"
+            "app_name_uplifting" -> "$startLink/positiveQuotes"
+            "app_name_biblical" -> "$startLink/biblicalQuotes"
+            else -> ""
+        }.also {
+            writeLog(text = "Link for name: $rawName -> $it")
         }
     }
 
