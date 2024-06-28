@@ -17,6 +17,7 @@ import android.graphics.Shader
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.FileProvider
@@ -32,13 +33,17 @@ import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-class Send @Inject constructor(@ApplicationContext private val context: Context) {
+class Send @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+) {
 
     private val rawName = BuildConfig.APP_TITLE
     private val name = context.getResourceString(rawName)
@@ -82,7 +87,7 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
 
         appLinkCopyToClipBoard()
 
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcherIO) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             if (result is BitmapDrawable) {
 
@@ -253,15 +258,15 @@ class Send @Inject constructor(@ApplicationContext private val context: Context)
         val clip = ClipData.newPlainText("App Link", selectLink())
         clipboard.setPrimaryClip(clip)
         withContext(Dispatchers.Main) {
-            context.showToast("Hemos agrgado el enlace de la aplicación al portapapeles, por si te apetece compartirlo. Gracias!!")
+            context.showToast("Enlace copiado, por si te apetece compartirlo. Gracias!!", Toast.LENGTH_LONG)
         }
     }
 
     private fun selectLink(): String {
         return when (rawName) {
-            "app_name_historical" -> "$startLink/historicalQuotes"
-            "app_name_uplifting" -> "$startLink/positiveQuotes"
-            "app_name_biblical" -> "$startLink/biblicalQuotes"
+            "app_name_historical" -> "$startLink/historicalquotes"
+            "app_name_uplifting" -> "$startLink/positivequotes"
+            "app_name_biblical" -> "$startLink/biblicalquotes"
             else -> ""
         }.also {
             writeLog(text = "Link for name: $rawName -> $it")
