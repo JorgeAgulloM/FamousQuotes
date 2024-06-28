@@ -88,5 +88,7 @@
     <string name="dialog_download_image_btn_view_ad">विज्ञापन देखें</string>
     <string name="dialog_download_image_btn_buy">हमेशा के लिए खरीदें</string>
 
+    <!-- Others -->
+    <string name="share_toast_link">लिंक कॉपी किया गया, साझा करने के लिए स्वतंत्र महसूस करें। धन्यवाद!!</string>
 
 </resources>

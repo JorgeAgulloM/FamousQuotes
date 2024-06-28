@@ -88,5 +88,7 @@
     <string name="dialog_download_image_btn_view_ad">View an ad</string>
     <string name="dialog_download_image_btn_buy">Buy forever</string>
 
+    <!-- Others -->
+    <string name="share_toast_link">Link copied, feel free to share it. Thanks!!</string>
 
 </resources>
