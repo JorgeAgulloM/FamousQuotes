@@ -257,9 +257,8 @@ class Send @Inject constructor(
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("App Link", selectLink())
         clipboard.setPrimaryClip(clip)
-        withContext(Dispatchers.Main) {
-            context.showToast("Enlace copiado, por si te apetece compartirlo. Gracias!!", Toast.LENGTH_LONG)
-        }
+        val message = context.getResourceString("share_toast_link")
+        withContext(Dispatchers.Main) { context.showToast(message, Toast.LENGTH_LONG) }
     }
 
     private fun selectLink(): String {
