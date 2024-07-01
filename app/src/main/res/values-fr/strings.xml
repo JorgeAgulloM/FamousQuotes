@@ -87,6 +87,10 @@
     <string name="dialog_download_image_title">Téléchargez votre image</string>
     <string name="dialog_download_image_btn_view_ad">Voir une annonce</string>
     <string name="dialog_download_image_btn_buy">Acheter pour toujours</string>
+    <string name="dialog_how_do_you_share">Comment voulez-vous partager cette citation ?</string>
+    <string name="dialog_share_title">Partager</string>
+    <string name="dialog_share_by_image">Comme image</string>
+    <string name="dialog_share_by_text">Comme texte</string>
 
     <!-- Others -->
     <string name="share_toast_link">Lien copié, n\'hésitez pas à le partager. Merci !!</string>
