@@ -37,16 +37,17 @@ class StorageServiceImpl @Inject constructor(
                     storage.reference.child(url).downloadUrl.addOnSuccessListener {
                         cancelCoroutine.resume(it.toString())
                     }.addOnFailureListener { ex ->
+                        writeLog(ERROR, "Error from onFailureListener: ${ex.cause}", ex)
                         cancelCoroutine.resumeWithException(ex)
                     }
                 } else {
                     cancelCoroutine.resume(null)
                 }
             } catch (ex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase: ${ex.cause}")
+                writeLog(ERROR, "Error from Firebase: ${ex.cause}", ex)
                 cancelCoroutine.resumeWithException(ex)
             } catch (ex: Exception) {
-                writeLog(ERROR, "Error Storage Service: ${ex.cause}")
+                writeLog(ERROR, "Error Storage Service: ${ex.cause}", ex)
                 cancelCoroutine.resumeWithException(ex)
             }
         }
@@ -62,7 +63,7 @@ class StorageServiceImpl @Inject constructor(
                     imageList.addAll(this)
                 }
             } catch (ex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}")
+                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}", ex)
                 null
             }
         }
@@ -84,10 +85,10 @@ class StorageServiceImpl @Inject constructor(
                 }
 
             } catch (fex: FirebaseException) {
-                writeLog(ERROR, "Error downloading image. Error: ${fex.cause}")
+                writeLog(ERROR, "Error downloading image. Error: ${fex.cause}", fex)
                 result(false)
             } catch (ex: Exception) {
-                writeLog(ERROR, "Error creating image. Error: ${ex.cause}")
+                writeLog(ERROR, "Error creating image. Error: ${ex.cause}", ex)
                 result(false)
             }
         } ?: result(false)
