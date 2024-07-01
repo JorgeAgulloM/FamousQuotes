@@ -43,7 +43,7 @@ import javax.inject.Inject
 class SendImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-): ISend {
+) : ISend {
 
     private val rawName = BuildConfig.APP_TITLE
     private val name = context.getResourceString(rawName)
@@ -89,170 +89,165 @@ class SendImpl @Inject constructor(
 
         return withContext(dispatcherIO) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
-            if (result is BitmapDrawable) {
+            if (result !is BitmapDrawable) return@withContext null
 
-                // Crea una copia mutable del Bitmap
-                val mutableBitmap = result.bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
-                var y = mutableBitmap.height / 1.28f // Posición vertical (centrado)
+            // Crea una copia mutable del Bitmap
+            val mutableBitmap = result.bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
+            var y = mutableBitmap.height / 1.28f // Posición vertical (centrado)
 
-                // Crea un Canvas para dibujar en el Bitmap mutable
-                val canvas = Canvas(mutableBitmap)
+            // Crea un Canvas para dibujar en el Bitmap mutable
+            val canvas = Canvas(mutableBitmap)
 
-                // Configuración del icono
-                val iconBitmap =
-                    BitmapFactory.decodeResource(context.resources, R.drawable.icon_quote)
-                val paintIcon = Paint().apply {
-                    colorFilter =
-                        PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
-                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
-                }
-
-                val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
-
-                // Configuración de los textos del título
-                val paintTitleTop = Paint().apply {
-                    color = WhiteSmoke.toArgb()
-                    textSize = 40f
-                    textAlign = Paint.Align.LEFT // Alineación a la izquierda
-                    typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
-                }
-
-                val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
-                    color = WhiteSmoke.toArgb()
-                    textSize = 40f
-                    textAlign = Paint.Align.LEFT
-                    typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
-                }
-
-                val titleTop = titleToDraw.split(" ")[0]
-                val titleBottom = titleToDraw.split(" ")[1]
-
-                // Cálculo de posiciones para el título
-                val boundsTitleTop = Rect()
-                paintTitleTop.getTextBounds(titleTop, 0, titleTop.length, boundsTitleTop)
-                val boundsTitleBottom = Rect()
-                paintTitleBottom.getTextBounds(
-                    titleBottom,
-                    0,
-                    titleBottom.length,
-                    boundsTitleBottom
-                )
-
-                val xIcon = mutableBitmap.width / 2.7f // Posición del icono a la izquierda
-                val yIcon =
-                    mutableBitmap.height / 1.40f - (boundsTitleTop.height() + boundsTitleBottom.height()) / 2
-                val iconWidth = scaledIconBitmap.width
-
-                // El icono se centra verticalmente entre las dos palabras del título
-                val xTitle = xIcon + iconWidth + 10 // Posición de las palabras a la derecha del icono
-                val yTitleTop = yIcon + boundsTitleTop.height()
-                val yTitleBottom = yTitleTop + boundsTitleBottom.height()
-
-                val gradientColors = intArrayOf(
-                    Color.Transparent.toArgb(),
-                    BackgroundColor.toArgb(),
-                    BackgroundColor.toArgb(),
-                    BackgroundColor.toArgb(),
-                    BackgroundColor.toArgb(),
-                    BackgroundColor.toArgb()
-                )
-
-                // De negro semitransparente a transparente
-                val gradientPositions = floatArrayOf(
-                    0f,
-                    0.2f,
-                    0.4f,
-                    0.6f,
-                    0.8f,
-                    1f
-                )
-
-                // Posiciones de los colores en el degradado
-                val gradient = LinearGradient(
-                    0f,
-                    yTitleTop - 90f, // Coordenada x de inicio (izquierda)
-                    0f,
-                    y + mutableBitmap.height / 1.22f, // Coordenada y de fin (abajo)
-                    gradientColors,
-                    gradientPositions,
-                    Shader.TileMode.CLAMP
-                )
-
-                // Configuración del Paint para el fondo
-                val paintBackground = Paint()
-                paintBackground.shader = gradient
-
-                // Calcular el área que ocupan los textos (incluyendo el icono)
-                val left = 0f // Considerar la posición del texto más a la izquierda
-                val top = yTitleTop - 40f
-                val right = mutableBitmap.width.toFloat()
-                val bottom = y + mutableBitmap.height / 1.22f
-
-                // Dibujar el fondo degradado
-                val rectBackground = RectF(left, top, right, bottom)
-                canvas.drawRect(rectBackground, paintBackground)
-
-                // Dibujar el icono y las palabras del título
-                canvas.drawBitmap(scaledIconBitmap, xIcon, yIcon, paintIcon)
-                canvas.drawText(titleTop, xTitle, yTitleTop, paintTitleTop)
-                canvas.drawText(titleBottom, xTitle, yTitleBottom, paintTitleBottom)
-
-                canvas.save()
-
-
-                // Configura el título para el texto
-                val subtitlePaint = Paint().apply {
-                    color = SecondaryColor.toArgb() // Color del texto
-                    textSize = 60f // Tamaño del texto
-                    textAlign = Paint.Align.CENTER // Alineación del texto
-                    typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(10f, 2f, 2f, Color.Black.toArgb())
-                }
-
-                // Dibuja el texto en el Canvas
-                canvas.drawText(subtitle, x, y, subtitlePaint)
-
-
-                val quotePaint = Paint().apply {
-                    color = Color.White.toArgb() // Color del texto
-                    textSize = 60f // Tamaño del texto
-                    textAlign = Paint.Align.CENTER // Alineación del texto
-                    typeface = Typeface.DEFAULT_BOLD
-                    setShadowLayer(10f, 1f, 1f, Color.Black.toArgb())
-                }
-
-                val palabras = textToDraw.split(" ") // Dividir el texto en palabras
-
-                var indice = 0
-                var decrementY = 0.0f
-                while (indice < palabras.size) {
-                    val grupo = palabras.subList(indice, minOf(indice + 6, palabras.size))
-                    x = mutableBitmap.width / 2f
-                    y = mutableBitmap.height / (1.20f + decrementY)
-                    canvas.drawText(grupo.joinToString(" "), x, y, quotePaint)
-                    indice += 6
-                    decrementY -= 0.05f
-                }
-
-                // Guarda el Bitmap modificado en un archivo temporal
-                val cacheDir = context.externalCacheDir
-                val file = File(cacheDir, "temp_image.png")
-                FileOutputStream(file).use { outputStream ->
-                    mutableBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                }
-
-                // Devuelve el Uri del archivo temporal
-                FileProvider.getUriForFile(
-                    context,
-                    "com.softyorch.famousquotes.uplifting.dev.fileprovider",
-                    file
-                )
-            } else {
-                null
+            // Configuración del icono
+            val iconBitmap =
+                BitmapFactory.decodeResource(context.resources, R.drawable.icon_quote)
+            val paintIcon = Paint().apply {
+                colorFilter =
+                    PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
+                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
             }
+
+            val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
+
+            // Configuración de los textos del título
+            val paintTitleTop = Paint().apply {
+                color = WhiteSmoke.toArgb()
+                textSize = 40f
+                textAlign = Paint.Align.LEFT // Alineación a la izquierda
+                typeface = Typeface.DEFAULT_BOLD
+                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+            }
+
+            val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
+                color = WhiteSmoke.toArgb()
+                textSize = 40f
+                textAlign = Paint.Align.LEFT
+                typeface = Typeface.DEFAULT_BOLD
+                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+            }
+
+            val titleTop = titleToDraw.split(" ")[0]
+            val titleBottom = titleToDraw.split(" ")[1]
+
+            // Cálculo de posiciones para el título
+            val boundsTitleTop = Rect()
+            paintTitleTop.getTextBounds(titleTop, 0, titleTop.length, boundsTitleTop)
+            val boundsTitleBottom = Rect()
+            paintTitleBottom.getTextBounds(
+                titleBottom,
+                0,
+                titleBottom.length,
+                boundsTitleBottom
+            )
+
+            val xIcon = mutableBitmap.width / 2.7f // Posición del icono a la izquierda
+            val yIcon =
+                mutableBitmap.height / 1.40f - (boundsTitleTop.height() + boundsTitleBottom.height()) / 2
+            val iconWidth = scaledIconBitmap.width
+
+            // El icono se centra verticalmente entre las dos palabras del título
+            val xTitle = xIcon + iconWidth + 10 // Posición de las palabras a la derecha del icono
+            val yTitleTop = yIcon + boundsTitleTop.height()
+            val yTitleBottom = yTitleTop + boundsTitleBottom.height()
+
+            val gradientColors = intArrayOf(
+                Color.Transparent.toArgb(),
+                BackgroundColor.toArgb(),
+                BackgroundColor.toArgb(),
+                BackgroundColor.toArgb(),
+                BackgroundColor.toArgb(),
+                BackgroundColor.toArgb()
+            )
+
+            // De negro semitransparente a transparente
+            val gradientPositions = floatArrayOf(
+                0f,
+                0.2f,
+                0.4f,
+                0.6f,
+                0.8f,
+                1f
+            )
+
+            // Posiciones de los colores en el degradado
+            val gradient = LinearGradient(
+                0f,
+                yTitleTop - 90f, // Coordenada x de inicio (izquierda)
+                0f,
+                y + mutableBitmap.height / 1.22f, // Coordenada y de fin (abajo)
+                gradientColors,
+                gradientPositions,
+                Shader.TileMode.CLAMP
+            )
+
+            // Configuración del Paint para el fondo
+            val paintBackground = Paint()
+            paintBackground.shader = gradient
+
+            // Calcular el área que ocupan los textos (incluyendo el icono)
+            val left = 0f // Considerar la posición del texto más a la izquierda
+            val top = yTitleTop - 40f
+            val right = mutableBitmap.width.toFloat()
+            val bottom = y + mutableBitmap.height / 1.22f
+
+            // Dibujar el fondo degradado
+            val rectBackground = RectF(left, top, right, bottom)
+            canvas.drawRect(rectBackground, paintBackground)
+
+            // Dibujar el icono y las palabras del título
+            canvas.drawBitmap(scaledIconBitmap, xIcon, yIcon, paintIcon)
+            canvas.drawText(titleTop, xTitle, yTitleTop, paintTitleTop)
+            canvas.drawText(titleBottom, xTitle, yTitleBottom, paintTitleBottom)
+
+            canvas.save()
+
+            // Configura el título para el texto
+            val subtitlePaint = Paint().apply {
+                color = SecondaryColor.toArgb() // Color del texto
+                textSize = 60f // Tamaño del texto
+                textAlign = Paint.Align.CENTER // Alineación del texto
+                typeface = Typeface.DEFAULT_BOLD
+                setShadowLayer(10f, 2f, 2f, Color.Black.toArgb())
+            }
+
+            // Dibuja el texto en el Canvas
+            canvas.drawText(subtitle, x, y, subtitlePaint)
+
+            val quotePaint = Paint().apply {
+                color = Color.White.toArgb() // Color del texto
+                textSize = 60f // Tamaño del texto
+                textAlign = Paint.Align.CENTER // Alineación del texto
+                typeface = Typeface.DEFAULT_BOLD
+                setShadowLayer(10f, 1f, 1f, Color.Black.toArgb())
+            }
+
+            val palabras = textToDraw.split(" ") // Dividir el texto en palabras
+
+            var indice = 0
+            var decrementY = 0.0f
+            while (indice < palabras.size) {
+                val grupo = palabras.subList(indice, minOf(indice + 6, palabras.size))
+                x = mutableBitmap.width / 2f
+                y = mutableBitmap.height / (1.20f + decrementY)
+                canvas.drawText(grupo.joinToString(" "), x, y, quotePaint)
+                indice += 6
+                decrementY -= 0.05f
+            }
+
+            // Guarda el Bitmap modificado en un archivo temporal
+            val cacheDir = context.externalCacheDir
+            val file = File(cacheDir, "temp_image.png")
+            FileOutputStream(file).use { outputStream ->
+                mutableBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
+
+            // Devuelve el Uri del archivo temporal
+            FileProvider.getUriForFile(
+                context,
+                "com.softyorch.famousquotes.uplifting.dev.fileprovider",
+                file
+            )
         }
     }
 
