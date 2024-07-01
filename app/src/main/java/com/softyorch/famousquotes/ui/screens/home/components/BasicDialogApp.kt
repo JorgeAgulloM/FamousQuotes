@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 
@@ -31,7 +32,7 @@ fun BasicDialogApp(
     onActions: (DialogCloseAction) -> Unit,
 ) {
     BasicAlertDialog(
-        onDismissRequest = { onActions(NEGATIVE) },
+        onDismissRequest = { onActions(if (blackDismissActions) DISMISS else NEGATIVE) },
         modifier = Modifier.background(
             color = BackgroundColor,
             shape = MaterialTheme.shapes.extraLarge
