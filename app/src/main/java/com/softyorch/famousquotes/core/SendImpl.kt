@@ -68,6 +68,7 @@ class SendImpl @Inject constructor(
                 Intent(Intent.ACTION_SEND).apply {
                     type = "image/*"
                     putExtra(Intent.EXTRA_STREAM, uri)
+                    putExtra(Intent.EXTRA_TEXT, selectLink())
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
             )
