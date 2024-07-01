@@ -55,7 +55,7 @@ class HomeViewModelTest {
     private lateinit var storage: IStorageService
 
     @RelaxedMockK
-    private lateinit var sendImpl: ISend
+    private lateinit var shareQuote: ISend
 
     @RelaxedMockK
     private lateinit var hasConnection: InternetConnection
@@ -78,7 +78,7 @@ class HomeViewModelTest {
             billingLaunchPurchase = billingLaunch,
             storage = storage,
             dispatcherIO = Dispatchers.Unconfined,
-            sendImpl = sendImpl,
+            shareQuote = shareQuote,
             hasConnection = hasConnection,
             intents = intents,
         )
