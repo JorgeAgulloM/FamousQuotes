@@ -11,15 +11,23 @@ import androidx.compose.ui.res.painterResource
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.core.APP_NAME
+import com.softyorch.famousquotes.core.Crashlytics
 import java.io.File
 
-fun writeLog(level: LevelLog = LevelLog.INFO, text: String) {
+fun writeLog(level: LevelLog = LevelLog.INFO, text: String, throwable: Throwable? = null) {
     val isTest = !IsTestMode.isTest
-    when (level) {
+    if (BuildConfig.DEBUG) when (level) {
         LevelLog.ERROR -> if (isTest) Log.e("LOGTAG", text)
         LevelLog.WARN -> if (isTest) Log.w("LOGTAG", text)
         LevelLog.INFO -> if (isTest) Log.i("LOGTAG", text)
         LevelLog.DEBUG -> if (isTest) Log.d("LOGTAG", text)
+    }
+    if (!BuildConfig.DEBUG) when (level) {
+        LevelLog.ERROR -> {
+            Crashlytics.sendError(text, throwable!!)
+            Log.e("LOGTAG", text)
+        }
+        else -> {}
     }
 }
 
@@ -39,11 +47,11 @@ inline fun <T> sdk33AndUp(onSdk: () -> T): T? =
 inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) onSdk() else null
 
-inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null
+/*inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null*/
 
-inline fun <T> sdk30AndDown(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) onSdk() else null
+/*inline fun <T> sdk30AndDown(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) onSdk() else null*/
 
 val sdk29AndDown = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
