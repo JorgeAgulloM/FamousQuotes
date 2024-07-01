@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -70,6 +71,8 @@ fun CardControls(
     isQuoteFromService: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
+    var showSendDialog by remember { mutableStateOf(false) }
+
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.wrapContentHeight()
@@ -107,7 +110,7 @@ fun CardControls(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
                     icon = Icons.Outlined.Share,
                     isEnabled = isEnabled
-                ) { onAction(HomeActions.Send()) }
+                ) { showSendDialog = true }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
@@ -115,6 +118,19 @@ fun CardControls(
                 ) { onAction(HomeActions.New()) }
             }
         }
+    }
+
+    if (showSendDialog) BasicDialogApp(
+        text = "Como quieres compartir esta cita?",
+        title = "Compartir",
+        textBtnPositive = "Como Imagen",
+        textBtnNegative = "Como Texto"
+    ) {
+        when (it) {
+            POSITIVE -> onAction(HomeActions.ShareWithImage())
+            NEGATIVE -> onAction(HomeActions.ShareText())
+        }
+        showSendDialog = false
     }
 }
 

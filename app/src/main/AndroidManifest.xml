@@ -21,7 +21,8 @@
         android:theme="@style/Theme.App.Starting"
         android:screenOrientation="portrait"
         tools:targetApi="34"
-        tools:ignore="DiscouragedApi">
+        tools:ignore="DiscouragedApi"
+        android:hardwareAccelerated="true">
 
         <activity
             android:name=".ui.mainActivity.MainActivity"
@@ -67,6 +68,16 @@
         <meta-data
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
             android:value="true"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.softyorch.famousquotes.uplifting.dev.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 
