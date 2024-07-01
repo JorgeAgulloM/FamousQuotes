@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
     private val billingLaunchPurchase: BillingPurchase,
     private val storage: IStorageService,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-    private val sendImpl: ISend,
+    private val shareQuote: ISend,
     private val hasConnection: InternetConnection,
     private val intents: Intents,
 ) : ViewModel() {
@@ -71,7 +71,8 @@ class HomeViewModel @Inject constructor(
         when (action) {
             is HomeActions.Info -> showInfoDialog()
             is HomeActions.New -> loadNewRandomQuote()
-            is HomeActions.Send -> shareQuote()
+            is HomeActions.ShareWithImage -> shareQuoteWithImage()
+            is HomeActions.ShareText -> shareQuoteText()
             is HomeActions.Buy -> purchaseLaunch()
             is HomeActions.Owner -> goToSearchOwner()
             is HomeActions.Like -> setQuoteLike()
@@ -85,6 +86,18 @@ class HomeViewModel @Inject constructor(
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
+        }
+    }
+
+    private fun shareQuoteText() {
+        val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
+
+        _uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            withContext(dispatcherIO) {
+                shareQuote.shareTextTo(dataToSend)
+            }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -121,13 +134,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun shareQuote() {
+    private fun shareQuoteWithImage() {
         val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
 
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                sendImpl.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
+                shareQuote.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
