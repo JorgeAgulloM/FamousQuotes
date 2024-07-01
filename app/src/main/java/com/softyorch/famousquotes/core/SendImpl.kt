@@ -40,16 +40,16 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-class Send @Inject constructor(
+class SendImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-) {
+): ISend {
 
     private val rawName = BuildConfig.APP_TITLE
     private val name = context.getResourceString(rawName)
     private val startLink = "https://softyorch.com"
 
-    suspend fun shareTextTo(data: String) {
+    override suspend fun shareTextTo(data: String) {
         val sendText = "$data\n\n$name\n\n${selectLink()}"
 
         context.startActivity(
@@ -61,7 +61,7 @@ class Send @Inject constructor(
         )
     }
 
-    suspend fun shareImageTo(data: String, imageUri: String) {
+    override suspend fun shareImageTo(data: String, imageUri: String) {
         val subtitle = context.getResourceString("main_text_get_inspired")
         downloadImageAndSaveToTempFile(imageUri, name, data, subtitle)?.let { uri ->
             context.startActivity(
@@ -91,9 +91,6 @@ class Send @Inject constructor(
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             if (result is BitmapDrawable) {
 
-                val titleTop = titleToDraw.split(" ")[0]
-                val titleBottom = titleToDraw.split(" ")[1]
-
                 // Crea una copia mutable del Bitmap
                 val mutableBitmap = result.bitmap.copy(Bitmap.Config.ARGB_8888, true)
                 var x = mutableBitmap.width / 2f // Posición horizontal (centrado)
@@ -112,7 +109,6 @@ class Send @Inject constructor(
                 }
 
                 val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
-                val iconWidth = scaledIconBitmap.width
 
                 // Configuración de los textos del título
                 val paintTitleTop = Paint().apply {
@@ -122,6 +118,7 @@ class Send @Inject constructor(
                     typeface = Typeface.DEFAULT_BOLD
                     setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
                 }
+
                 val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
                     color = WhiteSmoke.toArgb()
                     textSize = 40f
@@ -130,6 +127,8 @@ class Send @Inject constructor(
                     setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
                 }
 
+                val titleTop = titleToDraw.split(" ")[0]
+                val titleBottom = titleToDraw.split(" ")[1]
 
                 // Cálculo de posiciones para el título
                 val boundsTitleTop = Rect()
@@ -145,10 +144,10 @@ class Send @Inject constructor(
                 val xIcon = mutableBitmap.width / 2.7f // Posición del icono a la izquierda
                 val yIcon =
                     mutableBitmap.height / 1.40f - (boundsTitleTop.height() + boundsTitleBottom.height()) / 2
-                // El icono se centra verticalmente entre las dos palabras del título
+                val iconWidth = scaledIconBitmap.width
 
-                val xTitle =
-                    xIcon + iconWidth + 10 // Posición de las palabras a la derecha del icono
+                // El icono se centra verticalmente entre las dos palabras del título
+                val xTitle = xIcon + iconWidth + 10 // Posición de las palabras a la derecha del icono
                 val yTitleTop = yIcon + boundsTitleTop.height()
                 val yTitleBottom = yTitleTop + boundsTitleBottom.height()
 
@@ -159,7 +158,9 @@ class Send @Inject constructor(
                     BackgroundColor.toArgb(),
                     BackgroundColor.toArgb(),
                     BackgroundColor.toArgb()
-                ) // De negro semitransparente a transparente
+                )
+
+                // De negro semitransparente a transparente
                 val gradientPositions = floatArrayOf(
                     0f,
                     0.2f,
@@ -167,7 +168,9 @@ class Send @Inject constructor(
                     0.6f,
                     0.8f,
                     1f
-                ) // Posiciones de los colores en el degradado
+                )
+
+                // Posiciones de los colores en el degradado
                 val gradient = LinearGradient(
                     0f,
                     yTitleTop - 90f, // Coordenada x de inicio (izquierda)
@@ -178,17 +181,17 @@ class Send @Inject constructor(
                     Shader.TileMode.CLAMP
                 )
 
-// Configuración del Paint para el fondo
+                // Configuración del Paint para el fondo
                 val paintBackground = Paint()
                 paintBackground.shader = gradient
 
-// Calcular el área que ocupan los textos (incluyendo el icono)
+                // Calcular el área que ocupan los textos (incluyendo el icono)
                 val left = 0f // Considerar la posición del texto más a la izquierda
                 val top = yTitleTop - 40f
                 val right = mutableBitmap.width.toFloat()
                 val bottom = y + mutableBitmap.height / 1.22f
 
-// Dibujar el fondo degradado
+                // Dibujar el fondo degradado
                 val rectBackground = RectF(left, top, right, bottom)
                 canvas.drawRect(rectBackground, paintBackground)
 
@@ -271,5 +274,9 @@ class Send @Inject constructor(
             writeLog(text = "Link for name: $rawName -> $it")
         }
     }
+}
 
+interface ISend {
+    suspend fun shareTextTo(data: String)
+    suspend fun shareImageTo(data: String, imageUri: String)
 }
