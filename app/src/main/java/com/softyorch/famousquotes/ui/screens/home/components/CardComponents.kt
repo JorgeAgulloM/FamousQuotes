@@ -121,10 +121,10 @@ fun CardControls(
     }
 
     if (showSendDialog) BasicDialogApp(
-        text = "Como quieres compartir esta cita?",
-        title = "Compartir",
-        textBtnPositive = "Como Imagen",
-        textBtnNegative = "Como Texto"
+        text = stringResource(R.string.dialog_how_do_you_share),
+        title = stringResource(R.string.dialog_share_title),
+        textBtnPositive = stringResource(R.string.dialog_share_by_image),
+        textBtnNegative = stringResource(R.string.dialog_share_by_text)
     ) {
         when (it) {
             POSITIVE -> onAction(HomeActions.ShareWithImage())
