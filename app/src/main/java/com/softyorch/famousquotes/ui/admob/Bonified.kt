@@ -53,7 +53,7 @@ class Bonified @Inject constructor() {
                     adRequest,
                     object : RewardedAdLoadCallback() {
                         override fun onAdFailedToLoad(adError: LoadAdError) {
-                            writeLog(LevelLog.ERROR, text = "[BonifiedAd] -> on failure load: ${adError.message}")
+                            writeLog(LevelLog.ERROR, text = "[BonifiedAd] -> on failure load: ${adError.message}", Throwable("[BonifiedAd] Bonified Throw"))
                             rewardedAd = null
                         }
 
@@ -66,14 +66,14 @@ class Bonified @Inject constructor() {
                                     onAction(BonifiedAdState.Reward)
                                 }
                             } ?: run {
-                                writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> The rewarded ad wasn't ready yet.")
+                                writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> The rewarded ad wasn't ready yet.", Throwable("[BonifiedAd] Bonified Throw"))
                             }
                         }
                     }
                 )
             }
         } catch (ex: Exception) {
-            writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> Show Bonified error: ${ex.message}")
+            writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> Show Bonified error: ${ex.message}", ex)
             onAction(BonifiedAdState.Error)
         }
     }
@@ -81,7 +81,7 @@ class Bonified @Inject constructor() {
     private fun loadBonified(onAction: (BonifiedAdState) -> Unit) {
         rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> onAdDismissedFullScreenContent")
+                writeLog(level = LevelLog.WARN, text = "[BonifiedAd] -> onAdDismissedFullScreenContent")
                 onAction(BonifiedAdState.OnDismissed)
                 rewardedAd = null
             }
@@ -97,7 +97,7 @@ class Bonified @Inject constructor() {
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                writeLog(level = LevelLog.ERROR, text = "[BonifiedAd] -> onAdFailedToShowFullScreenContent: ${adError.message}")
+                writeLog(level = LevelLog.WARN, text = "[BonifiedAd] -> onAdFailedToShowFullScreenContent: ${adError.message}")
                 onAction(BonifiedAdState.Error)
                 rewardedAd = null
             }
