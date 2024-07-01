@@ -42,7 +42,7 @@ class BillingServiceImpl @Inject constructor(@ApplicationContext private val con
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             writeLog(WARN, "BillingService: PurchasesUpdatedListener -> UserCanceled")
         } else {
-            writeLog(ERROR, "BillingService: PurchasesUpdatedListener -> Error")
+            writeLog(ERROR, "BillingService: PurchasesUpdatedListener -> Error", Throwable("[Billing] throw -> ${billingResult.responseCode}"))
         }
     }
 

@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
         android:screenOrientation="portrait"
-        tools:targetApi="31"
+        tools:targetApi="34"
         tools:ignore="DiscouragedApi"
         android:hardwareAccelerated="true">
 

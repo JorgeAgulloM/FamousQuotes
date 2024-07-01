@@ -278,7 +278,7 @@ class HomeViewModel @Inject constructor(
     private fun getLikesQuote(id: String) {
         viewModelScope.launch(dispatcherIO) {
             getLikes(id).catch {
-                writeLog(ERROR, "Error from getting likes: ${it.cause}")
+                writeLog(ERROR, "Error from getting likes: ${it.cause}", it)
             }.collect { likes ->
                 _likeState.update {
                     it.copy(
@@ -305,7 +305,7 @@ class HomeViewModel @Inject constructor(
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
             hasConnection.isConnectedFlow().catch {
-                writeLog(ERROR, "Error getting connection state: ${it.cause}")
+                writeLog(ERROR, "Error getting connection state: ${it.cause}", it)
             }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
                     onActions(HomeActions.ReConnection())
