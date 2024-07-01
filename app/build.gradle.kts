@@ -69,6 +69,8 @@ android {
 
             if (buildType == "release") {
                 println("Active flavor in release buildType: $flavor")
+                buildConfigField("String", "PROVIDER_AUTHORITIES", "\"com.softyorch.famousquotes.$flavor.fileprovider\"")
+                variant.mergedFlavor.manifestPlaceholders["PROVIDER_AUTHORITIES"] = "com.softyorch.famousquotes.$flavor.fileprovider"
 
                 when (flavor) {
                     "historical" -> {
@@ -94,7 +96,9 @@ android {
                 buildConfigField("String", "ID_BANNER_HOME", adMobProperties["FAKE_RELEASE_KEY_ID_BANNER_HOME"].toString())
                 buildConfigField("String", "ID_INTERSTITIAL_OTHER_QUOTE", adMobProperties["FAKE_RELEASE_KEY_ID_INTERSTITIAL_OTHER_QUOTE"].toString())
                 buildConfigField("String", "ID_BONIFIED_DOWNLOAD_IMAGE", adMobProperties["FAKE_RELEASE_KEY_ID_BONIFIED_DOWNLOAD_IMAGE"].toString())
+                buildConfigField("String", "PROVIDER_AUTHORITIES", "\"com.softyorch.famousquotes.$flavor.dev.fileprovider\"")
                 variant.mergedFlavor.manifestPlaceholders["ICON_NOTIFICATION_FLAVOUR"] = "@drawable/default_icon"
+                variant.mergedFlavor.manifestPlaceholders["PROVIDER_AUTHORITIES"] = "com.softyorch.famousquotes.$flavor.dev.fileprovider"
             }
         }
     }
