@@ -3,7 +3,8 @@ package com.softyorch.famousquotes.ui.screens.home
 sealed class HomeActions {
     data class Info(val action: String = "Info"): HomeActions()
     data class New(val action: String = "New"): HomeActions()
-    data class Send(val action: String = "Send"): HomeActions()
+    data class ShareWithImage(val action: String = "ShareWithImage"): HomeActions()
+    data class ShareText(val action: String = "ShareText"): HomeActions()
     data class Buy(val action: String = "Buy"): HomeActions()
     data class Owner(val action: String = "Owner"): HomeActions()
     data class Like(val action: String = "Like"): HomeActions()
