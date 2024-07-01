@@ -72,6 +72,7 @@ class SendImpl @Inject constructor(
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
             )
+            appLinkCopyToClipBoard()
         }
     }
 
@@ -85,8 +86,6 @@ class SendImpl @Inject constructor(
         val request = ImageRequest.Builder(context)
             .data(imageUrl)
             .build()
-
-        appLinkCopyToClipBoard()
 
         return withContext(dispatcherIO) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
