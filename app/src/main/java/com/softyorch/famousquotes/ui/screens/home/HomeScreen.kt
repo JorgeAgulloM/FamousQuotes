@@ -282,7 +282,10 @@ fun CardQuote(
                                 is HomeActions.Owner -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                                is HomeActions.Send -> if (hasConnection) onAction(action)
+                                is HomeActions.ShareWithImage -> if (hasConnection) onAction(action)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                is HomeActions.ShareText -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                                 else -> onAction(action)
