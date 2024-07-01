@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.core.Analytics
+import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
-import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
     private val billingLaunchPurchase: BillingPurchase,
     private val storage: IStorageService,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-    private val send: Send,
+    private val sendImpl: ISend,
     private val hasConnection: InternetConnection,
     private val intents: Intents,
 ) : ViewModel() {
@@ -127,7 +127,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                send.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
+                sendImpl.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
