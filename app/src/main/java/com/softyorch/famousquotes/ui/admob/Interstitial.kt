@@ -48,7 +48,7 @@ class Interstitial {
                 mInterstitialAd.show(context as Activity)
             }
         } catch (ex: Exception) {
-            writeLog(level = ERROR, text = "Error Show Interstitial ${ex.message}")
+            writeLog(level = ERROR, text = "Error Show Interstitial ${ex.message}", ex)
             onAction(InterstitialAdState.Error)
         }
     }
