@@ -56,12 +56,10 @@ class MainActivity : ComponentActivity() {
 
         instance = this
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-
         splash.setKeepOnScreenCondition { true }
 
         StartUpdateManager()
-        StartFirebaseCrashlytics()
+        StartFirebase()
         sdk33AndUp { PermissionNotifications() }
         RequestGrantedProtectionData(this).getConsent()
         SetBlockedScreenShoot()
@@ -128,10 +126,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun StartFirebaseCrashlytics() {
-        // Start Firebase Crashlytics
+    private fun StartFirebase() {
+        // Start Firebase
         FirebaseApp.initializeApp(this)
-        Firebase.analytics.setAnalyticsCollectionEnabled(true)
+
+        // Start Firebase Analytics
+        firebaseAnalytics = Firebase.analytics
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
+
+        // Start Firebase Crashlytics
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         // Configurar Crashlytics para manejar excepciones no capturadas
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
