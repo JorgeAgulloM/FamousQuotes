@@ -245,7 +245,7 @@ class SendImpl @Inject constructor(
             // Devuelve el Uri del archivo temporal
             FileProvider.getUriForFile(
                 context,
-                "com.softyorch.famousquotes.uplifting.dev.fileprovider",
+                BuildConfig.PROVIDER_AUTHORITIES,
                 file
             )
         }
