@@ -17,7 +17,7 @@ jobs:
       - name: Decrypt sings file
         run: ./decryptors/decrypt_sings_file.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
       - name: Copy signs file
         run: cp $HOME/secrets/famousQuotes.jks /home/runner/work/FamousQuotes/AndroidFamousQuotes/signing/
 
@@ -26,7 +26,7 @@ jobs:
       - name: Decrypt signing.properties
         run: ./decryptors/decrypt_signing_properties.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
       - name: Copy signing.properties
         run: cp $HOME/secrets/signing.properties /home/runner/work/FamousQuotes/AndroidFamousQuotes/signing/
 
@@ -35,7 +35,7 @@ jobs:
       - name: Decrypt admob.properties
         run: ./decryptors/decrypt_admob_properties.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
       - name: Copy admob.properties
         run: cp $HOME/secrets/admob.properties /home/runner/work/FamousQuotes/AndroidFamousQuotes/admob/
 
@@ -44,7 +44,7 @@ jobs:
       - name: Decrypt google.service.json
         run: ./decryptors/decrypt_google_service.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
       - name: Copy google.service.json
         run: cp $HOME/secrets/google-services.json /home/runner/work/FamousQuotes/AndroidFamousQuotes/app/
 
