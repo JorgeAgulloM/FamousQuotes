@@ -62,12 +62,13 @@ class DatabaseServiceImpl @Inject constructor(
                         document.get().addOnSuccessListener { snapshot ->
                             cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
                         }.addOnFailureListener { ex ->
+                            writeLog(ERROR, "Error from Firebase onFailureListener: ${ex.cause}", ex)
                             cancelableCoroutine.resumeWithException(ex)
                         }
                     }
                 }
             } catch (ex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
                 null
             }
         }
@@ -82,11 +83,11 @@ class DatabaseServiceImpl @Inject constructor(
                             it.toObject(QuoteResponse::class.java)
                         )
                     }.addOnFailureListener {
-                        writeLog(ERROR, "Error listen from Firebase Firestore: ${it.cause}")
+                        writeLog(ERROR, "Error listen from Firebase Firestore: ${it.cause}", it)
                         cancelableCoroutine.resumeWithException(it)
                     }
                 } catch (ex: FirebaseException) {
-                    writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+                    writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
                     cancelableCoroutine.resumeWithException(ex)
                 }
             }
@@ -116,11 +117,11 @@ class DatabaseServiceImpl @Inject constructor(
             )
             document.collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
         } catch (fFex: FirebaseFirestoreException) {
-            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}")
+            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}", fFex)
         } catch (fex: Exception) {
-            writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+            writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Database Service: ${ex.cause}")
+            writeLog(ERROR, "Error from Database Service: ${ex.cause}", ex)
         }
 
     }
@@ -150,10 +151,10 @@ class DatabaseServiceImpl @Inject constructor(
                 else null
 
             } catch (fex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+                writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
                 return@withTimeoutOrNull null
             } catch (ex: Exception) {
-                writeLog(ERROR, "Error Exception: ${ex.cause}")
+                writeLog(ERROR, "Error Exception: ${ex.cause}", ex)
                 return@withTimeoutOrNull null
             }
         } ?: flowOf(LikeQuoteResponse())
@@ -171,7 +172,7 @@ class DatabaseServiceImpl @Inject constructor(
             } else null
 
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}")
+            writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
             return null
         }
     }
@@ -184,13 +185,13 @@ class DatabaseServiceImpl @Inject constructor(
                 .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
 
         } catch (fFex: FirebaseFirestoreException) {
-            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}")
+            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}", fFex)
             return LikeResponse()
         } catch (fex: FirebaseException) {
-            writeLog(ERROR, "Error from Firebase: ${fex.cause}")
+            writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
             return LikeResponse()
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Database Service: ${ex.cause}")
+            writeLog(ERROR, "Error from Database Service: ${ex.cause}", ex)
             return LikeResponse()
         }
     }

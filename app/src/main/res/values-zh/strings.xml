@@ -87,6 +87,12 @@
     <string name="dialog_download_image_title">下载你的图片</string>
     <string name="dialog_download_image_btn_view_ad">观看广告</string>
     <string name="dialog_download_image_btn_buy">永久购买</string>
+    <string name="dialog_how_do_you_share">你想如何分享这句话？</string>
+    <string name="dialog_share_title">分享</string>
+    <string name="dialog_share_by_image">作为图片</string>
+    <string name="dialog_share_by_text">作为文字</string>
 
+    <!-- Others -->
+    <string name="share_toast_link">链接已复制，随时分享。谢谢!!</string>
 
 </resources>

@@ -1,9 +1,8 @@
 package com.softyorch.famousquotes.ui.home
 
+import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
-import com.softyorch.famousquotes.core.Send
-import com.softyorch.famousquotes.domain.interfaces.IBilling
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.model.LikesDTO
@@ -56,7 +55,7 @@ class HomeViewModelTest {
     private lateinit var storage: IStorageService
 
     @RelaxedMockK
-    private lateinit var send: Send
+    private lateinit var shareQuote: ISend
 
     @RelaxedMockK
     private lateinit var hasConnection: InternetConnection
@@ -79,7 +78,7 @@ class HomeViewModelTest {
             billingLaunchPurchase = billingLaunch,
             storage = storage,
             dispatcherIO = Dispatchers.Unconfined,
-            send = send,
+            shareQuote = shareQuote,
             hasConnection = hasConnection,
             intents = intents,
         )

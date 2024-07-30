@@ -71,8 +71,6 @@
     <string name="uplifting_quote_default_10">ES#No importa cuántas veces caigas, lo importante es cuántas veces te levantes</string>
 
     <!-- Firebase Notifications Channels -->
-
-    <!-- Firebase Notifications Channels -->
     <string name="fbm_message_title">Tu frase diaria te espera</string>
     <string name="fbm_message_body">Recuerda que tienes una frase diferente cada día, no te la pierdas.</string>
 
@@ -89,6 +87,12 @@
     <string name="dialog_download_image_title">Descarga tu imagen</string>
     <string name="dialog_download_image_btn_view_ad">Ver un anuncio</string>
     <string name="dialog_download_image_btn_buy">Comprar para simpre</string>
+    <string name="dialog_how_do_you_share">¿Como quieres compartir esta frase?</string>
+    <string name="dialog_share_title">Compartir</string>
+    <string name="dialog_share_by_image">Como Imagen</string>
+    <string name="dialog_share_by_text">Como Texto</string>
 
+    <!-- Others -->
+    <string name="share_toast_link">Enlace copiado, por si te apetece compartirlo. Gracias!!</string>
 
 </resources>

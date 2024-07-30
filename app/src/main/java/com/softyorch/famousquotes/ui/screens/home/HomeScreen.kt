@@ -55,6 +55,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.TopControls
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
@@ -173,11 +174,11 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
                 textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
             ) { action ->
-                val homeAction = when (action) {
-                    POSITIVE -> HomeActions.CloseDialogDownLoadImageAgain()
-                    NEGATIVE -> HomeActions.SureDownloadImageAgain()
+                when (action) {
+                    POSITIVE -> viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain())
+                    NEGATIVE -> viewModel.onActions(HomeActions.SureDownloadImageAgain())
+                    DISMISS -> {}
                 }
-                viewModel.onActions(homeAction)
             }
 
         if (state.showBuyDialog) BuyImageDialog(
@@ -282,7 +283,10 @@ fun CardQuote(
                                 is HomeActions.Owner -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
-                                is HomeActions.Send -> if (hasConnection) onAction(action)
+                                is HomeActions.ShareWithImage -> if (hasConnection) onAction(action)
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                                is HomeActions.ShareText -> if (hasConnection) onAction(action)
                                 else context.showToast(toastMsg, Toast.LENGTH_LONG)
 
                                 else -> onAction(action)

@@ -87,6 +87,12 @@
     <string name="dialog_download_image_title">अपनी छवि डाउनलोड करें</string>
     <string name="dialog_download_image_btn_view_ad">विज्ञापन देखें</string>
     <string name="dialog_download_image_btn_buy">हमेशा के लिए खरीदें</string>
+    <string name="dialog_how_do_you_share">आप इस वाक्यांश को कैसे साझा करना चाहते हैं?</string>
+    <string name="dialog_share_title">साझा करें</string>
+    <string name="dialog_share_by_image">चित्र के रूप में</string>
+    <string name="dialog_share_by_text">पाठ के रूप में</string>
 
+    <!-- Others -->
+    <string name="share_toast_link">लिंक कॉपी किया गया, साझा करने के लिए स्वतंत्र महसूस करें। धन्यवाद!!</string>
 
 </resources>

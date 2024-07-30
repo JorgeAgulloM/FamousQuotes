@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.core.Analytics
+import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
-import com.softyorch.famousquotes.core.Send
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
     private val billingLaunchPurchase: BillingPurchase,
     private val storage: IStorageService,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-    private val send: Send,
+    private val shareQuote: ISend,
     private val hasConnection: InternetConnection,
     private val intents: Intents,
 ) : ViewModel() {
@@ -71,7 +71,8 @@ class HomeViewModel @Inject constructor(
         when (action) {
             is HomeActions.Info -> showInfoDialog()
             is HomeActions.New -> loadNewRandomQuote()
-            is HomeActions.Send -> shareQuote()
+            is HomeActions.ShareWithImage -> shareQuoteWithImage()
+            is HomeActions.ShareText -> shareQuoteText()
             is HomeActions.Buy -> purchaseLaunch()
             is HomeActions.Owner -> goToSearchOwner()
             is HomeActions.Like -> setQuoteLike()
@@ -85,6 +86,18 @@ class HomeViewModel @Inject constructor(
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
+        }
+    }
+
+    private fun shareQuoteText() {
+        val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
+
+        _uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            withContext(dispatcherIO) {
+                shareQuote.shareTextTo(dataToSend)
+            }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -121,13 +134,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun shareQuote() {
-        val dataToSend = "${_uiState.value.quote.body} - ${_uiState.value.quote.owner}"
+    private fun shareQuoteWithImage() {
+        val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
 
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             withContext(dispatcherIO) {
-                send.sendDataTo(dataToSend)
+                shareQuote.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -265,7 +278,7 @@ class HomeViewModel @Inject constructor(
     private fun getLikesQuote(id: String) {
         viewModelScope.launch(dispatcherIO) {
             getLikes(id).catch {
-                writeLog(ERROR, "Error from getting likes: ${it.cause}")
+                writeLog(ERROR, "Error from getting likes: ${it.cause}", it)
             }.collect { likes ->
                 _likeState.update {
                     it.copy(
@@ -292,7 +305,7 @@ class HomeViewModel @Inject constructor(
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherIO) {
             hasConnection.isConnectedFlow().catch {
-                writeLog(ERROR, "Error getting connection state: ${it.cause}")
+                writeLog(ERROR, "Error getting connection state: ${it.cause}", it)
             }.onEach { connection ->
                 if (_uiState.value.hasConnection != true && connection)
                     onActions(HomeActions.ReConnection())

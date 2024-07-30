@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,6 +57,7 @@ import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.utils.sdk29AndDown
@@ -70,6 +72,8 @@ fun CardControls(
     isQuoteFromService: Boolean,
     onAction: (HomeActions) -> Unit,
 ) {
+    var showSendDialog by remember { mutableStateOf(false) }
+
     AnimatedTextHome(hasText) {
         Row(
             modifier = Modifier.wrapContentHeight()
@@ -107,7 +111,7 @@ fun CardControls(
                     cDescription = stringResource(R.string.main_icon_content_desc_share),
                     icon = Icons.Outlined.Share,
                     isEnabled = isEnabled
-                ) { onAction(HomeActions.Send()) }
+                ) { showSendDialog = true }
                 IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
                     icon = Icons.Outlined.RestartAlt,
@@ -115,6 +119,21 @@ fun CardControls(
                 ) { onAction(HomeActions.New()) }
             }
         }
+    }
+
+    if (showSendDialog) BasicDialogApp(
+        text = stringResource(R.string.dialog_how_do_you_share),
+        title = stringResource(R.string.dialog_share_title),
+        textBtnPositive = stringResource(R.string.dialog_share_by_image),
+        textBtnNegative = stringResource(R.string.dialog_share_by_text),
+        blackDismissActions = true
+    ) {
+        when (it) {
+            POSITIVE -> onAction(HomeActions.ShareWithImage())
+            NEGATIVE -> onAction(HomeActions.ShareText())
+            DISMISS -> {}
+        }
+        showSendDialog = false
     }
 }
 
@@ -153,6 +172,7 @@ fun TopControls(
         when (action) {
             POSITIVE -> launcher.launch(permission)
             NEGATIVE -> context.showToast(context.getString(R.string.dialog_permission_rationale_denied_toast))
+            DISMISS -> {}
         }
         showPermissionRationaleDialog = false
     }

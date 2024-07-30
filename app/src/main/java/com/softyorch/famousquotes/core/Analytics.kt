@@ -1,7 +1,7 @@
 package com.softyorch.famousquotes.core
 
-import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity.Companion.firebaseAnalytics
@@ -16,9 +16,11 @@ sealed class Analytics(val name: String) {
 
     companion object {
         fun sendAction(action: Analytics) {
-            val bundle = Bundle()
-            bundle.putString(action.name, "clicked")
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                param(FirebaseAnalytics.Param.ITEM_ID, FLAVOR)
+                param(FirebaseAnalytics.Param.ITEM_NAME, action.name)
+                param(FirebaseAnalytics.Param.CONTENT_TYPE, "clicked")
+            }
 
             writeLog(level = DEBUG, text = "[Analytics] -> send action from: ${
                 MainActivity.instance.packageName
@@ -38,7 +40,8 @@ sealed class Analytics(val name: String) {
             is HomeActions.New -> "${FLAVOR}_action_new_quote"
             is HomeActions.Owner -> "${FLAVOR}_action_owner"
             is HomeActions.ReConnection -> "${FLAVOR}_action_reconnection"
-            is HomeActions.Send -> "${FLAVOR}_action_share"
+            is HomeActions.ShareWithImage -> "${FLAVOR}_action_share_with_image"
+            is HomeActions.ShareText -> "${FLAVOR}_action_share_text"
             is HomeActions.ShowImage -> "${FLAVOR}_action_image"
             is HomeActions.ShowNoConnectionDialog -> "${FLAVOR}_action_without_connection"
             is HomeActions.ShowToastDownload -> "${FLAVOR}_action_toast_download"
