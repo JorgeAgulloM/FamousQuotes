@@ -16,15 +16,19 @@ sealed class Analytics(val name: String) {
 
     companion object {
         fun sendAction(action: Analytics) {
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-                param(FirebaseAnalytics.Param.ITEM_ID, FLAVOR)
-                param(FirebaseAnalytics.Param.ITEM_NAME, action.name)
-                param(FirebaseAnalytics.Param.CONTENT_TYPE, "clicked")
-            }
+            if (!isRunningUnitTest()) {
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                    param(FirebaseAnalytics.Param.ITEM_ID, FLAVOR)
+                    param(FirebaseAnalytics.Param.ITEM_NAME, action.name)
+                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "clicked")
+                }
 
-            writeLog(level = DEBUG, text = "[Analytics] -> send action from: ${
-                MainActivity.instance.packageName
-            } to Analytics: ${action.name}")
+                writeLog(
+                    level = DEBUG, text = "[Analytics] -> send action from: ${
+                        MainActivity.instance.packageName
+                    } to Analytics: ${action.name}"
+                )
+            }
         }
 
         private const val FLAVOR = BuildConfig.FLAVOR
@@ -47,6 +51,15 @@ sealed class Analytics(val name: String) {
             is HomeActions.ShowToastDownload -> "${FLAVOR}_action_toast_download"
             is HomeActions.SureDownloadImageAgain -> "${FLAVOR}_action_download_image_again"
             is HomeActions.CloseDialogDownLoadImageAgain -> "${FLAVOR}_action_cancel_download_image_again"
+        }
+
+        private fun isRunningUnitTest(): Boolean {
+            return try {
+                Class.forName("org.junit.runner.RunWith")
+                true
+            } catch (e: ClassNotFoundException) {
+                false
+            }
         }
     }
 }
