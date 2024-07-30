@@ -28,11 +28,15 @@ render.experimental.xml
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
-
 # Android Profiling
 *.hprof
 
 # Secret Properties
-signing.properties
+signing/famousQuotes.jks
+signing/signing.properties
+
+# Google Services (e.g. APIs or Firebase)
+app/google-services.json
+
+# Admob Pproperties
+admob/admob.properties
