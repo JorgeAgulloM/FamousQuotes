@@ -54,9 +54,19 @@ jobs:
           cache: gradle
 
 
-        # Testing
-      - name: Unit Test Starter
-        run: ./gradlew testDebugUnitTest
+        # Historical flavor Testing
+      - name: Unit Test Historical Flavor Starter
+        run: ./gradlew testHistoricalDebugUnitTest
+
+
+        # Biblical flavor Testing
+      - name: Unit Test Biblical Flavor Starter
+        run: ./gradlew testBiblicalDebugUnitTest
+
+
+        # Uplifting flavor Testing
+      - name: Unit Test Uplifting Flavor Starter
+        run: ./gradlew testUpliftingDebugUnitTest
 
 
         # Testing Report
