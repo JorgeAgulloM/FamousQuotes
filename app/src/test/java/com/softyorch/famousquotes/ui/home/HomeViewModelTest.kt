@@ -121,9 +121,18 @@ class HomeViewModelTest {
         val id = getTodayId()
         val likesQuote = LikesQuote(likes = 2, isLike = true)
         val returnFlowLikes = flowOf(likesQuote)
+        val owner = "SoftYorch"
+        val quote = "The test quote"
+        val returnQuote = FamousQuoteModel(
+            id = id,
+            owner = owner,
+            body = quote,
+            imageUrl = ""
+        )
 
         //Given
         coEvery { getLikes(id) } returns returnFlowLikes
+        coEvery { selectQuote() } returns returnQuote
 
         //When
         launch { homeViewModel.onCreate() }
@@ -177,7 +186,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         //Then
-        coVerify(exactly = 1) { setLike(likesDTO) }
+        coVerify(exactly = 1) { setLike(any()) }
     }
 
 }

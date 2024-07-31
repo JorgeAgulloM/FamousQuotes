@@ -1,0 +1,75 @@
+name: FamousQuotes Testing CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+
+        # Decrypt and copy sings file
+      - name: Decrypt sings file
+        run: ./decryptors/decrypt_sings_file.sh
+        env:
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+      - name: Copy signs file
+        run: cp $HOME/secrets/famousQuotes.jks /home/runner/work/FamousQuotes/FamousQuotes/signing/
+
+
+        # Decrypt and copy signing.properties file
+      - name: Decrypt signing.properties
+        run: ./decryptors/decrypt_signing_properties.sh
+        env:
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+      - name: Copy signing.properties
+        run: cp $HOME/secrets/signing.properties /home/runner/work/FamousQuotes/FamousQuotes/signing/
+
+
+        # Decrypt and copy admob.properties file
+      - name: Decrypt admob.properties
+        run: ./decryptors/decrypt_admob_properties.sh
+        env:
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+      - name: Copy admob.properties
+        run: cp $HOME/secrets/admob.properties /home/runner/work/FamousQuotes/FamousQuotes/admob/
+
+
+        # Decrypt and copy google.service.json
+      - name: Decrypt google.service.json
+        run: ./decryptors/decrypt_google_service.sh
+        env:
+          FAMOUS_QUOTES_KEY: ${{ secrets.FAMOUS_QUOTES_KEY }}
+      - name: Copy google.service.json
+        run: cp $HOME/secrets/google-services.json /home/runner/work/FamousQuotes/FamousQuotes/app/
+
+
+        # Setup JDK
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: gradle
+
+
+        # Historical flavor Testing
+      - name: Unit Test Historical Flavor Starter
+        run: ./gradlew testHistoricalDebugUnitTest
+
+
+        # Biblical flavor Testing
+      - name: Unit Test Biblical Flavor Starter
+        run: ./gradlew testBiblicalDebugUnitTest
+
+
+        # Uplifting flavor Testing
+      - name: Unit Test Uplifting Flavor Starter
+        run: ./gradlew testUpliftingDebugUnitTest
+
+
+        # Testing Report
+      - name: Testing Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
