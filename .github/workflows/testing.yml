@@ -56,7 +56,7 @@ jobs:
 
         # Testing
       - name: Unit Test Starter
-        run: ./gradle testDebugUnitTest
+        run: ./gradlew testDebugUnitTest
 
 
         # Testing Report
