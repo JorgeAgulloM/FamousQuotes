@@ -4,10 +4,11 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("kapt")
     alias(libs.plugins.androidHilt)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
 }
 
 val keystorePropertiesFile: File = file("../signing/signing.properties")
@@ -20,12 +21,12 @@ adMobProperties.load(FileInputStream(adMobPropertiesFile))
 
 android {
     namespace = "com.softyorch.famousquotes"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.softyorch.famousquotes"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 35
         versionCode = 133
         versionName = "1.3.3"
 
@@ -168,9 +169,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
