@@ -181,9 +181,6 @@ android {
 
 dependencies {
 
-    // Billing
-    implementation(libs.billing)
-
     // Splash
     implementation(libs.androidx.core.splashscreen)
 

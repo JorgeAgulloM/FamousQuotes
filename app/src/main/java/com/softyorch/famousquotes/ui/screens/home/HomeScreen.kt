@@ -42,8 +42,6 @@ import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
-import com.softyorch.famousquotes.ui.screens.home.components.BuyActions
-import com.softyorch.famousquotes.ui.screens.home.components.BuyImageDialog
 import com.softyorch.famousquotes.ui.screens.home.components.CardControls
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
@@ -116,21 +114,14 @@ fun HomeScreen(viewModel: HomeViewModel) {
     ) {
 
         Box(modifier = Modifier.fillMaxWidth().zIndex(10f), contentAlignment = Alignment.TopEnd) {
-            val toastMsg = stringResource(R.string.main_info_dialog_connection)
             val hasConnection = state.hasConnection == true
             val imageFromWeb = state.quote.imageUrl.startsWith("http")
             TopControls(
                 hasText = state.quote.body,
-                isPurchased = state.purchasedOk,
                 isEnabled = hasConnection,
                 isImageExt = imageFromWeb
             ) { action ->
-                when (action) {
-                    is HomeActions.Buy -> if (hasConnection) viewModel.onActions(action)
-                    else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                    else -> viewModel.onActions(action)
-                }
+                viewModel.onActions(action)
             }
         }
         Box(
@@ -180,22 +171,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
                     DISMISS -> {}
                 }
             }
-
-        if (state.showBuyDialog) BuyImageDialog(
-            title = stringResource(R.string.dialog_download_image_title),
-            textBtnPositive = stringResource(R.string.dialog_download_image_btn_view_ad),
-            textBtnNegative = stringResource(R.string.dialog_download_image_btn_buy),
-        ) {
-            when (it) {
-                BuyActions.BuyImage -> viewModel.apply {
-                    onActions(HomeActions.Buy())
-                    onActions(HomeActions.ShowBuyDialog())
-                }
-
-                BuyActions.ViewAdd -> viewModel.onActions(HomeActions.DownloadImageByBonifiedAd())
-                BuyActions.Exit -> viewModel.onActions(HomeActions.ShowBuyDialog())
-            }
-        }
     }
 }
 
