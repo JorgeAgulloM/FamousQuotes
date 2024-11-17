@@ -29,7 +29,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
-kapt = "2.0.21"
+ksp = "2.0.21-1.0.27"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -77,4 +77,4 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 googleServices = { id = "com.google.gms.google-services", version.ref = "services" }
 androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crash" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
