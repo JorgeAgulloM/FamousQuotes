@@ -5,7 +5,9 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.softyorch.famousquotes.BuildConfig
@@ -50,8 +52,8 @@ inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
 /*inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null*/
 
-/*inline fun <T> sdk30AndDown(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) onSdk() else null*/
+inline fun <T> sdk30AndUp(onSdk: () -> T): T? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) onSdk() else null
 
 val sdk29AndDown = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
@@ -78,3 +80,15 @@ fun doesDownloadPathFileExist(fileName: String): Boolean {
 
     return File(completePath).exists()
 }
+
+fun isFullScreenMode(activity: ComponentActivity): Boolean =
+    sdk30AndUp {
+        val insets = activity.window.decorView.rootWindowInsets
+        val isVisible = insets?.isVisible(android.view.WindowInsets.Type.systemBars()) ?: true
+        !isVisible
+    } ?: run {
+        val flags = activity.window.decorView.systemUiVisibility
+        @Suppress("DEPRECATION")
+        (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
+    }
+

@@ -38,6 +38,7 @@ import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
@@ -58,11 +59,14 @@ import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
+import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
+
+    val isFullScreen = isFullScreenMode(MainActivity.instance)
 
     val interstitial = Interstitial.instance
     val bonified = Bonified.instance
@@ -104,8 +108,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize().padding(top = 2.dp).background(
+    Box(modifier = Modifier.fillMaxSize().padding(top = 2.dp).background(
             brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
                 bottomStart = ZeroCornerSize,
                 bottomEnd = ZeroCornerSize
@@ -113,7 +116,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
         )
     ) {
 
-        Box(modifier = Modifier.fillMaxWidth().zIndex(10f), contentAlignment = Alignment.TopEnd) {
+        val paddingTop = if (isFullScreen) 32.dp else 0.dp
+
+        Box(modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f), contentAlignment = Alignment.TopEnd) {
             val hasConnection = state.hasConnection == true
             val imageFromWeb = state.quote.imageUrl.startsWith("http")
             TopControls(
