@@ -55,9 +55,6 @@ inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
 
 val sdk29AndDown = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
-inline fun <T> sdk26AndUp(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) onSdk() else null
-
 @SuppressLint("DiscouragedApi")
 fun Context.getResourceDrawableIdentifier(name: String): Int? {
     if (name.isBlank()) return null

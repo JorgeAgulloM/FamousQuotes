@@ -25,11 +25,3 @@ private fun getCalendarZero(): Long {
     val oneHourInMillis = 1000 * 60 * 60
     return (calendar.timeInMillis - oneHourInMillis)
 }
-
-fun versionList(nameVersion: String): List<Int> =
-    nameVersion.split(".").map { it.toInt() }
-
-fun emptyVersionList(): List<Int> = listOf(0, 0, 0)
-
-fun versionToString(versionList: List<Int>): String =
-    "${versionList[0]}.${versionList[1]}.${versionList[2]}"

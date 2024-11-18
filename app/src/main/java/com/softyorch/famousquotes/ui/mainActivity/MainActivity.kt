@@ -32,7 +32,6 @@ import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
-import com.softyorch.famousquotes.utils.sdk26AndUp
 import com.softyorch.famousquotes.utils.sdk33AndUp
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,7 +86,7 @@ class MainActivity : ComponentActivity() {
         ) { isGranted ->
             if (isGranted) {
                 writeLog(LevelLog.INFO, "PERMISSION POST_NOTIFICATIONS GRANTED")
-                sdk26AndUp { CreatedChannelNotifications() }
+                CreatedChannelNotifications()
             } else {
                 writeLog(LevelLog.WARN, "PERMISSION POST_NOTIFICATIONS DENIED")
             }
@@ -96,7 +95,6 @@ class MainActivity : ComponentActivity() {
         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun CreatedChannelNotifications() {
         val channelId = getString(R.string.default_channel)
         val chName = "${BuildConfig.APP_TITLE}_Promotion"
@@ -135,7 +133,7 @@ class MainActivity : ComponentActivity() {
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
 
         // Start Firebase Crashlytics
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
         // Configurar Crashlytics para manejar excepciones no capturadas
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             Firebase.crashlytics.recordException(throwable)
