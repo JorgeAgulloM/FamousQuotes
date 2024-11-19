@@ -68,5 +68,5 @@ jobs:
 
 
         # Build app
-      - name: Build app
-        run: ./gradlew assemble
+      - name: Build app with debug logs
+        run: ./gradlew assemble --stacktrace --info --debug
