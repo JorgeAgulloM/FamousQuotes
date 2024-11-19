@@ -8,8 +8,6 @@ import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesQuote
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
-import com.softyorch.famousquotes.domain.useCases.billing.BillingPurchase
-import com.softyorch.famousquotes.domain.useCases.billing.BillingStart
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.domain.utils.getTodayId
@@ -46,12 +44,6 @@ class HomeViewModelTest {
     private lateinit var setLike: SetQuoteLike
 
     @RelaxedMockK
-    private lateinit var billingStart: BillingStart
-
-    @RelaxedMockK
-    private lateinit var billingLaunch: BillingPurchase
-
-    @RelaxedMockK
     private lateinit var storage: IStorageService
 
     @RelaxedMockK
@@ -74,8 +66,6 @@ class HomeViewModelTest {
             selectQuote = selectQuote,
             getLikes = getLikes,
             setLike = setLike,
-            billingStartUseCase = billingStart,
-            billingLaunchPurchase = billingLaunch,
             storage = storage,
             dispatcherIO = Dispatchers.Unconfined,
             shareQuote = shareQuote,

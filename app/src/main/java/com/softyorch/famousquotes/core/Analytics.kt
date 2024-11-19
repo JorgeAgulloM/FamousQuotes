@@ -34,9 +34,7 @@ sealed class Analytics(val name: String) {
         private const val FLAVOR = BuildConfig.FLAVOR
 
         private fun actionName(action: HomeActions) = when (action) {
-            is HomeActions.Buy -> "${FLAVOR}_action_buy"
             is HomeActions.DownloadImage -> "${FLAVOR}_download_image"
-            is HomeActions.ShowBuyDialog -> "${FLAVOR}_dialog_show"
             is HomeActions.DownloadImageByBonifiedAd -> "${FLAVOR}_download_image_by_bonified_ad"
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> "${FLAVOR}_cancel_or_error_download_by_bonified_ad"
             is HomeActions.Info -> "${FLAVOR}_action_info"

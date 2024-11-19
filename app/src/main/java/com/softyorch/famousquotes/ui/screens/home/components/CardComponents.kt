@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.WifiOff
@@ -50,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.QuoteLikesState
@@ -141,7 +139,6 @@ fun CardControls(
 @Composable
 fun TopControls(
     hasText: String,
-    isPurchased: Int?,
     isEnabled: Boolean,
     isImageExt: Boolean,
     onAction: (HomeActions) -> Unit,
@@ -155,9 +152,7 @@ fun TopControls(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                onAction(HomeActions.DownloadImage())
-            else onAction(HomeActions.Buy())
+            onAction(HomeActions.DownloadImage())
         } else {
             showPermissionRationaleDialog = true
         }
@@ -199,7 +194,7 @@ fun TopControls(
                 ) { onAction(HomeActions.Info()) }
                 if (isImageExt) IconButtonMenu(
                     cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
-                    icon = if (isPurchased == Purchase.PurchaseState.PURCHASED) Icons.Outlined.Download else Icons.Outlined.LocalMall,
+                    icon = Icons.Outlined.Download,
                     shadowOn = true,
                     isEnabled = isEnabled
                 ) {
@@ -214,9 +209,7 @@ fun TopControls(
                             launcher.launch(permission)
                         }
                     } else {
-                        if (isPurchased == Purchase.PurchaseState.PURCHASED)
-                            onAction(HomeActions.DownloadImage())
-                        else onAction(HomeActions.ShowBuyDialog())
+                        onAction(HomeActions.DownloadImage())
                     }
                 }
             }

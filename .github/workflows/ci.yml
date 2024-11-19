@@ -67,6 +67,19 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
 
-        # Build app
-      - name: Build app
-        run: ./gradlew assemble
+        # Clean Gradle before start
+      - name: Clear Gradle cache
+        run: |
+          rm -rf ~/.gradle/caches/
+          rm -rf ~/.gradle/wrapper/
+
+
+        # Start Gradle's tasks
+      - name: Run clean
+        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --refresh-dependencies --stacktrace
+
+      - name: Compile debug sources
+        run: ./gradlew compileBiblicalDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
+
+      - name: Package debug
+        run: ./gradlew packageBiblicalDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace

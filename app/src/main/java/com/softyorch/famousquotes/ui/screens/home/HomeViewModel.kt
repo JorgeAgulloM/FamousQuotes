@@ -2,7 +2,6 @@ package com.softyorch.famousquotes.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.billingclient.api.Purchase
 import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
@@ -10,12 +9,8 @@ import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
-import com.softyorch.famousquotes.domain.useCases.billing.BillingModel
-import com.softyorch.famousquotes.domain.useCases.billing.BillingPurchase
-import com.softyorch.famousquotes.domain.useCases.billing.BillingStart
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
-import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
@@ -39,8 +34,6 @@ class HomeViewModel @Inject constructor(
     private val selectQuote: GetTodayQuote,
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
-    private val billingStartUseCase: BillingStart,
-    private val billingLaunchPurchase: BillingPurchase,
     private val storage: IStorageService,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
     private val shareQuote: ISend,
@@ -54,7 +47,6 @@ class HomeViewModel @Inject constructor(
     private val _likeState = MutableStateFlow(QuoteLikesState())
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
-    private val _billingData = MutableStateFlow(BillingModel.empty())
     //val billingData: StateFlow<BillingModel> = _billingData
 
     init {
@@ -73,14 +65,12 @@ class HomeViewModel @Inject constructor(
             is HomeActions.New -> loadNewRandomQuote()
             is HomeActions.ShareWithImage -> shareQuoteWithImage()
             is HomeActions.ShareText -> shareQuoteText()
-            is HomeActions.Buy -> purchaseLaunch()
             is HomeActions.Owner -> goToSearchOwner()
             is HomeActions.Like -> setQuoteLike()
             is HomeActions.ShowImage -> showImage()
             is HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
             is HomeActions.ReConnection -> getQuote()
             is HomeActions.DownloadImage -> downloadImage()
-            is HomeActions.ShowBuyDialog -> showBuyDialog()
             is HomeActions.DownloadImageByBonifiedAd -> downloadImageByBonifiedAd()
             is HomeActions.ShowToastDownload -> showDownloadToast()
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
@@ -101,15 +91,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun showBuyDialog() {
-        _uiState.update { it.copy(showBuyDialog = !it.showBuyDialog) }
-    }
-
     private fun downloadImageByBonifiedAd() {
         if (!_uiState.value.showBonified) {
             _uiState.update {
                 it.copy(
-                    showBuyDialog = false,
                     showBonified = true,
                     isLoading = true
                 )
@@ -118,7 +103,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun closeOrErrorDownloadByBonifiedAd() {
-        _uiState.update { it.copy(showBuyDialog = false, isLoading = false) }
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun showInfoDialog() {
@@ -143,18 +128,6 @@ class HomeViewModel @Inject constructor(
                 shareQuote.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             }
             _uiState.update { it.copy(isLoading = false) }
-        }
-    }
-
-    private fun purchaseLaunch() {
-        viewModelScope.launch(dispatcherIO) {
-            billingLaunchPurchase(
-                _uiState.value.quote.id,
-                MainActivity.instance
-            ).let { purchase ->
-                _uiState.update { state -> state.copy(purchasedOk = purchase) }
-                billingStartUseCase()
-            }
         }
     }
 
@@ -211,7 +184,6 @@ class HomeViewModel @Inject constructor(
             }
 
             getLikesQuote(quote.id)
-            connectToBilling()
         }
     }
 
@@ -317,22 +289,6 @@ class HomeViewModel @Inject constructor(
                         hasConnection = connection,
                         showDialogNoConnection = if (!connection) false else null
                     )
-                }
-            }
-        }
-    }
-
-    private fun connectToBilling() {
-        viewModelScope.launch {
-            val resultModel = withContext(dispatcherIO) {
-                billingStartUseCase()
-            }
-            _billingData.update { resultModel }
-
-            resultModel.productsPurchased.forEach { productId ->
-                if (productId == _uiState.value.quote.id) {
-                    _uiState.update { it.copy(purchasedOk = Purchase.PurchaseState.PURCHASED) }
-                    return@forEach
                 }
             }
         }
