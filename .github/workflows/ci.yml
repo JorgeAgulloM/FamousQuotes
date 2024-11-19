@@ -62,11 +62,20 @@ jobs:
           cache: gradle
 
 
+        # Increase memory
+      - name: Increase memory for Gradle
+        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxPermSize=512m"
+
+
         # Setup gradle
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
 
         # Build app
-      - name: Build app with debug logs
-        run: ./gradlew assemble --stacktrace --info --debug
+      - name: Run clean
+        run: ./gradlew clean --warn
+      - name: Compile debug sources
+        run: ./gradlew compileDebugSources --warn
+      - name: Package debug
+        run: ./gradlew packageDebug --warn
