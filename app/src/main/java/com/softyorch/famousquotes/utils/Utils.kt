@@ -18,18 +18,35 @@ import java.io.File
 
 fun writeLog(level: LevelLog = LevelLog.INFO, text: String, throwable: Throwable? = null) {
     val isTest = !IsTestMode.isTest
+    LogForDebug(level, isTest, text)
+    LogForProduction(level, text, throwable)
+}
+
+private fun LogForDebug(
+    level: LevelLog,
+    isTest: Boolean,
+    text: String
+) {
     if (BuildConfig.DEBUG) when (level) {
         LevelLog.ERROR -> if (isTest) Log.e("LOGTAG", text)
         LevelLog.WARN -> if (isTest) Log.w("LOGTAG", text)
         LevelLog.INFO -> if (isTest) Log.i("LOGTAG", text)
         LevelLog.DEBUG -> if (isTest) Log.d("LOGTAG", text)
     }
+}
+
+private fun LogForProduction(
+    level: LevelLog,
+    text: String,
+    throwable: Throwable?
+) {
     if (!BuildConfig.DEBUG) when (level) {
         LevelLog.ERROR -> {
             Crashlytics.sendError(text, throwable!!)
             Log.e("LOGTAG", text)
         }
-        else -> {}
+
+        else -> Unit
     }
 }
 
@@ -48,9 +65,6 @@ inline fun <T> sdk33AndUp(onSdk: () -> T): T? =
 
 inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) onSdk() else null
-
-/*inline fun <T> sdk31AndUp(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) onSdk() else null*/
 
 inline fun <T> sdk30AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) onSdk() else null
@@ -81,6 +95,7 @@ fun doesDownloadPathFileExist(fileName: String): Boolean {
     return File(completePath).exists()
 }
 
+@Suppress("DEPRECATION")
 fun isFullScreenMode(activity: ComponentActivity): Boolean =
     sdk30AndUp {
         val insets = activity.window.decorView.rootWindowInsets
@@ -88,7 +103,5 @@ fun isFullScreenMode(activity: ComponentActivity): Boolean =
         !isVisible
     } ?: run {
         val flags = activity.window.decorView.systemUiVisibility
-        @Suppress("DEPRECATION")
         (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
     }
-
