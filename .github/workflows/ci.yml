@@ -64,7 +64,7 @@ jobs:
 
         # Increase memory
       - name: Increase memory for Gradle
-        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxPermSize=512m"
+        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g
 
 
         # Setup gradle
@@ -72,10 +72,14 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
 
-        # Build app
+      # Clean Gradle before start
+      - name: Clean Gradle cache
+        run: rm -rf ~/.gradle/caches/
+
+      # Start Gradle's tasks
       - name: Run clean
-        run: ./gradlew clean --warn
+        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g --warn"
       - name: Compile debug sources
-        run: ./gradlew compileDebugSources --warn
+        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g --warn"
       - name: Package debug
-        run: ./gradlew packageDebug --warn
+        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g --warn"
