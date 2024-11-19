@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,39 +65,52 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: HomeViewModel, navigationToUser: () -> Unit) {
 
-    val isFullScreen = isFullScreenMode(MainActivity.instance)
-
+    val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
     val bonified = Bonified.instance
 
-    val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
+    AdmobAds(state, interstitial, bonified) { action ->
+        viewModel.onActions(action)
+    }
+
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val isFullScreen = isFullScreenMode(MainActivity.instance)
+    val paddingTop = if (isFullScreen) 32.dp else 0.dp
+    ContentBody(paddingTop, state, stateLikes, context) { action ->
+        viewModel.onActions(action)
+    }
+}
+
+@Composable
+private fun AdmobAds(
+    state: HomeState,
+    interstitial: Interstitial,
+    bonified: Bonified,
+    onActions: (HomeActions) -> Unit
+) {
 
     interstitial.Show(state.showInterstitial) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
             writeLog(INFO, "itState: $it")
-            if (!state.imageIsDownloadAlready)
-                viewModel.onActions(HomeActions.New())
+            if (!state.imageIsDownloadAlready) onActions(HomeActions.New())
         }
 
-        if (it is InterstitialAdState.Clicked ||
-            it is InterstitialAdState.Close ||
-            it is InterstitialAdState.Error
-        ) {
-            if (state.imageIsDownloadAlready)
-                viewModel.onActions(HomeActions.SureDownloadImageAgain())
-        }
+        if ((it is InterstitialAdState.Clicked ||
+                    it is InterstitialAdState.Close ||
+                    it is InterstitialAdState.Error) &&
+            state.imageIsDownloadAlready
+        ) onActions(HomeActions.SureDownloadImageAgain())
+
     }
 
     bonified.Show(state.showBonified) { bonifiedState ->
-        if (bonifiedState == BonifiedAdState.Reward) {
-            viewModel.onActions(HomeActions.DownloadImage())
-        }
+        if (bonifiedState == BonifiedAdState.Reward) onActions(HomeActions.DownloadImage())
+
         if (
             bonifiedState == BonifiedAdState.Showed ||
             bonifiedState == BonifiedAdState.Close ||
@@ -104,35 +118,46 @@ fun HomeScreen(viewModel: HomeViewModel) {
             bonifiedState == BonifiedAdState.OnDismissed
         ) {
             writeLog(INFO, "[HomeScreen] -> bonifiedState: $bonifiedState")
-            viewModel.onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
+            onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
+}
 
-    Box(modifier = Modifier.fillMaxSize().padding(top = 2.dp).background(
-            brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
-                bottomStart = ZeroCornerSize,
-                bottomEnd = ZeroCornerSize
+@Composable
+private fun ContentBody(
+    paddingTop: Dp,
+    state: HomeState,
+    stateLikes: QuoteLikesState,
+    context: Context,
+    onActions: (HomeActions) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 2.dp)
+            .background(
+                brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
+                    bottomStart = ZeroCornerSize,
+                    bottomEnd = ZeroCornerSize
+                )
             )
-        )
     ) {
 
-        val paddingTop = if (isFullScreen) 32.dp else 0.dp
-
-        Box(modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f), contentAlignment = Alignment.TopEnd) {
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f),
+            contentAlignment = Alignment.TopEnd
+        ) {
             val hasConnection = state.hasConnection == true
             val imageFromWeb = state.quote.imageUrl.startsWith("http")
             TopControls(
                 hasText = state.quote.body,
                 isEnabled = hasConnection,
                 isImageExt = imageFromWeb
-            ) { action ->
-                viewModel.onActions(action)
+            ) { action -> onActions(action)
             }
         }
         Box(
-            modifier = Modifier.clickable {
-                viewModel.onActions(HomeActions.ShowImage())
-            },
+            modifier = Modifier.clickable { onActions(HomeActions.ShowImage()) },
             contentAlignment = Alignment.TopCenter
         ) {
             BackgroundImage(uri = state.quote.imageUrl)
@@ -142,16 +167,14 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 state = state,
                 stateLikes = stateLikes,
                 context = context
-            ) { action ->
-                viewModel.onActions(action)
-            }
+            ) { action -> onActions(action) }
         }
 
         if (state.showInfo)
-            InfoDialog { viewModel.onActions(HomeActions.Info()) }
+            InfoDialog { onActions(HomeActions.Info()) }
 
         if (state.showDialogNoConnection == false) NoConnectionDialog {
-            viewModel.onActions(HomeActions.ShowNoConnectionDialog())
+            onActions(HomeActions.ShowNoConnectionDialog())
         }
 
         if (state.isLoading) LoadingCircle()
@@ -161,7 +184,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 stringResource(R.string.image_download_toast_success),
                 Toast.LENGTH_LONG
             )
-            viewModel.onActions(HomeActions.ShowToastDownload())
+            onActions(HomeActions.ShowToastDownload())
         }
 
         if (state.imageIsDownloadAlready)
@@ -171,9 +194,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
             ) { action ->
                 when (action) {
-                    POSITIVE -> viewModel.onActions(HomeActions.CloseDialogDownLoadImageAgain())
-                    NEGATIVE -> viewModel.onActions(HomeActions.SureDownloadImageAgain())
-                    DISMISS -> {}
+                    POSITIVE -> onActions(HomeActions.CloseDialogDownLoadImageAgain())
+                    NEGATIVE -> onActions(HomeActions.SureDownloadImageAgain())
+                    DISMISS -> Unit
                 }
             }
     }
@@ -231,52 +254,17 @@ fun CardQuote(
             AnimatedContentHome(isActive = isActive) {
                 Column {
                     AppIcon()
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        TextInfoApp(
-                            text = stringResource(R.string.main_text_get_inspired),
-                            size = 22,
-                            color = SecondaryColor
-                        )
-                    }
+                    HeaderQuote()
                     TextBody(text = state.quote.body)
-                    Row(
-                        modifier = Modifier.background(color = Color.Transparent)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CardControls(
-                            hasText = state.quote.body,
-                            stateLikes = stateLikes,
-                            disabledReload = state.showInterstitial,
-                            isEnabled = hasConnection,
-                            isQuoteFromService = imageFromWeb
-                        ) { action ->
-                            when (action) {
-                                is HomeActions.New -> if (hasConnection) onAction(action)
-                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                                is HomeActions.Owner -> if (hasConnection) onAction(action)
-                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                                is HomeActions.ShareWithImage -> if (hasConnection) onAction(action)
-                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                                is HomeActions.ShareText -> if (hasConnection) onAction(action)
-                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
-
-                                else -> onAction(action)
-                            }
-                        }
-                        TextOwner(text = state.quote.owner) {
-                            if (hasConnection) onAction(HomeActions.Owner())
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
-                        }
-                    }
+                    BottomBar(
+                        state = state,
+                        stateLikes = stateLikes,
+                        hasConnection = hasConnection,
+                        imageFromWeb = imageFromWeb,
+                        context = context,
+                        toastMsg = toastMsg,
+                        onAction = onAction
+                    )
                 }
             }
             AnimatedContentHome(isActive = state.showImage) {
@@ -285,5 +273,62 @@ fun CardQuote(
             }
         }
         Banner.bannerInstance.Show()
+    }
+}
+
+@Composable
+private fun HeaderQuote() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        TextInfoApp(
+            text = stringResource(R.string.main_text_get_inspired),
+            size = 22,
+            color = SecondaryColor
+        )
+    }
+}
+
+@Composable
+private fun BottomBar(
+    state: HomeState,
+    stateLikes: QuoteLikesState,
+    hasConnection: Boolean,
+    imageFromWeb: Boolean,
+    context: Context,
+    toastMsg: String,
+    onAction: (HomeActions) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .background(color = Color.Transparent)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CardControls(
+            hasText = state.quote.body,
+            stateLikes = stateLikes,
+            disabledReload = state.showInterstitial,
+            isEnabled = hasConnection,
+            isQuoteFromService = imageFromWeb
+        ) { action ->
+            when (action) {
+                is HomeActions.New,
+                is HomeActions.Owner,
+                is HomeActions.ShareWithImage,
+                is HomeActions.ShareText -> if (hasConnection)
+                    onAction(action)
+                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+
+                else -> onAction(action)
+            }
+        }
+        TextOwner(text = state.quote.owner) {
+            if (hasConnection) onAction(HomeActions.Owner())
+            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+        }
     }
 }
