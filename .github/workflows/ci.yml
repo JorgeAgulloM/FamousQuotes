@@ -64,7 +64,7 @@ jobs:
 
         # Increase memory
       - name: Increase memory for Gradle
-        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g
+        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g"
 
 
         # Setup gradle
@@ -78,8 +78,8 @@ jobs:
 
       # Start Gradle's tasks
       - name: Run clean
-        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g --warn"
+        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
       - name: Compile debug sources
-        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g --warn"
+        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
       - name: Package debug
-        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g --warn"
+        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
