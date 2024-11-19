@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.crashlytics) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.ksp) apply false
+    alias(libs.plugins.kotlinxSerialization) apply false
 }
