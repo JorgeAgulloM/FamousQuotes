@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 val keystorePropertiesFile: File = file("../signing/signing.properties")
@@ -180,6 +181,12 @@ android {
 }
 
 dependencies {
+
+    // Serialization
+    implementation(libs.jetbrains.serialization)
+
+    // Navigation Compose
+    implementation(libs.android.compose.navigation)
 
     // Splash
     implementation(libs.androidx.core.splashscreen)
