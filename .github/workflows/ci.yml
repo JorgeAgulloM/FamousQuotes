@@ -79,7 +79,7 @@ jobs:
         run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --refresh-dependencies --stacktrace
 
       - name: Compile debug sources
-        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
+        run: ./gradlew compileBiblicalDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
 
       - name: Package debug
-        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
+        run: ./gradlew packageBiblicalDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
