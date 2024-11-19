@@ -62,24 +62,24 @@ jobs:
           cache: gradle
 
 
-        # Increase memory
-      - name: Increase memory for Gradle
-        run: ./gradlew assemble -Dorg.gradle.jvmargs="-Xmx4g"
-
-
         # Setup gradle
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
 
-      # Clean Gradle before start
-      - name: Clean Gradle cache
-        run: rm -rf ~/.gradle/caches/
+        # Clean Gradle before start
+      - name: Clear Gradle cache
+        run: |
+          rm -rf ~/.gradle/caches/
+          rm -rf ~/.gradle/wrapper/
 
-      # Start Gradle's tasks
+
+        # Start Gradle's tasks
       - name: Run clean
-        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
+        run: ./gradlew clean -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --refresh-dependencies --stacktrace
+
       - name: Compile debug sources
-        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
+        run: ./gradlew compileDebugSources -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
+
       - name: Package debug
-        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace
+        run: ./gradlew packageDebug -Dorg.gradle.jvmargs="-Xmx4g" --warn --stacktrace --no-daemon --stacktrace
