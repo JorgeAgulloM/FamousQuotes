@@ -17,7 +17,7 @@
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
     <string name="main_info_dialog_text_info">Información</string>
-    <string name="main_info_dialog_text_buy_image">Comprar y descargar la imagen generada por IA.</string>
+    <string name="main_info_dialog_text_buy_image">Descargar la imagen generada por IA.</string>
     <string name="main_info_dialog_text_other_quote">Ver otra frase/imagen. La imagen podría no tener relación con la fase.</string>
     <string name="main_info_dialog_text_">Comparte tu cita con tus amigos y familiares.</string>
     <string name="main_content_desc_image">Imagen</string>

@@ -17,7 +17,7 @@
     <string name="main_icon_content_desc_other_quote">Autre citation</string>
     <string name="main_icon_content_desc_share">Partager</string>
     <string name="main_info_dialog_text_info">Information</string>
-    <string name="main_info_dialog_text_buy_image">Acheter et télécharger l\'image générée par l\'IA.</string>
+    <string name="main_info_dialog_text_buy_image">Télécharger l\'image générée par IA.</string>
     <string name="main_info_dialog_text_other_quote">Voir une autre citation/image. L\'image peut ne pas être liée à la citation.</string>
     <string name="main_info_dialog_text_">Partagez votre citation avec vos amis et votre famille.</string>
     <string name="main_content_desc_image">Image</string>

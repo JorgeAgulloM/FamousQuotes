@@ -17,7 +17,7 @@
     <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
     <string name="main_icon_content_desc_share">शेयर करें</string>
     <string name="main_info_dialog_text_info">जानकारी</string>
-    <string name="main_info_dialog_text_buy_image">AI द्वारा उत्पन्न छवि खरीदें और डाउनलोड करें।</string>
+    <string name="main_info_dialog_text_buy_image">एआई द्वारा उत्पन्न छवि डाउनलोड करें।</string>
     <string name="main_info_dialog_text_other_quote">एक और उद्धरण/छवि देखें। छवि उद्धरण से संबंधित नहीं हो सकती है।</string>
     <string name="main_info_dialog_text_">अपने उद्धरण को अपने दोस्तों और परिवार के साथ साझा करें।</string>
     <string name="main_content_desc_image">छवि</string>

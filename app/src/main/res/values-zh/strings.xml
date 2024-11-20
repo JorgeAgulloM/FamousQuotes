@@ -17,7 +17,7 @@
     <string name="main_icon_content_desc_other_quote">其他引用</string>
     <string name="main_icon_content_desc_share">分享</string>
     <string name="main_info_dialog_text_info">信息</string>
-    <string name="main_info_dialog_text_buy_image">购买并下载由AI生成的图片。</string>
+    <string name="main_info_dialog_text_buy_image">下载由AI生成的图片。</string>
     <string name="main_info_dialog_text_other_quote">查看其他语录/图片。图片可能与语录无关。</string>
     <string name="main_info_dialog_text_">与朋友和家人分享你的语录。</string>
     <string name="main_content_desc_image">图片</string>
