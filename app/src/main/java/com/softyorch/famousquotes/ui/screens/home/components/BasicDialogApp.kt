@@ -35,40 +35,54 @@ fun BasicDialogApp(
         onDismissRequest = { onActions(if (blackDismissActions) DISMISS else NEGATIVE) },
         modifier = Modifier.background(
             color = BackgroundColor,
-            shape = MaterialTheme.shapes.extraLarge
+            shape = MaterialTheme.shapes.medium
         ),
         properties = DialogProperties(
             dismissOnBackPress = blackDismissActions,
             dismissOnClickOutside = blackDismissActions
         )
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
-            if (title != null) {
-                TextInfo(title)
-                SpacerHeight()
-            }
+        ContentDialog(title, text, auxText, textBtnPositive, textBtnNegative, onActions)
+    }
+}
 
-            TextInfo(text)
+@Composable
+private fun ContentDialog(
+    title: String?,
+    text: String,
+    auxText: String?,
+    textBtnPositive: String?,
+    textBtnNegative: String?,
+    onActions: (DialogCloseAction) -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        if (title != null) {
+            TextInfo(title)
             SpacerHeight()
+        }
 
-            if (auxText != null) {
-                TextInfo(auxText)
-                SpacerHeight()
+        TextInfo(text)
+        SpacerHeight()
+
+        if (auxText != null) {
+            TextInfo(auxText)
+            SpacerHeight()
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            if (textBtnPositive != null) ButtonApp(text = textBtnPositive, primary = true) {
+                onActions(POSITIVE)
             }
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                if (textBtnPositive != null) ButtonApp(text = textBtnPositive, primary = true) {
-                    onActions(POSITIVE)
-                }
-                if (textBtnNegative != null) ButtonApp(text = textBtnNegative) {
-                    onActions(NEGATIVE)
-                }
+            if (textBtnNegative != null) ButtonApp(text = textBtnNegative) {
+                onActions(NEGATIVE)
             }
         }
     }

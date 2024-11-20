@@ -34,7 +34,7 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
             })
         }
         composable<Home> {
-            HomeScreen(viewModel = homeViewModel, navigationToUser = { navController.navigate(User) })
+            HomeScreen(viewModel = homeViewModel, onNavigateToUserScreen = { navController.navigate(User) })
         }
         composable<User> {
             UserScreen(navigateBack = { navController.navigateUp() })

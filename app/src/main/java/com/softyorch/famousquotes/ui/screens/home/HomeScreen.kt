@@ -44,14 +44,14 @@ import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
-import com.softyorch.famousquotes.ui.screens.home.components.CardControls
+import com.softyorch.famousquotes.ui.screens.home.components.CardControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
 import com.softyorch.famousquotes.ui.screens.home.components.TextInfoApp
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
-import com.softyorch.famousquotes.ui.screens.home.components.TopControls
+import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
@@ -65,7 +65,7 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigationToUser: () -> Unit) {
+fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
@@ -79,7 +79,7 @@ fun HomeScreen(viewModel: HomeViewModel, navigationToUser: () -> Unit) {
     val context = LocalContext.current
     val isFullScreen = isFullScreenMode(MainActivity.instance)
     val paddingTop = if (isFullScreen) 32.dp else 0.dp
-    ContentBody(paddingTop, state, stateLikes, context) { action ->
+    ContentBody(paddingTop, state, stateLikes, context, onNavigateToUserScreen) { action ->
         viewModel.onActions(action)
     }
 }
@@ -129,6 +129,7 @@ private fun ContentBody(
     state: HomeState,
     stateLikes: QuoteLikesState,
     context: Context,
+    onNavigateToUserScreen: () -> Unit,
     onActions: (HomeActions) -> Unit
 ) {
     Box(
@@ -149,12 +150,12 @@ private fun ContentBody(
         ) {
             val hasConnection = state.hasConnection == true
             val imageFromWeb = state.quote.imageUrl.startsWith("http")
-            TopControls(
+            TopControlsGroup(
                 hasText = state.quote.body,
                 isEnabled = hasConnection,
-                isImageExt = imageFromWeb
-            ) { action -> onActions(action)
-            }
+                isImageExt = imageFromWeb,
+                onNavigateToUserScreen = onNavigateToUserScreen
+            ) { action -> onActions(action) }
         }
         Box(
             modifier = Modifier.clickable { onActions(HomeActions.ShowImage()) },
@@ -170,8 +171,7 @@ private fun ContentBody(
             ) { action -> onActions(action) }
         }
 
-        if (state.showInfo)
-            InfoDialog { onActions(HomeActions.Info()) }
+        if (state.showInfo) InfoDialog { onActions(HomeActions.Info()) }
 
         if (state.showDialogNoConnection == false) NoConnectionDialog {
             onActions(HomeActions.ShowNoConnectionDialog())
@@ -203,7 +203,7 @@ private fun ContentBody(
 }
 
 @Composable
-fun BackgroundImage(uri: String) {
+private fun BackgroundImage(uri: String) {
     val context = LocalContext.current
 
     val data = if (uri.startsWith("http")) uri
@@ -221,7 +221,7 @@ fun BackgroundImage(uri: String) {
     val state = painter.state
     Card(
         shape = MaterialTheme.shapes.extraLarge,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
     ) {
         AnimatedImage(
             isVisible = state is AsyncImagePainter.State.Success,
@@ -231,7 +231,7 @@ fun BackgroundImage(uri: String) {
 }
 
 @Composable
-fun CardQuote(
+private fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
     context: Context,
@@ -308,7 +308,7 @@ private fun BottomBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CardControls(
+        CardControlsGroup(
             hasText = state.quote.body,
             stateLikes = stateLikes,
             disabledReload = state.showInterstitial,

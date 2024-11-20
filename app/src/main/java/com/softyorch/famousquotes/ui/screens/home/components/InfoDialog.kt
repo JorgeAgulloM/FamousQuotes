@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -40,11 +38,11 @@ fun InfoDialog(onAction: () -> Unit) {
     BasicAlertDialog(onDismissRequest = { onAction() }, modifier = Modifier.semantics {
         text = AnnotatedString(text = infoText)
     }) {
-        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.extraLarge)) {
+        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.medium)) {
             Column(
                 modifier = Modifier.background(
                     brush = brushBackGround(),
-                    shape = MaterialTheme.shapes.extraLarge
+                    shape = MaterialTheme.shapes.medium
                 ).padding(16.dp)
             ) {
                 InfoIcons(
@@ -85,12 +83,7 @@ fun InfoDialog(onAction: () -> Unit) {
 }
 
 @Composable
-fun SpacerHeight(height: Int = 16) {
-    Spacer(modifier = Modifier.height(height.dp))
-}
-
-@Composable
-fun InfoIcons(icon: ImageVector, tint: Color = PrimaryColor, text: String) {
+private fun InfoIcons(icon: ImageVector, tint: Color = PrimaryColor, text: String) {
     Row {
         Icon(imageVector = icon, contentDescription = text, tint = tint)
         TextInfo(text)

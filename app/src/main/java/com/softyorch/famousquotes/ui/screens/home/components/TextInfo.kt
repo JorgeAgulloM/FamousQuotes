@@ -26,7 +26,7 @@ fun TextInfo(text: String) {
             style = MyTypography.labelLarge.copy(
                 shadow = Shadow(color = Color.Black, offset = Offset(2f, 2f)),
                 color = WhiteSmoke,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start
             )
         )
     }
