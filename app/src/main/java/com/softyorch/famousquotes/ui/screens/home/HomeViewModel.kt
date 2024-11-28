@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
     private val storage: IStorageService,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
     private val shareQuote: ISend,
     private val hasConnection: InternetConnection,
     private val intents: Intents,
@@ -60,7 +60,9 @@ class HomeViewModel @Inject constructor(
 
     fun onActions(action: HomeActions) {
         Analytics.sendAction(Analytics.Action(action))
+        writeLog(INFO, "[${HomeViewModel::class.java.simpleName}] onActions: $action")
         when (action) {
+            is HomeActions.HideLoading -> hideLoading()
             is HomeActions.Info -> showInfoDialog()
             is HomeActions.New -> loadNewRandomQuote()
             is HomeActions.ShareWithImage -> shareQuoteWithImage()
@@ -79,14 +81,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun hideLoading() {
+        _uiState.update { it.copy(isLoading = false) }
+    }
+
     private fun shareQuoteText() {
         val dataToSend = "${_uiState.value.quote.body} '${_uiState.value.quote.owner}'"
 
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            withContext(dispatcherIO) {
-                shareQuote.shareTextTo(dataToSend)
-            }
+            shareQuote.shareTextTo(dataToSend)
             _uiState.update { it.copy(isLoading = false) }
         }
     }
@@ -124,9 +128,7 @@ class HomeViewModel @Inject constructor(
 
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            withContext(dispatcherIO) {
-                shareQuote.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
-            }
+            shareQuote.shareImageTo(dataToSend, imageUri = _uiState.value.quote.imageUrl)
             _uiState.update { it.copy(isLoading = false) }
         }
     }
@@ -134,7 +136,7 @@ class HomeViewModel @Inject constructor(
     private fun goToSearchOwner() {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            withContext(dispatcherIO) {
+            withContext(dispatcherDefault) {
                 intents.goToSearchOwnerInBrowser(_uiState.value.quote.owner)
             }
             _uiState.update { it.copy(isLoading = false) }
@@ -142,7 +144,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun setQuoteLike() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(dispatcherDefault) {
             val isLike = !_likeState.value.isLike
             writeLog(INFO, "[HomeViewModel] -> setQuoteLike: $isLike")
             val id = _uiState.value.quote.id
@@ -157,14 +159,15 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun showConnectionDialog() {
-        _uiState.update { it.copy(showDialogNoConnection = true) }
+        val showSate = _uiState.value.showDialogNoConnection.let { !it }
+        _uiState.update { it.copy(showDialogNoConnection = showSate) }
     }
 
     private fun getQuote() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val quote = withContext(dispatcherIO) {
+            val quote = withContext(dispatcherDefault) {
                 selectQuote()
             }
             val reviewQuote = quote.copy(
@@ -177,9 +180,9 @@ class HomeViewModel @Inject constructor(
             )
             _uiState.update {
                 it.copy(
-                    isLoading = false,
+                    //isLoading = false,
                     quote = reviewQuote,
-                    showDialogNoConnection = if (it.hasConnection != true) false else null
+                    showDialogNoConnection = it.hasConnection != true
                 )
             }
 
@@ -188,7 +191,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun downloadImage() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(dispatcherDefault) {
             val imageName = uiState.value.quote.id
 
             if (_uiState.value.showBonified) {
@@ -248,7 +251,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getLikesQuote(id: String) {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(dispatcherDefault) {
             getLikes(id).catch {
                 writeLog(ERROR, "Error from getting likes: ${it.cause}", it)
             }.collect { likes ->
@@ -266,33 +269,36 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val quote = withContext(dispatcherIO) {
+            val quote = withContext(dispatcherDefault) {
                 selectQuote.getRandomQuote()
             }
             getLikesQuote(quote.id)
-            _uiState.update { it.copy(isLoading = false, quote = quote) }
+            _uiState.update { it.copy(quote = quote) }
         }
     }
 
     private fun hasConnectionFlow() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(dispatcherDefault) {
             hasConnection.isConnectedFlow().catch {
                 writeLog(ERROR, "Error getting connection state: ${it.cause}", it)
             }.onEach { connection ->
-                if (_uiState.value.hasConnection != true && connection)
+                if (isNeedActionWhenReconnection(connection))
                     onActions(HomeActions.ReConnection())
-                if (_uiState.value.showImage)
-                    onActions(HomeActions.ShowImage())
             }.collect { connection ->
                 _uiState.update {
                     it.copy(
                         hasConnection = connection,
-                        showDialogNoConnection = if (!connection) false else null
+                        showDialogNoConnection = !connection
                     )
                 }
             }
         }
     }
+
+    private fun isNeedActionWhenReconnection(connection: Boolean) =
+        _uiState.value.hasConnection != true && connection && !hasImageFromWeb() && !_uiState.value.isLoading
+
+    private fun hasImageFromWeb() = _uiState.value.quote.imageUrl.startsWith(HTTP)
 
     /**
      * Function only for TESTING!!!
@@ -302,4 +308,9 @@ class HomeViewModel @Inject constructor(
     fun showInterstitialOnlyForTesting() {
         _uiState.update { it.copy(showInterstitial = true) }
     }
+
+    companion object {
+        const val HTTP = "http"
+    }
+
 }

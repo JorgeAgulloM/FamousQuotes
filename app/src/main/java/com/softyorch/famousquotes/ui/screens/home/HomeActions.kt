@@ -1,6 +1,7 @@
 package com.softyorch.famousquotes.ui.screens.home
 
 sealed class HomeActions {
+    data class HideLoading(val action: String = "Loading"): HomeActions()
     data class Info(val action: String = "Info"): HomeActions()
     data class New(val action: String = "New"): HomeActions()
     data class ShareWithImage(val action: String = "ShareWithImage"): HomeActions()

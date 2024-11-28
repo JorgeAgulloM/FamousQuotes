@@ -67,7 +67,7 @@ class HomeViewModelTest {
             getLikes = getLikes,
             setLike = setLike,
             storage = storage,
-            dispatcherIO = Dispatchers.Unconfined,
+            dispatcherDefault = Dispatchers.Unconfined,
             shareQuote = shareQuote,
             hasConnection = hasConnection,
             intents = intents,

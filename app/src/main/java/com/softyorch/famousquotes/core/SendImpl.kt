@@ -42,7 +42,7 @@ import javax.inject.Inject
 
 class SendImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ISend {
 
     private val rawName = BuildConfig.APP_TITLE
@@ -87,7 +87,7 @@ class SendImpl @Inject constructor(
             .data(imageUrl)
             .build()
 
-        return withContext(dispatcherIO) {
+        return withContext(dispatcherDefault) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             if (result !is BitmapDrawable) return@withContext null
 

@@ -29,7 +29,8 @@ import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.components.LoadingCircle
-import com.softyorch.famousquotes.ui.screens.MainApp
+import com.softyorch.famousquotes.ui.core.navigation.NavigationWrapper
+import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import com.softyorch.famousquotes.utils.sdk33AndUp
@@ -68,8 +69,12 @@ class MainActivity : ComponentActivity() {
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
             when (state) {
-                MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
+                MainState.Home -> FamousQuotesTheme {
+                    splash.setKeepOnScreenCondition { false }
+                    NavigationWrapper()
+                }
                 MainState.Unauthorized -> LoadingCircle()
+                MainState.Start -> Unit
             }
         }
     }

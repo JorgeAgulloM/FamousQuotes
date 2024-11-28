@@ -20,6 +20,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -31,9 +32,9 @@ object DataModule {
     fun providesDatabaseService(
         firestore: FirebaseFirestore,
         internetConnection: InternetConnection,
+        dispatcherDefault: CoroutineDispatcher,
         @ApplicationContext context: Context
-    ):
-            IDatabaseService = DatabaseServiceImpl(firestore, internetConnection, context)
+    ): IDatabaseService = DatabaseServiceImpl(firestore, internetConnection, dispatcherDefault, context)
 
     @Singleton
     @Provides

@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -40,6 +39,7 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
+import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
@@ -91,24 +91,51 @@ private fun AdmobAds(
     bonified: Bonified,
     onActions: (HomeActions) -> Unit
 ) {
+    if (state.hasConnection == true)
+        ShowInterstitial(
+            interstitial = interstitial,
+            showInterstitial = state.showInterstitial,
+            imageIsDownloadAlready = state.imageIsDownloadAlready,
+            onActions = onActions
+        )
+    if (state.hasConnection == true)
+        ShowBonified(
+            bonified = bonified,
+            showBonified = state.showBonified,
+            onActions = onActions
+        )
+}
 
-    interstitial.Show(state.showInterstitial) {
+@Composable
+private fun ShowInterstitial(
+    interstitial: Interstitial,
+    showInterstitial: Boolean,
+    imageIsDownloadAlready: Boolean,
+    onActions: (HomeActions) -> Unit
+) {
+    interstitial.Show(showInterstitial) {
         if (it is InterstitialAdState.Showed ||
             it is InterstitialAdState.Error
         ) {
             writeLog(INFO, "itState: $it")
-            if (!state.imageIsDownloadAlready) onActions(HomeActions.New())
+            if (!imageIsDownloadAlready) onActions(HomeActions.New())
         }
 
         if ((it is InterstitialAdState.Clicked ||
                     it is InterstitialAdState.Close ||
                     it is InterstitialAdState.Error) &&
-            state.imageIsDownloadAlready
+            imageIsDownloadAlready
         ) onActions(HomeActions.SureDownloadImageAgain())
-
     }
+}
 
-    bonified.Show(state.showBonified) { bonifiedState ->
+@Composable
+private fun ShowBonified(
+    bonified: Bonified,
+    showBonified: Boolean,
+    onActions: (HomeActions) -> Unit
+) {
+    bonified.Show(showBonified) { bonifiedState ->
         if (bonifiedState == BonifiedAdState.Reward) onActions(HomeActions.DownloadImage())
 
         if (
@@ -137,43 +164,32 @@ private fun ContentBody(
             .fillMaxSize()
             .padding(top = 2.dp)
             .background(
-                brushBackGround(), shape = MaterialTheme.shapes.extraLarge.copy(
+                brushBackGround(),
+                shape = MaterialTheme.shapes.extraLarge.copy(
                     bottomStart = ZeroCornerSize,
                     bottomEnd = ZeroCornerSize
                 )
             )
     ) {
+        TopControlsGroup(
+            hasText = state.quote.body,
+            isEnabled = state.hasConnection == true,
+            isImageExt = state.quote.imageUrl.startsWith("http"),
+            paddingTop = paddingTop,
+            onNavigateToUserScreen = onNavigateToUserScreen
+        ) { action -> onActions(action) }
 
-        Box(
-            modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f),
-            contentAlignment = Alignment.TopEnd
-        ) {
-            val hasConnection = state.hasConnection == true
-            val imageFromWeb = state.quote.imageUrl.startsWith("http")
-            TopControlsGroup(
-                hasText = state.quote.body,
-                isEnabled = hasConnection,
-                isImageExt = imageFromWeb,
-                onNavigateToUserScreen = onNavigateToUserScreen
-            ) { action -> onActions(action) }
-        }
-        Box(
-            modifier = Modifier.clickable { onActions(HomeActions.ShowImage()) },
-            contentAlignment = Alignment.TopCenter
-        ) {
-            BackgroundImage(uri = state.quote.imageUrl)
-        }
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            CardQuote(
-                state = state,
-                stateLikes = stateLikes,
-                context = context
-            ) { action -> onActions(action) }
-        }
+        BackgroundImage(uri = state.quote.imageUrl) { action -> onActions(action) }
+
+        CardQuote(
+            state = state,
+            stateLikes = stateLikes,
+            context = context
+        ) { action -> onActions(action) }
 
         if (state.showInfo) InfoDialog { onActions(HomeActions.Info()) }
 
-        if (state.showDialogNoConnection == false) NoConnectionDialog {
+        if (state.showDialogNoConnection) NoConnectionDialog {
             onActions(HomeActions.ShowNoConnectionDialog())
         }
 
@@ -187,26 +203,25 @@ private fun ContentBody(
             onActions(HomeActions.ShowToastDownload())
         }
 
-        if (state.imageIsDownloadAlready)
-            BasicDialogApp(
-                text = stringResource(R.string.dialog_image_download_again_text),
-                textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
-                textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
-            ) { action ->
-                when (action) {
-                    POSITIVE -> onActions(HomeActions.CloseDialogDownLoadImageAgain())
-                    NEGATIVE -> onActions(HomeActions.SureDownloadImageAgain())
-                    DISMISS -> Unit
-                }
+        if (state.imageIsDownloadAlready) BasicDialogApp(
+            text = stringResource(R.string.dialog_image_download_again_text),
+            textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
+            textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
+        ) { action ->
+            when (action) {
+                POSITIVE -> onActions(HomeActions.CloseDialogDownLoadImageAgain())
+                NEGATIVE -> onActions(HomeActions.SureDownloadImageAgain())
+                DISMISS -> Unit
             }
+        }
     }
 }
 
 @Composable
-private fun BackgroundImage(uri: String) {
+private fun BackgroundImage(uri: String, onActions: (HomeActions) -> Unit) {
     val context = LocalContext.current
 
-    val data = if (uri.startsWith("http")) uri
+    val data = if (uri.startsWith(HTTP)) uri
     else context.getResourceDrawableIdentifier(uri)
 
     val painter = rememberAsyncImagePainter(
@@ -218,15 +233,23 @@ private fun BackgroundImage(uri: String) {
         contentScale = ContentScale.Fit
     )
 
-    val state = painter.state
-    Card(
-        shape = MaterialTheme.shapes.extraLarge,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+    val painterState = painter.state
+    Box(
+        modifier = Modifier.clickable { onActions(HomeActions.ShowImage()) },
+        contentAlignment = Alignment.TopCenter
     ) {
-        AnimatedImage(
-            isVisible = state is AsyncImagePainter.State.Success,
-            painter = painter
-        )
+        Card(
+            shape = MaterialTheme.shapes.extraLarge,
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+        ) {
+            AnimatedImage(
+                isVisible = painterState is AsyncImagePainter.State.Success,
+                painter = painter
+            )
+        }
+    }
+    if (painterState is AsyncImagePainter.State.Success) {
+        onActions(HomeActions.HideLoading())
     }
 }
 
@@ -238,41 +261,44 @@ private fun CardQuote(
     onAction: (HomeActions) -> Unit,
 ) {
     val toastMsg = stringResource(R.string.main_info_dialog_connection)
-
-    Column(
-        modifier = Modifier.background(brush = brushBackGround2()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        val isActive = state.quote.body.isNotBlank() && !state.showImage
-        val hasConnection = state.hasConnection == true
-        val imageFromWeb = state.quote.id.length > 3 && !state.quote.id.startsWith('0')
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         Column(
+            modifier = Modifier.background(brush = brushBackGround2()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().animateContentSize { _, _ -> },
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            AnimatedContentHome(isActive = isActive) {
-                Column {
-                    AppIcon()
-                    HeaderQuote()
-                    TextBody(text = state.quote.body)
-                    BottomBar(
-                        state = state,
-                        stateLikes = stateLikes,
-                        hasConnection = hasConnection,
-                        imageFromWeb = imageFromWeb,
-                        context = context,
-                        toastMsg = toastMsg,
-                        onAction = onAction
-                    )
+            val isActive = state.quote.body.isNotBlank() && !state.showImage
+            val hasConnection = state.hasConnection == true
+            val imageFromWeb = state.quote.id.length > 3 && !state.quote.id.startsWith('0')
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize { _, _ -> },
+            ) {
+                AnimatedContentHome(isActive = isActive) {
+                    Column {
+                        AppIcon()
+                        HeaderQuote()
+                        TextBody(text = state.quote.body)
+                        BottomBar(
+                            state = state,
+                            stateLikes = stateLikes,
+                            hasConnection = hasConnection,
+                            imageFromWeb = imageFromWeb,
+                            context = context,
+                            toastMsg = toastMsg,
+                            onAction = onAction
+                        )
+                    }
+                }
+                AnimatedContentHome(isActive = state.showImage) {
+                    TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
+                    // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
-            AnimatedContentHome(isActive = state.showImage) {
-                TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
-                // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
-            }
+            Banner.bannerInstance.Show()
         }
-        Banner.bannerInstance.Show()
     }
 }
 

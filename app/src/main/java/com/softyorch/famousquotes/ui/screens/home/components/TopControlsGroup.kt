@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,7 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.softyorch.famousquotes.R
@@ -40,6 +43,7 @@ fun TopControlsGroup(
     hasText: String,
     isEnabled: Boolean,
     isImageExt: Boolean,
+    paddingTop: Dp,
     onNavigateToUserScreen: () -> Unit,
     onAction: (HomeActions) -> Unit,
 ) {
@@ -56,16 +60,21 @@ fun TopControlsGroup(
         }
     }
 
-    AnimatedTextHome(hasText) {
-        TopControls(
-            isEnabled = isEnabled,
-            isImageExt = isImageExt,
-            context = context,
-            onAction = onAction,
-            onNavigateToUserScreen = onNavigateToUserScreen,
-            onLaunch = { launcher.launch(permission.WRITE_EXTERNAL_STORAGE) }
-        ) {
-            showPermissionRationaleDialog = true
+    Box(
+        modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f),
+        contentAlignment = Alignment.TopEnd
+    ) {
+        AnimatedTextHome(hasText) {
+            TopControls(
+                isEnabled = isEnabled,
+                isImageExt = isImageExt,
+                context = context,
+                onAction = onAction,
+                onNavigateToUserScreen = onNavigateToUserScreen,
+                onLaunch = { launcher.launch(permission.WRITE_EXTERNAL_STORAGE) }
+            ) {
+                showPermissionRationaleDialog = true
+            }
         }
     }
 
@@ -109,7 +118,7 @@ private fun TopControls(
             icon = Icons.Outlined.WifiOff,
             isVisible = !isEnabled,
             shadowOn = true
-        ) { onAction(HomeActions.New()) }
+        ) { onAction(HomeActions.ShowNoConnectionDialog()) }
         IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info,

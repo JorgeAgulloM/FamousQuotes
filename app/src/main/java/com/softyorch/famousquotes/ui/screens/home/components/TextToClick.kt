@@ -12,7 +12,7 @@ import com.softyorch.famousquotes.ui.theme.MyTypography
 
 @Composable
 fun TextToClick(text: String) {
-    AnimatedTextHome(text) {
+    //AnimatedTextHome(text) {
         Text(
             text = text,
             modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -20,5 +20,5 @@ fun TextToClick(text: String) {
             style = MyTypography.labelMedium,
             textAlign = TextAlign.Center
         )
-    }
+    //}
 }

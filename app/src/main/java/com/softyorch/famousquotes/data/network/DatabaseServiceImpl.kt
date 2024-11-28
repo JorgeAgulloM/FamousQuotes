@@ -22,6 +22,7 @@ import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -38,6 +39,7 @@ import kotlin.coroutines.resumeWithException
 class DatabaseServiceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val internetConnection: InternetConnection,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
     @ApplicationContext private val context: Context,
 ) : IDatabaseService {
 
@@ -45,6 +47,7 @@ class DatabaseServiceImpl @Inject constructor(
         const val COLLECTION = BuildConfig.DB_COLLECTION
         private const val COLLECTION_LIKES = "${COLLECTION}_likes"
         private const val COLLECTION_USERS_LIKE = "users_like"
+        private const val SERVICE_NAME = "FireStore ->"
     }
 
     //Provisional
@@ -56,19 +59,23 @@ class DatabaseServiceImpl @Inject constructor(
             try {
                 suspendCancellableCoroutine { cancelableCoroutine ->
                     val document = firestore.collection(COLLECTION).document(id)
-                    document.get(Source.CACHE).addOnSuccessListener { snapshot ->
+                    document[Source.CACHE].addOnSuccessListener { snapshot ->
                         cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
                     }.addOnFailureListener {
                         document.get().addOnSuccessListener { snapshot ->
                             cancelableCoroutine.resume(snapshot.toObject(QuoteResponse::class.java))
                         }.addOnFailureListener { ex ->
-                            writeLog(ERROR, "Error from Firebase onFailureListener: ${ex.cause}", ex)
+                            writeLog(
+                                ERROR,
+                                "$SERVICE_NAME Error from Firebase onFailureListener: ${ex.cause}",
+                                ex
+                            )
                             cancelableCoroutine.resumeWithException(ex)
                         }
                     }
                 }
             } catch (ex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
+                writeLog(ERROR, "$SERVICE_NAME Error from Firestore: ${ex.cause}", ex)
                 null
             }
         }
@@ -83,11 +90,15 @@ class DatabaseServiceImpl @Inject constructor(
                             it.toObject(QuoteResponse::class.java)
                         )
                     }.addOnFailureListener {
-                        writeLog(ERROR, "Error listen from Firebase Firestore: ${it.cause}", it)
+                        writeLog(
+                            ERROR,
+                            "$SERVICE_NAME Error listen from Firebase Firestore: ${it.cause}",
+                            it
+                        )
                         cancelableCoroutine.resumeWithException(it)
                     }
                 } catch (ex: FirebaseException) {
-                    writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
+                    writeLog(ERROR, "$SERVICE_NAME Error from Firebase Firestore: ${ex.cause}", ex)
                     cancelableCoroutine.resumeWithException(ex)
                 }
             }
@@ -100,7 +111,7 @@ class DatabaseServiceImpl @Inject constructor(
         val newLikes = likes + if (updateLikes.isLike) 1 else if (likes > 0) -1 else 0
         val isLike = updateLikes.isLike
 
-        writeLog(INFO, "Changed like to: $updateLikes")
+        writeLog(INFO, "$SERVICE_NAME Changed like to: $updateLikes")
 
         try {
             val newData = hashMapOf(
@@ -117,48 +128,46 @@ class DatabaseServiceImpl @Inject constructor(
             )
             document.collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
         } catch (fFex: FirebaseFirestoreException) {
-            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}", fFex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase firestore: ${fFex.cause}", fFex)
         } catch (fex: Exception) {
-            writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase: ${fex.cause}", fex)
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Database Service: ${ex.cause}", ex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Database Service: ${ex.cause}", ex)
         }
 
     }
 
-    override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> {
-        return withTimeoutOrNull(FIREBASE_TIMEOUT) {
-            try {
-                val haveConnection = withContext(Dispatchers.IO) {
-                    internetConnection.isConnectedFlow()
-                }
-
-                if (!haveConnection.first()) return@withTimeoutOrNull null
-
-                val document = firestore.collection(COLLECTION_LIKES).document(id)
-
-                if (document.get().await() != null)
-                    if (document.get().await().exists())
-                        document.snapshots().map { doc ->
-                            val result = doc.toObject(LikeQuoteResponse::class.java)
-
-                            val isLike = getUserIsLike(id).like
-
-                            result?.let {
-                                LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike)
-                            }
-                        } else null
-                else null
-
-            } catch (fex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
-                return@withTimeoutOrNull null
-            } catch (ex: Exception) {
-                writeLog(ERROR, "Error Exception: ${ex.cause}", ex)
-                return@withTimeoutOrNull null
+    override suspend fun getLikeQuoteFlow(id: String) = withTimeoutOrNull(FIREBASE_TIMEOUT) {
+        try {
+            val haveConnection = withContext(dispatcher) {
+                internetConnection.isConnectedFlow()
             }
-        } ?: flowOf(LikeQuoteResponse())
-    }
+
+            if (!haveConnection.first()) return@withTimeoutOrNull null
+
+            val document = firestore.collection(COLLECTION_LIKES).document(id)
+
+            if (document.get().await() != null)
+                if (document.get().await().exists())
+                    document.snapshots().map { doc ->
+                        val result = doc.toObject(LikeQuoteResponse::class.java)
+
+                        val isLike = getUserIsLike(id).like
+
+                        result?.let {
+                            LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike)
+                        }
+                    } else null
+            else null
+
+        } catch (fex: FirebaseException) {
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase: ${fex.cause}", fex)
+            return@withTimeoutOrNull null
+        } catch (ex: Exception) {
+            writeLog(ERROR, "$SERVICE_NAME Error Exception: ${ex.cause}", ex)
+            return@withTimeoutOrNull null
+        }
+    } ?: flowOf(LikeQuoteResponse())
 
     private suspend fun getLikeQuote(id: String): LikeQuoteResponse? {
         try {
@@ -167,12 +176,12 @@ class DatabaseServiceImpl @Inject constructor(
             return if (document.get().await().exists()) {
                 val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
                 likeQuote?.copy(like = getUserIsLike(id).like.also {
-                    writeLog(INFO, "[getUserIsLike] -> $it")
+                    writeLog(INFO, "$SERVICE_NAME [getUserIsLike] -> $it")
                 })
             } else null
 
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Firebase Firestore: ${ex.cause}", ex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase Firestore: ${ex.cause}", ex)
             return null
         }
     }
@@ -185,13 +194,13 @@ class DatabaseServiceImpl @Inject constructor(
                 .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
 
         } catch (fFex: FirebaseFirestoreException) {
-            writeLog(ERROR, "Error from Firebase firestore: ${fFex.cause}", fFex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase firestore: ${fFex.cause}", fFex)
             return LikeResponse()
         } catch (fex: FirebaseException) {
-            writeLog(ERROR, "Error from Firebase: ${fex.cause}", fex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Firebase: ${fex.cause}", fex)
             return LikeResponse()
         } catch (ex: Exception) {
-            writeLog(ERROR, "Error from Database Service: ${ex.cause}", ex)
+            writeLog(ERROR, "$SERVICE_NAME Error from Database Service: ${ex.cause}", ex)
             return LikeResponse()
         }
     }
