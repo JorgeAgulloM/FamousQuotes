@@ -26,6 +26,7 @@ import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -102,8 +103,6 @@ class DatabaseServiceImpl @Inject constructor(
         writeLog(INFO, "$SERVICE_NAME Changed like to: $updateLikes")
 
         tryCatchFireStore {
-            val document = firestore.collection(COLLECTION_LIKES).document(id)
-
             // Prepare likes
             val newData = hashMapOf(
                 ID to id,
@@ -113,7 +112,7 @@ class DatabaseServiceImpl @Inject constructor(
             // Prepare user like
             val userLike = hashMapOf(
                 ID to userId,
-                LIKES to isLike
+                LIKE to isLike
             )
 
             // Prepare user likes
@@ -122,13 +121,15 @@ class DatabaseServiceImpl @Inject constructor(
             )
 
             // Set values
-            document.set(newData)
-            document.collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
+            firestore.collection(COLLECTION_LIKES).document(id).apply {
+                set(newData)
+                collection(COLLECTION_USERS_LIKE).document(userId).set(userLike)
+            }
             firestore.collection(COLLECTION_USERS).document(userId).set(newDataUser)
         }
     }
 
-    override suspend fun getLikeQuoteFlow(id: String) = withTimeoutOrNull(FIREBASE_TIMEOUT) {
+    override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> = withTimeoutOrNull(FIREBASE_TIMEOUT) {
         tryCatchFireStore {
             val haveConnection = withContext(dispatcher) {
                 internetConnection.isConnectedFlow()
@@ -271,6 +272,7 @@ class DatabaseServiceImpl @Inject constructor(
         private const val COLLECTION_USERS_LIKE = "users_like"
         private const val SERVICE_NAME = "FireStore ->"
         private const val ID = "id"
+        private const val LIKE = "like"
         private const val LIKES = "likes"
         private const val LIKE_QUOTES = "likeQuotes"
     }
