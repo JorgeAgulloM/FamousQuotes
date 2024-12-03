@@ -12,8 +12,8 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
-import com.softyorch.famousquotes.ui.screens.user.GridViewModel
-import com.softyorch.famousquotes.ui.screens.user.GridScreen
+import com.softyorch.famousquotes.ui.screens.grid.GridViewModel
+import com.softyorch.famousquotes.ui.screens.grid.GridScreen
 import com.softyorch.famousquotes.utils.sdk32AndUp
 
 @Composable
