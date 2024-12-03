@@ -160,11 +160,15 @@ class DatabaseServiceImpl @Inject constructor(
             suspendCancellableCoroutine { cancelableCoroutine ->
                 tryCatchFireStore {
                     val document = firestore.collection(COLLECTION)
-                    document.get().addOnSuccessListener { snapshot ->
+                    document[Source.CACHE].addOnSuccessListener { snapshot ->
                         cancelableCoroutine.resume(snapshot.toObjects(QuoteResponse::class.java))
-                    }.addOnFailureListener { ex ->
-                        writeLogServiceError("Error getting all quotes", ex)
-                        cancelableCoroutine.resumeWithException(ex)
+                    }.addOnFailureListener {
+                        document.get().addOnSuccessListener { snapshot ->
+                            cancelableCoroutine.resume(snapshot.toObjects(QuoteResponse::class.java))
+                        }.addOnFailureListener { ex ->
+                            writeLogServiceError("Error getting all quotes", ex)
+                            cancelableCoroutine.resumeWithException(ex)
+                        }
                     }
                 } ?: cancelableCoroutine.resumeWithException(
                     throwService("Error getting all quotes")
@@ -183,11 +187,15 @@ class DatabaseServiceImpl @Inject constructor(
                     val query = firestore.collection(COLLECTION)
                         .whereIn(FieldPath.documentId(), likes)
 
-                    query.get().addOnSuccessListener { snapshot ->
+                    query[Source.CACHE].addOnSuccessListener { snapshot ->
                         cancelableCoroutine.resume(snapshot.toObjects(QuoteResponse::class.java))
-                    }.addOnFailureListener { ex ->
-                        throwService("Error getting favorite quotes")
-                        cancelableCoroutine.resumeWithException(ex)
+                    }.addOnFailureListener {
+                        query.get().addOnSuccessListener { snapshot ->
+                            cancelableCoroutine.resume(snapshot.toObjects(QuoteResponse::class.java))
+                        }.addOnFailureListener { ex ->
+                            throwService("Error getting favorite quotes")
+                            cancelableCoroutine.resumeWithException(ex)
+                        }
                     }
                 } ?: cancelableCoroutine.resumeWithException(
                     throwService("Error getting favorite quotes")
@@ -205,7 +213,7 @@ class DatabaseServiceImpl @Inject constructor(
 
             if (document.get().await().exists()) {
                 val likeQuote = document.get().await().toObject(LikeQuoteResponse::class.java)
-                likeQuote?.copy(like = getUserIsLikeNew().likeQuotes?.contains(id) == true)
+                likeQuote?.copy(like = getUserIsLikeFromUser().likeQuotes?.contains(id) == true)
             } else null
         }
     }
@@ -219,7 +227,7 @@ class DatabaseServiceImpl @Inject constructor(
         } ?: LikeResponse()
     }
 
-    private suspend fun getUserIsLikeNew(): UserLikesResponse {
+    private suspend fun getUserIsLikeFromUser(): UserLikesResponse {
         return tryCatchFireStore {
             firestore.collection(COLLECTION_USERS)
                 .document(userId)
@@ -233,12 +241,16 @@ class DatabaseServiceImpl @Inject constructor(
         withTimeoutOrNull(FIREBASE_TIMEOUT) {
             suspendCancellableCoroutine { cancelableCoroutine ->
                 tryCatchFireStore {
-                    firestore.collection(COLLECTION_USERS).document(userId).get()
-                        .addOnSuccessListener { snapshot ->
+                    val document = firestore.collection(COLLECTION_USERS).document(userId)
+                        document[Source.CACHE].addOnSuccessListener { snapshot ->
                             cancelableCoroutine.resume(snapshot.toObject(UserLikesResponse::class.java))
-                        }.addOnFailureListener { ex ->
-                            writeLogServiceError("Error getting like quotes", ex)
-                            cancelableCoroutine.resumeWithException(ex)
+                        }.addOnFailureListener {
+                            document.get().addOnSuccessListener { snapshot ->
+                                cancelableCoroutine.resume(snapshot.toObject(UserLikesResponse::class.java))
+                            }.addOnFailureListener { ex ->
+                                writeLogServiceError("Error getting like quotes", ex)
+                                cancelableCoroutine.resumeWithException(ex)
+                            }
                         }
                 } ?: cancelableCoroutine.resumeWithException(
                     throwService("Error getting like quotes")
