@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -149,7 +149,7 @@ private fun TopControls(
 
         IconButtonMenu(
             cDescription = "User Space",
-            icon = Icons.Outlined.Person,
+            icon = Icons.Outlined.GridView,
             shadowOn = true,
             isEnabled = isEnabled
         ) {
