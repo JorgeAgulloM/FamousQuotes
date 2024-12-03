@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.screens.home.components
+package com.softyorch.famousquotes.ui.core.commonComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
