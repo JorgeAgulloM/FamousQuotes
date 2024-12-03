@@ -97,12 +97,12 @@ private fun CardControls(
             badge = {
                 Badge(
                     containerColor = SecondaryColor.copy(alpha = 0.8f),
-                    modifier = Modifier.offset((-16).dp, (4).dp)
+                    modifier = Modifier.offset((-8).dp, (-8).dp)
                 ) {
                     Text(
                         text = stateLikes.likes.toString(),
                         fontSize = 14.sp,
-                        color = Color.DarkGray
+                        color = WhiteSmoke
                     )
                 }
             }
