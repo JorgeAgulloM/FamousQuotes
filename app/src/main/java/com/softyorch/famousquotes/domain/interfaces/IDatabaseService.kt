@@ -10,4 +10,6 @@ interface IDatabaseService {
     suspend fun getRandomQuote(): QuoteResponse?
     suspend fun likeDislikeQuote(updateLikes: LikesDataDTO)
     suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?>
+    suspend fun getAllQuotes(): List<QuoteResponse?>?
+    suspend fun getFavoriteQuotes(): List<QuoteResponse?>?
 }
