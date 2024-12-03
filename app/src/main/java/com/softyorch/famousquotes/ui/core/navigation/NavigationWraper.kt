@@ -12,8 +12,8 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
-import com.softyorch.famousquotes.ui.screens.user.UserViewModel
-import com.softyorch.famousquotes.ui.screens.user.UserScreen
+import com.softyorch.famousquotes.ui.screens.user.GridViewModel
+import com.softyorch.famousquotes.ui.screens.user.GridScreen
 import com.softyorch.famousquotes.utils.sdk32AndUp
 
 @Composable
@@ -25,7 +25,6 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
     Bonified()
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
-    val userViewModel = hiltViewModel<UserViewModel>()
 
     NavHost(navController = navController, startDestination = Splash) {
         composable<Splash> {
@@ -36,10 +35,11 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
            })
         }
         composable<Home> {
-            HomeScreen(viewModel = homeViewModel, onNavigateToUserScreen = { navController.navigate(User) })
+            HomeScreen(viewModel = homeViewModel, onNavigateToUserScreen = { navController.navigate(Grid) })
         }
-        composable<User> {
-            UserScreen(viewModel = userViewModel, navigateBack = { navController.navigateUp() })
+        composable<Grid> {
+            val gridViewModel = hiltViewModel<GridViewModel>()
+            GridScreen(viewModel = gridViewModel, navigateBack = { navController.navigateUp() })
         }
     }
 }

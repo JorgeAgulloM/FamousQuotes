@@ -9,4 +9,4 @@ object Splash
 object Home
 
 @Serializable
-object User
+object Grid
