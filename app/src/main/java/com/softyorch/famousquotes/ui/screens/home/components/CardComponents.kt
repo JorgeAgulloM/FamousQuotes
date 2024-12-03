@@ -91,7 +91,7 @@ private fun CardControls(
     ) {
         val iconLike =
             if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-        val colorIconLike = if (stateLikes.isLike) Color.Red else WhiteSmoke
+        val colorIconLike = if (stateLikes.isLike) Color.Red else SecondaryColor
 
         if (isQuoteFromService) BadgedBox(
             badge = {
