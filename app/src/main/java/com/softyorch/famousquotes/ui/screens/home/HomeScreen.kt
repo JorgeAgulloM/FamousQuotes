@@ -250,6 +250,7 @@ private fun BackgroundImage(uri: String, onActions: (HomeActions) -> Unit) {
     }
     if (painterState is AsyncImagePainter.State.Success) {
         onActions(HomeActions.HideLoading())
+        onActions(HomeActions.QuoteShown())
     }
 }
 

@@ -17,4 +17,5 @@ sealed class HomeActions {
     data class ShowToastDownload(val action: String = "ShowToastDownload"): HomeActions()
     data class CloseDialogDownLoadImageAgain(val action: String = "CloseDialogDownLoadImageAgain"): HomeActions()
     data class SureDownloadImageAgain(val action: String = "SureDownloadImageAgain"): HomeActions()
+    data class QuoteShown(val action: String = "SeenQuote"): HomeActions()
 }

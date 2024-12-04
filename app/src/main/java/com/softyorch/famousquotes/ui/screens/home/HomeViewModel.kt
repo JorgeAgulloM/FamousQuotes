@@ -9,7 +9,9 @@ import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
+import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
+import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
@@ -35,6 +37,8 @@ class HomeViewModel @Inject constructor(
     private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
     private val storage: IStorageService,
+    private val setQuoteShown: SetQuoteShown,
+    private val getUserLikeQuote: GetUserLikeQuote,
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
     private val shareQuote: ISend,
     private val hasConnection: InternetConnection,
@@ -78,6 +82,7 @@ class HomeViewModel @Inject constructor(
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
+            is HomeActions.QuoteShown -> setQuoteShown()
         }
     }
 
@@ -150,7 +155,7 @@ class HomeViewModel @Inject constructor(
             val id = _uiState.value.quote.id
             val updateLikes = LikesUiDTO(id = id, isLike = isLike)
             setLike(updateLikes.toDomain())
-            getLikesQuote(id)
+            //getLikesQuote(id)
         }
     }
 
