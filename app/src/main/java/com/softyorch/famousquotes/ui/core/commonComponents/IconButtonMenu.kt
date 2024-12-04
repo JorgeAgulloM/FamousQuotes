@@ -23,6 +23,7 @@ fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
     color: Color = SecondaryColor,
+    colorIcon: Color = WhiteSmoke,
     isVisible: Boolean = true,
     isEnabled: Boolean = true,
     shadowOn: Boolean = false,
@@ -52,6 +53,7 @@ fun IconButtonMenu(
                 imageVector = icon,
                 contentDescription = cDescription,
                 modifier = Modifier.size(32.dp),
+                tint = colorIcon,
             )
         }
     }
