@@ -10,6 +10,7 @@ import com.softyorch.famousquotes.domain.model.LikesQuote
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
+import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.domain.utils.getTodayId
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
@@ -51,6 +52,9 @@ class HomeViewModelTest {
     private lateinit var setQuoteShown: SetQuoteShown
 
     @RelaxedMockK
+    private lateinit var getUserLikeQuote: GetUserLikeQuote
+
+    @RelaxedMockK
     private lateinit var shareQuote: ISend
 
     @RelaxedMockK
@@ -72,6 +76,7 @@ class HomeViewModelTest {
             setLike = setLike,
             storage = storage,
             setQuoteShown = setQuoteShown,
+            getUserLikeQuote = getUserLikeQuote,
             dispatcherDefault = Dispatchers.Unconfined,
             shareQuote = shareQuote,
             hasConnection = hasConnection,
@@ -114,7 +119,7 @@ class HomeViewModelTest {
     fun `When start view model then getting Likes Quote`() = runTest {
         //Prepare test
         val id = getTodayId()
-        val likesQuote = LikesQuote(likes = 2, isLike = true)
+        val likesQuote = LikesQuote(likes = 2)
         val returnFlowLikes = flowOf(likesQuote)
         val owner = "SoftYorch"
         val quote = "The test quote"

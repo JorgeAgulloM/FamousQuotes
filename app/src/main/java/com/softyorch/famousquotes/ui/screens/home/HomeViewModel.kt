@@ -51,8 +51,6 @@ class HomeViewModel @Inject constructor(
     private val _likeState = MutableStateFlow(QuoteLikesState())
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
-    //val billingData: StateFlow<BillingModel> = _billingData
-
     init {
         onCreate()
     }
@@ -260,12 +258,14 @@ class HomeViewModel @Inject constructor(
             getLikes(id).catch {
                 writeLog(ERROR, "Error from getting likes: ${it.cause}", it)
             }.collect { likes ->
-                _likeState.update {
-                    it.copy(
-                        likes = likes?.likes ?: 0,
-                        isLike = likes?.isLike ?: false
-                    )
-                }
+                _likeState.update { it.copy(likes = likes?.likes ?: 0) }
+            }
+        }
+        viewModelScope.launch(dispatcherDefault) {
+            getUserLikeQuote(id).catch {
+                writeLog(ERROR, "Error from getting user like: ${it.cause}", it)
+            }.collect { isLike ->
+                _likeState.update { it.copy(isLike = isLike ?: false) }
             }
         }
     }
@@ -279,6 +279,14 @@ class HomeViewModel @Inject constructor(
             }
             getLikesQuote(quote.id)
             _uiState.update { it.copy(quote = quote) }
+        }
+    }
+
+    private fun setQuoteShown() {
+        viewModelScope.launch {
+            withContext(dispatcherDefault) {
+                setQuoteShown(_uiState.value.quote.id)
+            }
         }
     }
 

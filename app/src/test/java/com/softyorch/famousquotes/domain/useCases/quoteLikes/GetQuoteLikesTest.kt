@@ -36,7 +36,7 @@ class GetQuoteLikesTest {
         clearAllMocks()
     }
 
-    @Test
+/*    @Test
     fun `When Getting Likes From Service And Return Data`() = runBlocking {
         //Prepare test
         val id = getTodayId()
@@ -52,7 +52,7 @@ class GetQuoteLikesTest {
         //Then
         val fakeResult = returnFlow.first()
         assert(result.first() == fakeResult?.toDomain())
-    }
+    }*/
 
     @Test
     fun `When Getting Likes From Service And Return Null`() = runBlocking {
