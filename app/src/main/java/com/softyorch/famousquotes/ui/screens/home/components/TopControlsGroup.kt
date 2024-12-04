@@ -109,7 +109,7 @@ private fun TopControls(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+            .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -120,12 +120,14 @@ private fun TopControls(
             isVisible = !isEnabled,
             shadowOn = true
         ) { onAction(HomeActions.ShowNoConnectionDialog()) }
+
         IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info,
             isEnabled = isEnabled,
             shadowOn = true
         ) { onAction(HomeActions.Info()) }
+
         if (isImageExt) IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
             icon = Icons.Outlined.Download,
