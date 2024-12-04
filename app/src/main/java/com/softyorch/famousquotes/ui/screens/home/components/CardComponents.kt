@@ -91,13 +91,13 @@ private fun CardControls(
     ) {
         val iconLike =
             if (stateLikes.isLike) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
-        val colorIconLike = if (stateLikes.isLike) Color.Red else SecondaryColor
+        val colorIconLike = if (stateLikes.isLike) Color.Red else WhiteSmoke
 
         if (isQuoteFromService) BadgedBox(
             badge = {
                 Badge(
                     containerColor = SecondaryColor.copy(alpha = 0.8f),
-                    modifier = Modifier.offset((-8).dp, (-8).dp)
+                    modifier = Modifier.offset((-8).dp, 4.dp)
                 ) {
                     Text(
                         text = stateLikes.likes.toString(),
@@ -109,7 +109,7 @@ private fun CardControls(
         ) {
             IconButtonMenu(
                 cDescription = stringResource(R.string.main_icon_content_desc_like_use),
-                color = colorIconLike,
+                colorIcon = colorIconLike,
                 icon = iconLike,
                 isEnabled = isEnabled
             ) { onAction(HomeActions.Like()) }
