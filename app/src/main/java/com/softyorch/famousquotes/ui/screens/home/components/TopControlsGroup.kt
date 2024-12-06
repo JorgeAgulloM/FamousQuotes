@@ -44,6 +44,7 @@ fun TopControlsGroup(
     hasText: String,
     isEnabled: Boolean,
     isImageExt: Boolean,
+    isShoImage: Boolean,
     paddingTop: Dp,
     onNavigateToUserScreen: () -> Unit,
     onAction: (HomeActions) -> Unit,
@@ -65,7 +66,7 @@ fun TopControlsGroup(
         modifier = Modifier.fillMaxWidth().padding(top = paddingTop).zIndex(10f),
         contentAlignment = Alignment.TopEnd
     ) {
-        AnimatedTextHome(hasText) {
+        AnimatedTextHome(hasText, !isShoImage) {
             TopControls(
                 isEnabled = isEnabled,
                 isImageExt = isImageExt,
