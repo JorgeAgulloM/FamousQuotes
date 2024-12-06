@@ -11,6 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +35,7 @@ import com.softyorch.famousquotes.ui.core.navigation.NavigationWrapper
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
+import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.sdk33AndUp
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +44,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     companion object {
-        lateinit var instance: MainActivity
         lateinit var firebaseAnalytics: FirebaseAnalytics
+        var paddingTop: Dp = 0.dp
     }
 
     private lateinit var viewModel: MainViewModel
@@ -54,7 +57,7 @@ class MainActivity : ComponentActivity() {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        instance = this
+        paddingTop = getTopPadding()
 
         splash.setKeepOnScreenCondition { true }
 
@@ -77,6 +80,11 @@ class MainActivity : ComponentActivity() {
                 MainState.Start -> Unit
             }
         }
+    }
+
+    private fun getTopPadding(): Dp {
+        val isFullScreen = isFullScreenMode(this)
+        return if (isFullScreen) 32.dp else 0.dp
     }
 
     private fun StartUpdateManager() {

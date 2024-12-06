@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -57,7 +56,6 @@ import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
-import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -74,8 +72,7 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
 
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val isFullScreen = isFullScreenMode(MainActivity.instance)
-    val paddingTop = if (isFullScreen) 32.dp else 0.dp
+    val paddingTop = MainActivity.paddingTop
     ContentBody(paddingTop, state, stateLikes, context, onNavigateToUserScreen) { action ->
         viewModel.onActions(action)
     }

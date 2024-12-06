@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
@@ -45,14 +46,12 @@ import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
-import com.softyorch.famousquotes.utils.isFullScreenMode
+import com.softyorch.famousquotes.ui.theme.BackgroundColor
 
 @Composable
 fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
 
-    val isFullScreen = isFullScreenMode(MainActivity.instance)
-    val paddingTop = if (isFullScreen) 36.dp else 0.dp
+    val paddingTop = MainActivity.paddingTop
 
     val allQuotes by viewModel.quotes.collectAsStateWithLifecycle()
     val selectedQuotes by viewModel.filterQuotesSelected.collectAsStateWithLifecycle()
@@ -60,9 +59,9 @@ fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
     val gridState = rememberLazyGridState()
 
     Scaffold(
-        modifier = Modifier.padding(top = paddingTop),
         topBar = {
             TopBarGrid(
+                paddingTop = paddingTop,
                 filterQuotes = selectedQuotes,
                 navigateBack = navigateBack,
                 onClickSettingsListener = {}
@@ -70,8 +69,9 @@ fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
                 viewModel.selectFilterQuotes(it)
             }
         },
-        containerColor = WhiteSmoke
+        containerColor = BackgroundColor
     ) { paddingValues ->
+
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
@@ -124,7 +124,9 @@ fun CardItem(item: FamousQuoteModel?) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Card(
-                        modifier = Modifier.height(180.dp).padding(4.dp),
+                        modifier = Modifier
+                            .height(180.dp)
+                            .padding(4.dp),
                         shape = MaterialTheme.shapes.large,
                         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
                     ) {
@@ -157,21 +159,23 @@ fun CardItem(item: FamousQuoteModel?) {
 
 @Composable
 fun TopBarGrid(
+    paddingTop: Dp,
     filterQuotes: FilterQuotes,
     navigateBack: () -> Unit,
     onClickSettingsListener: () -> Unit,
     onClickListener: (FilterQuotes) -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, paddingTop + 8.dp, end = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButtonMenu(
             cDescription = "Back",
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             shadowOn = true
-        ) { navigateBack()}
+        ) { navigateBack() }
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -217,6 +221,6 @@ private fun ButtonTopBar(
         icon = icon,
         shadowOn = true,
         isSelected = isSelected
-    ) { onClickListener(filterQuotes)}
+    ) { onClickListener(filterQuotes) }
 }
 
