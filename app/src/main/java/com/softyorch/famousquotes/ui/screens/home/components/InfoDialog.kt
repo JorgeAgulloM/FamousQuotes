@@ -45,6 +45,9 @@ fun InfoDialog(onAction: () -> Unit) {
                     shape = MaterialTheme.shapes.medium
                 ).padding(16.dp)
             ) {
+                AppIcon()
+                HeaderQuote()
+                SpacerHeight(height = 32)
                 InfoIcons(
                     icon = Icons.Outlined.Info,
                     text = infoText
