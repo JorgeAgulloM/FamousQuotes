@@ -83,8 +83,8 @@ fun TopControlsGroup(
     if (showPermissionRationaleDialog) BasicDialogApp(
         text = stringResource(R.string.dialog_permission_rationale_text),
         auxText = stringResource(R.string.dialog_permission_rationale_aux_text),
-        textBtnPositive = stringResource(R.string.dialog_permission_rationale_ok),
-        textBtnNegative = stringResource(R.string.dialog_permission_rationale_denied),
+        textBtnPositive = stringResource(R.string.dialog_permission_rationale_denied),
+        textBtnNegative = stringResource(R.string.dialog_permission_rationale_ok),
     ) { action ->
         when (action) {
             DialogCloseAction.POSITIVE -> launcher.launch(permission.WRITE_EXTERNAL_STORAGE)

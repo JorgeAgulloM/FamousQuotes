@@ -60,8 +60,8 @@ fun CardControlsGroup(
     if (showSendDialog) BasicDialogApp(
         text = stringResource(R.string.dialog_how_do_you_share),
         title = stringResource(R.string.dialog_share_title),
-        textBtnPositive = stringResource(R.string.dialog_share_by_image),
-        textBtnNegative = stringResource(R.string.dialog_share_by_text),
+        textBtnPositive = stringResource(R.string.dialog_share_by_text),
+        textBtnNegative = stringResource(R.string.dialog_share_by_image),
         blackDismissActions = true
     ) {
         when (it) {

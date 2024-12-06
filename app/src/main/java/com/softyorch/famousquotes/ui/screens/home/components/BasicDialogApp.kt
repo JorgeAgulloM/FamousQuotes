@@ -58,6 +58,10 @@ private fun ContentDialog(
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
+        AppIcon()
+        HeaderQuote()
+        SpacerHeight(height = 32)
+
         if (title != null) {
             TextInfo(title)
             SpacerHeight()
@@ -78,10 +82,10 @@ private fun ContentDialog(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (textBtnPositive != null) ButtonApp(text = textBtnPositive, primary = true) {
+            if (textBtnPositive != null) ButtonApp(text = textBtnPositive) {
                 onActions(POSITIVE)
             }
-            if (textBtnNegative != null) ButtonApp(text = textBtnNegative) {
+            if (textBtnNegative != null) ButtonApp(text = textBtnNegative, primary = true) {
                 onActions(NEGATIVE)
             }
         }
