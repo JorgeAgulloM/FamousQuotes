@@ -25,7 +25,7 @@ sealed class Analytics(val name: String) {
 
                 writeLog(
                     level = DEBUG, text = "[Analytics] -> send action from: ${
-                        MainActivity.instance.packageName
+                        MainActivity.packageAppName
                     } to Analytics: ${action.name}"
                 )
             }

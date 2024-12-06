@@ -10,7 +10,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -45,6 +52,8 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         lateinit var firebaseAnalytics: FirebaseAnalytics
+        lateinit var instance: MainActivity
+        var packageAppName: String = ""
         var paddingTop: Dp = 0.dp
     }
 
@@ -57,7 +66,9 @@ class MainActivity : ComponentActivity() {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        instance = this
         paddingTop = getTopPadding()
+        packageAppName = applicationContext.packageName
 
         splash.setKeepOnScreenCondition { true }
 
