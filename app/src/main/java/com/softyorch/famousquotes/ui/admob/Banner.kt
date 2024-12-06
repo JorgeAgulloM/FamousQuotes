@@ -25,7 +25,7 @@ class Banner {
 
     companion object {
         val bannerInstance: Banner = Banner()
-        var heightBanner: Int = 50
+        var heightBanner: Int = 96
     }
 
     private var adView: AdView? = null
