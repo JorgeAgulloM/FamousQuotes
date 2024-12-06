@@ -159,7 +159,6 @@ private fun ContentBody(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 2.dp)
             .background(
                 brushBackGround(),
                 shape = MaterialTheme.shapes.extraLarge.copy(
