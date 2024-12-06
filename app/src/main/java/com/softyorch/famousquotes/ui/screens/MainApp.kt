@@ -6,12 +6,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.softyorch.famousquotes.ui.admob.Banner
+import com.softyorch.famousquotes.ui.admob.Bonified
+import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.core.navigation.NavigationWrapper
 
 @Composable
 fun MainApp(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter){
+
+    // Start AdMob Ads
+    Banner.bannerInstance.StartAdView()
+    Interstitial()
+    Bonified()
+
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         NavigationWrapper()
-        Banner.bannerInstance.Show()
+        Banner.bannerInstance.apply {
+            StartAdView()
+            Show()
+        }
     }
 }
