@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.Card
@@ -40,7 +39,6 @@ import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.LoadingCircle
-import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage

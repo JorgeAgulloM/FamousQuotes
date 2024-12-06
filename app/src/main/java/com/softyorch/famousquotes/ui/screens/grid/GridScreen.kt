@@ -48,7 +48,6 @@ import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
-import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 
