@@ -10,16 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,11 +29,10 @@ import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.components.LoadingCircle
-import com.softyorch.famousquotes.ui.core.navigation.NavigationWrapper
+import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
-import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.sdk33AndUp
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +44,6 @@ class MainActivity : ComponentActivity() {
         lateinit var firebaseAnalytics: FirebaseAnalytics
         lateinit var instance: MainActivity
         var packageAppName: String = ""
-        var paddingTop: Dp = 0.dp
     }
 
     private lateinit var viewModel: MainViewModel
@@ -67,7 +56,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         instance = this
-        paddingTop = getTopPadding()
         packageAppName = applicationContext.packageName
 
         splash.setKeepOnScreenCondition { true }
@@ -85,17 +73,12 @@ class MainActivity : ComponentActivity() {
             when (state) {
                 MainState.Home -> FamousQuotesTheme {
                     splash.setKeepOnScreenCondition { false }
-                    NavigationWrapper()
+                    MainApp()
                 }
                 MainState.Unauthorized -> LoadingCircle()
                 MainState.Start -> Unit
             }
         }
-    }
-
-    private fun getTopPadding(): Dp {
-        val isFullScreen = isFullScreenMode(this)
-        return if (isFullScreen) 32.dp else 0.dp
     }
 
     private fun StartUpdateManager() {

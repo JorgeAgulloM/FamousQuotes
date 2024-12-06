@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -34,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -44,14 +46,18 @@ import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
+import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
+import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 
 @Composable
 fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
 
-    val paddingTop = MainActivity.paddingTop
+    val paddingTop = with(LocalDensity.current) {
+        androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
+    }
 
     val allQuotes by viewModel.quotes.collectAsStateWithLifecycle()
     val selectedQuotes by viewModel.filterQuotesSelected.collectAsStateWithLifecycle()
@@ -84,6 +90,10 @@ fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
                 items(it) { quote ->
                     CardItem(item = quote)
                 }
+            }
+
+            item {
+                SpacerHeight(Banner.heightBanner)
             }
         }
     }
