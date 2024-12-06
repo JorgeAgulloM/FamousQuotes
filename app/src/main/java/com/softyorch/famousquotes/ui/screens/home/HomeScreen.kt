@@ -42,17 +42,14 @@ import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
-import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
 import com.softyorch.famousquotes.ui.screens.home.components.CardControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
-import com.softyorch.famousquotes.ui.screens.home.components.TextInfoApp
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
@@ -175,6 +172,7 @@ private fun ContentBody(
             hasText = state.quote.body,
             isEnabled = state.hasConnection == true,
             isImageExt = state.quote.imageUrl.startsWith("http"),
+            isShoImage = state.showImage,
             paddingTop = paddingTop,
             onNavigateToUserScreen = onNavigateToUserScreen
         ) { action -> onActions(action) }
@@ -279,8 +277,6 @@ private fun CardQuote(
             ) {
                 AnimatedContentHome(isActive = isActive) {
                     Column {
-                        AppIcon()
-                        HeaderQuote()
                         TextBody(text = state.quote.body)
                         BottomBar(
                             state = state,
@@ -300,21 +296,6 @@ private fun CardQuote(
             }
             Banner.bannerInstance.Show()
         }
-    }
-}
-
-@Composable
-private fun HeaderQuote() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        TextInfoApp(
-            text = stringResource(R.string.main_text_get_inspired),
-            size = 22,
-            color = SecondaryColor
-        )
     }
 }
 
