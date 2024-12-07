@@ -31,7 +31,7 @@ fun IsDebugShowText(id: String) {
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
