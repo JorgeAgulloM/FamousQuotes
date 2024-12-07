@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,6 +41,7 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.components.IsDebugShowText
 import com.softyorch.famousquotes.ui.components.LoadingCircle
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
@@ -59,6 +61,7 @@ import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
+import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -79,7 +82,13 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
     }
 
-    ContentBody(paddingTop, state, stateLikes, context, onNavigateToUserScreen) { action ->
+    ContentBody(
+        paddingTop = paddingTop,
+        state = state,
+        stateLikes = stateLikes,
+        context = context,
+        onNavigateToUserScreen = onNavigateToUserScreen
+    ) { action ->
         viewModel.onActions(action)
     }
 }
@@ -162,10 +171,7 @@ private fun ContentBody(
             .fillMaxSize()
             .background(
                 brushBackGround(),
-                shape = MaterialTheme.shapes.extraLarge.copy(
-                    bottomStart = ZeroCornerSize,
-                    bottomEnd = ZeroCornerSize
-                )
+                shape = configurableCornerShape()
             )
     ) {
         TopControlsGroup(
@@ -236,7 +242,7 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
         contentAlignment = Alignment.TopCenter
     ) {
         Card(
-            shape = MaterialTheme.shapes.extraLarge,
+            shape = configurableCornerShape(),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
         ) {
             AnimatedImage(
@@ -339,4 +345,16 @@ private fun BottomBar(
             else context.showToast(toastMsg, Toast.LENGTH_LONG)
         }
     }
+}
+
+@Composable
+private fun configurableCornerShape(isCard: Boolean = false): CornerBasedShape {
+    val isFullScreen = isFullScreenMode(MainActivity.instance)
+    val cornerMaterialXL = MaterialTheme.shapes.extraLarge.topStart
+    return MaterialTheme.shapes.extraLarge.copy(
+        topStart = if (isFullScreen) ZeroCornerSize else cornerMaterialXL,
+        topEnd = if (isFullScreen) ZeroCornerSize else cornerMaterialXL,
+        bottomStart = if (!isCard) ZeroCornerSize else cornerMaterialXL,
+        bottomEnd = if (!isCard) ZeroCornerSize else cornerMaterialXL
+    )
 }
