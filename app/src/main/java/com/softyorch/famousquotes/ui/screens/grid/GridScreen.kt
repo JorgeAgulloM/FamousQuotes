@@ -49,6 +49,7 @@ import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.ui.admob.Banner
+import com.softyorch.famousquotes.ui.components.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
@@ -116,9 +117,11 @@ fun CardItem(item: FamousQuoteModel?) {
         ),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
     ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             if (item == null || item.imageUrl.isEmpty()) {
-                CircularProgressIndicator()
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             } else {
                 val painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
@@ -158,6 +161,8 @@ fun CardItem(item: FamousQuoteModel?) {
                         modifier = Modifier.padding(8.dp),
                     )
                 }
+
+                IsDebugShowText(item.id)
 
                 if (painterState !is AsyncImagePainter.State.Success) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

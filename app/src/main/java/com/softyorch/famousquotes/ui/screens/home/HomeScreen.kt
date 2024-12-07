@@ -38,6 +38,7 @@ import com.softyorch.famousquotes.ui.admob.Bonified
 import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
+import com.softyorch.famousquotes.ui.components.IsDebugShowText
 import com.softyorch.famousquotes.ui.components.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
@@ -293,6 +294,7 @@ private fun CardQuote(
                     // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
+            IsDebugShowText(state.quote.id)
             SpacerHeight(Banner.heightBanner)
         }
     }
