@@ -49,7 +49,7 @@ class Interstitial {
             }
         } catch (ex: Exception) {
             writeLog(level = ERROR, text = "Error Show Interstitial ${ex.message}", ex)
-            onAction(InterstitialAdState.Error)
+            onAction(InterstitialAdState.Error(ex.message ?: ""))
         }
     }
 
@@ -62,8 +62,8 @@ class Interstitial {
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    writeLog(ERROR, "[Interstitial] -> Error Admob: ${error.message}of")
-                    onAction(InterstitialAdState.Error)
+                    writeLog(ERROR, "[Interstitial] -> Error Admob: ${error.message}")
+                    onAction(InterstitialAdState.Error(error.message))
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -90,7 +90,7 @@ class Interstitial {
 
                             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                                 super.onAdFailedToShowFullScreenContent(adError)
-                                onAction(InterstitialAdState.Error)
+                                onAction(InterstitialAdState.Error(adError.message))
                             }
 
                             override fun onAdImpression() {
