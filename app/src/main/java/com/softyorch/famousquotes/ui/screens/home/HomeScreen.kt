@@ -177,7 +177,7 @@ private fun ContentBody(
             onNavigateToUserScreen = onNavigateToUserScreen
         ) { action -> onActions(action) }
 
-        BackgroundImage(uri = state.quote.imageUrl) { action -> onActions(action) }
+        BackgroundImage(uri = state.quote.imageUrl, context = context) { action -> onActions(action) }
 
         CardQuote(
             state = state,
@@ -216,8 +216,7 @@ private fun ContentBody(
 }
 
 @Composable
-private fun BackgroundImage(uri: String, onActions: (HomeActions) -> Unit) {
-    val context = LocalContext.current
+private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActions) -> Unit) {
 
     val data = if (uri.startsWith(HTTP)) uri
     else context.getResourceDrawableIdentifier(uri)
