@@ -90,17 +90,15 @@ private fun AdmobAds(
     bonified: Bonified,
     onActions: (HomeActions) -> Unit
 ) {
-    if (state.hasConnection == true)
+    if (state.hasConnection == true && state.showInterstitial)
         ShowInterstitial(
             interstitial = interstitial,
-            showInterstitial = state.showInterstitial,
             imageIsDownloadAlready = state.imageIsDownloadAlready,
             onActions = onActions
         )
-    if (state.hasConnection == true)
+    if (state.hasConnection == true && state.showBonified)
         ShowBonified(
             bonified = bonified,
-            showBonified = state.showBonified,
             onActions = onActions
         )
 }
@@ -108,7 +106,7 @@ private fun AdmobAds(
 @Composable
 private fun ShowInterstitial(
     interstitial: Interstitial,
-    showInterstitial: Boolean,
+    showInterstitial: Boolean = true,
     imageIsDownloadAlready: Boolean,
     onActions: (HomeActions) -> Unit
 ) {
@@ -131,7 +129,7 @@ private fun ShowInterstitial(
 @Composable
 private fun ShowBonified(
     bonified: Bonified,
-    showBonified: Boolean,
+    showBonified: Boolean = true,
     onActions: (HomeActions) -> Unit
 ) {
     bonified.Show(showBonified) { bonifiedState ->
