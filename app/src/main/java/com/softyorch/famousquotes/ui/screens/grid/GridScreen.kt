@@ -1,6 +1,7 @@
 package com.softyorch.famousquotes.ui.screens.grid
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -31,7 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +52,7 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @Composable
 fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
@@ -109,7 +112,7 @@ fun CardItem(item: FamousQuoteModel?) {
             .height(240.dp),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray
+            containerColor = WhiteSmoke
         ),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
     ) {
@@ -177,16 +180,19 @@ fun TopBarGrid(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, paddingTop + 8.dp, end = 8.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(start = 8.dp, paddingTop + 8.dp, end = 8.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
     ) {
         IconButtonMenu(
             cDescription = "Back",
-            icon = Icons.AutoMirrored.Filled.ArrowBack,
-            shadowOn = true
+            icon = Icons.AutoMirrored.Filled.ArrowBack
         ) { navigateBack() }
 
         Row(
+            modifier = Modifier
+                .background(color = WhiteSmoke, shape = MaterialTheme.shapes.large)
+                .padding(start = 1.dp, end = 1.dp, top = 2.dp, bottom = 2.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -200,7 +206,7 @@ fun TopBarGrid(
                 contentDescription = "Shown",
                 filterQuotes = FilterQuotes.Seen,
                 icon = Icons.Default.RemoveRedEye,
-                isSelected = filterQuotes == FilterQuotes.Seen
+                isSelected = filterQuotes == FilterQuotes.Seen,
             ) { onClickListener(it) }
             ButtonTopBar(
                 contentDescription = "Favorites",
@@ -208,12 +214,11 @@ fun TopBarGrid(
                 icon = Icons.Default.Star,
                 isSelected = filterQuotes == FilterQuotes.Favorites
             ) { onClickListener(it) }
-            IconButtonMenu(
-                cDescription = "Back",
-                icon = Icons.Default.Settings,
-                shadowOn = true
-            ) { onClickSettingsListener() }
         }
+        IconButtonMenu(
+            cDescription = "Back",
+            icon = Icons.Default.Settings
+        ) { onClickSettingsListener() }
     }
 }
 
@@ -225,11 +230,24 @@ private fun ButtonTopBar(
     isSelected: Boolean,
     onClickListener: (FilterQuotes) -> Unit
 ) {
-    IconButtonMenu(
-        cDescription = contentDescription,
-        icon = icon,
-        shadowOn = true,
-        isSelected = isSelected
-    ) { onClickListener(filterQuotes) }
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 1.dp)
+            .width(80.dp)
+            .height(40.dp)
+            .shadow(elevation = 4.dp, shape = MaterialTheme.shapes.large)
+            .background(
+                color = BackgroundColor,
+                shape = MaterialTheme.shapes.large
+            ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        IconButtonMenu(
+            cDescription = contentDescription,
+            icon = icon,
+            shadowOn = false,
+            isSelected = isSelected
+        ) { onClickListener(filterQuotes) }
+    }
 }
 

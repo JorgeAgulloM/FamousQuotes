@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
@@ -30,12 +30,15 @@ fun IconButtonMenu(
     isSelected: Boolean = false,
     onClick: () -> Unit,
 ) {
-    val selectColor = if (isSelected) WhiteSmoke.copy(alpha = 0.4f)
+    val selectedColor = PrimaryColor
+    val selectColor = if (isSelected) selectedColor
+    else if (colorIcon != WhiteSmoke)
+        colorIcon
     else WhiteSmoke
 
     if (isVisible) IconButton(
         onClick = { onClick() },
-        colors = IconButtonDefaults.iconButtonColors(contentColor = selectColor),
+        //colors = IconButtonDefaults.iconButtonColors(contentColor = selectColor),
         modifier = Modifier
             .padding(4.dp)
             .size(48.dp),
@@ -53,7 +56,7 @@ fun IconButtonMenu(
                 imageVector = icon,
                 contentDescription = cDescription,
                 modifier = Modifier.size(32.dp),
-                tint = colorIcon,
+                tint = selectColor,
             )
         }
     }
