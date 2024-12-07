@@ -21,7 +21,7 @@ val HistoricalBackground = Color(0xFF00253A)
 
 val BiblicalPrimary = Color(0xFF3182BD)
 val BiblicalSecondary = Color(0xFF6BAED6)
-val BiblicalBackground = Color(0xFF7FA0BB)
+val BiblicalBackground = Color(0xFF00253A)
 
 val UpliftingPrimary = Color(0xFF99CE00)
 val UpliftingSecondary = Color(0xFFBAD56B)

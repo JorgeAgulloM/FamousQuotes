@@ -156,7 +156,7 @@ android {
             buildConfigField("String", "ICON", "\"biblical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF3182BD")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF3182BD")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF7FA0BB")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF00253A")
             android.buildFeatures.buildConfig = true
         }
     }
