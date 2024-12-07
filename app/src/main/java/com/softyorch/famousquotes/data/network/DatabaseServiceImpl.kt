@@ -15,8 +15,6 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
-import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
-import com.softyorch.famousquotes.data.network.response.LikeResponse
 import com.softyorch.famousquotes.data.network.response.LikesQuoteResponse
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.UserLikesResponse
@@ -106,10 +104,10 @@ class DatabaseServiceImpl @Inject constructor(
         modifyLikeValue(id, isLike)
 
         // Añade o quita una frase a la lista de likes del usuario
-        modifyUserOnQuoteGenericList(id, isLike, UserEditableValuesTypeList.Like())
+        genericModifyQuotesInUserLists(id, isLike, UserEditableValuesTypeList.Like())
 
         // Añade o quita un usuario de la lista de la frase
-        modifyQuotesOnUserGenericList(id, isLike, QuoteEditableValuesTypeList.Like())
+        genericModifyUsersInQuoteLists(id, isLike, QuoteEditableValuesTypeList.Like())
     }
 
     /* Crea un guardado de los usuario s que han visto la frase, que le han dado Like, y añade una lista de favoritos
@@ -118,38 +116,20 @@ class DatabaseServiceImpl @Inject constructor(
 
     override suspend fun setQuoteShown(id: String) {
         tryCatchFireStore {
-            firestore.collection(COLLECTION_USERS)
-                .document(userId)
-                .update(SHOWN_QUOTES, FieldValue.arrayUnion(id))
-                .await()
+            val document = firestore.collection(COLLECTION_USERS).document(userId)
+
+            document.get().addOnSuccessListener { documentSnapShot ->
+                if (documentSnapShot.exists()) {
+                    document.update(SHOWN_QUOTES, FieldValue.arrayUnion(id))
+                        .addOnFailureListener { ex ->
+                            ex.message?.let { throwService(it) }
+                        }
+                } else {
+                    document.set(UserShownResponse(shownQuotes = mutableListOf(id)))
+                }
+            }.addOnFailureListener { ex -> ex.message?.let { throwService(it) } }
         }
     }
-
-    override suspend fun getLikeQuoteFlow(id: String): Flow<LikeQuoteResponse?> =
-        withTimeoutOrNull(FIREBASE_TIMEOUT) {
-            tryCatchFireStore {
-                val haveConnection = withContext(dispatcher) {
-                    internetConnection.isConnectedFlow()
-                }
-
-                if (!haveConnection.first()) return@withTimeoutOrNull null
-
-                val document = firestore.collection(COLLECTION).document(id)
-
-                if (document.get().await() != null)
-                    if (document.get().await().exists())
-                        document.snapshots().map { doc ->
-                            val result = doc.toObject(LikeQuoteResponse::class.java)
-
-                            val isLike = getUserIsLike(id).like
-
-                            result?.let {
-                                LikeQuoteResponse(id = it.id, likes = it.likes, like = isLike)
-                            }
-                        } else null
-                else null
-            }
-        } ?: flowOf(LikeQuoteResponse())
 
     override suspend fun getLikesQuoteFlow(id: String): Flow<LikesQuoteResponse?> =
         withTimeoutOrNull(FIREBASE_TIMEOUT) {
@@ -288,7 +268,7 @@ class DatabaseServiceImpl @Inject constructor(
         }
     }
 
-    private suspend fun modifyUserOnQuoteGenericList(
+    private suspend fun genericModifyQuotesInUserLists(
         idQuote: String,
         isNewUser: Boolean,
         typeList: UserEditableValuesTypeList
@@ -302,7 +282,7 @@ class DatabaseServiceImpl @Inject constructor(
         }
     }
 
-    private suspend fun modifyQuotesOnUserGenericList(
+    private suspend fun genericModifyUsersInQuoteLists(
         idQuote: String,
         isNewUser: Boolean,
         typeList: QuoteEditableValuesTypeList
@@ -314,15 +294,6 @@ class DatabaseServiceImpl @Inject constructor(
                 if (isNewUser) FieldValue.arrayUnion(userId) else FieldValue.arrayRemove(userId)
             document.update(list, fileValue).await()
         }
-    }
-
-    private suspend fun getUserIsLike(id: String): LikeResponse {
-        return tryCatchFireStore {
-            firestore.collection(COLLECTION_LIKES)
-                .document(id)
-                .collection(COLLECTION_USERS_LIKE)
-                .document(userId).get().await().toObject(LikeResponse::class.java) ?: LikeResponse()
-        } ?: LikeResponse()
     }
 
     private suspend fun getLikeQuotes(): UserLikesResponse? =
@@ -388,9 +359,7 @@ class DatabaseServiceImpl @Inject constructor(
 
     companion object {
         const val COLLECTION = BuildConfig.DB_COLLECTION
-        private const val COLLECTION_LIKES = "${COLLECTION}_likes"
         private const val COLLECTION_USERS = "${COLLECTION}_users"
-        private const val COLLECTION_USERS_LIKE = "users_like"
         private const val SERVICE_NAME = "FireStore ->"
         private const val LIKES = "likes"
         private const val LIKE_USERS = "likeUsers"
