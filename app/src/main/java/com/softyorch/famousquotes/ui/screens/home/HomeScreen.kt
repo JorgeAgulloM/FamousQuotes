@@ -271,6 +271,8 @@ private fun CardQuote(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            IsDebugShowText(state.quote.id)
+
             val isActive = state.quote.body.isNotBlank() && !state.showImage
             val hasConnection = state.hasConnection == true
             val imageFromWeb = state.quote.id.length > 3 && !state.quote.id.startsWith('0')
@@ -296,10 +298,8 @@ private fun CardQuote(
                 }
                 AnimatedContentHome(isActive = state.showImage) {
                     TextToClick(text = stringResource(R.string.main_info_click_another_on_image))
-                    // For Mode demo => Box(modifier = Modifier.fillMaxWidth().height(108.dp))
                 }
             }
-            IsDebugShowText(state.quote.id)
             SpacerHeight(Banner.heightBanner)
         }
     }
