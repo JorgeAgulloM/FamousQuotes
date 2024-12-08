@@ -209,9 +209,9 @@ fun TopBarGrid(
             ) { onClickListener(it) }
             ButtonTopBar(
                 contentDescription = "Shown",
-                filterQuotes = FilterQuotes.Seen,
+                filterQuotes = FilterQuotes.Shown,
                 icon = Icons.Default.RemoveRedEye,
-                isSelected = filterQuotes == FilterQuotes.Seen,
+                isSelected = filterQuotes == FilterQuotes.Shown,
             ) { onClickListener(it) }
             ButtonTopBar(
                 contentDescription = "Favorites",

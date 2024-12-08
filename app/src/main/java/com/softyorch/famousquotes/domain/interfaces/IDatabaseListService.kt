@@ -13,6 +13,6 @@ interface IDatabaseListService {
     suspend fun getLikesQuoteFlow(id: String): Flow<LikesQuoteResponse?>
     suspend fun getUserLikeQuote(id: String): Flow<Boolean?>
     suspend fun getLikeQuotes(): List<QuoteResponse?>?
-    suspend fun getQuotesShown(): List<QuoteResponse?>?
-    suspend fun getQuotesFavorites(): List<QuoteResponse?>?
+    suspend fun getShownQuotes(): List<QuoteResponse?>?
+    suspend fun getFavoriteQuotes(): List<QuoteResponse?>?
 }

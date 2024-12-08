@@ -1,7 +1,7 @@
 package com.softyorch.famousquotes.domain.useCases
 
 import com.softyorch.famousquotes.core.FilterQuotes
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel.Companion.toDomain
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 // WIP
 class GetAllQuotesFiltered @Inject constructor(
-    private val dbService: IDatabaseService,
+    private val dbService: IDatabaseListService,
     private val storageService: IStorageService
 ) {
     fun invoke(filter: FilterQuotes): Flow<List<FamousQuoteModel?>?> = flow {
@@ -33,8 +33,8 @@ class GetAllQuotesFiltered @Inject constructor(
 
     private suspend fun getFunctionService(filter: FilterQuotes) =
         when (filter) {
-            FilterQuotes.Likes -> dbService.getFavoriteQuotes()
-            FilterQuotes.Seen -> dbService.getQuotesShown()
+            FilterQuotes.Likes -> dbService.getLikeQuotes()
+            FilterQuotes.Shown -> dbService.getShownQuotes()
             FilterQuotes.Favorites -> dbService.getFavoriteQuotes()
         }
 
