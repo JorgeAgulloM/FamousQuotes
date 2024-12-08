@@ -1,10 +1,13 @@
 package com.softyorch.famousquotes.data.network.databaseService.auxFireStore
 
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
+import com.google.firebase.firestore.snapshots
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
+import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION_USERS
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableQuantityValuesTypeList
@@ -16,13 +19,24 @@ import com.softyorch.famousquotes.data.network.databaseService.utils.writeLogSer
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.UserLikesResponse
 import com.softyorch.famousquotes.data.network.response.UserShownResponse
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStoreLists {
+class AuxFireStoreLists(
+    private val firestore: FirebaseFirestore,
+    private val internetConnection: InternetConnection,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
+) : IAuxFireStoreLists {
 
     override suspend fun getUserLikeQuotesId(userId: String): UserLikesResponse? =
         getUserGenericQuotesListId(userId, UserLikesResponse::class.java)
@@ -34,20 +48,20 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
             V : QuoteEditableQuantityValuesTypeList,
             U : UserEditableValuesTypeList,
             Q : QuoteEditableValuesTypeList>
-            genericModifyData(
+            selectedTypeModifyData(
         userId: String, id: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
     ) {
         // Añade o quita un like a la lista de likes de la frase
-        genericModifyUsersInQuotesQuantity(id, isLike, valueList)
+        selectedTypeModifyUsersInQuotesQuantity(id, isLike, valueList)
 
         // Añade o quita una frase a la lista de likes del usuario
-        genericModifyQuotesInUserLists(userId, id, isLike, valueUser)
+        selectedTypeModifyQuotesInUserLists(userId, id, isLike, valueUser)
 
         // Añade o quita un usuario de la lista de la frase
-        genericModifyUsersInQuoteLists(userId, id, isLike, valueQuote)
+        selectedTypeModifyUsersInQuoteLists(userId, id, isLike, valueQuote)
     }
 
-    override suspend fun genericGetQuotesList(
+    override suspend fun getSelectedTypeQuotesList(
         userId: String,
         typeList: QuoteEditableQuantityValuesTypeList,
         msgError: String
@@ -86,6 +100,30 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
         }
     }
 
+    override suspend fun <T> genericGetDocumentFlow(
+        collection: String,
+        documentId: String,
+        mapResult: (DocumentSnapshot) -> T?
+    ): Flow<T?> = withTimeoutOrNull(FIREBASE_TIMEOUT) {
+        tryCatchFireStore {
+            val haveConnection = withContext(dispatcher) {
+                internetConnection.isConnectedFlow()
+            }
+
+            if (!haveConnection.first()) return@withTimeoutOrNull null
+
+            val document = firestore.collection(collection).document(documentId)
+
+            if (document.get().await() != null && document.get().await().exists()) {
+                document.snapshots().map { snapshot ->
+                    mapResult(snapshot)
+                }
+            } else {
+                flowOf(null)
+            }
+        }
+    } ?: flowOf(null)
+
     /***************************************************************************************/
     /*********************************** PRIVATE METHODS ***********************************/
     /***************************************************************************************/
@@ -111,7 +149,7 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
             }
         }
 
-    private suspend fun genericModifyUsersInQuotesQuantity(
+    private suspend fun selectedTypeModifyUsersInQuotesQuantity(
         idQuote: String,
         isLike: Boolean,
         typeList: QuoteEditableQuantityValuesTypeList
@@ -131,7 +169,7 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
         }
     }
 
-    private suspend fun genericModifyQuotesInUserLists(
+    private suspend fun selectedTypeModifyQuotesInUserLists(
         userId: String,
         idQuote: String,
         isNewUser: Boolean,
@@ -146,7 +184,7 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
         }
     }
 
-    private suspend fun genericModifyUsersInQuoteLists(
+    private suspend fun selectedTypeModifyUsersInQuoteLists(
         userId: String,
         idQuote: String,
         isNewUser: Boolean,
