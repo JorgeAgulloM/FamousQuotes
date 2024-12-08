@@ -17,6 +17,7 @@ import com.softyorch.famousquotes.data.network.databaseService.utils.throwServic
 import com.softyorch.famousquotes.data.network.databaseService.utils.tryCatchFireStore
 import com.softyorch.famousquotes.data.network.databaseService.utils.writeLogServiceError
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
+import com.softyorch.famousquotes.data.network.response.UserFavoritesResponse
 import com.softyorch.famousquotes.data.network.response.UserLikesResponse
 import com.softyorch.famousquotes.data.network.response.UserShownResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +44,9 @@ class AuxFireStoreLists(
 
     override suspend fun getUserShownQuotesListId(userId: String): UserShownResponse? =
         getUserGenericQuotesListId(userId, UserShownResponse::class.java)
+
+    override suspend fun getUserFavoriteQuotesListId(userId: String): UserFavoritesResponse? =
+        getUserGenericQuotesListId(userId, UserFavoritesResponse::class.java)
 
     override suspend fun <
             V : QuoteEditableQuantityValuesTypeList,
@@ -73,7 +77,7 @@ class AuxFireStoreLists(
             is QuoteEditableQuantityValuesTypeList.Shown ->
                 getUserShownQuotesListId(userId)?.shownQuotes ?: mutableListOf()
             is QuoteEditableQuantityValuesTypeList.Favorites ->
-                getUserLikeQuotesId(userId)?.likeQuotes ?: mutableListOf()
+                getUserFavoriteQuotesListId(userId)?.favoriteQuotes ?: mutableListOf()
         }
 
         suspendCancellableCoroutine { cancelableCoroutine ->

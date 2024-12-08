@@ -51,6 +51,7 @@ sealed class Analytics(val name: String) {
             is HomeActions.SureDownloadImageAgain -> "${FLAVOR}_action_download_image_again"
             is HomeActions.CloseDialogDownLoadImageAgain -> "${FLAVOR}_action_cancel_download_image_again"
             is HomeActions.QuoteShown -> "${FLAVOR}_action_set_shown_image"
+            is HomeActions.Favorite -> "${FLAVOR}_action_favorite"
         }
 
         private fun isRunningUnitTest(): Boolean {

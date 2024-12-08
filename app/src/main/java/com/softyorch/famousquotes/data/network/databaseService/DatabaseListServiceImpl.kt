@@ -106,4 +106,14 @@ class DatabaseListServiceImpl @Inject constructor(
             msgError = "Error getting quotes favorites"
         )
 
+    override suspend fun getUserFavoriteQuote(id: String): Flow<Boolean?> {
+        return auxFirebaseLists.genericGetDocumentFlow(
+            collection = COLLECTION_USERS,
+            documentId = userId
+        ) { snapshot ->
+            val list = snapshot[FAVORITE_QUOTES] as? List<*>
+            list?.contains(id)
+        }
+    }
+
 }

@@ -54,6 +54,8 @@ import com.softyorch.famousquotes.ui.screens.home.components.TextBody
 import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
+import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
+import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
@@ -77,6 +79,7 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
     }
 
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
+    val stateFavorite: QuoteFavoriteState by viewModel.favoriteState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val paddingTop = with(LocalDensity.current) {
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
@@ -86,6 +89,7 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
         paddingTop = paddingTop,
         state = state,
         stateLikes = stateLikes,
+        stateFavorite = stateFavorite,
         context = context,
         onNavigateToUserScreen = onNavigateToUserScreen
     ) { action ->
@@ -162,6 +166,7 @@ private fun ContentBody(
     paddingTop: Dp,
     state: HomeState,
     stateLikes: QuoteLikesState,
+    stateFavorite: QuoteFavoriteState,
     context: Context,
     onNavigateToUserScreen: () -> Unit,
     onActions: (HomeActions) -> Unit
@@ -188,6 +193,7 @@ private fun ContentBody(
         CardQuote(
             state = state,
             stateLikes = stateLikes,
+            stateFavorite = stateFavorite,
             context = context
         ) { action -> onActions(action) }
 
@@ -261,6 +267,7 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
 private fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
+    stateFavorite: QuoteFavoriteState,
     context: Context,
     onAction: (HomeActions) -> Unit,
 ) {
@@ -288,6 +295,7 @@ private fun CardQuote(
                         BottomBar(
                             state = state,
                             stateLikes = stateLikes,
+                            stateFavorite = stateFavorite,
                             hasConnection = hasConnection,
                             imageFromWeb = imageFromWeb,
                             context = context,
@@ -309,6 +317,7 @@ private fun CardQuote(
 private fun BottomBar(
     state: HomeState,
     stateLikes: QuoteLikesState,
+    stateFavorite: QuoteFavoriteState,
     hasConnection: Boolean,
     imageFromWeb: Boolean,
     context: Context,
@@ -325,6 +334,7 @@ private fun BottomBar(
         CardControlsGroup(
             hasText = state.quote.body,
             stateLikes = stateLikes,
+            stateFavorite = stateFavorite,
             disabledReload = state.showInterstitial,
             isEnabled = hasConnection,
             isQuoteFromService = imageFromWeb

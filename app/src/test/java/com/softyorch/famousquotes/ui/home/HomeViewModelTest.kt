@@ -8,6 +8,8 @@ import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesQuote
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
+import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
+import com.softyorch.famousquotes.domain.useCases.SetQuoteFavorite
 import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
@@ -55,6 +57,12 @@ class HomeViewModelTest {
     private lateinit var getUserLikeQuote: GetUserLikeQuote
 
     @RelaxedMockK
+    private lateinit var getUserFavoriteQuote: GetUserFavoriteQuote
+
+    @RelaxedMockK
+    private lateinit var setQuoteFavorite: SetQuoteFavorite
+
+    @RelaxedMockK
     private lateinit var shareQuote: ISend
 
     @RelaxedMockK
@@ -75,8 +83,10 @@ class HomeViewModelTest {
             getLikes = getLikes,
             setLike = setLike,
             storage = storage,
-            setQuoteShown = setQuoteShown,
+            setShown = setQuoteShown,
+            setFavorite = setQuoteFavorite,
             getUserLikeQuote = getUserLikeQuote,
+            getUserFavoriteQuote = getUserFavoriteQuote,
             dispatcherDefault = Dispatchers.Unconfined,
             shareQuote = shareQuote,
             hasConnection = hasConnection,

@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.screens.home
+package com.softyorch.famousquotes.ui.screens.home.model
 
 data class QuoteLikesState(
     val likes: Int = 0,
