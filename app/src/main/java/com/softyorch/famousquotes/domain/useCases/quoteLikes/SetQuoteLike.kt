@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class SetQuoteLike @Inject constructor(private val dbService: IDatabaseService) {
     suspend operator fun invoke(updateLikes: LikesDTO) {
-        dbService.likeDislikeQuote(updateLikes.toData())
+        dbService.setQuoteLikes(updateLikes.toData())
     }
 }

@@ -8,8 +8,10 @@ import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.datastore.DatastoreImpl
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.AuthServiceImpl
-import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
+import com.softyorch.famousquotes.data.network.databaseService.DatabaseServiceImpl
 import com.softyorch.famousquotes.data.network.StorageServiceImpl
+import com.softyorch.famousquotes.data.network.databaseService.auxFireStore.AuxFireStoreLists
+import com.softyorch.famousquotes.data.network.databaseService.auxFireStore.IAuxFireStoreLists
 import com.softyorch.famousquotes.domain.interfaces.IAuthService
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
@@ -31,10 +33,17 @@ object DataModule {
     @Provides
     fun providesDatabaseService(
         firestore: FirebaseFirestore,
+        auxFirebaseLists: IAuxFireStoreLists,
         internetConnection: InternetConnection,
         dispatcherDefault: CoroutineDispatcher,
         @ApplicationContext context: Context
-    ): IDatabaseService = DatabaseServiceImpl(firestore, internetConnection, dispatcherDefault, context)
+    ): IDatabaseService = DatabaseServiceImpl(
+        firestore,
+        auxFirebaseLists,
+        internetConnection,
+        dispatcherDefault,
+        context
+    )
 
     @Singleton
     @Provides
@@ -57,4 +66,9 @@ object DataModule {
     @Provides
     fun providesAuthService(auth: FirebaseAuth):
             IAuthService = AuthServiceImpl(auth)
+
+    @Singleton
+    @Provides
+    fun providesAuxFirebaseLists(firestore: FirebaseFirestore): IAuxFireStoreLists =
+        AuxFireStoreLists(firestore)
 }
