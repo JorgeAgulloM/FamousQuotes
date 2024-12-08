@@ -99,4 +99,11 @@ class DatabaseListServiceImpl @Inject constructor(
             msgError = "Error getting quotes shown"
         )
 
+    override suspend fun getQuotesFavorites(): List<QuoteResponse?>? =
+        auxFirebaseLists.getSelectedTypeQuotesList(
+            userId = userId,
+            typeList = QuoteEditableQuantityValuesTypeList.Favorites(),
+            msgError = "Error getting quotes favorites"
+        )
+
 }
