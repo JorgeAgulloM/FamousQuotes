@@ -2,7 +2,7 @@ package com.softyorch.famousquotes.domain.useCases
 
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultModel
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseQuoteService
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.utils.getTodayId
@@ -20,7 +20,7 @@ import org.junit.Test
 class GetTodayQuoteTest {
 
     @RelaxedMockK
-    private lateinit var dbService: IDatabaseService
+    private lateinit var dbService: IDatabaseQuoteService
 
     @RelaxedMockK
     private lateinit var storageService: IStorageService

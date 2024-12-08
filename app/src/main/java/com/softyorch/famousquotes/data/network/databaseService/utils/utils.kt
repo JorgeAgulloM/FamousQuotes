@@ -22,3 +22,5 @@ inline fun <T> tryCatchFireStore(onTry: () -> T): T? = try {
 fun writeLogServiceError(message: String, ex: Exception) {
     writeLog(ERROR, "$SERVICE_NAME $message: ${ex.cause} - Message: ${ex.message}", ex)
 }
+
+fun throwService(message: String): Throwable = Throwable("$SERVICE_NAME $message")

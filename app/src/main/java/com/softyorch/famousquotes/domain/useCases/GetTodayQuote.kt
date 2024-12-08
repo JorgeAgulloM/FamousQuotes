@@ -1,6 +1,6 @@
 package com.softyorch.famousquotes.domain.useCases
 
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseQuoteService
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
@@ -11,7 +11,7 @@ import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Inject
 
 class GetTodayQuote @Inject constructor(
-    private val dbService: IDatabaseService,
+    private val dbService: IDatabaseQuoteService,
     private val storageService: IStorageService,
     private val defaultDatabase: IDefaultDatabase,
 ) {

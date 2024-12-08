@@ -1,6 +1,6 @@
 package com.softyorch.famousquotes.domain.useCases.quoteLikes
 
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseQuoteService
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesDTO.Companion.toData
 import com.softyorch.famousquotes.domain.utils.getTodayId
@@ -17,7 +17,7 @@ import org.junit.Test
 class SetQuoteLikeTest {
 
     @RelaxedMockK
-    private lateinit var dbService: IDatabaseService
+    private lateinit var dbService: IDatabaseQuoteService
 
     private lateinit var setQuoteLike: SetQuoteLike
 

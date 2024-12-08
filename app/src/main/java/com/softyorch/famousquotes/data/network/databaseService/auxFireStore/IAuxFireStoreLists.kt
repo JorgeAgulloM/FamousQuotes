@@ -23,6 +23,4 @@ interface IAuxFireStoreLists {
         typeList: QuoteEditableQuantityValuesTypeList,
         msgError: String
     ): MutableList<QuoteResponse>?
-
-    fun throwService(message: String): Throwable
 }

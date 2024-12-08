@@ -7,10 +7,10 @@ import com.google.firebase.firestore.Source
 import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION_USERS
-import com.softyorch.famousquotes.data.network.databaseService.SERVICE_NAME
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableQuantityValuesTypeList
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableValuesTypeList
 import com.softyorch.famousquotes.data.network.databaseService.typeList.UserEditableValuesTypeList
+import com.softyorch.famousquotes.data.network.databaseService.utils.throwService
 import com.softyorch.famousquotes.data.network.databaseService.utils.tryCatchFireStore
 import com.softyorch.famousquotes.data.network.databaseService.utils.writeLogServiceError
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
@@ -85,8 +85,6 @@ class AuxFireStoreLists(private val firestore: FirebaseFirestore) : IAuxFireStor
             )
         }
     }
-
-    override fun throwService(message: String): Throwable = Throwable("$SERVICE_NAME $message")
 
     /***************************************************************************************/
     /*********************************** PRIVATE METHODS ***********************************/
