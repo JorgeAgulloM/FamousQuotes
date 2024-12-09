@@ -184,6 +184,7 @@ private fun ContentBody(
             isEnabled = state.hasConnection == true,
             isImageExt = state.quote.imageUrl.startsWith("http"),
             isShoImage = state.showImage,
+            disabledReload = state.showInterstitial,
             paddingTop = paddingTop,
             onNavigateToUserScreen = onNavigateToUserScreen
         ) { action -> onActions(action) }
@@ -335,7 +336,6 @@ private fun BottomBar(
             hasText = state.quote.body,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
-            disabledReload = state.showInterstitial,
             isEnabled = hasConnection,
             isQuoteFromService = imageFromWeb
         ) { action ->

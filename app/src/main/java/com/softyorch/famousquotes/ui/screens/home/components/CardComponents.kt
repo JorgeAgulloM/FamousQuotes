@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Badge
@@ -42,7 +41,6 @@ fun CardControlsGroup(
     hasText: String,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    disabledReload: Boolean,
     isEnabled: Boolean,
     isQuoteFromService: Boolean,
     onAction: (HomeActions) -> Unit,
@@ -55,8 +53,7 @@ fun CardControlsGroup(
             stateFavorite = stateFavorite,
             isQuoteFromService = isQuoteFromService,
             isEnabled = isEnabled,
-            onAction = onAction,
-            disabledReload = disabledReload
+            onAction = onAction
         ) {
             showSendDialog = true
         }
@@ -85,7 +82,6 @@ private fun CardControls(
     isQuoteFromService: Boolean,
     isEnabled: Boolean,
     onAction: (HomeActions) -> Unit,
-    disabledReload: Boolean,
     onClick: () -> Unit
 ) {
     Row(
@@ -113,12 +109,6 @@ private fun CardControls(
             icon = Icons.Outlined.Share,
             isEnabled = isEnabled
         ) { onClick() }
-
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
-            icon = Icons.Outlined.RestartAlt,
-            isEnabled = !disabledReload && isEnabled
-        ) { onAction(HomeActions.New()) }
     }
 }
 
