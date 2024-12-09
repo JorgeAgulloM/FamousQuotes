@@ -200,7 +200,7 @@ class AuxFireStoreLists(
             val document = firestore.collection(COLLECTION).document(idQuote)
             val list = QuoteEditableValuesTypeList.getList(typeList)
 
-            if (userDisplayIsAlreadyRegistered(document, list, userId)) {
+            if (isNewUser && userDisplayIsAlreadyRegistered(document, list, userId)) {
                 onTryUpdate(false)
                 return
             }
@@ -209,7 +209,8 @@ class AuxFireStoreLists(
             else FieldValue.arrayRemove(userId)
 
             document.update(list, fileValue)
-            onTryUpdate(userDisplayIsAlreadyRegistered(document, list, userId))
+            if (isNewUser) onTryUpdate(userDisplayIsAlreadyRegistered(document, list, userId))
+            else onTryUpdate(true)
 
         } ?: onTryUpdate(false)
     }
