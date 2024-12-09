@@ -21,8 +21,6 @@ import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.UserFavoritesResponse
 import com.softyorch.famousquotes.data.network.response.UserLikesResponse
 import com.softyorch.famousquotes.data.network.response.UserShownResponse
-import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -63,7 +61,6 @@ class AuxFireStoreLists(
 
         // Añade o quita un usuario de la lista de la frase
         selectedTypeModifyUsersInQuoteLists(userId, id, isLike, valueQuote) { updated ->
-            writeLog(LevelLog.INFO, "selectedTypeModifyUsersInQuoteLists -> updated: $updated")
             // Añade o quita uno a la lista
             if (updated) selectedTypeModifyUsersInQuotesQuantity(id, isLike, valueList)
         }
