@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.data.network.databaseService.auxFireStore
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
@@ -20,6 +21,8 @@ import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.UserFavoritesResponse
 import com.softyorch.famousquotes.data.network.response.UserLikesResponse
 import com.softyorch.famousquotes.data.network.response.UserShownResponse
+import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -55,14 +58,15 @@ class AuxFireStoreLists(
             selectedTypeModifyData(
         userId: String, id: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
     ) {
-        // Añade o quita un like a la lista de likes de la frase
-        selectedTypeModifyUsersInQuotesQuantity(id, isLike, valueList)
-
         // Añade o quita una frase a la lista de likes del usuario
         selectedTypeModifyQuotesInUserLists(userId, id, isLike, valueUser)
 
         // Añade o quita un usuario de la lista de la frase
-        selectedTypeModifyUsersInQuoteLists(userId, id, isLike, valueQuote)
+        selectedTypeModifyUsersInQuoteLists(userId, id, isLike, valueQuote) { updated ->
+            writeLog(LevelLog.INFO, "selectedTypeModifyUsersInQuoteLists -> updated: $updated")
+            // Añade o quita uno a la lista
+            if (updated) selectedTypeModifyUsersInQuotesQuantity(id, isLike, valueList)
+        }
     }
 
     override suspend fun getSelectedTypeQuotesList(
@@ -192,14 +196,33 @@ class AuxFireStoreLists(
         userId: String,
         idQuote: String,
         isNewUser: Boolean,
-        typeList: QuoteEditableValuesTypeList
+        typeList: QuoteEditableValuesTypeList,
+        onTryUpdate: suspend (Boolean) -> Unit
     ) {
         tryCatchFireStore {
             val document = firestore.collection(COLLECTION).document(idQuote)
             val list = QuoteEditableValuesTypeList.getList(typeList)
-            val fileValue =
-                if (isNewUser) FieldValue.arrayUnion(userId) else FieldValue.arrayRemove(userId)
-            document.update(list, fileValue).await()
-        }
+
+            if (userDisplayIsAlreadyRegistered(document, list, userId)) {
+                onTryUpdate(false)
+                return
+            }
+
+            val fileValue = if (isNewUser) FieldValue.arrayUnion(userId)
+            else FieldValue.arrayRemove(userId)
+
+            document.update(list, fileValue)
+            onTryUpdate(userDisplayIsAlreadyRegistered(document, list, userId))
+
+        } ?: onTryUpdate(false)
+    }
+
+    private suspend fun userDisplayIsAlreadyRegistered(
+        document: DocumentReference,
+        list: String,
+        userId: String
+    ): Boolean {
+        val currentList = document.get().await().data?.get(list) as? List<*> ?: emptyList<String>()
+        return currentList.contains(userId)
     }
 }
