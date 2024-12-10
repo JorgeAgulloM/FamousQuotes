@@ -68,7 +68,7 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
+fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onNavigateToSettings: () -> Unit) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
@@ -91,7 +91,8 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit) {
         stateLikes = stateLikes,
         stateFavorite = stateFavorite,
         context = context,
-        onNavigateToUserScreen = onNavigateToUserScreen
+        onNavigateToUserScreen = onNavigateToUserScreen,
+        onNavigateToSettings = onNavigateToSettings
     ) { action ->
         viewModel.onActions(action)
     }
@@ -169,6 +170,7 @@ private fun ContentBody(
     stateFavorite: QuoteFavoriteState,
     context: Context,
     onNavigateToUserScreen: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onActions: (HomeActions) -> Unit
 ) {
     Box(
@@ -186,7 +188,8 @@ private fun ContentBody(
             isShoImage = state.showImage,
             disabledReload = state.showInterstitial,
             paddingTop = paddingTop,
-            onNavigateToUserScreen = onNavigateToUserScreen
+            onNavigateToUserScreen = onNavigateToUserScreen,
+            onNavigateToSettings = onNavigateToSettings
         ) { action -> onActions(action) }
 
         BackgroundImage(uri = state.quote.imageUrl, context = context) { action -> onActions(action) }

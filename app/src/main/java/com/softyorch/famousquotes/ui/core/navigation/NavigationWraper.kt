@@ -10,6 +10,8 @@ import com.softyorch.famousquotes.ui.screens.grid.GridScreen
 import com.softyorch.famousquotes.ui.screens.grid.GridViewModel
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
+import com.softyorch.famousquotes.ui.screens.settings.SettingsScreen
+import com.softyorch.famousquotes.ui.screens.settings.SettingsViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
 import com.softyorch.famousquotes.utils.sdk32AndUp
 
@@ -27,11 +29,19 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
            })
         }
         composable<Home> {
-            HomeScreen(viewModel = homeViewModel, onNavigateToUserScreen = { navController.navigate(Grid) })
+            HomeScreen(
+                viewModel = homeViewModel,
+                onNavigateToUserScreen = { navController.navigate(Grid) },
+                onNavigateToSettings = { navController.navigate(Settings)}
+            )
         }
         composable<Grid> {
             val gridViewModel = hiltViewModel<GridViewModel>()
             GridScreen(viewModel = gridViewModel, navigateBack = { navController.navigateUp() })
+        }
+        composable<Settings> {
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            SettingsScreen(viewModel = settingsViewModel, onBackNavigation = { navController.navigateUp() })
         }
     }
 }

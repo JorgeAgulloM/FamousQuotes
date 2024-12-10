@@ -26,9 +26,7 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.WifiOff
@@ -68,6 +66,7 @@ fun TopControlsGroup(
     disabledReload: Boolean,
     paddingTop: Dp,
     onNavigateToUserScreen: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onAction: (HomeActions) -> Unit,
 ) {
     var showPermissionRationaleDialog by rememberSaveable { mutableStateOf(false) }
@@ -98,6 +97,7 @@ fun TopControlsGroup(
                 context = context,
                 onAction = onAction,
                 onNavigateToUserScreen = onNavigateToUserScreen,
+                onNavigateToSettings = onNavigateToSettings,
                 onLaunch = { launcher.launch(permission.WRITE_EXTERNAL_STORAGE) }
             ) {
                 showPermissionRationaleDialog = true
@@ -128,6 +128,7 @@ private fun TopControls(
     context: Context,
     onAction: (HomeActions) -> Unit,
     onNavigateToUserScreen: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onLaunch: () -> Unit,
     showPermissionRationaleDialog: () -> Unit
 ) {
@@ -157,6 +158,7 @@ private fun TopControls(
             disabledReload = disabledReload,
             onAction = onAction,
             onNavigateToUserScreen = onNavigateToUserScreen,
+            onNavigateToSettings = onNavigateToSettings,
             onLaunch = onLaunch,
             showPermissionRationaleDialog = showPermissionRationaleDialog,
             onCloseMenu = { expanded = !expanded }
@@ -174,6 +176,7 @@ private fun FoldableMenu(
     disabledReload: Boolean,
     onAction: (HomeActions) -> Unit,
     onNavigateToUserScreen: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onLaunch: () -> Unit,
     showPermissionRationaleDialog: () -> Unit,
     onCloseMenu: () -> Unit
@@ -183,8 +186,9 @@ private fun FoldableMenu(
 
     val shape = MaterialTheme.shapes.extraLarge
     val iconSize = 48
-    val closedSize = iconSize + 8 /* iconSize + padding */
-    val expandedSize = iconSize * 9 + 32
+    val iconsCount = 6
+    val closedSize = iconSize + 8
+    val expandedSize = closedSize * iconsCount + 4
     val borderStroke = if (expanded) 1.dp else 0.dp
     val shadow = if (expanded) 4.dp else 2.dp
 
@@ -239,8 +243,8 @@ private fun FoldableMenu(
         }
 
         IconButtonMenu(
-            cDescription = "User Space",
-            icon = Icons.Outlined.Person,
+            cDescription = stringResource(R.string.main_icon_content_desc_info),
+            icon = Icons.Outlined.Info,
             isEnabled = isEnabled,
             shadowOn = true
         ) {
@@ -255,27 +259,7 @@ private fun FoldableMenu(
             shadowOn = true
         ) {
             onCloseMenu()
-            onAction(HomeActions.Info())
-        }
-
-        IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_info),
-            icon = Icons.Outlined.Info,
-            isEnabled = isEnabled,
-            shadowOn = true
-        ) {
-            onCloseMenu()
-            onAction(HomeActions.Info())
-        }
-
-        IconButtonMenu(
-            cDescription = "About",
-            icon = Icons.Outlined.ManageAccounts,
-            isEnabled = isEnabled,
-            shadowOn = true
-        ) {
-            onCloseMenu()
-            onAction(HomeActions.Info())
+            onNavigateToSettings()
         }
     }
 }

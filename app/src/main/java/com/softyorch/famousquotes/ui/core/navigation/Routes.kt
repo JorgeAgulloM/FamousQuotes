@@ -10,3 +10,6 @@ object Home
 
 @Serializable
 object Grid
+
+@Serializable
+object Settings
