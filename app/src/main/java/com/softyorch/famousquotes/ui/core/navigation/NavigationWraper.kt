@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.softyorch.famousquotes.ui.screens.detail.DetailScreen
+import com.softyorch.famousquotes.ui.screens.detail.DetailViewModel
 import com.softyorch.famousquotes.ui.screens.grid.GridScreen
 import com.softyorch.famousquotes.ui.screens.grid.GridViewModel
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
@@ -37,7 +39,18 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
         }
         composable<Grid> {
             val gridViewModel = hiltViewModel<GridViewModel>()
-            GridScreen(viewModel = gridViewModel, navigateBack = { navController.navigateUp() })
+            GridScreen(
+                viewModel = gridViewModel,
+                onNavigateToDetail = { navController.navigate(Detail(it)) },
+                onNavigateBack = { navController.navigateUp() }
+            )
+        }
+        composable<Detail> {
+            val id = it.arguments?.getString("id") ?: ""
+            val detailViewModel = hiltViewModel<DetailViewModel>()
+            DetailScreen(viewModel = detailViewModel, id = id) {
+                navController.navigateUp()
+            }
         }
         composable<Settings> {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()

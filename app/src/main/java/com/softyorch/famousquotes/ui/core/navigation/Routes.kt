@@ -13,3 +13,6 @@ object Grid
 
 @Serializable
 object Settings
+
+@Serializable
+data class Detail(val id: String)

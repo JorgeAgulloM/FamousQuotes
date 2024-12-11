@@ -22,7 +22,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 
 @Composable
-fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
+fun GridScreen(viewModel: GridViewModel, onNavigateToDetail: (String) -> Unit, onNavigateBack: () -> Unit) {
 
     val paddingTop = with(LocalDensity.current) {
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
@@ -38,7 +38,7 @@ fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
             TopBarGrid(
                 paddingTop = paddingTop,
                 filterQuotes = selectedQuotes,
-                navigateBack = navigateBack
+                navigateBack = onNavigateBack
             ) {
                 viewModel.selectFilterQuotes(it)
             }
@@ -56,7 +56,7 @@ fun GridScreen(viewModel: GridViewModel, navigateBack: () -> Unit) {
         ) {
             allQuotes?.let {
                 items(it) { quote ->
-                    CardItem(item = quote)
+                    CardItem(item = quote) { idQuote -> onNavigateToDetail(idQuote) }
                 }
             }
 
