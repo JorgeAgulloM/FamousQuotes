@@ -54,15 +54,19 @@ class AuxFireStoreLists(
             U : UserEditableValuesTypeList,
             Q : QuoteEditableValuesTypeList>
             selectedTypeModifyData(
-        userId: String, id: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
+        userId: String, quoteId: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
     ) {
         // Añade o quita una frase a la lista de likes del usuario
-        selectedTypeModifyQuotesInUserLists(userId, id, isLike, valueUser)
+        selectedTypeModifyQuotesInUserLists(userId, quoteId, isLike, valueUser) { updated ->
+            if (updated)
+                selectedTypeModifyUsersInQuotesQuantity(userId, COLLECTION_USERS, isLike, valueList)
+        }
 
         // Añade o quita un usuario de la lista de la frase
-        selectedTypeModifyUsersInQuoteLists(userId, id, isLike, valueQuote) { updated ->
+        selectedTypeModifyUsersInQuoteLists(userId, quoteId, isLike, valueQuote) { updated ->
             // Añade o quita uno a la lista
-            if (updated) selectedTypeModifyUsersInQuotesQuantity(id, isLike, valueList)
+            if (updated)
+                selectedTypeModifyUsersInQuotesQuantity(quoteId, COLLECTION, isLike, valueList)
         }
     }
 
@@ -155,12 +159,13 @@ class AuxFireStoreLists(
         }
 
     private suspend fun selectedTypeModifyUsersInQuotesQuantity(
-        idQuote: String,
+        idDocument: String,
+        collection: String,
         isLike: Boolean,
         typeList: QuoteEditableQuantityValuesTypeList
     ) {
         tryCatchFireStore {
-            val document = firestore.collection(COLLECTION).document(idQuote)
+            val document = firestore.collection(collection).document(idDocument)
             firestore.runTransaction { transaction ->
                 val snapshot = transaction[document]
                 val list = QuoteEditableQuantityValuesTypeList.getList(typeList)
@@ -178,15 +183,25 @@ class AuxFireStoreLists(
         userId: String,
         idQuote: String,
         isNewUser: Boolean,
-        typeList: UserEditableValuesTypeList
+        typeList: UserEditableValuesTypeList,
+        onTryUpdate: suspend (Boolean) -> Unit
     ) {
         tryCatchFireStore {
             val document = firestore.collection(COLLECTION_USERS).document(userId)
             val list = UserEditableValuesTypeList.getList(typeList)
-            val fileValue =
-                if (isNewUser) FieldValue.arrayUnion(idQuote) else FieldValue.arrayRemove(idQuote)
+
+            if (isNewUser && userDisplayIsAlreadyRegistered(document, list, idQuote)) {
+                onTryUpdate(false)
+                return
+            }
+
+            val fileValue = if (isNewUser) FieldValue.arrayUnion(idQuote)
+            else FieldValue.arrayRemove(idQuote)
+
             document.update(list, fileValue).await()
-        }
+            if (isNewUser) onTryUpdate(userDisplayIsAlreadyRegistered(document, list, idQuote))
+            else onTryUpdate(false)
+        } ?: onTryUpdate(false)
     }
 
     private suspend fun selectedTypeModifyUsersInQuoteLists(

@@ -19,7 +19,7 @@ interface IAuxFireStoreLists {
             U : UserEditableValuesTypeList,
             Q : QuoteEditableValuesTypeList>
             selectedTypeModifyData(
-        userId: String, id: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
+        userId: String, quoteId: String, isLike: Boolean, valueList: V, valueUser: U, valueQuote: Q
     )
     suspend fun getSelectedTypeQuotesList(
         userId: String,

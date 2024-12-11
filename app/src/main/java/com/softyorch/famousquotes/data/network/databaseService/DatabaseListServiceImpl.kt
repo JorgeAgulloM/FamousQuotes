@@ -32,7 +32,7 @@ class DatabaseListServiceImpl @Inject constructor(
 
         auxFirebaseLists.selectedTypeModifyData(
             userId = userId,
-            id = id,
+            quoteId = id,
             isLike = isLike,
             valueList = QuoteEditableQuantityValuesTypeList.Likes(),
             valueUser = UserEditableValuesTypeList.Like(),
@@ -43,7 +43,7 @@ class DatabaseListServiceImpl @Inject constructor(
     override suspend fun setQuoteShown(id: String) {
         auxFirebaseLists.selectedTypeModifyData(
             userId = userId,
-            id = id,
+            quoteId = id,
             isLike = true,
             valueList = QuoteEditableQuantityValuesTypeList.Shown(),
             valueUser = UserEditableValuesTypeList.Shown(),
@@ -57,7 +57,7 @@ class DatabaseListServiceImpl @Inject constructor(
 
         auxFirebaseLists.selectedTypeModifyData(
             userId = userId,
-            id = id,
+            quoteId = id,
             isLike = isLike,
             valueList = QuoteEditableQuantityValuesTypeList.Favorites(),
             valueUser = UserEditableValuesTypeList.Favorite(),

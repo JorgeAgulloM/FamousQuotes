@@ -2,11 +2,11 @@ package com.softyorch.famousquotes.data.network.databaseService.typeList
 
 import com.softyorch.famousquotes.data.network.databaseService.FAVORITES
 import com.softyorch.famousquotes.data.network.databaseService.LIKES
-import com.softyorch.famousquotes.data.network.databaseService.SHOWN
+import com.softyorch.famousquotes.data.network.databaseService.SHOWNS
 
 sealed interface QuoteEditableQuantityValuesTypeList {
     data class Likes(val likes: String = LIKES) : QuoteEditableQuantityValuesTypeList
-    data class Shown(val shown: String = SHOWN) : QuoteEditableQuantityValuesTypeList
+    data class Shown(val shown: String = SHOWNS) : QuoteEditableQuantityValuesTypeList
     data class Favorites(val favorites: String = FAVORITES) : QuoteEditableQuantityValuesTypeList
 
     companion object {
