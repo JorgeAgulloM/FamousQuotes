@@ -38,12 +38,12 @@ class SetQuoteLikeTest {
         val updateLikes = LikesDTO(getTodayId(), true)
 
         //Given
-        coEvery { dbService.setQuoteLikes(updateLikes.toData()) } returns Unit
+        coEvery { dbService.setQuoteLike(updateLikes.toData()) } returns Unit
 
         //When
         setQuoteLike(updateLikes)
 
         //Then
-        coVerify(exactly = 1) { dbService.setQuoteLikes(updateLikes.toData()) }
+        coVerify(exactly = 1) { dbService.setQuoteLike(updateLikes.toData()) }
     }
 }

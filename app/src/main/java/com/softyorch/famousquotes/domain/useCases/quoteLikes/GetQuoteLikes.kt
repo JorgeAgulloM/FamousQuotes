@@ -9,5 +9,5 @@ import javax.inject.Inject
 
 class GetQuoteLikes @Inject constructor(private val dbService: IDatabaseListService) {
     suspend operator fun invoke(id: String): Flow<LikesQuote?> =
-        dbService.getLikesQuoteFlow(id).map { it?.toDomain() }
+        dbService.getQuoteLikesFlow(id).map { it?.toDomain() }
 }
