@@ -1,5 +1,7 @@
 package com.softyorch.famousquotes.ui.core.navigation
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -17,44 +19,56 @@ import com.softyorch.famousquotes.ui.screens.settings.SettingsViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
 import com.softyorch.famousquotes.utils.sdk32AndUp
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavigationWrapper(navController: NavHostController = rememberNavController()) {
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
 
-    NavHost(navController = navController, startDestination = Splash) {
-        composable<Splash> {
-           sdk32AndUp {
-               navController.navigate(Home)
-           } ?: SplashScreen(navigateHome = {
-               navController.navigate(Home) { popUpTo(Splash) { inclusive = true } }
-           })
-        }
-        composable<Home> {
-            HomeScreen(
-                viewModel = homeViewModel,
-                onNavigateToUserScreen = { navController.navigate(Grid) },
-                onNavigateToSettings = { navController.navigate(Settings)}
-            )
-        }
-        composable<Grid> {
-            val gridViewModel = hiltViewModel<GridViewModel>()
-            GridScreen(
-                viewModel = gridViewModel,
-                onNavigateToDetail = { navController.navigate(Detail(it)) },
-                onNavigateBack = { navController.navigateUp() }
-            )
-        }
-        composable<Detail> {
-            val id = it.arguments?.getString("id") ?: ""
-            val detailViewModel = hiltViewModel<DetailViewModel>()
-            DetailScreen(viewModel = detailViewModel, id = id) {
-                navController.navigateUp()
+    SharedTransitionLayout {
+        NavHost(navController = navController, startDestination = Splash) {
+            composable<Splash> {
+                sdk32AndUp {
+                    navController.navigate(Home)
+                } ?: SplashScreen(navigateHome = {
+                    navController.navigate(Home) { popUpTo(Splash) { inclusive = true } }
+                })
             }
-        }
-        composable<Settings> {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            SettingsScreen(viewModel = settingsViewModel, onBackNavigation = { navController.navigateUp() })
+            composable<Home> {
+                HomeScreen(
+                    viewModel = homeViewModel,
+                    onNavigateToUserScreen = { navController.navigate(Grid) },
+                    onNavigateToSettings = { navController.navigate(Settings) }
+                )
+            }
+            composable<Grid> {
+                val gridViewModel = hiltViewModel<GridViewModel>()
+                GridScreen(
+                    viewModel = gridViewModel,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@composable,
+                    onNavigateToDetail = { navController.navigate(Detail(it)) },
+                    onNavigateBack = { navController.navigateUp() }
+                )
+            }
+            composable<Detail> {
+                val id = it.arguments?.getString("id") ?: ""
+                val detailViewModel = hiltViewModel<DetailViewModel>()
+                DetailScreen(
+                    viewModel = detailViewModel,
+                    id = id,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@composable,
+                ) {
+                    navController.navigateUp()
+                }
+            }
+            composable<Settings> {
+                val settingsViewModel = hiltViewModel<SettingsViewModel>()
+                SettingsScreen(
+                    viewModel = settingsViewModel,
+                    onBackNavigation = { navController.navigateUp() })
+            }
         }
     }
 }

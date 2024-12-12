@@ -1,5 +1,8 @@
 package com.softyorch.famousquotes.ui.screens.grid
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,8 +24,15 @@ import com.softyorch.famousquotes.ui.screens.grid.components.TopBarGrid
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun GridScreen(viewModel: GridViewModel, onNavigateToDetail: (String) -> Unit, onNavigateBack: () -> Unit) {
+fun GridScreen(
+    viewModel: GridViewModel,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onNavigateToDetail: (String) -> Unit,
+    onNavigateBack: () -> Unit
+) {
 
     val paddingTop = with(LocalDensity.current) {
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
@@ -56,7 +66,11 @@ fun GridScreen(viewModel: GridViewModel, onNavigateToDetail: (String) -> Unit, o
         ) {
             allQuotes?.let {
                 items(it) { quote ->
-                    CardItem(item = quote) { idQuote -> onNavigateToDetail(idQuote) }
+                    CardItem(
+                        item = quote,
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedVisibilityScope = animatedVisibilityScope
+                    ) { idQuote -> onNavigateToDetail(idQuote) }
                 }
             }
 
