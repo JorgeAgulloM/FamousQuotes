@@ -30,7 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.ui.components.IsDebugShowText
+import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @OptIn(ExperimentalSharedTransitionApi::class)

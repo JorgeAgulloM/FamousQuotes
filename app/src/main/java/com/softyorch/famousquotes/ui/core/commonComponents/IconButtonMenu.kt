@@ -38,7 +38,6 @@ fun IconButtonMenu(
 
     if (isVisible) IconButton(
         onClick = { onClick() },
-        //colors = IconButtonDefaults.iconButtonColors(contentColor = selectColor),
         modifier = Modifier
             .padding(4.dp)
             .size(48.dp),

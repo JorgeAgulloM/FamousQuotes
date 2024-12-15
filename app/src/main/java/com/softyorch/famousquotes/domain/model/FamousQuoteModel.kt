@@ -10,11 +10,25 @@ data class FamousQuoteModel(
     val body: String,
     val imageUrl: String,
     val likes: Int,
+    val isLiked: Boolean = false,
     val shown: Int,
-    val favorites: Int
+    val isShown: Boolean = false,
+    val favorites: Int,
+    val isFavorite: Boolean = false
 ) {
     companion object {
-        fun emptyModel(): FamousQuoteModel = FamousQuoteModel("", "", "", "", 0, 0, 0)
+        fun emptyModel(): FamousQuoteModel = FamousQuoteModel(
+            id = "",
+            owner = "",
+            body = "",
+            imageUrl = "",
+            likes = 0,
+            isLiked = false,
+            shown = 0,
+            isShown = false,
+            favorites = 0,
+            isFavorite = false
+        )
 
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,

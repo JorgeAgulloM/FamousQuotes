@@ -28,7 +28,7 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.components.LoadingCircle
+import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.MainApp
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog

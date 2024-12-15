@@ -1,6 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.home.model
 
 data class QuoteFavoriteState(
-    val id: String = "",
+    val favorites: Int = 0,
     val isFavorite: Boolean = false
 )

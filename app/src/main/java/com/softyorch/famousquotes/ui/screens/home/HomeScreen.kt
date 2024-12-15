@@ -39,8 +39,8 @@ import com.softyorch.famousquotes.ui.admob.Bonified
 import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
-import com.softyorch.famousquotes.ui.components.IsDebugShowText
-import com.softyorch.famousquotes.ui.components.LoadingCircle
+import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
+import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
@@ -56,6 +56,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
+import com.softyorch.famousquotes.ui.screens.home.model.QuoteShownState
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
@@ -80,6 +81,8 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onN
 
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val stateFavorite: QuoteFavoriteState by viewModel.favoriteState.collectAsStateWithLifecycle()
+    val stateShown: QuoteShownState by viewModel.stateShown.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
     val paddingTop = with(LocalDensity.current) {
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
@@ -90,6 +93,7 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onN
         state = state,
         stateLikes = stateLikes,
         stateFavorite = stateFavorite,
+        stateShown = stateShown,
         context = context,
         onNavigateToUserScreen = onNavigateToUserScreen,
         onNavigateToSettings = onNavigateToSettings
@@ -168,6 +172,7 @@ private fun ContentBody(
     state: HomeState,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
+    stateShown: QuoteShownState,
     context: Context,
     onNavigateToUserScreen: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -198,6 +203,7 @@ private fun ContentBody(
             state = state,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
+            stateShown = stateShown,
             context = context
         ) { action -> onActions(action) }
 
@@ -272,6 +278,7 @@ private fun CardQuote(
     state: HomeState,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
+    stateShown: QuoteShownState,
     context: Context,
     onAction: (HomeActions) -> Unit,
 ) {
@@ -304,6 +311,7 @@ private fun CardQuote(
                             state = state,
                             stateLikes = stateLikes,
                             stateFavorite = stateFavorite,
+                            stateShown = stateShown,
                             hasConnection = hasConnection,
                             imageFromWeb = imageFromWeb,
                             context = context,
@@ -326,6 +334,7 @@ private fun BottomBar(
     state: HomeState,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
+    stateShown: QuoteShownState,
     hasConnection: Boolean,
     imageFromWeb: Boolean,
     context: Context,
@@ -343,6 +352,7 @@ private fun BottomBar(
             hasText = state.quote.body,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
+            stateShown = stateShown,
             isEnabled = hasConnection,
             isQuoteFromService = imageFromWeb
         ) { action ->

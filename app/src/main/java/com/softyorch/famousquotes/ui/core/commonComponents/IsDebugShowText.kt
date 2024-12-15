@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.components
+package com.softyorch.famousquotes.ui.core.commonComponents
 
 import android.content.ClipData
 import android.content.ClipboardManager
