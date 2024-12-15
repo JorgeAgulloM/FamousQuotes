@@ -46,9 +46,6 @@ fun IsDebugShowText(quote: FamousQuoteModel) {
                         copyToClipboard(context, quote.id)
                     }
             )
-            Text(text = "Likes: ${quote.likes}")
-            Text(text = "Shown: ${quote.shown}")
-            Text(text = "Favorites: ${quote.favorites}")
         }
     }
 }

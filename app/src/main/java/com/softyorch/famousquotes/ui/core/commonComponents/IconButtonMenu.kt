@@ -3,7 +3,6 @@ package com.softyorch.famousquotes.ui.core.commonComponents
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -22,7 +21,7 @@ import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
-    color: Color = SecondaryColor,
+    color: Color = SecondaryColor.copy(alpha = 0.6f),
     colorIcon: Color = WhiteSmoke,
     isVisible: Boolean = true,
     isEnabled: Boolean = true,
@@ -39,7 +38,6 @@ fun IconButtonMenu(
     if (isVisible) IconButton(
         onClick = { onClick() },
         modifier = Modifier
-            .padding(4.dp)
             .size(48.dp),
         enabled = isEnabled
     ) {
@@ -48,7 +46,7 @@ fun IconButtonMenu(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = color.copy(alpha = 0.8f), shape = CircleShape)
+                        .background(color = color, shape = CircleShape)
                 )
             }
             Icon(

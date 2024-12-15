@@ -185,10 +185,9 @@ private fun FoldableMenu(
         ContextCompat.checkSelfPermission(context, permission.WRITE_EXTERNAL_STORAGE)
 
     val shape = MaterialTheme.shapes.extraLarge
-    val iconSize = 48
+    val closedSize = 48
     val iconsCount = 6
-    val closedSize = iconSize + 8
-    val expandedSize = closedSize * iconsCount + 4
+    val expandedSize = closedSize * iconsCount
     val borderStroke = if (expanded) 1.dp else 0.dp
     val shadow = if (expanded) 4.dp else 2.dp
 
@@ -196,7 +195,7 @@ private fun FoldableMenu(
         modifier = modifier
             .padding(end = 8.dp)
             .shadow(elevation = shadow, shape = shape)
-            .background(SecondaryColor, shape = shape)
+            .background(SecondaryColor.copy(alpha = 0.6f), shape = shape)
             .border(border = BorderStroke(borderStroke, PrimaryColor), shape = shape)
             .animateContentSize()
             .height(if (expanded) expandedSize.dp else closedSize.dp),
@@ -209,7 +208,6 @@ private fun FoldableMenu(
         IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
             icon = Icons.Outlined.RestartAlt,
-            shadowOn = true,
             isEnabled = isEnabled && !disabledReload
         ) {
             onCloseMenu()
@@ -219,7 +217,6 @@ private fun FoldableMenu(
         if (isImageExt) IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
             icon = Icons.Outlined.Download,
-            shadowOn = true,
             isEnabled = isEnabled
         ) {
             onCloseMenu()
@@ -235,7 +232,6 @@ private fun FoldableMenu(
         IconButtonMenu(
             cDescription = "Go to Grid View",
             icon = Icons.Outlined.GridView,
-            shadowOn = true,
             isEnabled = isEnabled
         ) {
             onCloseMenu()
@@ -246,7 +242,6 @@ private fun FoldableMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info,
             isEnabled = isEnabled,
-            shadowOn = true
         ) {
             onCloseMenu()
             onAction(HomeActions.Info())
@@ -256,7 +251,6 @@ private fun FoldableMenu(
             cDescription = "Settings",
             icon = Icons.Outlined.Settings,
             isEnabled = isEnabled,
-            shadowOn = true
         ) {
             onCloseMenu()
             onNavigateToSettings()
