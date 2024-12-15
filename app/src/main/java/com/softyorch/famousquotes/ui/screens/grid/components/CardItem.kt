@@ -117,7 +117,7 @@ fun CardItem(
                         }
                     }
                 }
-                IsDebugShowText(item.id)
+                IsDebugShowText(item)
             }
         }
     }

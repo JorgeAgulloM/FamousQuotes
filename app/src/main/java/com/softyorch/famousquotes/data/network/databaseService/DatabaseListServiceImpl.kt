@@ -10,10 +10,7 @@ import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEdi
 import com.softyorch.famousquotes.data.network.databaseService.typeList.UserEditableValuesTypeList
 import com.softyorch.famousquotes.data.network.dto.FavoritesDataDTO
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
-import com.softyorch.famousquotes.data.network.response.FavoritesQuoteResponse
-import com.softyorch.famousquotes.data.network.response.LikesQuoteResponse
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
-import com.softyorch.famousquotes.data.network.response.ShownQuoteResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -66,33 +63,6 @@ class DatabaseListServiceImpl @Inject constructor(
             valueQuote = QuoteEditableValuesTypeList.Favorite()
         )
     }
-
-    override suspend fun getQuoteLikesFlow(id: String): Flow<LikesQuoteResponse?> =
-        auxFirebaseLists.genericGetDocumentFlow(
-            collection = COLLECTION,
-            documentId = id
-        ) { snapshot ->
-            val result = snapshot.toObject(LikesQuoteResponse::class.java)
-            result?.let { LikesQuoteResponse(likes = it.likes) }
-        }
-
-    override suspend fun getQuoteShownFlow(id: String): Flow<ShownQuoteResponse?> =
-        auxFirebaseLists.genericGetDocumentFlow(
-            collection = COLLECTION,
-            documentId = id
-        ) { snapshot ->
-            val result = snapshot.toObject(ShownQuoteResponse::class.java)
-            result?.let { ShownQuoteResponse(showns = it.showns) }
-        }
-
-    override suspend fun getQuoteFavoritesFlow(id: String): Flow<FavoritesQuoteResponse?> =
-        auxFirebaseLists.genericGetDocumentFlow(
-            collection = COLLECTION,
-            documentId = id
-        ) { snapshot ->
-            val result = snapshot.toObject(FavoritesQuoteResponse::class.java)
-            result?.let { FavoritesQuoteResponse(favorites = it.favorites) }
-        }
 
     override suspend fun getUserLikeQuote(id: String): Flow<Boolean?> =
         auxFirebaseLists.genericGetDocumentFlow(

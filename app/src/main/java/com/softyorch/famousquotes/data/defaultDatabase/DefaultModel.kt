@@ -5,4 +5,7 @@ data class DefaultModel(
     val owner: String = "",
     val quote: List<String> = emptyList(),
     val imageUrl: String = "",
+    val likes: Int = 0,
+    val shown: Int = 0,
+    val favorites: Int = 0
 )

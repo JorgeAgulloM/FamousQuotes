@@ -10,4 +10,7 @@ data class QuoteResponse(
     val quote: List<String> = emptyList(),
     val date: Timestamp = Timestamp.now(),
     val imageUrl: String = "",
+    val likes: Int = 0,
+    val showns: Int = 0,
+    val favorites: Int = 0
 )

@@ -5,7 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -17,9 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 
 @Composable
-fun IsDebugShowText(id: String) {
+fun IsDebugShowText(quote: FamousQuoteModel) {
     if (BuildConfig.DEBUG) {
         val context = LocalContext.current
 
@@ -30,19 +31,24 @@ fun IsDebugShowText(id: String) {
             clipboardManager.setPrimaryClip(clip)
         }
 
-        Box(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier
+                .background(Color.Yellow.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = id,
+                text = quote.id,
                 modifier = Modifier
-                    .background(Color.Yellow.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
                     .padding(8.dp)
                     .clickable {
-                        copyToClipboard(context, id)
+                        copyToClipboard(context, quote.id)
                     }
             )
+            Text(text = "Likes: ${quote.likes}")
+            Text(text = "Shown: ${quote.shown}")
+            Text(text = "Favorites: ${quote.favorites}")
         }
     }
 }

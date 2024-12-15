@@ -75,7 +75,6 @@ fun DetailScreen(
     LaunchedEffect(true) {
         viewModel.apply {
             getQuote(id)
-            getStatistics(id)
         }
     }
 
@@ -195,7 +194,7 @@ fun CardDetail(
                         CardControls()
                     }
                 }
-                IsDebugShowText(quote.id)
+                IsDebugShowText(quote)
             }
         }
     }

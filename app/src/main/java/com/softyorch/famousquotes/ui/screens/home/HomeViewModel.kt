@@ -12,7 +12,6 @@ import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.SetQuoteFavorite
 import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
-import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.ui.screens.home.model.FavoritesUiDTO
@@ -40,7 +39,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val selectQuote: GetTodayQuote,
-    private val getLikes: GetQuoteLikes,
     private val setLike: SetQuoteLike,
     private val storage: IStorageService,
     private val setShown: SetQuoteShown,
@@ -165,7 +163,7 @@ class HomeViewModel @Inject constructor(
             val id = _uiState.value.quote.id
             val updateLikes = LikesUiDTO(id = id, isLike = isLike)
             setLike(updateLikes.toDomain())
-            getLikesQuote(id)
+            //getLikesQuote(id)
             getFavoriteQuote(id)
         }
     }
@@ -194,27 +192,25 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val quote = withContext(dispatcherDefault) {
-                selectQuote()
-            }
-            val reviewQuote = quote.copy(
-                body = quote.body.trim(),
-                owner = if ("'" in quote.owner) {
-                    quote.owner.trim().replace("'", "")
-                } else {
-                    quote.owner.trim()
+            selectQuote().collect { quoteResult ->
+                quoteResult?.let { quote ->
+                    _uiState.update {
+                        it.copy(
+                            quote = quote.copy(
+                                body = quote.body.trim(),
+                                owner = if ("'" in quote.owner) {
+                                    quote.owner.trim().replace("'", "")
+                                } else {
+                                    quote.owner.trim()
+                                }
+                            ),
+                            showDialogNoConnection = it.hasConnection != true
+                        )
+                    }
+                    getLikesQuote(id = quote.id, likes = quote.likes)
+                    getFavoriteQuote(quote.id)
                 }
-            )
-            _uiState.update {
-                it.copy(
-                    //isLoading = false,
-                    quote = reviewQuote,
-                    showDialogNoConnection = it.hasConnection != true
-                )
             }
-
-            getLikesQuote(quote.id)
-            getFavoriteQuote(quote.id)
         }
     }
 
@@ -278,14 +274,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getLikesQuote(id: String) {
-        viewModelScope.launch(dispatcherDefault) {
-            getLikes(id).catch {
-                writeLog(ERROR, "Error from getting likes: ${it.cause}", it)
-            }.collect { likes ->
-                _likeState.update { it.copy(likes = likes?.likes ?: 0) }
-            }
-        }
+    private fun getLikesQuote(id: String, likes: Int? = null) {
+        likes?.let { likeInt -> _likeState.update { it.copy(likes = likeInt) } }
         viewModelScope.launch(dispatcherDefault) {
             getUserLikeQuote(id).catch {
                 writeLog(ERROR, "Error from getting user like: ${it.cause}", it)
@@ -306,15 +296,16 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRandomQuote() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherDefault) {
             _uiState.update { it.copy(isLoading = true) }
 
-            val quote = withContext(dispatcherDefault) {
-                selectQuote.getRandomQuote()
+            selectQuote.getRandomQuote().collect { quoteResult ->
+                quoteResult?.let { quote ->
+                    getLikesQuote(id = quote.id, likes = quote.likes)
+                    getFavoriteQuote(quote.id)
+                    _uiState.update { it.copy(quote = quote) }
+                }
             }
-            getLikesQuote(quote.id)
-            getFavoriteQuote(quote.id)
-            _uiState.update { it.copy(quote = quote) }
         }
     }
 

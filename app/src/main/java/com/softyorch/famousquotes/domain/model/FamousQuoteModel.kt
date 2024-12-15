@@ -9,22 +9,31 @@ data class FamousQuoteModel(
     val owner: String,
     val body: String,
     val imageUrl: String,
+    val likes: Int,
+    val shown: Int,
+    val favorites: Int
 ) {
     companion object {
-        fun emptyModel(): FamousQuoteModel = FamousQuoteModel("", "", "", "")
+        fun emptyModel(): FamousQuoteModel = FamousQuoteModel("", "", "", "", 0, 0, 0)
 
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,
             owner = getDataLocal(owner),
             body = getDataLocal(quote),
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
+            likes = likes,
+            shown = showns,
+            favorites = favorites
         )
 
         fun DefaultModel.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,
             owner = owner,
             body = getDataLocal(quote),
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
+            likes = likes,
+            shown = shown,
+            favorites = favorites
         )
 
         private fun getDataLocal(quotes: List<String>): String = try {

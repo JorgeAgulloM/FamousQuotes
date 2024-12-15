@@ -282,7 +282,7 @@ private fun CardQuote(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            IsDebugShowText(state.quote.id)
+            IsDebugShowText(state.quote)
 
             val isActive = state.quote.body.isNotBlank() && !state.showImage
             val hasConnection = state.hasConnection == true
@@ -296,6 +296,10 @@ private fun CardQuote(
                 AnimatedContentHome(isActive = isActive) {
                     Column {
                         TextBody(text = state.quote.body)
+                        TextOwner(text = state.quote.owner) {
+                            if (hasConnection) onAction(HomeActions.Owner())
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        }
                         BottomBar(
                             state = state,
                             stateLikes = stateLikes,
@@ -352,10 +356,6 @@ private fun BottomBar(
 
                 else -> onAction(action)
             }
-        }
-        TextOwner(text = state.quote.owner) {
-            if (hasConnection) onAction(HomeActions.Owner())
-            else context.showToast(toastMsg, Toast.LENGTH_LONG)
         }
     }
 }

@@ -7,9 +7,8 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.domain.useCases.GetQuoteById
+import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.ui.screens.detail.model.PropertyStatisticsModel
-import com.softyorch.famousquotes.domain.useCases.GetStatistics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,15 +16,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getQuoteById: GetQuoteById,
-    private val getStatistics: GetStatistics,
+    private val getQuote: GetTodayQuote,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
-): ViewModel() {
+) : ViewModel() {
 
     private val _quote = MutableStateFlow(FamousQuoteModel.emptyModel())
     val quote: StateFlow<FamousQuoteModel> = _quote
@@ -34,37 +31,35 @@ class DetailViewModel @Inject constructor(
     val propertyList: StateFlow<List<PropertyStatisticsModel>> = _propertyList
 
     fun getQuote(id: String) {
-        viewModelScope.launch {
-            val result = withContext(defaultDispatcher) {
-                getQuoteById(id)
+        viewModelScope.launch(defaultDispatcher) {
+            getQuote.invoke(id).collect { quoteResult ->
+                quoteResult?.let { quote ->
+                    getStatistics(quote)
+                    _quote.update { quote }
+                }
             }
-            result?.let { quoteResult -> _quote.update { quoteResult } }
         }
     }
 
-    fun getStatistics(id: String) {
-        viewModelScope.launch(defaultDispatcher) {
-            getStatistics.invoke(id).collect { properties ->
-                _propertyList.update {
-                    listOf(
-                        PropertyStatisticsModel(
-                            name = "Likes",
-                            value = properties.likes,
-                            icon = Icons.Outlined.FavoriteBorder
-                        ),
-                        PropertyStatisticsModel(
-                            name = "Shown",
-                            value = properties.shown,
-                            icon = Icons.Outlined.RemoveRedEye
-                        ),
-                        PropertyStatisticsModel(
-                            name = "Favorites",
-                            value = properties.favorites,
-                            icon = Icons.Outlined.Star
-                        )
-                    )
-                }
-            }
+    private fun getStatistics(quote: FamousQuoteModel) {
+        _propertyList.update {
+            listOf(
+                PropertyStatisticsModel(
+                    name = "Likes",
+                    value = quote.likes,
+                    icon = Icons.Outlined.FavoriteBorder
+                ),
+                PropertyStatisticsModel(
+                    name = "Shown",
+                    value = quote.shown,
+                    icon = Icons.Outlined.RemoveRedEye
+                ),
+                PropertyStatisticsModel(
+                    name = "Favorites",
+                    value = quote.favorites,
+                    icon = Icons.Outlined.Star
+                )
+            )
         }
     }
 
