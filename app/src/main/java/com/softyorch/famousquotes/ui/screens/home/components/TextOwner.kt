@@ -21,7 +21,7 @@ fun TextOwner(text: String, onClick: () -> Unit) {
             text = text,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 8.dp, bottom = 8.dp)
+                .padding(bottom = 8.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
             style = MyTypography.labelLarge.copy(color = Color.White),

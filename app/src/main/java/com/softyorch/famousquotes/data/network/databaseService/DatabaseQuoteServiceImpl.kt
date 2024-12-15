@@ -27,7 +27,7 @@ class DatabaseQuoteServiceImpl @Inject constructor(
 
     override suspend fun getQuoteFlow(id: String?): Flow<QuoteResponse?> = genericGetQuoteFlow(id)
 
-    override suspend fun getRandomQuote(): Flow<QuoteResponse?> = genericGetQuoteFlow(null)
+    override suspend fun getRandomQuote(): Flow<QuoteResponse?> = genericGetQuoteFlow()
 
     // OJO CON USAR ESTO!!!!!!!!!
     override suspend fun getAllQuotes(): List<QuoteResponse?>? = genericGetAllQuotes()

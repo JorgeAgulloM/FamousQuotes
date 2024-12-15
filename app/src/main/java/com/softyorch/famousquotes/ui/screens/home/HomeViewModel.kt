@@ -301,9 +301,21 @@ class HomeViewModel @Inject constructor(
 
             selectQuote.getRandomQuote().collect { quoteResult ->
                 quoteResult?.let { quote ->
+                    _uiState.update {
+                        it.copy(
+                            quote = quote.copy(
+                                body = quote.body.trim(),
+                                owner = if ("'" in quote.owner) {
+                                    quote.owner.trim().replace("'", "")
+                                } else {
+                                    quote.owner.trim()
+                                }
+                            ),
+                            showDialogNoConnection = it.hasConnection != true
+                        )
+                    }
                     getLikesQuote(id = quote.id, likes = quote.likes)
                     getFavoriteQuote(quote.id)
-                    _uiState.update { it.copy(quote = quote) }
                 }
             }
         }
