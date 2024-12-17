@@ -23,11 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.ui.screens.home.model.QuoteShownState
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
@@ -36,9 +36,9 @@ import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 @Composable
 fun CardControlsGroup(
     hasText: String,
+    stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    stateShown: QuoteShownState,
     isEnabled: Boolean,
     isQuoteFromService: Boolean,
     onAction: (HomeActions) -> Unit,
@@ -47,9 +47,9 @@ fun CardControlsGroup(
 
     AnimatedTextHome(hasText) {
         CardControls(
+            stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
-            stateShown = stateShown,
             isQuoteFromService = isQuoteFromService,
             isEnabled = isEnabled,
             onAction = onAction
@@ -76,9 +76,9 @@ fun CardControlsGroup(
 
 @Composable
 private fun CardControls(
+    stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    stateShown: QuoteShownState,
     isQuoteFromService: Boolean,
     isEnabled: Boolean,
     onAction: (HomeActions) -> Unit,
@@ -101,7 +101,7 @@ private fun CardControls(
                 color = Color.Red,
                 colorIcon = WhiteSmoke,
                 isSelected = stateLikes.isLike,
-                valueStatistic = stateLikes.likes,
+                valueStatistic = stateStatistics.likes,
                 isVisible = isQuoteFromService,
                 isEnabled = isEnabled
             ) { onAction(HomeActions.Like()) }
@@ -113,7 +113,7 @@ private fun CardControls(
                 color = Color.Yellow,
                 colorIcon = WhiteSmoke,
                 isSelected = stateFavorite.isFavorite,
-                valueStatistic = stateFavorite.favorites,
+                valueStatistic = stateStatistics.favorites,
                 isVisible = isQuoteFromService,
                 isEnabled = isEnabled
             ) { onAction(HomeActions.Favorite()) }
@@ -128,7 +128,7 @@ private fun CardControls(
             IconCard(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Outlined.RemoveRedEye,
-                valueStatistic = stateShown.shown,
+                valueStatistic = stateStatistics.showns,
                 isEnabled = isEnabled
             ) { }
             SpacerWidth()

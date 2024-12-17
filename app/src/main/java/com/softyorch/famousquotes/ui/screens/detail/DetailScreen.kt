@@ -9,18 +9,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.RemoveRedEye
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -48,11 +50,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
+import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
+import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
-import com.softyorch.famousquotes.ui.screens.detail.model.PropertyStatisticsModel
+import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
+import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel.Companion.toFamousQuoteModel
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
@@ -69,13 +72,10 @@ fun DetailScreen(
     onBackNavigation: () -> Unit
 ) {
 
-    val quote: FamousQuoteModel by viewModel.quote.collectAsStateWithLifecycle()
-    val propertyList: List<PropertyStatisticsModel> by viewModel.propertyList.collectAsStateWithLifecycle()
+    val quote: QuoteDetailsModel by viewModel.quoteModel.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        viewModel.apply {
-            getQuote(id)
-        }
+        viewModel.setDetailAction(DetailActions.LoadQuoteData(), id)
     }
 
     Scaffold(modifier = modifier.fillMaxSize(), containerColor = BackgroundColor) { paddingValues ->
@@ -88,9 +88,8 @@ fun DetailScreen(
             CardDetail(
                 quote = quote,
                 sharedTransitionScope = sharedTransitionScope,
-                animatedVisibilityScope = animatedVisibilityScope,
-                properties = propertyList
-            )
+                animatedVisibilityScope = animatedVisibilityScope
+            ) { action -> viewModel.setDetailAction(action, id) }
             Row(
                 modifier = modifier
                     .padding(horizontal = 8.dp)
@@ -113,15 +112,15 @@ fun DetailScreen(
 @Composable
 fun CardDetail(
     modifier: Modifier = Modifier,
-    quote: FamousQuoteModel?,
-    properties: List<PropertyStatisticsModel>,
+    quote: QuoteDetailsModel,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    onAction: (DetailActions) -> Unit
 ) {
     val context = LocalContext.current
     with(sharedTransitionScope) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-            if (quote == null || quote.imageUrl.isEmpty()) {
+            if (quote.imageUrl.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
@@ -189,49 +188,21 @@ fun CardDetail(
                                 .padding(top = 8.dp, start = 16.dp, end = 8.dp)
                         )
 
-                        CardStatisticQuote(properties)
-
-                        CardControls()
+                        CardControls(quote = quote, onAction = onAction)
                     }
                 }
-                IsDebugShowText(quote)
+                IsDebugShowText(quote.toFamousQuoteModel())
             }
         }
     }
 }
 
 @Composable
-fun CardStatisticQuote(propertyList: List<PropertyStatisticsModel>) {
-    Column {
-        propertyList.forEach { properties ->
-            StatisticProperty(properties)
-        }
-    }
-}
-
-@Composable
-fun StatisticProperty(
-    properties: PropertyStatisticsModel
+fun CardControls(
+    modifier: Modifier = Modifier,
+    quote: QuoteDetailsModel,
+    onAction: (DetailActions) -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButtonMenu(
-            cDescription = properties.name,
-            icon = properties.icon,
-            colorIcon = PrimaryColor
-        ) { }
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = properties.value.toString())
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = properties.name)
-    }
-}
-
-@Composable
-fun CardControls(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
@@ -242,26 +213,40 @@ fun CardControls(modifier: Modifier = Modifier) {
             ),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        IconButtonMenu(
-            cDescription = "Like",
-            icon = Icons.Outlined.FavoriteBorder,
-            colorIcon = PrimaryColor
-        ) { }
-        IconButtonMenu(
-            cDescription = "Favorite",
-            icon = Icons.Outlined.Star,
-            colorIcon = PrimaryColor
-        ) { }
-        IconButtonMenu(
-            cDescription = "Share",
-            icon = Icons.Outlined.Share,
-            colorIcon = PrimaryColor
-        ) { }
-        IconButtonMenu(
-            cDescription = "Download",
-            icon = Icons.Outlined.Download,
-            colorIcon = PrimaryColor
-        ) { }
+        quote.let {
+            IconCard(
+                cDescription = "Like",
+                icon = Icons.Default.FavoriteBorder,
+                secondIcon = Icons.Default.Favorite,
+                color = Color.Red,
+                valueStatistic = quote.likes,
+                isSelected = quote.isLiked,
+            ) { onAction(DetailActions.SetLikeQuote()) }
+            IconCard(
+                cDescription = "Favorite",
+                icon = Icons.Default.StarOutline,
+                secondIcon = Icons.Default.Star,
+                color = Color.Yellow,
+                valueStatistic = quote.favorites,
+                isSelected = quote.isFavorite
+            ) { onAction(DetailActions.SetFavoriteQuote()) }
+            IconCard(
+                cDescription = "Share",
+                icon = Icons.Outlined.Share,
+                colorIcon = PrimaryColor
+            ) { onAction(DetailActions.ShareQuoteAsText()) }
+            IconCard(
+                cDescription = "Download",
+                icon = Icons.Outlined.Download,
+                colorIcon = PrimaryColor
+            ) { onAction(DetailActions.DownloadQuote()) }
+            IconCard(
+                cDescription = "Shown",
+                icon = Icons.Outlined.RemoveRedEye,
+                colorIcon = PrimaryColor,
+                valueStatistic = quote.showns
+            ) { }
+        }
     }
 }
 

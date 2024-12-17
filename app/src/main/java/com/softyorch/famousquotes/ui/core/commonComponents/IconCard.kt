@@ -45,15 +45,17 @@ fun IconCard(
 ) {
     if (isVisible) {
         val rowShape = MaterialTheme.shapes.large
-        val colorBackground = selectColor(isEnabled, isSelected, color, colorIcon)
+        val colorBackground = selectBackgroundColor(isEnabled, isSelected, color, colorIcon)
+        val textColor = selectTextColor(isSelected, color, colorIcon)
 
-        Box(modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp)) {
+        Box(modifier = Modifier
+            .clip(rowShape)
+            .clickable { if (isEnabled) onClick() }
+            .padding(top = 4.dp, bottom = 4.dp)) {
             Row(
                 modifier = Modifier
                     .background(color = colorBackground, shape = rowShape)
-                    .padding(horizontal = 10.dp, vertical = 2.dp)
-                    .clip(rowShape)
-                    .clickable { if (isEnabled) onClick() },
+                    .padding(horizontal = 10.dp, vertical = 2.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AnimatedContent(
@@ -69,22 +71,21 @@ fun IconCard(
                                 contentDescription = cDescription,
                                 tint = WhiteSmoke,
                                 modifier = Modifier
-                                    .padding(2.dp)
-                                    .size(16.dp),
+                                    .padding(4.dp)
+                                    .size(20.dp),
                             )
                         }
                     else Icon(
                         imageVector = icon,
                         contentDescription = cDescription,
-                        modifier = Modifier
-                            .size(20.dp),
+                        modifier = Modifier.size(28.dp),
                         tint = colorIcon
                     )
                 }
                 if (valueStatistic >= 0) Text(
                     text = valueStatistic.toString(),
-                    color = WhiteSmoke,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    color = textColor,
+                    style = MaterialTheme.typography.bodyLarge.copy(
                         textAlign = TextAlign.Center
                     ),
                     modifier = Modifier.padding(start = 8.dp)
@@ -96,7 +97,14 @@ fun IconCard(
 }
 
 @Composable
-private fun selectColor(
+fun selectTextColor(isSelected: Boolean, color: Color, colorIcon: Color) = when {
+    isSelected -> color
+    colorIcon != WhiteSmoke -> colorIcon
+    else -> WhiteSmoke
+}
+
+@Composable
+private fun selectBackgroundColor(
     isEnabled: Boolean,
     isSelected: Boolean,
     color: Color,
@@ -113,7 +121,7 @@ private fun selectColor(
 fun IconCardPrev(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.background(color = BackgroundColor)) {
         IconCard(
-            cDescription = "Content Description",
+            cDescription = "Content Description Favorite",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
             color = Color.Red,
@@ -129,7 +137,7 @@ fun IconCardPrev(modifier: Modifier = Modifier) {
 fun IconCardPrevSelected(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.background(color = BackgroundColor)) {
         IconCard(
-            cDescription = "Content Description",
+            cDescription = "Content Description FavoriteBorder",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
             color = Color.Red,
@@ -145,7 +153,7 @@ fun IconCardPrevSelected(modifier: Modifier = Modifier) {
 fun IconCardFavoritePrev(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.background(color = BackgroundColor)) {
         IconCard(
-            cDescription = "Content Description",
+            cDescription = "Content Description Star",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
             color = Color.Yellow,
@@ -161,7 +169,7 @@ fun IconCardFavoritePrev(modifier: Modifier = Modifier) {
 fun IconCardPrevFavoriteSelected(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.background(color = BackgroundColor)) {
         IconCard(
-            cDescription = "Content Description",
+            cDescription = "Content Description StarBorder",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
             color = Color.Yellow,
@@ -177,7 +185,7 @@ fun IconCardPrevFavoriteSelected(modifier: Modifier = Modifier) {
 fun IconCardSharePrev(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.background(color = BackgroundColor)) {
         IconCard(
-            cDescription = "Content Description",
+            cDescription = "Content Description Share",
             icon = Icons.Rounded.Share,
             color = Color.Yellow,
             colorIcon = WhiteSmoke,

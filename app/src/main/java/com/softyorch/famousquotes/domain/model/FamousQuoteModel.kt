@@ -8,46 +8,28 @@ data class FamousQuoteModel(
     val id: String,
     val owner: String,
     val body: String,
-    val imageUrl: String,
-    val likes: Int,
-    val isLiked: Boolean = false,
-    val shown: Int,
-    val isShown: Boolean = false,
-    val favorites: Int,
-    val isFavorite: Boolean = false
+    val imageUrl: String
 ) {
     companion object {
         fun emptyModel(): FamousQuoteModel = FamousQuoteModel(
             id = "",
             owner = "",
             body = "",
-            imageUrl = "",
-            likes = 0,
-            isLiked = false,
-            shown = 0,
-            isShown = false,
-            favorites = 0,
-            isFavorite = false
+            imageUrl = ""
         )
 
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,
             owner = getDataLocal(owner),
             body = getDataLocal(quote),
-            imageUrl = imageUrl,
-            likes = likes,
-            shown = showns,
-            favorites = favorites
+            imageUrl = imageUrl
         )
 
         fun DefaultModel.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,
             owner = owner,
             body = getDataLocal(quote),
-            imageUrl = imageUrl,
-            likes = likes,
-            shown = shown,
-            favorites = favorites
+            imageUrl = imageUrl
         )
 
         private fun getDataLocal(quotes: List<String>): String = try {

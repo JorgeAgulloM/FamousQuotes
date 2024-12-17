@@ -34,6 +34,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Bonified
 import com.softyorch.famousquotes.ui.admob.BonifiedAdState
@@ -41,7 +42,6 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
-import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
@@ -56,7 +56,6 @@ import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.ui.screens.home.model.QuoteShownState
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
@@ -64,7 +63,6 @@ import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
-import com.softyorch.famousquotes.utils.isFullScreenMode
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
@@ -79,9 +77,9 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onN
         viewModel.onActions(action)
     }
 
+    val stateStatistics: QuoteStatistics by viewModel.uiStateStatistics.collectAsStateWithLifecycle()
     val stateLikes: QuoteLikesState by viewModel.likesState.collectAsStateWithLifecycle()
     val stateFavorite: QuoteFavoriteState by viewModel.favoriteState.collectAsStateWithLifecycle()
-    val stateShown: QuoteShownState by viewModel.stateShown.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val paddingTop = with(LocalDensity.current) {
@@ -91,9 +89,9 @@ fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onN
     ContentBody(
         paddingTop = paddingTop,
         state = state,
+        stateStatistics = stateStatistics,
         stateLikes = stateLikes,
         stateFavorite = stateFavorite,
-        stateShown = stateShown,
         context = context,
         onNavigateToUserScreen = onNavigateToUserScreen,
         onNavigateToSettings = onNavigateToSettings
@@ -170,9 +168,9 @@ private fun ShowBonified(
 private fun ContentBody(
     paddingTop: Dp,
     state: HomeState,
+    stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    stateShown: QuoteShownState,
     context: Context,
     onNavigateToUserScreen: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -201,9 +199,9 @@ private fun ContentBody(
 
         CardQuote(
             state = state,
+            stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
-            stateShown = stateShown,
             context = context
         ) { action -> onActions(action) }
 
@@ -276,9 +274,9 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
 @Composable
 private fun CardQuote(
     state: HomeState,
+    stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    stateShown: QuoteShownState,
     context: Context,
     onAction: (HomeActions) -> Unit,
 ) {
@@ -309,9 +307,9 @@ private fun CardQuote(
                         }
                         BottomBar(
                             state = state,
+                            stateStatistics = stateStatistics,
                             stateLikes = stateLikes,
                             stateFavorite = stateFavorite,
-                            stateShown = stateShown,
                             hasConnection = hasConnection,
                             imageFromWeb = imageFromWeb,
                             context = context,
@@ -332,9 +330,9 @@ private fun CardQuote(
 @Composable
 private fun BottomBar(
     state: HomeState,
+    stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
-    stateShown: QuoteShownState,
     hasConnection: Boolean,
     imageFromWeb: Boolean,
     context: Context,
@@ -350,9 +348,9 @@ private fun BottomBar(
     ) {
         CardControlsGroup(
             hasText = state.quote.body,
+            stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
-            stateShown = stateShown,
             isEnabled = hasConnection,
             isQuoteFromService = imageFromWeb
         ) { action ->
@@ -371,13 +369,12 @@ private fun BottomBar(
 }
 
 @Composable
-private fun configurableCornerShape(isCard: Boolean = false): CornerBasedShape {
-    val isFullScreen = isFullScreenMode(MainActivity.instance)
+private fun configurableCornerShape(isCard: Boolean = true): CornerBasedShape {
     val cornerMaterialXL = MaterialTheme.shapes.extraLarge.topStart
     return MaterialTheme.shapes.extraLarge.copy(
-        topStart = if (isFullScreen) ZeroCornerSize else cornerMaterialXL,
-        topEnd = if (isFullScreen) ZeroCornerSize else cornerMaterialXL,
-        bottomStart = if (!isCard) ZeroCornerSize else cornerMaterialXL,
-        bottomEnd = if (!isCard) ZeroCornerSize else cornerMaterialXL
+        topStart = if (isCard) ZeroCornerSize else cornerMaterialXL,
+        topEnd = if (isCard) ZeroCornerSize else cornerMaterialXL,
+        bottomStart = if (isCard) ZeroCornerSize else cornerMaterialXL,
+        bottomEnd = if (isCard) ZeroCornerSize else cornerMaterialXL
     )
 }

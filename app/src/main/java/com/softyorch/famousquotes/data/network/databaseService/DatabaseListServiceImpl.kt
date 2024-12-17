@@ -11,6 +11,7 @@ import com.softyorch.famousquotes.data.network.databaseService.typeList.UserEdit
 import com.softyorch.famousquotes.data.network.dto.FavoritesDataDTO
 import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
+import com.softyorch.famousquotes.data.network.response.QuoteStatisticsResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,9 @@ class DatabaseListServiceImpl @Inject constructor(
     //Provisional
     @SuppressLint("HardwareIds")
     private val userId = Settings.Secure.getString(context.contentResolver, ANDROID_ID)
+
+    /*************************************** SETTERS ***************************************/
+
 
     override suspend fun setQuoteLike(updateLikes: LikesDataDTO) {
         val id = updateLikes.id
@@ -64,6 +68,8 @@ class DatabaseListServiceImpl @Inject constructor(
         )
     }
 
+    /*************************************** GETTERS ***************************************/
+
     override suspend fun getUserLikeQuote(id: String): Flow<Boolean?> =
         auxFirebaseLists.genericGetDocumentFlow(
             collection = COLLECTION_USERS,
@@ -72,6 +78,25 @@ class DatabaseListServiceImpl @Inject constructor(
             val list = snapshot[LIKE_QUOTES] as? List<*>
             list?.contains(id)
         }
+
+    override suspend fun getUserFavoriteQuote(id: String): Flow<Boolean?> {
+        return auxFirebaseLists.genericGetDocumentFlow(
+            collection = COLLECTION_USERS,
+            documentId = userId
+        ) { snapshot ->
+            val list = snapshot[FAVORITE_QUOTES] as? List<*>
+            list?.contains(id)
+        }
+    }
+
+    override suspend fun getQuoteStatisticsFlow(id: String): Flow<QuoteStatisticsResponse?> {
+        return auxFirebaseLists.genericGetDocumentFlow(
+            collection = COLLECTION,
+            documentId = id
+        ) { snapshot ->
+            snapshot.toObject(QuoteStatisticsResponse::class.java)
+        }
+    }
 
     override suspend fun getLikeQuotes(): List<QuoteResponse?>? =
         auxFirebaseLists.getSelectedTypeQuotesList(
@@ -93,15 +118,5 @@ class DatabaseListServiceImpl @Inject constructor(
             typeList = QuoteEditableQuantityValuesTypeList.Favorites(),
             msgError = "Error getting quotes favorites"
         )
-
-    override suspend fun getUserFavoriteQuote(id: String): Flow<Boolean?> {
-        return auxFirebaseLists.genericGetDocumentFlow(
-            collection = COLLECTION_USERS,
-            documentId = userId
-        ) { snapshot ->
-            val list = snapshot[FAVORITE_QUOTES] as? List<*>
-            list?.contains(id)
-        }
-    }
 
 }

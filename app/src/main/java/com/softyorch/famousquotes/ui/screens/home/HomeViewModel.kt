@@ -8,8 +8,10 @@ import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
+import com.softyorch.famousquotes.domain.useCases.GetQuoteStatistics
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
+import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
 import com.softyorch.famousquotes.domain.useCases.SetQuoteFavorite
 import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
@@ -20,7 +22,6 @@ import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.ui.screens.home.model.QuoteShownState
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.doesDownloadPathFileExist
@@ -40,29 +41,30 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val selectQuote: GetTodayQuote,
-    private val setLike: SetQuoteLike,
     private val storage: IStorageService,
+    private val setLike: SetQuoteLike,
     private val setShown: SetQuoteShown,
     private val setFavorite: SetQuoteFavorite,
     private val getUserLikeQuote: GetUserLikeQuote,
     private val getUserFavoriteQuote: GetUserFavoriteQuote,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
+    private val getQuoteStatistics: GetQuoteStatistics,
     private val shareQuote: ISend,
-    private val hasConnection: InternetConnection,
     private val intents: Intents,
+    private val hasConnection: InternetConnection,
+    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel.emptyModel()))
     val uiState: StateFlow<HomeState> = _uiState
+
+    private val _uiStateStatistics: MutableStateFlow<QuoteStatistics> = MutableStateFlow(QuoteStatistics())
+    val uiStateStatistics: StateFlow<QuoteStatistics> = _uiStateStatistics
 
     private val _likeState = MutableStateFlow(QuoteLikesState())
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
     private val _favoriteState = MutableStateFlow(QuoteFavoriteState())
     val favoriteState: StateFlow<QuoteFavoriteState> = _favoriteState
-
-    private val _stateShown = MutableStateFlow(QuoteShownState())
-    val stateShown: StateFlow<QuoteShownState> = _stateShown
 
     init {
         onCreate()
@@ -204,16 +206,12 @@ class HomeViewModel @Inject constructor(
                                     quote.owner.trim().replace("'", "")
                                 } else {
                                     quote.owner.trim()
-                                },
-                                likes = quote.likes,
-                                favorites = quote.favorites
+                                }
                             ),
                             showDialogNoConnection = it.hasConnection != true,
                         )
                     }
-                    _stateShown.update { it.copy(shown = quote.shown) }
-                    getLikesQuote(id = quote.id, likes = quote.likes)
-                    getFavoriteQuote(id = quote.id, favorites = quote.favorites)
+                    getStatistics(id = quote.id)
                 }
             }
         }
@@ -279,8 +277,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getLikesQuote(id: String, likes: Int? = null) {
-        likes?.let { likeInt -> _likeState.update { it.copy(likes = likeInt) } }
+    private fun getStatistics(id: String) {
+        getLikesQuote(id)
+        getFavoriteQuote(id)
+        viewModelScope.launch(dispatcherDefault) {
+            getQuoteStatistics(id).collect { statisticsResult ->
+                statisticsResult?.let { statistics ->
+                    _uiStateStatistics.update { statistics }
+                }
+            }
+        }
+    }
+
+    private fun getLikesQuote(id: String) {
         viewModelScope.launch(dispatcherDefault) {
             getUserLikeQuote(id).catch {
                 writeLog(ERROR, "Error from getting user like: ${it.cause}", it)
@@ -290,8 +299,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getFavoriteQuote(id: String, favorites: Int) {
-        _favoriteState.update { it.copy(favorites = favorites) }
+    private fun getFavoriteQuote(id: String) {
         viewModelScope.launch(dispatcherDefault) {
             getUserFavoriteQuote(id).catch {
                 writeLog(ERROR, "Error from getting user favorite: ${it.cause}", it)
@@ -320,8 +328,7 @@ class HomeViewModel @Inject constructor(
                             showDialogNoConnection = it.hasConnection != true
                         )
                     }
-                    getLikesQuote(id = quote.id, likes = quote.likes)
-                    getFavoriteQuote(id = quote.id, favorites = quote.favorites)
+                    getStatistics(id = quote.id)
                 }
             }
         }

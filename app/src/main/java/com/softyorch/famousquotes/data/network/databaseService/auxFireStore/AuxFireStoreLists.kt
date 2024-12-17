@@ -11,6 +11,7 @@ import com.softyorch.famousquotes.core.FIREBASE_TIMEOUT
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION
 import com.softyorch.famousquotes.data.network.databaseService.COLLECTION_USERS
+import com.softyorch.famousquotes.data.network.databaseService.CREATED_AT
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableQuantityValuesTypeList
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableValuesTypeList
 import com.softyorch.famousquotes.data.network.databaseService.typeList.UserEditableValuesTypeList
@@ -79,8 +80,10 @@ class AuxFireStoreLists(
         val list = when (typeList) {
             is QuoteEditableQuantityValuesTypeList.Likes ->
                 getUserLikeQuotesId(userId)?.likeQuotes ?: mutableListOf()
+
             is QuoteEditableQuantityValuesTypeList.Shown ->
                 getUserShownQuotesListId(userId)?.shownQuotes ?: mutableListOf()
+
             is QuoteEditableQuantityValuesTypeList.Favorites ->
                 getUserFavoriteQuotesListId(userId)?.favoriteQuotes ?: mutableListOf()
         }
@@ -189,6 +192,10 @@ class AuxFireStoreLists(
         tryCatchFireStore {
             val document = firestore.collection(COLLECTION_USERS).document(userId)
             val list = UserEditableValuesTypeList.getList(typeList)
+
+            if (!document.get().await().exists()) {
+                document.set(mapOf(CREATED_AT to System.currentTimeMillis())).await()
+            }
 
             if (isNewUser && userDisplayIsAlreadyRegistered(document, list, idQuote)) {
                 onTryUpdate(false)

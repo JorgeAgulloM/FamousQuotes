@@ -33,7 +33,6 @@ fun IsDebugShowText(quote: FamousQuoteModel) {
 
         Column(
             modifier = Modifier
-                .background(Color.Yellow.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -41,6 +40,7 @@ fun IsDebugShowText(quote: FamousQuoteModel) {
             Text(
                 text = quote.id,
                 modifier = Modifier
+                    .background(Color.Yellow.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
                     .padding(8.dp)
                     .clickable {
                         copyToClipboard(context, quote.id)
