@@ -347,9 +347,7 @@ private fun BottomBar(
 private fun configurableCornerShape(isCard: Boolean = true): CornerBasedShape {
     val cornerMaterialXL = MaterialTheme.shapes.extraLarge.topStart
     return MaterialTheme.shapes.extraLarge.copy(
-        topStart = if (isCard) ZeroCornerSize else cornerMaterialXL,
-        topEnd = if (isCard) ZeroCornerSize else cornerMaterialXL,
-        bottomStart = if (isCard) ZeroCornerSize else cornerMaterialXL,
-        bottomEnd = if (isCard) ZeroCornerSize else cornerMaterialXL
+        bottomStart = if (isCard) cornerMaterialXL else ZeroCornerSize,
+        bottomEnd = if (isCard) cornerMaterialXL else ZeroCornerSize
     )
 }
