@@ -36,7 +36,7 @@ import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CardItem(
-    item: FamousQuoteModel?,
+    item: FamousQuoteModel,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onNavigateToDetail: (String) -> Unit
@@ -45,80 +45,71 @@ fun CardItem(
 
     with(sharedTransitionScope) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-            if (item == null || item.imageUrl.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                Card(
-                    modifier = Modifier
-                        .sharedElement(
-                            state = rememberSharedContentState(key = "image-${item.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-                        .padding(start = 4.dp, end = 4.dp, bottom = 16.dp)
-                        .fillMaxWidth()
-                        .height(240.dp)
-                        .clip(MaterialTheme.shapes.large)
-                        .clickable { onNavigateToDetail(item.id) },
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = WhiteSmoke
-                    ),
-                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-                ) {
-
-                    val painter = rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(context)
-                            .data(item.imageUrl)
-                            .crossfade(true) // Set the target size to load the image at.
-                            .build(),
-                        contentScale = ContentScale.Fit
+            Card(
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image-${item.id}"),
+                        animatedVisibilityScope = animatedVisibilityScope
                     )
+                    .padding(start = 4.dp, end = 4.dp, bottom = 16.dp)
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(MaterialTheme.shapes.large)
+                    .clickable { onNavigateToDetail(item.id) },
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = WhiteSmoke
+                ),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            ) {
 
-                    val painterState = painter.state
+                val painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(context)
+                        .data(item.imageUrl)
+                        .crossfade(true) // Set the target size to load the image at.
+                        .build(),
+                    contentScale = ContentScale.Fit
+                )
 
-                    Column(
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Card(
                         modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                            .height(180.dp)
+                            .padding(4.dp),
+                        shape = MaterialTheme.shapes.large,
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
                     ) {
-                        Card(
+                        Image(
+                            painter = painter,
+                            contentDescription = stringResource(R.string.main_content_desc_image),
                             modifier = Modifier
-                                .height(180.dp)
-                                .padding(4.dp),
-                            shape = MaterialTheme.shapes.large,
-                            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-                        ) {
-                            Image(
-                                painter = painter,
-                                contentDescription = stringResource(R.string.main_content_desc_image),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(180.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-
-                        Text(
-                            text = item.body,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(8.dp),
+                                .fillMaxWidth()
+                                .height(180.dp),
+                            contentScale = ContentScale.Crop
                         )
-                    }
-
-                    if (painterState !is AsyncImagePainter.State.Success) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
+                        if (painter.state is AsyncImagePainter.State.Loading) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
+
+                    Text(
+                        text = item.body,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(8.dp),
+                    )
                 }
-                IsDebugShowText(item)
             }
+            IsDebugShowText(item)
         }
     }
 }

@@ -20,11 +20,14 @@ class GridViewModel @Inject constructor(
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
 
-    private val _quotes = MutableStateFlow<List<FamousQuoteModel?>?>(emptyList())
-    val quotes: StateFlow<List<FamousQuoteModel?>?> = _quotes
+    private val _quotes = MutableStateFlow<List<FamousQuoteModel>>(emptyList())
+    val quotes: StateFlow<List<FamousQuoteModel>> = _quotes
 
     private val _filterQuotesSelected = MutableStateFlow<FilterQuotes>(FilterQuotes.Likes)
     val filterQuotesSelected: StateFlow<FilterQuotes> = _filterQuotesSelected
+
+    private val _state = MutableStateFlow(GridState())
+    val state: StateFlow<GridState> = _state
 
     init {
         onCreate()
@@ -35,6 +38,7 @@ class GridViewModel @Inject constructor(
     }
 
     private fun getAllQuotes() {
+        _state.update { it.copy(isLoading = true) }
         getFilteredQuotes()
     }
 
@@ -46,7 +50,12 @@ class GridViewModel @Inject constructor(
     private fun getFilteredQuotes() {
         viewModelScope.launch(dispatcherDefault) {
             getQuotes.invoke(_filterQuotesSelected.value).collect { quotes ->
-                _quotes.update { quotes }
+                quotes?.let { quoteList ->
+                    _state.update { it.copy(isLoading = false) }
+                    _quotes.update {
+                        quoteList.map { quote -> quote ?: FamousQuoteModel.emptyModel() }
+                    }
+                }
             }
         }
     }

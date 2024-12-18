@@ -1,8 +1,10 @@
 package com.softyorch.famousquotes.ui.screens.grid
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,9 +13,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -40,6 +44,7 @@ fun GridScreen(
 
     val allQuotes by viewModel.quotes.collectAsStateWithLifecycle()
     val selectedQuotes by viewModel.filterQuotesSelected.collectAsStateWithLifecycle()
+    val state: GridState by viewModel.state.collectAsStateWithLifecycle()
 
     val gridState = rememberLazyGridState()
 
@@ -56,26 +61,31 @@ fun GridScreen(
         containerColor = BackgroundColor
     ) { paddingValues ->
 
-        LazyVerticalGrid(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            columns = GridCells.Fixed(2),
-            state = gridState,
-            contentPadding = PaddingValues(horizontal = 8.dp)
-        ) {
-            allQuotes?.let {
-                items(it) { quote ->
+        AnimatedContent(state.isLoading, label = "Animated content grid") { isLoading ->
+            if (isLoading) Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            } else LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                columns = GridCells.Fixed(2),
+                state = gridState,
+                contentPadding = PaddingValues(horizontal = 8.dp)
+            ) {
+                items(allQuotes) { quote ->
                     CardItem(
                         item = quote,
                         sharedTransitionScope = sharedTransitionScope,
                         animatedVisibilityScope = animatedVisibilityScope
                     ) { idQuote -> onNavigateToDetail(idQuote) }
                 }
-            }
 
-            item {
-                SpacerHeight(Banner.heightBanner)
+                item {
+                    SpacerHeight(Banner.heightBanner)
+                }
             }
         }
     }
