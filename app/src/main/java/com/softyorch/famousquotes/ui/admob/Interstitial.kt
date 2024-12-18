@@ -12,7 +12,6 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
-import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Singleton
 
