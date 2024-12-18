@@ -28,7 +28,6 @@ import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -80,9 +79,9 @@ class HomeViewModel @Inject constructor(
         Analytics.sendAction(Analytics.Action(action))
         writeLog(INFO, "[${HomeViewModel::class.java.simpleName}] onActions: $action")
         when (action) {
-            is HomeActions.HideLoading -> hideLoading()
             is HomeActions.Info -> showInfoDialog()
-            is HomeActions.New -> loadNewRandomQuote()
+            is HomeActions.NewQuoteRequest -> startProcessNewRandomQuote()
+            is HomeActions.NewQuote -> loadNewRandomQuote()
             is HomeActions.ShareWithImage -> shareQuoteWithImage()
             is HomeActions.ShareText -> shareQuoteText()
             is HomeActions.Owner -> goToSearchOwner()
@@ -93,16 +92,10 @@ class HomeViewModel @Inject constructor(
             is HomeActions.ReConnection -> getQuote()
             is HomeActions.ImageDownloadRequest -> startProcessDownloadImage()
             is HomeActions.DownloadImage -> downloadImage()
-            is HomeActions.ShowToastDownload -> showDownloadToast()
-            is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
-            is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
+            is HomeActions.ShowToastDownload -> showDownloadedToast()
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> closeOrErrorDownloadByBonifiedAd()
             is HomeActions.QuoteShown -> setQuoteShown()
         }
-    }
-
-    private fun hideLoading() {
-        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun shareQuoteText() {
@@ -123,13 +116,14 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(showInfo = !it.showInfo) }
     }
 
-    private fun loadNewRandomQuote() {
-        if (!_uiState.value.showInterstitial) {
+    private fun startProcessNewRandomQuote() {
+        if (!_uiState.value.showInterstitial)
             _uiState.update { it.copy(showInterstitial = true, isLoading = true) }
-        } else {
-            getRandomQuote()
-            _uiState.update { it.copy(showInterstitial = false) }
-        }
+    }
+
+    private fun loadNewRandomQuote() {
+        _uiState.update { it.copy(showInterstitial = false, isLoading = false) }
+        getRandomQuote()
     }
 
     private fun shareQuoteWithImage() {
@@ -229,36 +223,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun showDownloadToast() {
+    private fun showDownloadedToast() {
         _uiState.update { it.copy(downloadImage = false) }
-    }
-
-    private fun closeDownloadImageAgain() {
-        _uiState.update { it.copy(imageIsDownloadAlready = false) }
-    }
-
-    private fun downloadImageAgain() {
-        viewModelScope.launch {
-            if (!_uiState.value.showInterstitial) {
-                _uiState.update {
-                    it.copy(
-                        showInterstitial = true,
-                        isLoading = true
-                    )
-                }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        showInterstitial = false,
-                        imageIsDownloadAlready = false,
-                        isLoading = false
-                    )
-                }
-                storage.downloadImage(_uiState.value.quote.id) { downloadResult ->
-                    _uiState.update { it.copy(downloadImage = downloadResult) }
-                }
-            }
-        }
     }
 
     private fun getStatistics(id: String) {
@@ -321,8 +287,10 @@ class HomeViewModel @Inject constructor(
     private fun setQuoteShown() {
         viewModelScope.launch {
             withContext(dispatcherDefault) {
+                writeLog(INFO, "[HomeViewModel] -> setQuoteShown: ${_uiState.value.quote.id}")
                 setShown(_uiState.value.quote.id)
             }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 

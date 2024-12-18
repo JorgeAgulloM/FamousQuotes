@@ -42,11 +42,9 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
-import com.softyorch.famousquotes.ui.core.navigation.Home
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
-import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
 import com.softyorch.famousquotes.ui.screens.home.components.CardControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
@@ -59,9 +57,6 @@ import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 import com.softyorch.famousquotes.ui.theme.brushBackGround2
-import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
-import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
-import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceDrawableIdentifier
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.showToast
@@ -111,7 +106,6 @@ private fun AdmobAds(
     if (state.hasConnection == true && state.showInterstitial)
         ShowInterstitial(
             interstitial = interstitial,
-            imageIsDownloadAlready = state.imageIsDownloadAlready,
             onActions = onActions
         )
     if (state.hasConnection == true && state.showBonified)
@@ -125,22 +119,13 @@ private fun AdmobAds(
 private fun ShowInterstitial(
     interstitial: Interstitial,
     showInterstitial: Boolean = true,
-    imageIsDownloadAlready: Boolean,
     onActions: (HomeActions) -> Unit
 ) {
     interstitial.Show(showInterstitial) {
-        if (it is InterstitialAdState.Showed ||
-            it is InterstitialAdState.Error
-        ) {
-            writeLog(INFO, "itState: $it")
-            if (!imageIsDownloadAlready) onActions(HomeActions.New())
-        }
+        writeLog(INFO, "[Interstitial] -> OnAction: $it")
 
-        if ((it is InterstitialAdState.Clicked ||
-                    it is InterstitialAdState.Close ||
-                    it is InterstitialAdState.Error) &&
-            imageIsDownloadAlready
-        ) onActions(HomeActions.SureDownloadImageAgain())
+        if ((it is InterstitialAdState.Showed || it is InterstitialAdState.Error))
+            onActions(HomeActions.NewQuote())
     }
 }
 
@@ -151,9 +136,9 @@ private fun ShowBonified(
     onActions: (HomeActions) -> Unit
 ) {
     bonified.Show(showBonified) { bonifiedState ->
+        writeLog(INFO, "[HomeScreen] -> bonifiedState: $bonifiedState")
 
         if (bonifiedState == BonifiedAdState.Reward) onActions(HomeActions.DownloadImage())
-
 
         // Estudiar como advertir al usuairo que debe esperar la finalización del ad
         if (
@@ -162,7 +147,6 @@ private fun ShowBonified(
             bonifiedState == BonifiedAdState.Error ||
             bonifiedState == BonifiedAdState.OnDismissed
         ) {
-            writeLog(INFO, "[HomeScreen] -> bonifiedState: $bonifiedState")
             onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
@@ -224,18 +208,6 @@ private fun ContentBody(
             )
             onActions(HomeActions.ShowToastDownload())
         }
-
-        if (state.imageIsDownloadAlready) BasicDialogApp(
-            text = stringResource(R.string.dialog_image_download_again_text),
-            textBtnPositive = stringResource(R.string.dialog_image_download_again_cancel),
-            textBtnNegative = stringResource(R.string.dialog_image_download_again_download),
-        ) { action ->
-            when (action) {
-                POSITIVE -> onActions(HomeActions.CloseDialogDownLoadImageAgain())
-                NEGATIVE -> onActions(HomeActions.SureDownloadImageAgain())
-                DISMISS -> Unit
-            }
-        }
     }
 }
 
@@ -270,7 +242,7 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
         }
     }
     if (painterState is AsyncImagePainter.State.Success) {
-        onActions(HomeActions.HideLoading())
+        writeLog(INFO, "[HomeScreen] -> Show image url: $data")
         onActions(HomeActions.QuoteShown())
     }
 }
@@ -359,7 +331,6 @@ private fun BottomBar(
             isQuoteFromService = imageFromWeb
         ) { action ->
             when (action) {
-                is HomeActions.New,
                 is HomeActions.Owner,
                 is HomeActions.ShareWithImage,
                 is HomeActions.ShareText -> if (hasConnection)

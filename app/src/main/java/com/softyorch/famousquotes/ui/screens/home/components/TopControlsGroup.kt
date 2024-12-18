@@ -211,7 +211,7 @@ private fun FoldableMenu(
             isEnabled = isEnabled && !disabledReload
         ) {
             onCloseMenu()
-            onAction(HomeActions.New())
+            onAction(HomeActions.NewQuoteRequest())
         }
 
         if (isImageExt) IconButtonMenu(
