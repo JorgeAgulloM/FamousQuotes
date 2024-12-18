@@ -106,6 +106,8 @@ private fun CardControls(
                 isEnabled = isEnabled
             ) { onAction(HomeActions.Like()) }
 
+            SpacerWidth(width = 8)
+
             IconCard(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Default.StarOutline,
@@ -117,6 +119,9 @@ private fun CardControls(
                 isVisible = isQuoteFromService,
                 isEnabled = isEnabled
             ) { onAction(HomeActions.Favorite()) }
+
+            SpacerWidth(width = 8)
+
             IconCard(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Outlined.Share,
