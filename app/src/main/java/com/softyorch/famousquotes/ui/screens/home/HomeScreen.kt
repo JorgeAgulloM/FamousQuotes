@@ -42,6 +42,7 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
+import com.softyorch.famousquotes.ui.core.navigation.Home
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
@@ -150,8 +151,11 @@ private fun ShowBonified(
     onActions: (HomeActions) -> Unit
 ) {
     bonified.Show(showBonified) { bonifiedState ->
+
         if (bonifiedState == BonifiedAdState.Reward) onActions(HomeActions.DownloadImage())
 
+
+        // Estudiar como advertir al usuairo que debe esperar la finalización del ad
         if (
             bonifiedState == BonifiedAdState.Showed ||
             bonifiedState == BonifiedAdState.Close ||

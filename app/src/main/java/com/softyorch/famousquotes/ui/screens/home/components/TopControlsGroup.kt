@@ -76,7 +76,7 @@ fun TopControlsGroup(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            onAction(HomeActions.DownloadImage())
+            onAction(HomeActions.ImageDownloadRequest())
         } else {
             showPermissionRationaleDialog = true
         }
@@ -299,6 +299,6 @@ private fun SelectAction(
             onLaunch()
         }
     } else {
-        onAction(HomeActions.DownloadImage())
+        onAction(HomeActions.ImageDownloadRequest())
     }
 }

@@ -35,8 +35,8 @@ sealed class Analytics(val name: String) {
 
         private fun actionName(action: HomeActions) = when (action) {
             is HomeActions.HideLoading -> "${FLAVOR}_loading_off"
+            is HomeActions.ImageDownloadRequest -> "${FLAVOR}_image_download_request"
             is HomeActions.DownloadImage -> "${FLAVOR}_download_image"
-            is HomeActions.DownloadImageByBonifiedAd -> "${FLAVOR}_download_image_by_bonified_ad"
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> "${FLAVOR}_cancel_or_error_download_by_bonified_ad"
             is HomeActions.Info -> "${FLAVOR}_action_info"
             is HomeActions.Like -> "${FLAVOR}_action_like"

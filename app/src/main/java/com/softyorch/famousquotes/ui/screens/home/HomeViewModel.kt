@@ -24,11 +24,11 @@ import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
-import com.softyorch.famousquotes.utils.doesDownloadPathFileExist
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -57,7 +57,8 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel.emptyModel()))
     val uiState: StateFlow<HomeState> = _uiState
 
-    private val _uiStateStatistics: MutableStateFlow<QuoteStatistics> = MutableStateFlow(QuoteStatistics())
+    private val _uiStateStatistics: MutableStateFlow<QuoteStatistics> =
+        MutableStateFlow(QuoteStatistics())
     val uiStateStatistics: StateFlow<QuoteStatistics> = _uiStateStatistics
 
     private val _likeState = MutableStateFlow(QuoteLikesState())
@@ -90,8 +91,8 @@ class HomeViewModel @Inject constructor(
             is HomeActions.ShowImage -> showImage()
             is HomeActions.ShowNoConnectionDialog -> showConnectionDialog()
             is HomeActions.ReConnection -> getQuote()
+            is HomeActions.ImageDownloadRequest -> startProcessDownloadImage()
             is HomeActions.DownloadImage -> downloadImage()
-            is HomeActions.DownloadImageByBonifiedAd -> downloadImageByBonifiedAd()
             is HomeActions.ShowToastDownload -> showDownloadToast()
             is HomeActions.CloseDialogDownLoadImageAgain -> closeDownloadImageAgain()
             is HomeActions.SureDownloadImageAgain -> downloadImageAgain()
@@ -111,17 +112,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             shareQuote.shareTextTo(dataToSend)
             _uiState.update { it.copy(isLoading = false) }
-        }
-    }
-
-    private fun downloadImageByBonifiedAd() {
-        if (!_uiState.value.showBonified) {
-            _uiState.update {
-                it.copy(
-                    showBonified = true,
-                    isLoading = true
-                )
-            }
         }
     }
 
@@ -217,29 +207,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun startProcessDownloadImage() {
+        viewModelScope.launch(dispatcherDefault) {
+            if (!_uiState.value.showBonified) {
+                _uiState.update { it.copy(showBonified = true, isLoading = true) }
+            }
+        }
+    }
+
     private fun downloadImage() {
         viewModelScope.launch(dispatcherDefault) {
-            val imageName = uiState.value.quote.id
-
-            if (_uiState.value.showBonified) {
-                storage.downloadImage(imageName) { downloadResult ->
-                    _uiState.update {
-                        it.copy(
-                            showBonified = false,
-                            downloadImage = downloadResult,
-                            isLoading = false
-                        )
-                    }
-                }
-            } else {
-                val imageIsExist = _uiState.value.imageIsDownloadAlready
-
-                if (!imageIsExist && doesDownloadPathFileExist(imageName)) {
-                    _uiState.update { it.copy(imageIsDownloadAlready = true) }
-                } else {
-                    storage.downloadImage(imageName) { downloadResult ->
-                        _uiState.update { it.copy(downloadImage = downloadResult) }
-                    }
+            storage.downloadImage(_uiState.value.quote.id) { downloadResult ->
+                _uiState.update {
+                    it.copy(
+                        downloadImage = downloadResult,
+                        showBonified = false,
+                        isLoading = false
+                    )
                 }
             }
         }
