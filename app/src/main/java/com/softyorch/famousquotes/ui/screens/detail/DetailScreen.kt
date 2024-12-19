@@ -34,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -57,6 +56,8 @@ import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel.Companion.toFamousQuoteModel
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.FavoriteColor
+import com.softyorch.famousquotes.ui.theme.LikeColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
@@ -218,7 +219,7 @@ fun CardControls(
                 cDescription = "Like",
                 icon = Icons.Default.FavoriteBorder,
                 secondIcon = Icons.Default.Favorite,
-                color = Color.Red,
+                color = LikeColor,
                 valueStatistic = quote.likes,
                 isSelected = quote.isLiked,
             ) { onAction(DetailActions.SetLikeQuote()) }
@@ -226,7 +227,7 @@ fun CardControls(
                 cDescription = "Favorite",
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
-                color = Color.Yellow,
+                color = FavoriteColor,
                 valueStatistic = quote.favorites,
                 isSelected = quote.isFavorite
             ) { onAction(DetailActions.SetFavoriteQuote()) }

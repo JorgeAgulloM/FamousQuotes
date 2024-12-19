@@ -27,8 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.DisabledIconButtonsColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.LikeColor
+import com.softyorch.famousquotes.ui.theme.FavoriteColor
 
 @Composable
 fun IconCard(
@@ -49,9 +52,10 @@ fun IconCard(
         val textColor = selectTextColor(isSelected, color, colorIcon)
 
         Box(modifier = Modifier
+            .padding(top = 4.dp, bottom = 4.dp)
             .clip(rowShape)
             .clickable { if (isEnabled) onClick() }
-            .padding(top = 4.dp, bottom = 4.dp)) {
+        ) {
             Row(
                 modifier = Modifier
                     .background(color = colorBackground, shape = rowShape)
@@ -110,7 +114,7 @@ private fun selectBackgroundColor(
     color: Color,
     colorIcon: Color
 ) = when {
-    !isEnabled -> Color.Gray
+    !isEnabled -> DisabledIconButtonsColor
     isSelected -> color.copy(alpha = 0.2f)
     colorIcon != WhiteSmoke -> colorIcon.copy(alpha = 0.1f)
     else -> WhiteSmoke.copy(alpha = 0.1f)
@@ -124,7 +128,7 @@ fun IconCardPrev(modifier: Modifier = Modifier) {
             cDescription = "Content Description Favorite",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
-            color = Color.Red,
+            color = LikeColor,
             colorIcon = WhiteSmoke,
             valueStatistic = 23,
             isSelected = false
@@ -140,7 +144,7 @@ fun IconCardPrevSelected(modifier: Modifier = Modifier) {
             cDescription = "Content Description FavoriteBorder",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
-            color = Color.Red,
+            color = LikeColor,
             colorIcon = WhiteSmoke,
             valueStatistic = 2,
             isSelected = true
@@ -156,7 +160,7 @@ fun IconCardFavoritePrev(modifier: Modifier = Modifier) {
             cDescription = "Content Description Star",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
-            color = Color.Yellow,
+            color = FavoriteColor,
             colorIcon = WhiteSmoke,
             valueStatistic = 23,
             isSelected = false
@@ -172,7 +176,7 @@ fun IconCardPrevFavoriteSelected(modifier: Modifier = Modifier) {
             cDescription = "Content Description StarBorder",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
-            color = Color.Yellow,
+            color = FavoriteColor,
             colorIcon = WhiteSmoke,
             valueStatistic = 23,
             isSelected = true
@@ -187,7 +191,7 @@ fun IconCardSharePrev(modifier: Modifier = Modifier) {
         IconCard(
             cDescription = "Content Description Share",
             icon = Icons.Rounded.Share,
-            color = Color.Yellow,
+            color = FavoriteColor,
             colorIcon = WhiteSmoke,
             isSelected = false
         ) { }

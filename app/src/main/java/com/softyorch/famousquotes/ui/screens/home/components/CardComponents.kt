@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.R
@@ -28,6 +27,8 @@ import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
+import com.softyorch.famousquotes.ui.theme.FavoriteColor
+import com.softyorch.famousquotes.ui.theme.LikeColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
@@ -98,7 +99,7 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                 icon = Icons.Rounded.FavoriteBorder,
                 secondIcon = Icons.Rounded.Favorite,
-                color = Color.Red,
+                color = LikeColor,
                 colorIcon = WhiteSmoke,
                 isSelected = stateLikes.isLike,
                 valueStatistic = stateStatistics.likes,
@@ -112,7 +113,7 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
-                color = Color.Yellow,
+                color = FavoriteColor,
                 colorIcon = WhiteSmoke,
                 isSelected = stateFavorite.isFavorite,
                 valueStatistic = stateStatistics.favorites,

@@ -8,11 +8,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.ui.theme.MyTypography
+import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 
 @Composable
 fun TextOwner(text: String, onClick: () -> Unit) {
@@ -24,7 +24,7 @@ fun TextOwner(text: String, onClick: () -> Unit) {
                 .padding(bottom = 16.dp)
                 .clip(shape = MaterialTheme.shapes.large)
                 .clickable { onClick() },
-            style = MyTypography.labelLarge.copy(color = Color.White),
+            style = MyTypography.labelLarge.copy(color = TextStandardWhiteColor),
             textDecoration = TextDecoration.Underline,
             textAlign = TextAlign.Center
         )
