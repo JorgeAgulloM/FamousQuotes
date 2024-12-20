@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.detail
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -49,18 +50,29 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
+import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
+import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel.Companion.toFamousQuoteModel
+import com.softyorch.famousquotes.ui.screens.home.components.BasicDialogApp
+import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
+import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.FavoriteColor
 import com.softyorch.famousquotes.ui.theme.LikeColor
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.TextStandardColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
+import com.softyorch.famousquotes.utils.showToast
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -74,46 +86,84 @@ fun DetailScreen(
 ) {
 
     val quote: QuoteDetailsModel by viewModel.quoteModel.collectAsStateWithLifecycle()
+    val state: DetailState by viewModel.detailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         viewModel.setDetailAction(DetailActions.LoadQuoteData(), id)
     }
 
     Scaffold(modifier = modifier.fillMaxSize(), containerColor = BackgroundColor) { paddingValues ->
-        Box(
-            modifier = modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+        Column(
+            modifier = modifier.padding(paddingValues)
         ) {
-            CardDetail(
-                quote = quote,
-                sharedTransitionScope = sharedTransitionScope,
-                animatedVisibilityScope = animatedVisibilityScope
-            ) { action -> viewModel.setDetailAction(action, id) }
-            Row(
+            Box(
                 modifier = modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.TopCenter
             ) {
-                IconButtonMenu(
-                    cDescription = "Back",
-                    color = SecondaryColor.copy(alpha = 0.6f),
-                    icon = Icons.AutoMirrored.Outlined.ArrowBack,
-                    shadowOn = true
-                ) { onBackNavigation() }
-                SpacerIconButton()
+                CardDetail(
+                    id = id,
+                    quote = quote,
+                    state = state,
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                ) { action -> viewModel.setDetailAction(action, id) }
+                Row(
+                    modifier = modifier
+                        .padding(horizontal = 8.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButtonMenu(
+                        cDescription = "Back",
+                        color = SecondaryColor.copy(alpha = 0.6f),
+                        icon = Icons.AutoMirrored.Outlined.ArrowBack,
+                        shadowOn = true
+                    ) { onBackNavigation() }
+                    SpacerIconButton()
+                }
             }
+            Box(Modifier.height(Banner.heightBanner.dp)) {}
+        }
+        SetDialogs(state) {
+            viewModel.setDetailAction(it, id)
         }
     }
 }
 
+@Composable
+fun SetDialogs(state: DetailState, onActions: (DetailActions) -> Unit) {
+    if (state.showDialogNoConnection) NoConnectionDialog {
+        onActions(DetailActions.ShowNoConnectionDialog())
+    }
+
+    if (state.isLoading) LoadingCircle()
+
+    if (state.shareAs) BasicDialogApp(
+        text = stringResource(R.string.dialog_how_do_you_share),
+        title = stringResource(R.string.dialog_share_title),
+        textBtnPositive = stringResource(R.string.dialog_share_by_text),
+        textBtnNegative = stringResource(R.string.dialog_share_by_image),
+        blackDismissActions = true
+    ) {
+        when (it) {
+            POSITIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Text))
+            NEGATIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Image))
+            DISMISS -> onActions(DetailActions.HowToShareQuote())
+        }
+    }
+
+}
+
+
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CardDetail(
+    id: String,
     modifier: Modifier = Modifier,
     quote: QuoteDetailsModel,
+    state: DetailState,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onAction: (DetailActions) -> Unit
@@ -126,10 +176,12 @@ fun CardDetail(
                     CircularProgressIndicator()
                 }
             } else {
+                val toastMsg = stringResource(R.string.main_info_dialog_connection)
+
                 Card(
                     modifier = Modifier
                         .sharedElement(
-                            state = rememberSharedContentState(key = "image-${quote.id}"),
+                            state = rememberSharedContentState(key = "image-$id"),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                         .padding(horizontal = 8.dp)
@@ -189,7 +241,16 @@ fun CardDetail(
                                 .padding(top = 8.dp, start = 16.dp, end = 8.dp)
                         )
 
-                        CardControls(quote = quote, onAction = onAction)
+                        TextOwner(
+                            text = quote.owner,
+                            color = TextStandardColor,
+                            isHiPadding = false
+                        ) {
+                            if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        }
+
+                        CardControls(quote = quote, state = state, onAction = onAction)
                     }
                 }
                 IsDebugShowText(quote.toFamousQuoteModel())
@@ -202,6 +263,7 @@ fun CardDetail(
 fun CardControls(
     modifier: Modifier = Modifier,
     quote: QuoteDetailsModel,
+    state: DetailState,
     onAction: (DetailActions) -> Unit
 ) {
     Row(
@@ -221,6 +283,7 @@ fun CardControls(
                 secondIcon = Icons.Default.Favorite,
                 color = LikeColor,
                 valueStatistic = quote.likes,
+                isEnabled = state.hasConnection,
                 isSelected = quote.isLiked,
             ) { onAction(DetailActions.SetLikeQuote()) }
             IconCard(
@@ -229,22 +292,26 @@ fun CardControls(
                 secondIcon = Icons.Default.Star,
                 color = FavoriteColor,
                 valueStatistic = quote.favorites,
+                isEnabled = state.hasConnection,
                 isSelected = quote.isFavorite
             ) { onAction(DetailActions.SetFavoriteQuote()) }
             IconCard(
                 cDescription = "Share",
                 icon = Icons.Outlined.Share,
-                colorIcon = PrimaryColor
-            ) { onAction(DetailActions.ShareQuoteAsText()) }
+                colorIcon = PrimaryColor,
+                isEnabled = state.hasConnection,
+            ) { onAction(DetailActions.HowToShareQuote()) }
             IconCard(
                 cDescription = "Download",
                 icon = Icons.Outlined.Download,
-                colorIcon = PrimaryColor
+                colorIcon = PrimaryColor,
+                isEnabled = state.hasConnection,
             ) { onAction(DetailActions.DownloadQuote()) }
             IconCard(
                 cDescription = "Shown",
                 icon = Icons.Outlined.RemoveRedEye,
                 colorIcon = PrimaryColor,
+                isEnabled = state.hasConnection,
                 valueStatistic = quote.showns
             ) { }
         }
