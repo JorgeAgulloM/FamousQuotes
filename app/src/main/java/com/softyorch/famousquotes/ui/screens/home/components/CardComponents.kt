@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.QuoteStatistics
+import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState

@@ -49,6 +49,7 @@ import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.theme.PrimaryColor

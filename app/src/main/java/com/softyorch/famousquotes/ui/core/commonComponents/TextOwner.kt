@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.screens.home.components
+package com.softyorch.famousquotes.ui.core.commonComponents
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.ui.screens.home.components.AnimatedTextHome
 import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 

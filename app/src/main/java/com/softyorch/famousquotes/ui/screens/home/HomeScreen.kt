@@ -50,7 +50,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
-import com.softyorch.famousquotes.ui.screens.home.components.TextOwner
+import com.softyorch.famousquotes.ui.core.commonComponents.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState

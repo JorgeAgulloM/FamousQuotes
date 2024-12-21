@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.screens.home.components
+package com.softyorch.famousquotes.ui.core.commonComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
+import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
+import com.softyorch.famousquotes.ui.screens.home.components.HeaderQuote
+import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
+import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
