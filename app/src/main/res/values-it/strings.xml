@@ -16,6 +16,8 @@
     <string name="main_icon_content_desc_buy_image">Acquista immagine</string>
     <string name="main_icon_content_desc_other_quote">Altra citazione</string>
     <string name="main_icon_content_desc_share">Condividi</string>
+    <string name="main_icon_content_desc_go_to_grid_view">Vai alla vista a griglia</string>
+    <string name="main_icon_content_desc_go_to_settings">Vai alle impostazioni</string>
     <string name="main_info_dialog_text_info">Informazioni</string>
     <string name="main_info_dialog_text_buy_image">Scarica l\'immagine generata dall\'IA.</string>
     <string name="main_info_dialog_text_other_quote">Vedi un\'altra citazione/immagine. L\'immagine potrebbe non essere correlata alla citazione.</string>

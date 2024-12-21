@@ -16,6 +16,8 @@
     <string name="main_icon_content_desc_buy_image">Buy image</string>
     <string name="main_icon_content_desc_other_quote">Other quote</string>
     <string name="main_icon_content_desc_share">Share</string>
+    <string name="main_icon_content_desc_go_to_grid_view">Go to Grid View</string>
+    <string name="main_icon_content_desc_go_to_settings">Go to Settings</string>
     <string name="main_info_dialog_text_info">Information</string>
     <string name="main_info_dialog_text_buy_image">Download the AI-generated image.</string>
     <string name="main_info_dialog_text_other_quote">See another quote/image. The image may not be related to the quote.</string>

@@ -16,6 +16,8 @@
     <string name="main_icon_content_desc_buy_image">Bild kaufen</string>
     <string name="main_icon_content_desc_other_quote">Anderes Zitat</string>
     <string name="main_icon_content_desc_share">Teilen</string>
+    <string name="main_icon_content_desc_go_to_grid_view">Zur Rasteransicht wechseln</string>
+    <string name="main_icon_content_desc_go_to_settings">Zu den Einstellungen wechseln</string>
     <string name="main_info_dialog_text_info">Information</string>
     <string name="main_info_dialog_text_buy_image">Lade das von der KI generierte Bild herunter.</string>
     <string name="main_info_dialog_text_other_quote">Sieh dir ein weiteres Zitat/Bild an. Das Bild könnte nicht zum Zitat passen.</string>

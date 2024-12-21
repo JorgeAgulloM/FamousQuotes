@@ -16,6 +16,8 @@
     <string name="main_icon_content_desc_buy_image">छवि खरीदें</string>
     <string name="main_icon_content_desc_other_quote">अन्य उद्धरण</string>
     <string name="main_icon_content_desc_share">शेयर करें</string>
+    <string name="main_icon_content_desc_go_to_grid_view">ग्रिड दृश्य पर जाएं</string>
+    <string name="main_icon_content_desc_go_to_settings">सेटिंग्स पर जाएं</string>
     <string name="main_info_dialog_text_info">जानकारी</string>
     <string name="main_info_dialog_text_buy_image">एआई द्वारा उत्पन्न छवि डाउनलोड करें।</string>
     <string name="main_info_dialog_text_other_quote">एक और उद्धरण/छवि देखें। छवि उद्धरण से संबंधित नहीं हो सकती है।</string>

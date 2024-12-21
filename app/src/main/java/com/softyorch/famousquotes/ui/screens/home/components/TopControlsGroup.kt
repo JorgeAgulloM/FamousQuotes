@@ -212,6 +212,15 @@ private fun FoldableMenu(
         )
 
         IconButtonMenu(
+            cDescription = stringResource(R.string.main_icon_content_desc_go_to_grid_view),
+            icon = Icons.Outlined.GridView,
+            isEnabled = isEnabled
+        ) {
+            onCloseMenu()
+            onNavigateToUserScreen()
+        }
+
+        IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
             icon = Icons.Outlined.RestartAlt,
             isEnabled = isEnabled && !disabledReload
@@ -221,7 +230,7 @@ private fun FoldableMenu(
         }
 
         if (isImageExt) IconButtonMenu(
-            cDescription = stringResource(R.string.main_icon_content_desc_buy_image),
+            cDescription = stringResource(R.string.main_info_dialog_text_buy_image),
             icon = Icons.Outlined.Download,
             isEnabled = isEnabled
         ) {
@@ -236,15 +245,6 @@ private fun FoldableMenu(
         }
 
         IconButtonMenu(
-            cDescription = "Go to Grid View",
-            icon = Icons.Outlined.GridView,
-            isEnabled = isEnabled
-        ) {
-            onCloseMenu()
-            onNavigateToUserScreen()
-        }
-
-        IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_info),
             icon = Icons.Outlined.Info,
             isEnabled = isEnabled,
@@ -254,7 +254,7 @@ private fun FoldableMenu(
         }
 
         IconButtonMenu(
-            cDescription = "Settings",
+            cDescription = stringResource(R.string.main_icon_content_desc_go_to_settings),
             icon = Icons.Outlined.Settings,
             isEnabled = isEnabled,
         ) {
