@@ -10,4 +10,5 @@ sealed interface DetailActions {
     data class OwnerQuoteIntent(val action: String = "OwnerQuoteIntent") : DetailActions
     data class ShowNoConnectionDialog(val action: String = "OwnerQuoteIntent") : DetailActions
     data class HideControls(val action: String = "HideControls") : DetailActions
+    data class ExitDetail(val action: String = "ExitDetail") : DetailActions
 }

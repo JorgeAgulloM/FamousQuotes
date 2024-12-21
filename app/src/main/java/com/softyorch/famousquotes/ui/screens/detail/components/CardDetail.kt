@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,99 +59,93 @@ fun CardDetail(
     val context = LocalContext.current
     with(sharedTransitionScope) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-            if (quote.imageUrl.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                val toastMsg = stringResource(R.string.main_info_dialog_connection)
+            val toastMsg = stringResource(R.string.main_info_dialog_connection)
 
-                Card(
-                    modifier = Modifier
-                        .sharedElement(
-                            state = rememberSharedContentState(key = "image-$id"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-                        .padding(horizontal = 8.dp)
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.large),
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = WhiteSmoke
-                    ),
-                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            Card(
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image-$id"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .clip(MaterialTheme.shapes.large),
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = WhiteSmoke
+                ),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            ) {
+
+                val painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(context)
+                        .data(quote.imageUrl)
+                        .crossfade(true) // Set the target size to load the image at.
+                        .build(),
+                    contentScale = ContentScale.Fit
+                )
+
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    val painter = rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(context)
-                            .data(quote.imageUrl)
-                            .crossfade(true) // Set the target size to load the image at.
-                            .build(),
-                        contentScale = ContentScale.Fit
-                    )
+                    val cardShape = MaterialTheme.shapes.large
 
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceBetween
+                    Card(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth()
+                            .clip(cardShape)
+                            .clickable { onAction(DetailActions.HideControls()) }
+                            .weight(1f),
+                        shape = cardShape,
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
                     ) {
+                        Image(
+                            painter = painter,
+                            contentDescription = stringResource(R.string.main_content_desc_image),
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
 
-                        val cardShape = MaterialTheme.shapes.large
-
-                        Card(
+                    AnimatedVisibility(finishAnimation) {
+                        Text(
+                            text = quote.body,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp,
+                                textAlign = TextAlign.Center,
+                                fontStyle = FontStyle.Italic,
+                                shadow = Shadow(
+                                    color = BackgroundColor.copy(alpha = 0.6f),
+                                    blurRadius = 4f
+                                )
+                            ),
                             modifier = Modifier
-                                .padding(4.dp)
                                 .fillMaxWidth()
-                                .clip(cardShape)
-                                .clickable { onAction(DetailActions.HideControls()) }
-                                .weight(1f),
-                            shape = cardShape,
-                            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+                                .padding(top = 8.dp, start = 16.dp, end = 8.dp)
+                        )
+                    }
+
+                    AnimatedVisibility(finishAnimation) {
+                        TextOwner(
+                            text = quote.owner,
+                            color = TextStandardColor,
+                            isHiPadding = false
                         ) {
-                            Image(
-                                painter = painter,
-                                contentDescription = stringResource(R.string.main_content_desc_image),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-
-                        AnimatedVisibility(finishAnimation) {
-                            Text(
-                                text = quote.body,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 22.sp,
-                                    textAlign = TextAlign.Center,
-                                    fontStyle = FontStyle.Italic,
-                                    shadow = Shadow(
-                                        color = BackgroundColor.copy(alpha = 0.6f),
-                                        blurRadius = 4f
-                                    )
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp, start = 16.dp, end = 8.dp)
-                            )
-                        }
-
-                        AnimatedVisibility(finishAnimation) {
-                            TextOwner(
-                                text = quote.owner,
-                                color = TextStandardColor,
-                                isHiPadding = false
-                            ) {
-                                if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
-                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
-                            }
-                        }
-                        AnimatedVisibility(finishAnimation) {
-                            CardControls(quote = quote, state = state, onAction = onAction)
+                            if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
+                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
                         }
                     }
+                    AnimatedVisibility(finishAnimation) {
+                        CardControls(quote = quote, state = state, onAction = onAction)
+                    }
                 }
-                IsDebugShowText(quote.toFamousQuoteModel())
             }
+            IsDebugShowText(quote.toFamousQuoteModel())
         }
     }
 }

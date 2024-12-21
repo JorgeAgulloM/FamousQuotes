@@ -67,6 +67,7 @@ class DetailViewModel @Inject constructor(
             is DetailActions.OwnerQuoteIntent -> goToOwnerInfo()
             is DetailActions.ShowNoConnectionDialog -> showNoConnectionDialog()
             is DetailActions.HideControls -> showHidControls()
+            is DetailActions.ExitDetail -> deleteQuote()
         }
     }
 
@@ -193,6 +194,10 @@ class DetailViewModel @Inject constructor(
 
     private fun showHidControls() {
         _detailState.update { it.copy(hideControls = !it.hideControls) }
+    }
+
+    private fun deleteQuote() {
+        _quoteModel.update { QuoteDetailsModel() }
     }
 
     private fun setLoadingState(isLoading: Boolean) {
