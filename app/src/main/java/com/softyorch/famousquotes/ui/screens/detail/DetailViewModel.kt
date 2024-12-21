@@ -66,6 +66,7 @@ class DetailViewModel @Inject constructor(
             is DetailActions.ShareQuoteAs -> askHowToShare(action.shareAs)
             is DetailActions.OwnerQuoteIntent -> goToOwnerInfo()
             is DetailActions.ShowNoConnectionDialog -> showNoConnectionDialog()
+            is DetailActions.HideControls -> showHidControls()
         }
     }
 
@@ -188,6 +189,10 @@ class DetailViewModel @Inject constructor(
 
     private fun showNoConnectionDialog() {
         _detailState.update { it.copy(showDialogNoConnection = !it.showDialogNoConnection) }
+    }
+
+    private fun showHidControls() {
+        _detailState.update { it.copy(hideControls = !it.hideControls) }
     }
 
     private fun setLoadingState(isLoading: Boolean) {

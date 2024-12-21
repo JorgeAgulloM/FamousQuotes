@@ -1,11 +1,14 @@
 package com.softyorch.famousquotes.ui.screens.detail
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,13 +40,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -92,9 +93,13 @@ fun DetailScreen(
         viewModel.setDetailAction(DetailActions.LoadQuoteData(), id)
     }
 
+    val finishAnimation =
+        animatedVisibilityScope.transition.currentState == EnterExitState.Visible && !state.hideControls
+
     Scaffold(modifier = modifier.fillMaxSize(), containerColor = BackgroundColor) { paddingValues ->
         Column(
-            modifier = modifier.padding(paddingValues)
+            modifier = modifier.padding(paddingValues),
+            verticalArrangement = Arrangement.Center
         ) {
             Box(
                 modifier = modifier
@@ -107,11 +112,12 @@ fun DetailScreen(
                     quote = quote,
                     state = state,
                     sharedTransitionScope = sharedTransitionScope,
-                    animatedVisibilityScope = animatedVisibilityScope
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    finishAnimation = finishAnimation
                 ) { action -> viewModel.setDetailAction(action, id) }
-                Row(
+                if (finishAnimation) Row(
                     modifier = modifier
-                        .padding(horizontal = 8.dp)
+                        .padding(start = 16.dp, top = 8.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -156,7 +162,6 @@ fun SetDialogs(state: DetailState, onActions: (DetailActions) -> Unit) {
 
 }
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CardDetail(
@@ -166,6 +171,7 @@ fun CardDetail(
     state: DetailState,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    finishAnimation: Boolean,
     onAction: (DetailActions) -> Unit
 ) {
     val context = LocalContext.current
@@ -185,7 +191,7 @@ fun CardDetail(
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                         .padding(horizontal = 8.dp)
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .clip(MaterialTheme.shapes.large),
                     shape = MaterialTheme.shapes.large,
                     colors = CardDefaults.cardColors(
@@ -203,54 +209,63 @@ fun CardDetail(
                     )
 
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
+
+                        val cardShape = MaterialTheme.shapes.large
+
                         Card(
                             modifier = Modifier
-                                .padding(top = 4.dp, start = 4.dp, end = 4.dp)
+                                .padding(4.dp)
                                 .fillMaxWidth()
-                                .height(sixtyPercentOfScreen()),
-                            shape = MaterialTheme.shapes.large,
+                                .clip(cardShape)
+                                .clickable { onAction(DetailActions.HideControls()) }
+                                .weight(1f),
+                            shape = cardShape,
                             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
                         ) {
                             Image(
                                 painter = painter,
                                 contentDescription = stringResource(R.string.main_content_desc_image),
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                                modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
                         }
 
-                        Text(
-                            text = quote.body,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 22.sp,
-                                textAlign = TextAlign.Center,
-                                fontStyle = FontStyle.Italic,
-                                shadow = Shadow(
-                                    color = BackgroundColor.copy(alpha = 0.6f),
-                                    blurRadius = 4f
-                                )
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, start = 16.dp, end = 8.dp)
-                        )
-
-                        TextOwner(
-                            text = quote.owner,
-                            color = TextStandardColor,
-                            isHiPadding = false
-                        ) {
-                            if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
-                            else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                        AnimatedVisibility(finishAnimation) {
+                            Text(
+                                text = quote.body,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 22.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontStyle = FontStyle.Italic,
+                                    shadow = Shadow(
+                                        color = BackgroundColor.copy(alpha = 0.6f),
+                                        blurRadius = 4f
+                                    )
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp, start = 16.dp, end = 8.dp)
+                            )
                         }
 
-                        CardControls(quote = quote, state = state, onAction = onAction)
+                        AnimatedVisibility(finishAnimation) {
+                            TextOwner(
+                                text = quote.owner,
+                                color = TextStandardColor,
+                                isHiPadding = false
+                            ) {
+                                if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
+                                else context.showToast(toastMsg, Toast.LENGTH_LONG)
+                            }
+                        }
+                        AnimatedVisibility(finishAnimation) {
+                            CardControls(quote = quote, state = state, onAction = onAction)
+                        }
                     }
                 }
                 IsDebugShowText(quote.toFamousQuoteModel())
@@ -316,15 +331,4 @@ fun CardControls(
             ) { }
         }
     }
-}
-
-
-@Composable
-fun sixtyPercentOfScreen(): Dp {
-    val configuration = LocalConfiguration.current
-    val screenHeightPx =
-        configuration.screenHeightDp.dp
-    val heightInDp = (screenHeightPx.value * 0.55f).dp
-
-    return heightInDp
 }

@@ -31,7 +31,7 @@ fun TopBarGrid(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, paddingTop + 8.dp, end = 8.dp, bottom = 8.dp),
+            .padding(start = 16.dp, paddingTop, end = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
