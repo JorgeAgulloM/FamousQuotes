@@ -18,6 +18,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
 import com.softyorch.famousquotes.ui.screens.home.components.HeaderQuote
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
+import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
 import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
@@ -40,7 +41,7 @@ fun BasicDialogApp(
         onDismissRequest = { onActions(if (blackDismissActions) DISMISS else NEGATIVE) },
         modifier = Modifier.background(
             color = BackgroundColor,
-            shape = MaterialTheme.shapes.medium
+            shape = MaterialTheme.shapes.large
         ),
         properties = DialogProperties(
             dismissOnBackPress = blackDismissActions,
@@ -83,13 +84,14 @@ private fun ContentDialog(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (textBtnPositive != null) ButtonApp(text = textBtnPositive) {
                 onActions(POSITIVE)
             }
+            SpacerWidth(4)
             if (textBtnNegative != null) ButtonApp(text = textBtnNegative, primary = true) {
                 onActions(NEGATIVE)
             }
