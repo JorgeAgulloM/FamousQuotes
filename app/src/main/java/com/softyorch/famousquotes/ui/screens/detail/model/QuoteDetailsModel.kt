@@ -22,4 +22,16 @@ data class QuoteDetailsModel(
                 imageUrl = imageUrl
             )
     }
+
+    override fun toString(): String {
+        return "QuoteDetailsModel(id = $id \n" +
+                "owner = $owner" +
+                "body = $body" +
+                "imageUrl = $imageUrl\n" +
+                "likes = $likes\n" +
+                "showns = $showns\n" +
+                "favorites = $favorites\n" +
+                "isLiked = $isLiked\n" +
+                "isFavorite = $isFavorite)"
+    }
 }
