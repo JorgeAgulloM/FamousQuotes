@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.Star
@@ -17,21 +18,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.core.FilterQuotes
+import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedIconRotating180Degrees
+import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
-import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @Composable
 fun TopBarGrid(
     paddingTop: Dp,
     filterQuotes: FilterQuotes,
+    expanded: Boolean,
     navigateBack: () -> Unit,
+    onActions: () -> Unit,
     onClickListener: (FilterQuotes) -> Unit
 ) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, paddingTop, end = 8.dp, bottom = 8.dp),
+            .padding(start = 16.dp, paddingTop, end = 16.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
@@ -66,6 +71,14 @@ fun TopBarGrid(
                 isSelected = filterQuotes == FilterQuotes.Favorites
             ) { onClickListener(it) }
         }
-        SpacerIconButton()
+
+        AnimatedIconRotating180Degrees(
+            expanded = expanded,
+            iconFirst = Icons.AutoMirrored.Filled.Sort,
+            iconSecond = Icons.AutoMirrored.Filled.Sort,
+            shadowOn = false,
+            animatedType = AnimatedType.Flip,
+            onCloseMenu = onActions
+        )
     }
 }

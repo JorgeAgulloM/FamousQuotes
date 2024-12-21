@@ -16,7 +16,11 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -48,12 +52,25 @@ fun GridScreen(
 
     val gridState = rememberLazyGridState()
 
+    var expanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(true) {
+        viewModel.setAction(GridActions.LoadingQuotes())
+    }
+
     Scaffold(
         topBar = {
             TopBarGrid(
                 paddingTop = paddingTop,
                 filterQuotes = selectedQuotes,
-                navigateBack = onNavigateBack
+                expanded = state.orderByAscending,
+                navigateBack = onNavigateBack,
+                onActions = {
+                    expanded = !expanded
+                    viewModel.setAction(
+                        if (state.orderByAscending) GridActions.DescendingOrder() else GridActions.AscendingOrder()
+                    )
+                }
             ) {
                 viewModel.selectFilterQuotes(it)
             }
@@ -75,7 +92,13 @@ fun GridScreen(
                 state = gridState,
                 contentPadding = PaddingValues(horizontal = 8.dp)
             ) {
-                items(allQuotes) { quote ->
+
+                val quoteList = if (state.orderByAscending)
+                    allQuotes.sortedBy { it.id }
+                 else
+                    allQuotes.sortedByDescending { it.id }
+
+                items(quoteList) { quote ->
                     CardItem(
                         item = quote,
                         sharedTransitionScope = sharedTransitionScope,

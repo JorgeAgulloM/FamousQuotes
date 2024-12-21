@@ -29,12 +29,12 @@ class GridViewModel @Inject constructor(
     private val _state = MutableStateFlow(GridState())
     val state: StateFlow<GridState> = _state
 
-    init {
-        onCreate()
-    }
-
-    fun onCreate() {
-        getAllQuotes()
+    fun setAction(action: GridActions) {
+        when (action) {
+            is GridActions.LoadingQuotes -> getAllQuotes()
+            is GridActions.AscendingOrder -> revertOrder()
+            is GridActions.DescendingOrder -> revertOrder()
+        }
     }
 
     private fun getAllQuotes() {
@@ -48,15 +48,32 @@ class GridViewModel @Inject constructor(
     }
 
     private fun getFilteredQuotes() {
+        val isAscending: Boolean = _state.value.orderByAscending
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch(dispatcherDefault) {
             getQuotes.invoke(_filterQuotesSelected.value).collect { quotes ->
                 quotes?.let { quoteList ->
                     _state.update { it.copy(isLoading = false) }
                     _quotes.update {
-                        quoteList.map { quote -> quote ?: FamousQuoteModel.emptyModel() }
+                        if (isAscending)
+                            quoteList.map { quote -> quote ?: FamousQuoteModel.emptyModel() }
+                        else
+                            quoteList.sortedByDescending { quote ->
+                                quote?.id
+                            }.map { quote ->
+                                quote ?: FamousQuoteModel.emptyModel()
+                            }
+                    }.also {
+                        _state.update { it.copy(isLoading = false) }
                     }
                 }
             }
+        }
+    }
+
+    private fun revertOrder() {
+        _state.update {
+            it.copy(orderByAscending = !_state.value.orderByAscending)
         }
     }
 }

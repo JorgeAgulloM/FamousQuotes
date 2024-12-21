@@ -7,9 +7,6 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -49,6 +45,8 @@ import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedIconRotating180Degrees
+import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
@@ -204,7 +202,14 @@ private fun FoldableMenu(
         verticalArrangement = Arrangement.Top
     ) {
 
-        IconOpenCloseMenu(expanded, onCloseMenu)
+        AnimatedIconRotating180Degrees(
+            expanded = expanded,
+            iconFirst = Icons.Outlined.Menu,
+            iconSecond = Icons.Outlined.Close,
+            shadowOn = true,
+            animatedType = AnimatedType.Rotate,
+            onCloseMenu = onCloseMenu
+        )
 
         IconButtonMenu(
             cDescription = stringResource(R.string.main_icon_content_desc_other_quote),
@@ -255,29 +260,6 @@ private fun FoldableMenu(
         ) {
             onCloseMenu()
             onNavigateToSettings()
-        }
-    }
-}
-
-@Composable
-private fun IconOpenCloseMenu(expanded: Boolean, onCloseMenu: () -> Unit) {
-
-    val rotation by animateFloatAsState(
-        targetValue = if (expanded) 180f else 0f,
-        animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing),
-        label = "animateFloatAsState"
-    )
-
-    val icon = if (expanded) Icons.Outlined.Close else Icons.Outlined.Menu
-
-    Box(modifier = Modifier.graphicsLayer { rotationZ = rotation }) {
-        IconButtonMenu(
-            cDescription = "Close menu",
-            icon = icon,
-            shadowOn = true,
-            isEnabled = true
-        ) {
-            onCloseMenu()
         }
     }
 }
