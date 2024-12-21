@@ -164,7 +164,6 @@ class HomeViewModel @Inject constructor(
             val favoriteState = FavoritesUiDTO(id = id, isFavorite = isFavorite)
             setFavorite(favoriteState.toDomain())
         }
-        if (!_likeState.value.isLike && !_favoriteState.value.isFavorite) setQuoteLike()
     }
 
     private fun showImage() {
