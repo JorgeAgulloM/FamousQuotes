@@ -38,7 +38,6 @@ class GridViewModel @Inject constructor(
     }
 
     private fun getAllQuotes() {
-        _state.update { it.copy(isLoading = true) }
         getFilteredQuotes()
     }
 
@@ -48,14 +47,12 @@ class GridViewModel @Inject constructor(
     }
 
     private fun getFilteredQuotes() {
-        val isAscending: Boolean = _state.value.orderByAscending
-        _state.update { it.copy(isLoading = true) }
+        if (_quotes.value.isEmpty()) _state.update { it.copy(isLoading = true) }
         viewModelScope.launch(dispatcherDefault) {
             getQuotes.invoke(_filterQuotesSelected.value).collect { quotes ->
                 quotes?.let { quoteList ->
-                    _state.update { it.copy(isLoading = false) }
                     _quotes.update {
-                        if (isAscending)
+                        if (_state.value.orderByAscending)
                             quoteList.map { quote -> quote ?: FamousQuoteModel.emptyModel() }
                         else
                             quoteList.sortedByDescending { quote ->
@@ -75,5 +72,12 @@ class GridViewModel @Inject constructor(
         _state.update {
             it.copy(orderByAscending = !_state.value.orderByAscending)
         }
+        val revertList = if (_state.value.orderByAscending)
+            _quotes.value.sortedBy { it.id }
+        else
+            _quotes.value.sortedByDescending { it.id }
+
+        _quotes.update { emptyList() }
+        _quotes.update { revertList }
     }
 }
