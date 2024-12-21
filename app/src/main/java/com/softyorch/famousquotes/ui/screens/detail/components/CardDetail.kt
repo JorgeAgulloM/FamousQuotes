@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,7 +38,6 @@ import com.softyorch.famousquotes.ui.screens.detail.DetailActions
 import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel.Companion.toFamousQuoteModel
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.TextStandardColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.utils.showToast
@@ -119,10 +117,6 @@ fun CardDetail(
                                 fontSize = 22.sp,
                                 textAlign = TextAlign.Center,
                                 fontStyle = FontStyle.Italic,
-                                shadow = Shadow(
-                                    color = BackgroundColor.copy(alpha = 0.6f),
-                                    blurRadius = 4f
-                                )
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
