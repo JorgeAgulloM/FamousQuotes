@@ -2,9 +2,7 @@ package com.softyorch.famousquotes.ui.screens.grid.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,8 +25,6 @@ fun ButtonTopBar(
     Box(
         modifier = Modifier
             .padding(horizontal = 1.dp)
-            .width(80.dp)
-            .height(40.dp)
             .shadow(elevation = 4.dp, shape = MaterialTheme.shapes.large)
             .background(
                 color = BackgroundColor,
@@ -36,11 +32,13 @@ fun ButtonTopBar(
             ),
         contentAlignment = Alignment.BottomCenter
     ) {
-        IconButtonMenu(
-            cDescription = contentDescription,
-            icon = icon,
-            shadowOn = false,
-            isSelected = isSelected
-        ) { onClickListener(filterQuotes) }
+        Box(modifier = Modifier.padding(horizontal = 8.dp)) {
+            IconButtonMenu(
+                cDescription = contentDescription,
+                icon = icon,
+                shadowOn = false,
+                isSelected = isSelected
+            ) { onClickListener(filterQuotes) }
+        }
     }
 }
