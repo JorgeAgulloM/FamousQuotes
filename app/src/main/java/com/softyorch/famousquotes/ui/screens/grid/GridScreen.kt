@@ -92,13 +92,7 @@ fun GridScreen(
                 state = gridState,
                 contentPadding = PaddingValues(horizontal = 8.dp)
             ) {
-
-                val quoteList = if (state.orderByAscending)
-                    allQuotes.sortedBy { it.id }
-                 else
-                    allQuotes.sortedByDescending { it.id }
-
-                items(quoteList) { quote ->
+                items(allQuotes) { quote ->
                     CardItem(
                         item = quote,
                         sharedTransitionScope = sharedTransitionScope,
