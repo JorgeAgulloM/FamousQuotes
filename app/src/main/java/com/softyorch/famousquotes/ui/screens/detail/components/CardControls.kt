@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.detail.DetailActions
 import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
@@ -31,6 +32,7 @@ fun CardControls(
     modifier: Modifier = Modifier,
     quote: QuoteDetailsModel,
     state: DetailState,
+    statistics: QuoteStatistics,
     onAction: (DetailActions) -> Unit
 ) {
     Row(
@@ -49,7 +51,7 @@ fun CardControls(
                 icon = Icons.Default.FavoriteBorder,
                 secondIcon = Icons.Default.Favorite,
                 color = LikeColor,
-                valueStatistic = quote.likes,
+                valueStatistic = statistics.likes,
                 isEnabled = state.hasConnection,
                 isSelected = quote.isLiked,
             ) { onAction(DetailActions.SetLikeQuote()) }
@@ -58,7 +60,7 @@ fun CardControls(
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
                 color = FavoriteColor,
-                valueStatistic = quote.favorites,
+                valueStatistic = statistics.favorites,
                 isEnabled = state.hasConnection,
                 isSelected = quote.isFavorite
             ) { onAction(DetailActions.SetFavoriteQuote()) }
@@ -79,7 +81,7 @@ fun CardControls(
                 icon = Icons.Outlined.RemoveRedEye,
                 colorIcon = PrimaryColor,
                 isEnabled = state.hasConnection,
-                valueStatistic = quote.showns
+                valueStatistic = statistics.showns
             ) { }
         }
     }

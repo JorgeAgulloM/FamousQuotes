@@ -7,9 +7,6 @@ data class QuoteDetailsModel(
     val owner: String = "",
     val body: String = "",
     val imageUrl: String = "",
-    val likes: Int = 0,
-    val showns: Int = 0,
-    val favorites: Int = 0,
     val isLiked: Boolean = false,
     val isFavorite: Boolean = false
 ) {
@@ -28,9 +25,6 @@ data class QuoteDetailsModel(
                 "owner = $owner" +
                 "body = $body" +
                 "imageUrl = $imageUrl\n" +
-                "likes = $likes\n" +
-                "showns = $showns\n" +
-                "favorites = $favorites\n" +
                 "isLiked = $isLiked\n" +
                 "isFavorite = $isFavorite)"
     }

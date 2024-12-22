@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.TextOwner
 import com.softyorch.famousquotes.ui.screens.detail.DetailActions
@@ -49,6 +50,7 @@ fun CardDetail(
     modifier: Modifier = Modifier,
     quote: QuoteDetailsModel,
     state: DetailState,
+    statistics: QuoteStatistics,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     finishAnimation: Boolean,
@@ -135,7 +137,7 @@ fun CardDetail(
                         }
                     }
                     AnimatedVisibility(finishAnimation) {
-                        CardControls(quote = quote, state = state, onAction = onAction)
+                        CardControls(quote = quote, state = state, statistics = statistics, onAction = onAction)
                     }
                 }
             }

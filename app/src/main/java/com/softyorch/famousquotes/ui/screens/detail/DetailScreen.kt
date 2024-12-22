@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
@@ -44,6 +45,7 @@ fun DetailScreen(
 
     val quote: QuoteDetailsModel by viewModel.quoteModel.collectAsStateWithLifecycle()
     val state: DetailState by viewModel.detailState.collectAsStateWithLifecycle()
+    val statistics: QuoteStatistics by viewModel.statisticsModel.collectAsStateWithLifecycle()
 
     val finishAnimation =
         animatedVisibilityScope.transition.currentState == EnterExitState.Visible && !state.hideControls
@@ -64,6 +66,7 @@ fun DetailScreen(
                     id = id,
                     quote = quote,
                     state = state,
+                    statistics = statistics,
                     sharedTransitionScope = sharedTransitionScope,
                     animatedVisibilityScope = animatedVisibilityScope,
                     finishAnimation = finishAnimation

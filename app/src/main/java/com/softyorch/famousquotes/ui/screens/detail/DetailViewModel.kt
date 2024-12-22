@@ -6,6 +6,7 @@ import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.domain.useCases.GetQuoteStatistics
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
 import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
@@ -24,6 +25,7 @@ import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -47,8 +49,13 @@ class DetailViewModel @Inject constructor(
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
 
+    private var quoteJob: Job? = null
     private val _quoteModel = MutableStateFlow(QuoteDetailsModel())
     val quoteModel: StateFlow<QuoteDetailsModel> = _quoteModel
+
+    private var statisticsJob: Job? = null
+    private val _statisticsModel = MutableStateFlow(QuoteStatistics())
+    val statisticsModel: StateFlow<QuoteStatistics> = _statisticsModel
 
     private val _detailState = MutableStateFlow(DetailState())
     val detailState: StateFlow<DetailState> = _detailState
@@ -72,13 +79,14 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun getData(id: String) {
-        viewModelScope.launch(dispatcherDefault) {
+        quoteJob?.cancel()
+
+        quoteJob = viewModelScope.launch(dispatcherDefault) {
             combine(
                 getQuote.invoke(id),
                 getUserLikeQuote.invoke(id),
-                getUserFavoriteQuote.invoke(id),
-                getQuoteStatistics.invoke(id)
-            ) { quoteResponse, isLikeResponse, isFavoriteResponse, statisticsResponse ->
+                getUserFavoriteQuote.invoke(id)
+            ) { quoteResponse, isLikeResponse, isFavoriteResponse ->
 
                 quoteResponse?.let { response ->
                     _quoteModel.update {
@@ -98,9 +106,20 @@ class DetailViewModel @Inject constructor(
                 isFavoriteResponse?.let { quoteFavorite ->
                     _quoteModel.update { it.copy(isFavorite = quoteFavorite) }
                 }
+            }.collect {
+                getStatisticsQuote(id)
+                writeLog(LevelLog.INFO, "${this.javaClass.simpleName}: get data quote: ${_quoteModel.value}")
+            }
+        }
+    }
 
+    private fun getStatisticsQuote(id: String) {
+        statisticsJob?.cancel()
+
+        statisticsJob = viewModelScope.launch(dispatcherDefault) {
+            getQuoteStatistics.invoke(id).collect { statisticsResponse ->
                 statisticsResponse?.let { quoteStatistics ->
-                    _quoteModel.update {
+                    _statisticsModel.update {
                         it.copy(
                             likes = quoteStatistics.likes,
                             showns = quoteStatistics.showns,
@@ -108,8 +127,6 @@ class DetailViewModel @Inject constructor(
                         )
                     }
                 }
-            }.collect {
-                writeLog(LevelLog.INFO, "${this.javaClass.simpleName}: get data quote: ${_quoteModel.value}")
             }
         }
     }
