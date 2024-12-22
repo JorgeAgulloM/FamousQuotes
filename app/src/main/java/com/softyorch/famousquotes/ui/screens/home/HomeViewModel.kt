@@ -28,6 +28,7 @@ import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -53,16 +54,20 @@ class HomeViewModel @Inject constructor(
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
+    private var quoteJob: Job? = null
     private val _uiState = MutableStateFlow(HomeState(quote = FamousQuoteModel.emptyModel()))
     val uiState: StateFlow<HomeState> = _uiState
 
+    private var statisticsJob: Job? = null
     private val _uiStateStatistics: MutableStateFlow<QuoteStatistics> =
         MutableStateFlow(QuoteStatistics())
     val uiStateStatistics: StateFlow<QuoteStatistics> = _uiStateStatistics
 
+    private var likeJob: Job? = null
     private val _likeState = MutableStateFlow(QuoteLikesState())
     val likesState: StateFlow<QuoteLikesState> = _likeState
 
+    private var favoriteJob: Job? = null
     private val _favoriteState = MutableStateFlow(QuoteFavoriteState())
     val favoriteState: StateFlow<QuoteFavoriteState> = _favoriteState
 
@@ -176,7 +181,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getQuote() {
-        viewModelScope.launch {
+        quoteJob?.cancel()
+
+        quoteJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
             selectQuote().collect { quoteResult ->
@@ -227,9 +234,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getStatistics(id: String) {
+        statisticsJob?.cancel()
+
         getLikesQuote(id)
         getFavoriteQuote(id)
-        viewModelScope.launch(dispatcherDefault) {
+        statisticsJob = viewModelScope.launch(dispatcherDefault) {
             getQuoteStatistics(id).collect { statisticsResult ->
                 statisticsResult?.let { statistics ->
                     _uiStateStatistics.update { statistics }
@@ -239,7 +248,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getLikesQuote(id: String) {
-        viewModelScope.launch(dispatcherDefault) {
+        likeJob?.cancel()
+
+        likeJob = viewModelScope.launch(dispatcherDefault) {
             getUserLikeQuote(id).catch {
                 writeLog(ERROR, "Error from getting user like: ${it.cause}", it)
             }.collect { isLike ->
@@ -249,7 +260,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getFavoriteQuote(id: String) {
-        viewModelScope.launch(dispatcherDefault) {
+        favoriteJob?.cancel()
+
+        favoriteJob = viewModelScope.launch(dispatcherDefault) {
             getUserFavoriteQuote(id).catch {
                 writeLog(ERROR, "Error from getting user favorite: ${it.cause}", it)
             }.collect { isFavorite ->
