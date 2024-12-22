@@ -8,6 +8,7 @@ import com.softyorch.famousquotes.domain.useCases.GetAllQuotesFiltered
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,6 +21,7 @@ class GridViewModel @Inject constructor(
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
 
+    private var quotesJob: Job? = null
     private val _quotes = MutableStateFlow<List<FamousQuoteModel>>(emptyList())
     val quotes: StateFlow<List<FamousQuoteModel>> = _quotes
 
@@ -32,6 +34,7 @@ class GridViewModel @Inject constructor(
     fun setAction(action: GridActions) {
         when (action) {
             is GridActions.LoadingQuotes -> getAllQuotes()
+            is GridActions.SelectFilterQuotes -> selectFilterQuotes(action.filterQuotes)
             is GridActions.AscendingOrder -> revertOrder()
             is GridActions.DescendingOrder -> revertOrder()
         }
@@ -41,14 +44,17 @@ class GridViewModel @Inject constructor(
         getFilteredQuotes()
     }
 
-    fun selectFilterQuotes(filterQuotes: FilterQuotes) {
+    private fun selectFilterQuotes(filterQuotes: FilterQuotes) {
         _filterQuotesSelected.update { filterQuotes }
         getFilteredQuotes()
     }
 
     private fun getFilteredQuotes() {
-        if (_quotes.value.isEmpty()) _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch(dispatcherDefault) {
+        _state.update { it.copy(isLoading = true) }
+
+        quotesJob?.cancel()
+
+        quotesJob = viewModelScope.launch(dispatcherDefault) {
             getQuotes.invoke(_filterQuotesSelected.value).collect { quotes ->
                 quotes?.let { quoteList ->
                     _quotes.update {

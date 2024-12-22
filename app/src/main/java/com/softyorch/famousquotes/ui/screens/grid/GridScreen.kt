@@ -79,7 +79,7 @@ fun GridScreen(
                     )
                 }
             ) {
-                viewModel.selectFilterQuotes(it)
+                viewModel.setAction(GridActions.SelectFilterQuotes(filterQuotes = it))
             }
         },
         containerColor = BackgroundColor
