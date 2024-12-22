@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +43,7 @@ import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
+import com.softyorch.famousquotes.ui.core.commonComponents.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedContentHome
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedImage
@@ -50,7 +52,6 @@ import com.softyorch.famousquotes.ui.screens.home.components.InfoDialog
 import com.softyorch.famousquotes.ui.screens.home.components.NoConnectionDialog
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.TextBody
-import com.softyorch.famousquotes.ui.core.commonComponents.TextOwner
 import com.softyorch.famousquotes.ui.screens.home.components.TextToClick
 import com.softyorch.famousquotes.ui.screens.home.components.TopControlsGroup
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
@@ -63,7 +64,11 @@ import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, onNavigateToUserScreen: () -> Unit, onNavigateToSettings: () -> Unit) {
+fun HomeScreen(
+    viewModel: HomeViewModel,
+    onNavigateToUserScreen: () -> Unit,
+    onNavigateToSettings: () -> Unit
+) {
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
@@ -183,7 +188,10 @@ private fun ContentBody(
             onNavigateToSettings = onNavigateToSettings
         ) { action -> onActions(action) }
 
-        BackgroundImage(uri = state.quote.imageUrl, context = context) { action -> onActions(action) }
+        BackgroundImage(
+            uri = state.quote.imageUrl,
+            context = context
+        ) { action -> onActions(action) }
 
         CardQuote(
             state = state,
@@ -227,11 +235,11 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
     )
 
     val painterState = painter.state
-    Box(
-        modifier = Modifier.clickable { onActions(HomeActions.ShowImage()) },
-        contentAlignment = Alignment.TopCenter
-    ) {
+    Box(contentAlignment = Alignment.TopCenter) {
         Card(
+            modifier = Modifier
+                .clip(configurableCornerShape())
+                .clickable { onActions(HomeActions.ShowImage()) },
             shape = configurableCornerShape(),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
         ) {

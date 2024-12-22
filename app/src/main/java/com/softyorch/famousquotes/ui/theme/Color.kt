@@ -30,7 +30,7 @@ val UpliftingBackground = Color(0xFF00253A)
 
 
 val WhiteSmoke = Color(0xFFE6E6E6)
-val LikeColor = Color(0xFFD20000)
+val LikeColor = Color(0xFFBE0000)
 val FavoriteColor = Color(0xFFC8C800)
 val DisabledIconButtonsColor = Color(0xFF737373)
 val TextStandardColor = Color(0xE6000000)

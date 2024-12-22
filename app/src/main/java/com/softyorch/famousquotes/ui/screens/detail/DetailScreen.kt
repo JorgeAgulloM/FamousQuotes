@@ -56,6 +56,7 @@ fun DetailScreen(
             Box(
                 modifier = modifier
                     .fillMaxSize()
+                    .padding(top = 8.dp)
                     .weight(1f),
                 contentAlignment = Alignment.TopCenter
             ) {

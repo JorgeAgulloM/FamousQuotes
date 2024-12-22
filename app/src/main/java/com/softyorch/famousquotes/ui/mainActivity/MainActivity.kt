@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
@@ -57,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
         instance = this
         packageAppName = applicationContext.packageName
+
+        enableEdgeToEdge()
 
         splash.setKeepOnScreenCondition { true }
 

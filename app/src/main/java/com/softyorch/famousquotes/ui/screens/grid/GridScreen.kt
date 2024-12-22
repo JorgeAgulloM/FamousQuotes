@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -43,7 +44,7 @@ fun GridScreen(
 ) {
 
     val paddingTop = with(LocalDensity.current) {
-        androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
+        WindowInsets.statusBars.getTop(this).toDp() + 24.dp
     }
 
     val allQuotes by viewModel.quotes.collectAsStateWithLifecycle()
@@ -87,7 +88,7 @@ fun GridScreen(
             } else LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues.apply { calculateTopPadding() + 16.dp }),
                 columns = GridCells.Fixed(2),
                 state = gridState,
                 contentPadding = PaddingValues(horizontal = 8.dp)
