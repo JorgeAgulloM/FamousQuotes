@@ -96,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">链接已复制，随时分享。谢谢!!</string>
+    <string name="have_not_favorites_quotes">您没有喜欢的句子</string>
+    <string name="have_not_like_quotes">您不喜欢任何句子</string>
+    <string name="have_not_show_any_quotes">您没有看到任何句子</string>
 
 </resources>

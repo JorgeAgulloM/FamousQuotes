@@ -96,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">लिंक कॉपी किया गया, साझा करने के लिए स्वतंत्र महसूस करें। धन्यवाद!!</string>
+    <string name="have_not_favorites_quotes">आपके पास पसंदीदा उद्धरण नहीं हैं</string>
+    <string name="have_not_like_quotes">आपको कोई उद्धरण पसंद नहीं है</string>
+    <string name="have_not_show_any_quotes">आपने कोई उद्धरण नहीं देखा है</string>
 
 </resources>

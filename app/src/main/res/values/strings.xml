@@ -96,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">Link copied, feel free to share it. Thanks!!</string>
+    <string name="have_not_favorites_quotes">You have no favorite quotes</string>
+    <string name="have_not_like_quotes">You don\'t like any quote</string>
+    <string name="have_not_show_any_quotes">You haven\'t seen any quote</string>
 
 </resources>
