@@ -107,10 +107,10 @@ class DetailViewModel @Inject constructor(
                     _quoteModel.update { it.copy(isFavorite = quoteFavorite) }
                 }
             }.collect {
-                getStatisticsQuote(id)
                 writeLog(LevelLog.INFO, "${this.javaClass.simpleName}: get data quote: ${_quoteModel.value}")
             }
         }
+        getStatisticsQuote(id)
     }
 
     private fun getStatisticsQuote(id: String) {
