@@ -89,9 +89,10 @@ class AuxFireStoreLists(
         }
 
         suspendCancellableCoroutine { cancelableCoroutine ->
-            if (list.isEmpty()) cancelableCoroutine.resumeWithException(
-                throwService("$msgError: Empty list")
-            )
+            if (list.isEmpty()) {
+                cancelableCoroutine.resume(mutableListOf())
+                return@suspendCancellableCoroutine
+            }
             tryCatchFireStore {
                 val query = firestore.collection(COLLECTION)
                     .whereIn(FieldPath.documentId(), list)
