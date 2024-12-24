@@ -45,13 +45,12 @@ class GridViewModel @Inject constructor(
     }
 
     private fun selectFilterQuotes(filterQuotes: FilterQuotes) {
+        _state.update { it.copy(isLoading = true) }
         _filterQuotesSelected.update { filterQuotes }
         getFilteredQuotes()
     }
 
     private fun getFilteredQuotes() {
-        _state.update { it.copy(isLoading = true) }
-
         quotesJob?.cancel()
 
         quotesJob = viewModelScope.launch(dispatcherDefault) {
