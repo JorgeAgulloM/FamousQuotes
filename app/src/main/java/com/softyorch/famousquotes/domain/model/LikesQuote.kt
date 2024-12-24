@@ -1,12 +1,11 @@
 package com.softyorch.famousquotes.domain.model
 
-import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
+import com.softyorch.famousquotes.data.network.response.LikesQuoteResponse
 
 data class LikesQuote(
-    val likes: Int,
-    val isLike: Boolean
+    val likes: Int
 ) {
     companion object {
-        fun LikeQuoteResponse.toDomain(): LikesQuote = LikesQuote(this.likes, like)
+        fun LikesQuoteResponse.toDomain(): LikesQuote = LikesQuote(this.likes)
     }
 }

@@ -1,8 +1,6 @@
 package com.softyorch.famousquotes.domain.useCases.quoteLikes
 
-import com.softyorch.famousquotes.data.network.response.LikeQuoteResponse
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
-import com.softyorch.famousquotes.domain.model.LikesQuote.Companion.toDomain
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import com.softyorch.famousquotes.domain.utils.getTodayId
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
@@ -21,14 +19,14 @@ import org.junit.Test
 class GetQuoteLikesTest {
 
     @RelaxedMockK
-    private lateinit var dbService: IDatabaseService
+    private lateinit var dbService: IDatabaseListService
 
-    private lateinit var getLikeQuotes: GetQuoteLikes
+    private lateinit var getLikeQuotes: GetUserLikeQuote
 
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        getLikeQuotes = GetQuoteLikes(dbService)
+        getLikeQuotes = GetUserLikeQuote(dbService)
     }
 
     @After
@@ -40,18 +38,18 @@ class GetQuoteLikesTest {
     fun `When Getting Likes From Service And Return Data`() = runBlocking {
         //Prepare test
         val id = getTodayId()
-        val returnFlow: Flow<LikeQuoteResponse?> =
-            flowOf(LikeQuoteResponse(id = id, likes = 3, like = true))
+        val returnFlow: Flow<Boolean> =
+            flowOf(true)
 
         //Given
-        coEvery { dbService.getLikeQuoteFlow(id) } returns returnFlow
+        coEvery { dbService.getUserLikeQuote(id) } returns returnFlow
 
         //When
         val result = getLikeQuotes(getTodayId())
 
         //Then
         val fakeResult = returnFlow.first()
-        assert(result.first() == fakeResult?.toDomain())
+        assert(result.first() == fakeResult)
     }
 
     @Test
@@ -60,7 +58,7 @@ class GetQuoteLikesTest {
         val returnFlow = flowOf(null)
 
         //Given
-        coEvery { dbService.getLikeQuoteFlow(any()) } returns returnFlow
+        coEvery { dbService.getUserLikeQuote(any()) } returns returnFlow
 
         //When
         val result = getLikeQuotes(getTodayId())
@@ -74,12 +72,12 @@ class GetQuoteLikesTest {
     @Test
     fun `When Getting Likes From Services And Only Called Once`() = runBlocking {
         //Given
-        coEvery { dbService.getLikeQuoteFlow(any()) } returns flowOf()
+        coEvery { dbService.getUserLikeQuote(any()) } returns flowOf()
 
         //When
         getLikeQuotes(getTodayId())
 
         //Then
-        coVerify(exactly = 1) { dbService.getLikeQuoteFlow(any()) }
+        coVerify(exactly = 1) { dbService.getUserLikeQuote(any()) }
     }
 }

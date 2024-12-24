@@ -11,8 +11,7 @@ data class HomeState(
     val getRewardFromBonified: Boolean = false,
     val isLoading: Boolean = false,
     val hasConnection: Boolean? = null,
-    val showDialogNoConnection: Boolean? = null,
+    val showDialogNoConnection: Boolean = false,
     val reConnect: Boolean? = null,
     val downloadImage: Boolean = false,
-    val imageIsDownloadAlready: Boolean = false,
 )

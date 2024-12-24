@@ -3,8 +3,8 @@ package com.softyorch.famousquotes.data.network.response
 import androidx.annotation.Keep
 
 @Keep
-data class LikeQuoteResponse(
-    val id: String = "",
+data class QuoteStatisticsResponse(
     val likes: Int = 0,
-    val like: Boolean = false
+    val showns: Int = 0,
+    val favorites: Int = 0
 )

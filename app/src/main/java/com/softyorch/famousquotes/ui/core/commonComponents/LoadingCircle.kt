@@ -1,4 +1,4 @@
-package com.softyorch.famousquotes.ui.components
+package com.softyorch.famousquotes.ui.core.commonComponents
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat

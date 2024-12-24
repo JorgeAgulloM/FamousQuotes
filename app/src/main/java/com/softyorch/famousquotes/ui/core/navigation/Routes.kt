@@ -9,4 +9,10 @@ object Splash
 object Home
 
 @Serializable
-object User
+object Grid
+
+@Serializable
+object Settings
+
+@Serializable
+data class Detail(val id: String)

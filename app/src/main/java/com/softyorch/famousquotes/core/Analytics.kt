@@ -25,7 +25,7 @@ sealed class Analytics(val name: String) {
 
                 writeLog(
                     level = DEBUG, text = "[Analytics] -> send action from: ${
-                        MainActivity.instance.packageName
+                        MainActivity.packageAppName
                     } to Analytics: ${action.name}"
                 )
             }
@@ -34,12 +34,13 @@ sealed class Analytics(val name: String) {
         private const val FLAVOR = BuildConfig.FLAVOR
 
         private fun actionName(action: HomeActions) = when (action) {
+            is HomeActions.ImageDownloadRequest -> "${FLAVOR}_image_download_request"
             is HomeActions.DownloadImage -> "${FLAVOR}_download_image"
-            is HomeActions.DownloadImageByBonifiedAd -> "${FLAVOR}_download_image_by_bonified_ad"
             is HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd -> "${FLAVOR}_cancel_or_error_download_by_bonified_ad"
             is HomeActions.Info -> "${FLAVOR}_action_info"
             is HomeActions.Like -> "${FLAVOR}_action_like"
-            is HomeActions.New -> "${FLAVOR}_action_new_quote"
+            is HomeActions.NewQuoteRequest -> "${FLAVOR}_action_new_quote_request"
+            is HomeActions.NewQuote -> "${FLAVOR}_action_new_quote"
             is HomeActions.Owner -> "${FLAVOR}_action_owner"
             is HomeActions.ReConnection -> "${FLAVOR}_action_reconnection"
             is HomeActions.ShareWithImage -> "${FLAVOR}_action_share_with_image"
@@ -47,8 +48,8 @@ sealed class Analytics(val name: String) {
             is HomeActions.ShowImage -> "${FLAVOR}_action_image"
             is HomeActions.ShowNoConnectionDialog -> "${FLAVOR}_action_without_connection"
             is HomeActions.ShowToastDownload -> "${FLAVOR}_action_toast_download"
-            is HomeActions.SureDownloadImageAgain -> "${FLAVOR}_action_download_image_again"
-            is HomeActions.CloseDialogDownLoadImageAgain -> "${FLAVOR}_action_cancel_download_image_again"
+            is HomeActions.QuoteShown -> "${FLAVOR}_action_set_shown_image"
+            is HomeActions.Favorite -> "${FLAVOR}_action_favorite"
         }
 
         private fun isRunningUnitTest(): Boolean {

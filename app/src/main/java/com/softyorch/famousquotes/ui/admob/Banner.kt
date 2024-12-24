@@ -17,6 +17,7 @@ import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
 import com.softyorch.famousquotes.core.Analytics
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -24,6 +25,7 @@ class Banner {
 
     companion object {
         val bannerInstance: Banner = Banner()
+        var heightBanner: Int = 96
     }
 
     private var adView: AdView? = null
@@ -67,7 +69,27 @@ class Banner {
                     super.onAdSwipeGestureClicked()
                     Analytics.sendAction(Analytics.Banner())
                 }
+
+                override fun onAdLoaded() {
+                    val density = resources.displayMetrics.density
+                    val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MainActivity.instance, getAdWidth()) // ancho en dp
+                    val heightInDp = adSize.height
+                    val heightInPixels = (heightInDp * density).toInt()
+                    heightBanner = pxToIntFoDpUse(heightInPixels)
+                }
             }
         }
+    }
+
+    fun getAdWidth(): Int {
+        val displayMetrics = MainActivity.instance.resources.displayMetrics
+        val widthPixels = displayMetrics.widthPixels // Ancho en píxeles
+        val density = displayMetrics.density // Densidad de píxeles
+        return (widthPixels / density).toInt() // Convertir a dp
+    }
+
+    fun pxToIntFoDpUse(px: Int): Int {
+        val density = MainActivity.instance.resources.displayMetrics.density
+        return ((px.toFloat() / density) + 32f).toInt()
     }
 }

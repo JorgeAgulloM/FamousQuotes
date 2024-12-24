@@ -51,9 +51,9 @@ fun AnimatedImage(isVisible: Boolean, painter: Painter) {
 }
 
 @Composable
-fun AnimatedTextHome(text: String, content: @Composable () -> Unit) {
+fun AnimatedTextHome(text: String, isVisible: Boolean = true, content: @Composable () -> Unit) {
     AnimatedVisibility(
-        visible = text.isNotBlank(),
+        visible = text.isNotBlank() && isVisible,
         enter = fadeIn(
             animationSpec = spring(0.8f, 20f),
             initialAlpha = 0f

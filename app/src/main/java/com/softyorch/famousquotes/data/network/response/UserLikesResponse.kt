@@ -3,7 +3,6 @@ package com.softyorch.famousquotes.data.network.response
 import androidx.annotation.Keep
 
 @Keep
-data class LikeResponse(
-    val id: String? = null,
-    val like: Boolean = false
+data class UserLikesResponse(
+    val likeQuotes: List<String>? = mutableListOf()
 )

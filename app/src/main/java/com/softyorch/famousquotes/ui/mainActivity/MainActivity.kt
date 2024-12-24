@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
@@ -28,8 +29,9 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.components.LoadingCircle
+import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.MainApp
+import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import com.softyorch.famousquotes.utils.sdk33AndUp
@@ -40,8 +42,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     companion object {
-        lateinit var instance: MainActivity
         lateinit var firebaseAnalytics: FirebaseAnalytics
+        lateinit var instance: MainActivity
+        var packageAppName: String = ""
     }
 
     private lateinit var viewModel: MainViewModel
@@ -54,6 +57,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         instance = this
+        packageAppName = applicationContext.packageName
+
+        enableEdgeToEdge()
 
         splash.setKeepOnScreenCondition { true }
 
@@ -68,8 +74,12 @@ class MainActivity : ComponentActivity() {
             val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
 
             when (state) {
-                MainState.Home -> MainApp().also { splash.setKeepOnScreenCondition { false } }
+                MainState.Home -> FamousQuotesTheme {
+                    splash.setKeepOnScreenCondition { false }
+                    MainApp()
+                }
                 MainState.Unauthorized -> LoadingCircle()
+                MainState.Start -> Unit
             }
         }
     }

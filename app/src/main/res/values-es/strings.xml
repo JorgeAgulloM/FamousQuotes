@@ -16,8 +16,10 @@
     <string name="main_icon_content_desc_buy_image">Comprar imagen</string>
     <string name="main_icon_content_desc_other_quote">Otra cita</string>
     <string name="main_icon_content_desc_share">Compartir</string>
+    <string name="main_icon_content_desc_go_to_grid_view">Ir a la vista de cuadrícula</string>
+    <string name="main_icon_content_desc_go_to_settings">Ir a Configuración</string>
     <string name="main_info_dialog_text_info">Información</string>
-    <string name="main_info_dialog_text_buy_image">Comprar y descargar la imagen generada por IA.</string>
+    <string name="main_info_dialog_text_buy_image">Descargar la imagen generada por IA.</string>
     <string name="main_info_dialog_text_other_quote">Ver otra frase/imagen. La imagen podría no tener relación con la fase.</string>
     <string name="main_info_dialog_text_">Comparte tu cita con tus amigos y familiares.</string>
     <string name="main_content_desc_image">Imagen</string>
@@ -94,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">Enlace copiado, por si te apetece compartirlo. Gracias!!</string>
+    <string name="have_not_favorites_quotes">No tienes frases favoritas</string>
+    <string name="have_not_like_quotes">No te gusta ninguna frase</string>
+    <string name="have_not_show_any_quotes">No has visto ninguna frase</string>
 
 </resources>

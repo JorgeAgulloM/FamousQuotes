@@ -1,6 +1,6 @@
 package com.softyorch.famousquotes.domain.useCases.quoteLikes
 
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import com.softyorch.famousquotes.domain.model.LikesDTO
 import com.softyorch.famousquotes.domain.model.LikesDTO.Companion.toData
 import com.softyorch.famousquotes.domain.utils.getTodayId
@@ -17,7 +17,7 @@ import org.junit.Test
 class SetQuoteLikeTest {
 
     @RelaxedMockK
-    private lateinit var dbService: IDatabaseService
+    private lateinit var dbService: IDatabaseListService
 
     private lateinit var setQuoteLike: SetQuoteLike
 
@@ -38,12 +38,12 @@ class SetQuoteLikeTest {
         val updateLikes = LikesDTO(getTodayId(), true)
 
         //Given
-        coEvery { dbService.likeDislikeQuote(updateLikes.toData()) } returns Unit
+        coEvery { dbService.setQuoteLike(updateLikes.toData()) } returns Unit
 
         //When
         setQuoteLike(updateLikes)
 
         //Then
-        coVerify(exactly = 1) { dbService.likeDislikeQuote(updateLikes.toData()) }
+        coVerify(exactly = 1) { dbService.setQuoteLike(updateLikes.toData()) }
     }
 }

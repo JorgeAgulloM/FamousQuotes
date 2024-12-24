@@ -8,10 +8,14 @@ import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.data.datastore.DatastoreImpl
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultDatabaseImpl
 import com.softyorch.famousquotes.data.network.AuthServiceImpl
-import com.softyorch.famousquotes.data.network.DatabaseServiceImpl
 import com.softyorch.famousquotes.data.network.StorageServiceImpl
+import com.softyorch.famousquotes.data.network.databaseService.DatabaseListServiceImpl
+import com.softyorch.famousquotes.data.network.databaseService.DatabaseQuoteServiceImpl
+import com.softyorch.famousquotes.data.network.databaseService.auxFireStore.AuxFireStoreLists
+import com.softyorch.famousquotes.data.network.databaseService.auxFireStore.IAuxFireStoreLists
 import com.softyorch.famousquotes.domain.interfaces.IAuthService
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseQuoteService
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
@@ -20,6 +24,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -28,12 +33,15 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesDatabaseService(
-        firestore: FirebaseFirestore,
-        internetConnection: InternetConnection,
+    fun providesDatabaseService(firestore: FirebaseFirestore):
+            IDatabaseQuoteService = DatabaseQuoteServiceImpl(firestore)
+
+    @Singleton
+    @Provides
+    fun provideDatabaseListService(
+        auxFirebaseLists: IAuxFireStoreLists,
         @ApplicationContext context: Context
-    ):
-            IDatabaseService = DatabaseServiceImpl(firestore, internetConnection, context)
+    ): IDatabaseListService = DatabaseListServiceImpl(auxFirebaseLists, context)
 
     @Singleton
     @Provides
@@ -44,8 +52,7 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesDatastore(@ApplicationContext context: Context):
-            IDatastore = DatastoreImpl(context)
+    fun providesDatastore(@ApplicationContext context: Context): IDatastore = DatastoreImpl(context)
 
     @Singleton
     @Provides
@@ -54,6 +61,13 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providesAuthService(auth: FirebaseAuth):
-            IAuthService = AuthServiceImpl(auth)
+    fun providesAuthService(auth: FirebaseAuth): IAuthService = AuthServiceImpl(auth)
+
+    @Singleton
+    @Provides
+    fun providesAuxFirebaseLists(
+        firestore: FirebaseFirestore,
+        internetConnection: InternetConnection,
+        dispatcherDefault: CoroutineDispatcher,
+    ): IAuxFireStoreLists = AuxFireStoreLists(firestore, internetConnection, dispatcherDefault)
 }

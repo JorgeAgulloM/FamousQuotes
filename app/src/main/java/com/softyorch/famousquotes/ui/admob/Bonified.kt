@@ -81,29 +81,24 @@ class Bonified @Inject constructor() {
     private fun loadBonified(onAction: (BonifiedAdState) -> Unit) {
         rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                writeLog(level = LevelLog.WARN, text = "[BonifiedAd] -> onAdDismissedFullScreenContent")
                 onAction(BonifiedAdState.OnDismissed)
-                rewardedAd = null
+                getAdRequest()
             }
 
             override fun onAdClicked() {
-                writeLog(text = "[BonifiedAd] -> onAdClicked")
                 onAction(BonifiedAdState.Clicked)
             }
 
             override fun onAdShowedFullScreenContent() {
-                writeLog(text = "[BonifiedAd] -> onAdShowedFullScreenContent")
                 onAction(BonifiedAdState.Showed)
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                writeLog(level = LevelLog.WARN, text = "[BonifiedAd] -> onAdFailedToShowFullScreenContent: ${adError.message}")
                 onAction(BonifiedAdState.Error)
-                rewardedAd = null
+                getAdRequest()
             }
 
             override fun onAdImpression() {
-                writeLog(text = "[BonifiedAd] -> onAdImpression")
                 onAction(BonifiedAdState.Impression)
             }
         }
