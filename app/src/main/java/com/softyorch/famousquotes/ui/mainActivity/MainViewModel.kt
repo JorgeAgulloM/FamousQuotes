@@ -18,9 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val authService: AuthConnection,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<MainState>(MainState.Unauthorized)
+    private val _uiState = MutableStateFlow<MainState>(MainState.Start)
     val mainState: StateFlow<MainState> = _uiState
 
     init {
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
 
     private fun anonymousAuthentication() {
         viewModelScope.launch {
-            withContext(dispatcherIO) {
+            withContext(dispatcherDefault) {
                 authService()
             }.also {
                 if (it) {

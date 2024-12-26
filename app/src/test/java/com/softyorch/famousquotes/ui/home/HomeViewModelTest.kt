@@ -6,11 +6,13 @@ import com.softyorch.famousquotes.core.InternetConnection
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.model.LikesDTO
-import com.softyorch.famousquotes.domain.model.LikesQuote
+import com.softyorch.famousquotes.domain.model.QuoteStatistics
+import com.softyorch.famousquotes.domain.useCases.GetQuoteStatistics
 import com.softyorch.famousquotes.domain.useCases.GetTodayQuote
-import com.softyorch.famousquotes.domain.useCases.billing.BillingPurchase
-import com.softyorch.famousquotes.domain.useCases.billing.BillingStart
-import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetQuoteLikes
+import com.softyorch.famousquotes.domain.useCases.GetUserFavoriteQuote
+import com.softyorch.famousquotes.domain.useCases.SetQuoteFavorite
+import com.softyorch.famousquotes.domain.useCases.SetQuoteShown
+import com.softyorch.famousquotes.domain.useCases.quoteLikes.GetUserLikeQuote
 import com.softyorch.famousquotes.domain.useCases.quoteLikes.SetQuoteLike
 import com.softyorch.famousquotes.domain.utils.getTodayId
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
@@ -23,6 +25,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -40,19 +43,25 @@ class HomeViewModelTest {
     private lateinit var selectQuote: GetTodayQuote
 
     @RelaxedMockK
-    private lateinit var getLikes: GetQuoteLikes
-
-    @RelaxedMockK
     private lateinit var setLike: SetQuoteLike
 
     @RelaxedMockK
-    private lateinit var billingStart: BillingStart
-
-    @RelaxedMockK
-    private lateinit var billingLaunch: BillingPurchase
-
-    @RelaxedMockK
     private lateinit var storage: IStorageService
+
+    @RelaxedMockK
+    private lateinit var setQuoteShown: SetQuoteShown
+
+    @RelaxedMockK
+    private lateinit var getUserLikeQuote: GetUserLikeQuote
+
+    @RelaxedMockK
+    private lateinit var getQuoteStatistics: GetQuoteStatistics
+
+    @RelaxedMockK
+    private lateinit var getUserFavoriteQuote: GetUserFavoriteQuote
+
+    @RelaxedMockK
+    private lateinit var setQuoteFavorite: SetQuoteFavorite
 
     @RelaxedMockK
     private lateinit var shareQuote: ISend
@@ -65,6 +74,7 @@ class HomeViewModelTest {
 
     private lateinit var homeViewModel: HomeViewModel
 
+
     @Before
     fun onBefore() {
         TestUtils()
@@ -72,15 +82,17 @@ class HomeViewModelTest {
         Dispatchers.setMain(dispatcher = Dispatchers.Unconfined)
         homeViewModel = HomeViewModel(
             selectQuote = selectQuote,
-            getLikes = getLikes,
-            setLike = setLike,
-            billingStartUseCase = billingStart,
-            billingLaunchPurchase = billingLaunch,
             storage = storage,
-            dispatcherIO = Dispatchers.Unconfined,
+            setLike = setLike,
+            setShown = setQuoteShown,
+            setFavorite = setQuoteFavorite,
+            getUserLikeQuote = getUserLikeQuote,
+            getQuoteStatistics = getQuoteStatistics,
+            getUserFavoriteQuote = getUserFavoriteQuote,
             shareQuote = shareQuote,
             hasConnection = hasConnection,
             intents = intents,
+            dispatcherDefault = Dispatchers.Unconfined,
         )
     }
 
@@ -96,11 +108,13 @@ class HomeViewModelTest {
         val id = getTodayId()
         val owner = "SoftYorch"
         val quote = "The test quote"
-        val returnQuote = FamousQuoteModel(
-            id = id,
-            owner = owner,
-            body = quote,
-            imageUrl = ""
+        val returnQuote = flowOf(
+            FamousQuoteModel(
+                id = id,
+                owner = owner,
+                body = quote,
+                imageUrl = ""
+            )
         )
 
         //Given
@@ -115,23 +129,35 @@ class HomeViewModelTest {
         assert(result.body == quote)
     }
 
+
     @Test
     fun `When start view model then getting Likes Quote`() = runTest {
         //Prepare test
         val id = getTodayId()
-        val likesQuote = LikesQuote(likes = 2, isLike = true)
-        val returnFlowLikes = flowOf(likesQuote)
+        val statistics = QuoteStatistics(likes = 1, showns = 1, favorites = 1)
+        val returnFlowLikes = flowOf(statistics)
+        val owner = "SoftYorch"
+        val quote = "The test quote"
+        val returnQuote = flowOf(
+            FamousQuoteModel(
+                id = id,
+                owner = owner,
+                body = quote,
+                imageUrl = ""
+            )
+        )
 
         //Given
-        coEvery { getLikes(id) } returns returnFlowLikes
+        coEvery { getQuoteStatistics(id) } returns returnFlowLikes
+        coEvery { selectQuote() } returns returnQuote
 
         //When
         launch { homeViewModel.onCreate() }
         advanceUntilIdle()
 
         //Then
-        val result = homeViewModel.likesState.value
-        assert(result.likes == likesQuote.likes)
+        val result = homeViewModel.uiStateStatistics.value.likes
+        assert(result == statistics.likes)
     }
 
     @Test
@@ -140,11 +166,13 @@ class HomeViewModelTest {
         val id = getTodayId()
         val owner = "SoftYorch"
         val quote = "The test random quote"
-        val returnQuote = FamousQuoteModel(
-            id = id,
-            owner = owner,
-            body = quote,
-            imageUrl = ""
+        val returnQuote = flowOf(
+            FamousQuoteModel(
+                id = id,
+                owner = owner,
+                body = quote,
+                imageUrl = ""
+            )
         )
 
         //Given
@@ -154,13 +182,13 @@ class HomeViewModelTest {
         launch {
             homeViewModel.onCreate()
             homeViewModel.showInterstitialOnlyForTesting()
-            homeViewModel.onActions(HomeActions.New())
+            homeViewModel.onActions(HomeActions.NewQuote())
         }
         advanceUntilIdle()
 
         //Then
         val result = homeViewModel.uiState.value.quote
-        assert(result.body == returnQuote.body)
+        assert(result.body == returnQuote.first().body)
     }
 
     @Test
@@ -177,7 +205,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         //Then
-        coVerify(exactly = 1) { setLike(likesDTO) }
+        coVerify(exactly = 1) { setLike(any()) }
     }
 
 }

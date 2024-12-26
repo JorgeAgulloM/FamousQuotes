@@ -4,10 +4,12 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("kapt")
     alias(libs.plugins.androidHilt)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 val keystorePropertiesFile: File = file("../signing/signing.properties")
@@ -20,14 +22,14 @@ adMobProperties.load(FileInputStream(adMobPropertiesFile))
 
 android {
     namespace = "com.softyorch.famousquotes"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.softyorch.famousquotes"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 133
-        versionName = "1.3.3"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 200
+        versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -154,7 +156,7 @@ android {
             buildConfigField("String", "ICON", "\"biblical_icon\"")
             buildConfigField("int", "PRIMARY_COLOR", "0xFF3182BD")
             buildConfigField("int", "SECONDARY_COLOR", "0xFF3182BD")
-            buildConfigField("int", "BACKGROUND_COLOR", "0xFF7FA0BB")
+            buildConfigField("int", "BACKGROUND_COLOR", "0xFF00253A")
             android.buildFeatures.buildConfig = true
         }
     }
@@ -169,9 +171,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -183,8 +182,11 @@ android {
 
 dependencies {
 
-    // Billing
-    implementation(libs.billing)
+    // Serialization
+    implementation(libs.jetbrains.serialization)
+
+    // Navigation Compose
+    implementation(libs.android.compose.navigation)
 
     // Splash
     implementation(libs.androidx.core.splashscreen)
@@ -210,19 +212,19 @@ dependencies {
     implementation(libs.user.messaging.platform)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("com.google.firebase:firebase-config-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.auth.ktx)
 
     // Dagger Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Material

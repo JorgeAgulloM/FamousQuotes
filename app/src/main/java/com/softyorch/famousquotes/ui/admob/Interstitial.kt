@@ -1,7 +1,5 @@
 package com.softyorch.famousquotes.ui.admob
 
-import android.app.Activity
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.ads.AdError
@@ -12,6 +10,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.Analytics
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
 import javax.inject.Singleton
@@ -23,8 +22,8 @@ class Interstitial {
         lateinit var instance: Interstitial
     }
 
+    private var mInterstitialAd: InterstitialAd? = null
     private lateinit var adRequest: AdRequest
-    private lateinit var mInterstitialAd: InterstitialAd
 
     init {
         instance = this
@@ -40,68 +39,73 @@ class Interstitial {
 
         if (!::adRequest.isInitialized) getAdRequest()
 
-        loadInter(context) { onAction(it) }
+        loadInter { onAction(it) }
 
         try {
             if (isVisible) {
                 onAction(InterstitialAdState.Loading)
-                mInterstitialAd.show(context as Activity)
+
+                val adId = BuildConfig.ID_INTERSTITIAL_OTHER_QUOTE
+
+                InterstitialAd.load(
+                    context,
+                    adId,
+                    adRequest,
+                    object : InterstitialAdLoadCallback() {
+                        override fun onAdFailedToLoad(error: LoadAdError) {
+                            writeLog(ERROR, "[Interstitial] -> Error Admob: ${error.message}")
+                            mInterstitialAd = null
+                            onAction(InterstitialAdState.Error(error.message))
+                        }
+
+                        override fun onAdLoaded(ad: InterstitialAd) {
+                            writeLog(text = "[Interstitial] -> On ad loaded: $ad")
+                            mInterstitialAd = ad
+                            mInterstitialAd?.let { adItem ->
+                                adItem.show(MainActivity.instance)
+                                writeLog(text = "[Interstitial] -> On ad showed: $adItem")
+                                onAction(InterstitialAdState.Showed)
+                            } ?: run {
+                                writeLog(
+                                    text = "[Interstitial] -> The rewarded ad wasn't ready yet.",
+                                    throwable = Throwable("[Interstitial] Interstitial Throw")
+                                )
+                            }
+                        }
+                    }
+                )
             }
         } catch (ex: Exception) {
             writeLog(level = ERROR, text = "Error Show Interstitial ${ex.message}", ex)
-            onAction(InterstitialAdState.Error)
+            onAction(InterstitialAdState.Error(ex.message ?: ""))
         }
     }
 
-    private fun loadInter(context: Context, onAction: (InterstitialAdState) -> Unit) {
-        val adId = BuildConfig.ID_INTERSTITIAL_OTHER_QUOTE
-
-        InterstitialAd.load(
-            context,
-            adId,
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    writeLog(ERROR, "[Interstitial] -> Error Admob: ${error.message}of")
-                    onAction(InterstitialAdState.Error)
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    super.onAdLoaded(interstitialAd)
-
-                    interstitialAd.fullScreenContentCallback =
-                        object : FullScreenContentCallback() {
-                            override fun onAdDismissedFullScreenContent() {
-                                super.onAdDismissedFullScreenContent()
-                                onAction(InterstitialAdState.Close)
-                                getAdRequest()
-                            }
-
-                            override fun onAdClicked() {
-                                super.onAdClicked()
-                                onAction(InterstitialAdState.Clicked)
-                                Analytics.sendAction(Analytics.Interstitial())
-                            }
-
-                            override fun onAdShowedFullScreenContent() {
-                                super.onAdShowedFullScreenContent()
-                                onAction(InterstitialAdState.Showed)
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                                super.onAdFailedToShowFullScreenContent(adError)
-                                onAction(InterstitialAdState.Error)
-                            }
-
-                            override fun onAdImpression() {
-                                super.onAdImpression()
-                                onAction(InterstitialAdState.Impression)
-                            }
-                        }
-                    mInterstitialAd = interstitialAd
-                }
+    private fun loadInter(onAction: (InterstitialAdState) -> Unit) {
+        mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                onAction(InterstitialAdState.Close)
+                getAdRequest()
             }
-        )
+
+            override fun onAdClicked() {
+                onAction(InterstitialAdState.Clicked)
+                Analytics.sendAction(Analytics.Interstitial())
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                onAction(InterstitialAdState.Showed)
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                onAction(InterstitialAdState.Error(adError.message))
+                getAdRequest()
+            }
+
+            override fun onAdImpression() {
+                onAction(InterstitialAdState.Impression)
+            }
+        }
     }
 
 

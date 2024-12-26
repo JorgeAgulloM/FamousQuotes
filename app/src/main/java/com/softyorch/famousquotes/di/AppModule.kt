@@ -18,12 +18,12 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesDispatcherIO(): CoroutineDispatcher = Dispatchers.IO
+    fun providesDispatcherDefault(): CoroutineDispatcher = Dispatchers.Default
 
     @Singleton
     @Provides
     fun providesSendInterface(
         @ApplicationContext context: Context,
-        dispatcherIO: CoroutineDispatcher,
-    ): ISend = SendImpl(context, dispatcherIO)
+        dispatcherDefault: CoroutineDispatcher,
+    ): ISend = SendImpl(context, dispatcherDefault)
 }

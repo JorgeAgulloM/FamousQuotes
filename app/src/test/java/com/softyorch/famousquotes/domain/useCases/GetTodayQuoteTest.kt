@@ -2,7 +2,7 @@ package com.softyorch.famousquotes.domain.useCases
 
 import com.softyorch.famousquotes.data.defaultDatabase.DefaultModel
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
-import com.softyorch.famousquotes.domain.interfaces.IDatabaseService
+import com.softyorch.famousquotes.domain.interfaces.IDatabaseQuoteService
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.domain.utils.getTodayId
@@ -12,6 +12,8 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -20,7 +22,7 @@ import org.junit.Test
 class GetTodayQuoteTest {
 
     @RelaxedMockK
-    private lateinit var dbService: IDatabaseService
+    private lateinit var dbService: IDatabaseQuoteService
 
     @RelaxedMockK
     private lateinit var storageService: IStorageService
@@ -48,20 +50,22 @@ class GetTodayQuoteTest {
         val id = getTodayId()
         val owner = "SoftYorch"
         val quote = "The test quote"
-        val quoteResponse = QuoteResponse(
-            id = id,
-            owner = listOf("EN#$owner"),
-            quote = listOf("EN#$quote")
+        val quoteResponse = flowOf(
+            QuoteResponse(
+                id = id,
+                owner = listOf("EN#$owner"),
+                quote = listOf("EN#$quote")
+            )
         )
 
         //Given
-        coEvery { dbService.getQuote(id) } returns quoteResponse
+        coEvery { dbService.getQuoteFlow(id) } returns quoteResponse
 
         //When
-        val result = getTodayQuote()
+        val result = getTodayQuote().first()
 
         //Then
-        assert(result.owner == owner && result.body == quote)
+        assert(result?.owner == owner && result.body == quote)
     }
 
     @Test
@@ -76,14 +80,14 @@ class GetTodayQuoteTest {
         )
 
         //Given
-        coEvery { dbService.getQuote(id) } returns null
+        coEvery { dbService.getQuoteFlow(id) } returns flowOf(null)
         coEvery { defaultDatabase.getDefaultQuote() } returns defaultQuote
 
         //When
-        val result = getTodayQuote(id)
+        val result = getTodayQuote(id).first()
 
         //Then
-        assert(result.owner == owner && result.body == quote)
+        assert(result?.owner == owner && result.body == quote)
     }
 
     @Test
@@ -92,62 +96,66 @@ class GetTodayQuoteTest {
         val id = "1704099900000"
         val owner = "SoftYorch"
         val quote = "The test quote"
-        val quoteResponse = QuoteResponse(
-            id = id,
-            owner = listOf("EN#$owner"),
-            quote = listOf("EN#$quote")
+        val quoteResponse = flowOf(
+            QuoteResponse(
+                id = id,
+                owner = listOf("EN#$owner"),
+                quote = listOf("EN#$quote")
+            )
         )
 
         //Given
-        coEvery { dbService.getQuote(id) } returns quoteResponse
+        coEvery { dbService.getQuoteFlow(id) } returns quoteResponse
 
         //When
-        val result = getTodayQuote(id)
+        val result = getTodayQuote(id).first()
 
         //Then
-        assert(!result.imageUrl.startsWith("http"))
+        assert(result?.imageUrl?.startsWith("http") == false)
     }
-
 
     @Test
     fun `When getting Today Quote from service this is called once`() = runBlocking {
         val id = "1704099900000"
         val owner = "SoftYorch"
         val quote = "The test quote"
-        val quoteResponse = QuoteResponse(
-            id = id,
-            owner = listOf("EN#$owner"),
-            quote = listOf("EN#$quote")
+        val quoteResponse = flowOf(
+            QuoteResponse(
+                id = id,
+                owner = listOf("EN#$owner"),
+                quote = listOf("EN#$quote")
+            )
         )
 
         //Given
-        coEvery { dbService.getQuote(id) } returns quoteResponse
+        coEvery { dbService.getQuoteFlow(id) } returns quoteResponse
 
         //When
         getTodayQuote(id)
 
         //Then
-        coVerify(exactly = 1) { dbService.getQuote(any()) }
+        coVerify(exactly = 1) { dbService.getQuoteFlow(any()) }
     }
 
     @Test
-    fun `When getting Today Quote from service and return null then getting Default Quote is called once`() = runBlocking {
-        //Prepare test
-        val owner = "SoftYorch"
-        val quote = "The test quote"
-        val defaultQuote = DefaultModel(
-            owner = owner,
-            quote = listOf("EN#$quote")
-        )
+    fun `When getting Today Quote from service and return null then getting Default Quote is called once`() =
+        runBlocking {
+            //Prepare test
+            val owner = "SoftYorch"
+            val quote = "The test quote"
+            val defaultQuote = DefaultModel(
+                owner = owner,
+                quote = listOf("EN#$quote")
+            )
 
-        //Given
-        coEvery { dbService.getQuote(any()) } returns null
-        coEvery { defaultDatabase.getDefaultQuote() } returns defaultQuote
+            //Given
+            coEvery { dbService.getQuoteFlow(any()) } returns flowOf(null)
+            coEvery { defaultDatabase.getDefaultQuote() } returns defaultQuote
 
-        //When
-        getTodayQuote()
+            //When
+            getTodayQuote().first()
 
-        //Then
-        coVerify(exactly = 1) { defaultDatabase.getDefaultQuote()}
-    }
+            //Then
+            coVerify(exactly = 1) { defaultDatabase.getDefaultQuote() }
+        }
 }

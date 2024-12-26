@@ -20,8 +20,6 @@ class InternetConnection @Inject constructor(@ApplicationContext private val con
 
     private var isConnected: Boolean = false
 
-    fun isConnected(): Boolean = isConnected
-
     fun isConnectedFlow(): Flow<Boolean> = startConnectionCallback()
 
     private fun startConnectionCallback(): Flow<Boolean> = callbackFlow {

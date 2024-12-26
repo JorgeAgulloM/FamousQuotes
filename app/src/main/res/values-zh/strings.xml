@@ -16,8 +16,10 @@
     <string name="main_icon_content_desc_buy_image">購買圖片</string>
     <string name="main_icon_content_desc_other_quote">其他引用</string>
     <string name="main_icon_content_desc_share">分享</string>
+    <string name="main_icon_content_desc_go_to_grid_view">转到网格视图</string>
+    <string name="main_icon_content_desc_go_to_settings">转到设置</string>
     <string name="main_info_dialog_text_info">信息</string>
-    <string name="main_info_dialog_text_buy_image">购买并下载由AI生成的图片。</string>
+    <string name="main_info_dialog_text_buy_image">下载由AI生成的图片。</string>
     <string name="main_info_dialog_text_other_quote">查看其他语录/图片。图片可能与语录无关。</string>
     <string name="main_info_dialog_text_">与朋友和家人分享你的语录。</string>
     <string name="main_content_desc_image">图片</string>
@@ -94,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">链接已复制，随时分享。谢谢!!</string>
+    <string name="have_not_favorites_quotes">您没有喜欢的句子</string>
+    <string name="have_not_like_quotes">您不喜欢任何句子</string>
+    <string name="have_not_show_any_quotes">您没有看到任何句子</string>
 
 </resources>

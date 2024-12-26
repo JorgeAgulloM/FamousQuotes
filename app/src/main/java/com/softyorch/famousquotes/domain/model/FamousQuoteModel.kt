@@ -8,10 +8,15 @@ data class FamousQuoteModel(
     val id: String,
     val owner: String,
     val body: String,
-    val imageUrl: String,
+    val imageUrl: String
 ) {
     companion object {
-        fun emptyModel(): FamousQuoteModel = FamousQuoteModel("", "", "", "")
+        fun emptyModel(): FamousQuoteModel = FamousQuoteModel(
+            id = "",
+            owner = "",
+            body = "",
+            imageUrl = ""
+        )
 
         fun QuoteResponse.toDomain(): FamousQuoteModel = FamousQuoteModel(
             id = id,

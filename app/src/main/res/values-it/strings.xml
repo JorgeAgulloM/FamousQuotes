@@ -16,8 +16,10 @@
     <string name="main_icon_content_desc_buy_image">Acquista immagine</string>
     <string name="main_icon_content_desc_other_quote">Altra citazione</string>
     <string name="main_icon_content_desc_share">Condividi</string>
+    <string name="main_icon_content_desc_go_to_grid_view">Vai alla vista a griglia</string>
+    <string name="main_icon_content_desc_go_to_settings">Vai alle impostazioni</string>
     <string name="main_info_dialog_text_info">Informazioni</string>
-    <string name="main_info_dialog_text_buy_image">Acquista e scarica l\'immagine generata dall\'IA.</string>
+    <string name="main_info_dialog_text_buy_image">Scarica l\'immagine generata dall\'IA.</string>
     <string name="main_info_dialog_text_other_quote">Vedi un\'altra citazione/immagine. L\'immagine potrebbe non essere correlata alla citazione.</string>
     <string name="main_info_dialog_text_">Condividi la tua citazione con amici e familiari.</string>
     <string name="main_content_desc_image">Immagine</string>
@@ -94,5 +96,8 @@
 
     <!-- Others -->
     <string name="share_toast_link">Link copiato, sentiti libero di condividerlo. Grazie!!</string>
+    <string name="have_not_favorites_quotes">Non hai frasi preferite</string>
+    <string name="have_not_like_quotes">Non ti piace nessuna frase</string>
+    <string name="have_not_show_any_quotes">Non hai visto nessuna frase</string>
 
 </resources>

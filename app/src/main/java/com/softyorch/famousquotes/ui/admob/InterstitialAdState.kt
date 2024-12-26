@@ -10,5 +10,5 @@ sealed class InterstitialAdState {
     data object Impression : InterstitialAdState()
     data object Clicked : InterstitialAdState()
     data object Close : InterstitialAdState()
-    data object Error : InterstitialAdState()
+    data class Error(val message: String) : InterstitialAdState()
 }

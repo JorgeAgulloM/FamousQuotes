@@ -12,21 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.navigation.NavigationRoutes
 import com.softyorch.famousquotes.utils.appIcon
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navHost: NavHostController) {
+fun SplashScreen(navigateHome: () -> Unit) {
 
     LaunchedEffect(true) {
         delay(2000L)
 
-        navHost.navigate(NavigationRoutes.HomeScreen.route) {
-            navHost.popBackStack(route = NavigationRoutes.SplashScreen.route, true)
-        }
+        navigateHome()
     }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

@@ -1,6 +1,5 @@
 package com.softyorch.famousquotes.data.di
 
-import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestore.setLoggingEnabled
@@ -12,12 +11,9 @@ import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.data.network.BillingServiceImpl
-import com.softyorch.famousquotes.domain.interfaces.IBilling
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -48,8 +44,4 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
-    @Singleton
-    @Provides
-    fun providesBillingService(@ApplicationContext context: Context): IBilling = BillingServiceImpl(context)
 }

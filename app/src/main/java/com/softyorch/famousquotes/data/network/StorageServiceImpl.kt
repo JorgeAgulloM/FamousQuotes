@@ -54,17 +54,17 @@ class StorageServiceImpl @Inject constructor(
     }
 
     override suspend fun getImageList(): List<String>? {
-        return withTimeoutOrNull(FIREBASE_TIMEOUT) {
-            try {
-                if (imageList.size > 0) return@withTimeoutOrNull imageList
-
-                val storageRef = storage.reference.child(URL_STORAGE_PROJECT)
-                storageRef.listAll().await().prefixes.toList().map { it.name }.apply {
-                    imageList.addAll(this)
+        return imageList.ifEmpty {
+            withTimeoutOrNull(FIREBASE_TIMEOUT) {
+                try {
+                    val storageRef = storage.reference.child(URL_STORAGE_PROJECT)
+                    storageRef.listAll().await().prefixes.toList().map { it.name }.apply {
+                        imageList.addAll(this)
+                    }
+                } catch (ex: FirebaseException) {
+                    writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}", ex)
+                    null
                 }
-            } catch (ex: FirebaseException) {
-                writeLog(ERROR, "Error from Firebase Storage: ${ex.cause}", ex)
-                null
             }
         }
     }

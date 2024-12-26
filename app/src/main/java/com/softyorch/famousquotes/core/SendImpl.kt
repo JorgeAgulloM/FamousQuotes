@@ -28,6 +28,8 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.BackgroundColor
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.TextShadowColor
+import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 import com.softyorch.famousquotes.utils.showToast
@@ -42,7 +44,7 @@ import javax.inject.Inject
 
 class SendImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ISend {
 
     private val rawName = BuildConfig.APP_TITLE
@@ -87,7 +89,7 @@ class SendImpl @Inject constructor(
             .data(imageUrl)
             .build()
 
-        return withContext(dispatcherIO) {
+        return withContext(dispatcherDefault) {
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             if (result !is BitmapDrawable) return@withContext null
 
@@ -105,7 +107,7 @@ class SendImpl @Inject constructor(
             val paintIcon = Paint().apply {
                 colorFilter =
                     PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
-                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
             }
 
             val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
@@ -116,7 +118,7 @@ class SendImpl @Inject constructor(
                 textSize = 40f
                 textAlign = Paint.Align.LEFT // Alineación a la izquierda
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
             }
 
             val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
@@ -124,7 +126,7 @@ class SendImpl @Inject constructor(
                 textSize = 40f
                 textAlign = Paint.Align.LEFT
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(20f, 2f, 2f, Color.Black.toArgb())
+                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
             }
 
             val titleTop = titleToDraw.split(" ")[0]
@@ -208,18 +210,18 @@ class SendImpl @Inject constructor(
                 textSize = 60f // Tamaño del texto
                 textAlign = Paint.Align.CENTER // Alineación del texto
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(10f, 2f, 2f, Color.Black.toArgb())
+                setShadowLayer(10f, 2f, 2f, TextShadowColor.toArgb())
             }
 
             // Dibuja el texto en el Canvas
             canvas.drawText(subtitle, x, y, subtitlePaint)
 
             val quotePaint = Paint().apply {
-                color = Color.White.toArgb() // Color del texto
+                color = TextStandardWhiteColor.toArgb() // Color del texto
                 textSize = 60f // Tamaño del texto
                 textAlign = Paint.Align.CENTER // Alineación del texto
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(10f, 1f, 1f, Color.Black.toArgb())
+                setShadowLayer(10f, 1f, 1f, TextShadowColor.toArgb())
             }
 
             val palabras = textToDraw.split(" ") // Dividir el texto en palabras
