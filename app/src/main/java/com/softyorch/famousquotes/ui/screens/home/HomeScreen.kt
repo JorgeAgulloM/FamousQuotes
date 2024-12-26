@@ -1,7 +1,9 @@
 package com.softyorch.famousquotes.ui.screens.home
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -215,6 +217,10 @@ private fun ContentBody(
                 Toast.LENGTH_LONG
             )
             onActions(HomeActions.ShowToastDownload())
+        }
+
+        BackHandler {
+            (context as? Activity)?.finish()
         }
     }
 }
