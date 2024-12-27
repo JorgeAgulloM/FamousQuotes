@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -11,14 +12,15 @@ import com.softyorch.famousquotes.ui.theme.MyTypography
 import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 
 @Composable
-fun TextToClick(text: String) {
-    //AnimatedTextHome(text) {
-        Text(
-            text = text,
-            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-            color = TextStandardWhiteColor,
-            style = MyTypography.labelMedium,
-            textAlign = TextAlign.Center
-        )
-    //}
+fun TextToClick(text: String, onclick: () -> Unit = {}) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onclick() }
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+        color = TextStandardWhiteColor,
+        style = MyTypography.labelMedium,
+        textAlign = TextAlign.Center
+    )
 }
