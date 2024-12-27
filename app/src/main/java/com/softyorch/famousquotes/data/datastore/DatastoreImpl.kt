@@ -14,7 +14,6 @@ import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Compan
 import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.LEFT_HANDED
 import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.NOTIFICATION_CHANNEL
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
-import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -62,7 +61,7 @@ class DatastoreImpl @Inject constructor(
 
     /*********** Settings *************************************************************************/
 
-    override fun getSettings() =
+    override fun getSettings(): Flow<SettingsStoreModel> =
         context.datastore.data.map { data ->
             SettingsStoreModel(
                 autoDarkMode = data[booleanPreferencesKey(AUTO_DARK_MODE)] ?: false,
