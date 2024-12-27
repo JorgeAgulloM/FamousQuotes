@@ -25,8 +25,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
 import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 import com.softyorch.famousquotes.ui.theme.brushBackGround
@@ -46,7 +46,7 @@ fun InfoDialog(onAction: () -> Unit) {
                 ).padding(16.dp)
             ) {
                 AppIcon()
-                HeaderQuote()
+                HeaderSubtitleApp()
                 SpacerHeight(height = 32)
                 InfoIcons(
                     icon = Icons.Outlined.Info,
@@ -79,7 +79,7 @@ fun InfoDialog(onAction: () -> Unit) {
                     text = stringResource(R.string.main_icon_content_desc_lost_connection)
                 )
                 SpacerHeight()
-                TextToClick(text = "V: ${BuildConfig.VERSION_NAME}")
+                AppVersionText()
             }
         }
     }
