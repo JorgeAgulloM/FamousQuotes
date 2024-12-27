@@ -1,12 +1,20 @@
 package com.softyorch.famousquotes.data.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.softyorch.famousquotes.BuildConfig
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.AUTO_DARK_MODE
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.DARK_MODE
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.IS_SHOW_ON_BOARDING
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.LEFT_HANDED
+import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.NOTIFICATION_CHANNEL
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
+import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -48,6 +56,30 @@ class DatastoreImpl @Inject constructor(
     override suspend fun setDbVersion(dbVersion: String) {
         context.datastore.edit { data ->
             data[stringPreferencesKey(DB_VERSION)] = dbVersion
+        }
+    }
+
+
+    /*********** Settings *************************************************************************/
+
+    override fun getSettings() =
+        context.datastore.data.map { data ->
+            SettingsStoreModel(
+                autoDarkMode = data[booleanPreferencesKey(AUTO_DARK_MODE)] ?: false,
+                darkMode = data[booleanPreferencesKey(DARK_MODE)] ?: false,
+                leftHanded = data[booleanPreferencesKey(LEFT_HANDED)] ?: false,
+                notificationChannel = data[booleanPreferencesKey(NOTIFICATION_CHANNEL)] ?: false,
+                isShowOnBoarding = data[booleanPreferencesKey(IS_SHOW_ON_BOARDING)] ?: false
+            )
+        }
+
+    override suspend fun setSettings(settings: SettingsStoreModel) {
+        context.datastore.edit { data ->
+            data[booleanPreferencesKey(AUTO_DARK_MODE)] = settings.autoDarkMode
+            data[booleanPreferencesKey(DARK_MODE)] = settings.darkMode
+            data[booleanPreferencesKey(LEFT_HANDED)] = settings.leftHanded
+            data[booleanPreferencesKey(NOTIFICATION_CHANNEL)] = settings.notificationChannel
+            data[booleanPreferencesKey(IS_SHOW_ON_BOARDING)] = settings.isShowOnBoarding
         }
     }
 }
