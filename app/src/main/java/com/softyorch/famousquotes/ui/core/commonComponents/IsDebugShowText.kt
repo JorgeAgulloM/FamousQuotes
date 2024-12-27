@@ -1,8 +1,5 @@
 package com.softyorch.famousquotes.ui.core.commonComponents
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,18 +15,12 @@ import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.ui.theme.FavoriteColor
+import com.softyorch.famousquotes.ui.utils.extFunc.copyToClipboard
 
 @Composable
 fun IsDebugShowText(quote: FamousQuoteModel) {
     if (BuildConfig.DEBUG) {
         val context = LocalContext.current
-
-        fun copyToClipboard(context: Context, text: String) {
-            val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Id quote", text)
-            clipboardManager.setPrimaryClip(clip)
-        }
 
         Column(
             modifier = Modifier
@@ -42,9 +33,7 @@ fun IsDebugShowText(quote: FamousQuoteModel) {
                 modifier = Modifier
                     .background(FavoriteColor.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
                     .padding(8.dp)
-                    .clickable {
-                        copyToClipboard(context, quote.id)
-                    }
+                    .clickable { context.copyToClipboard("Id quote", quote.id) }
             )
         }
     }
