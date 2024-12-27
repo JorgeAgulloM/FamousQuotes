@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.domain.useCases.settings.GetSettings
 import com.softyorch.famousquotes.domain.useCases.settings.SetSettings
-import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +25,6 @@ class SettingsViewModel @Inject constructor(
     val settings: StateFlow<SettingsModel> = _settings
 
     fun actions(actions: SettingsActions) {
-        writeLog(text = "[SettingsViewModel] - $actions")
         when (actions) {
             is SettingsActions.GetSettings -> getSettings()
             is SettingsActions.AutoDarkMode -> setAutoDarkMode(actions.autoDarkMode)
@@ -40,7 +38,6 @@ class SettingsViewModel @Inject constructor(
     private fun getSettings() {
         viewModelScope.launch(dispatcherDefault) {
             getSettings.invoke().collect { settings ->
-                writeLog(text = "[SettingsViewModel] - getSettings: $settings")
                 _settings.update { settings }
             }
         }
