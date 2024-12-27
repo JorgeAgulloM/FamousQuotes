@@ -11,7 +11,7 @@ import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.theme.SecondaryColor
 
 @Composable
-fun HeaderQuote() {
+fun HeaderSubtitleApp() {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
