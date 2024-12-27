@@ -1,6 +1,8 @@
 package com.softyorch.famousquotes.ui.utils.extFunc
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.runtime.Composable
 
@@ -20,4 +22,9 @@ fun Context.getResourceString(name: String): String {
     return getString(intResource)
 }
 
-fun Context.packageNameApp(): String = this.packageManager.getPackageInfo(this.packageName, 0).packageName
+fun Context.copyToClipboard(id: String, text: String) {
+    val clipboardManager =
+        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(id, text)
+    clipboardManager.setPrimaryClip(clip)
+}
