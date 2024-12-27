@@ -1,7 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.PrimaryColor
 import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 
 @Composable
@@ -37,7 +36,7 @@ fun SwitchSettings(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedTrackColor = SecondaryColor
+                checkedTrackColor = PrimaryColor
             ),
             enabled = isEnable
         )
@@ -59,7 +58,6 @@ fun SwitchSettings(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
