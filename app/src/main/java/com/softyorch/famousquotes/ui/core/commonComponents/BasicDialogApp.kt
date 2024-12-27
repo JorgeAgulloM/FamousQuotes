@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
-import com.softyorch.famousquotes.ui.screens.home.components.HeaderQuote
+import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
 import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
@@ -65,7 +65,7 @@ private fun ContentDialog(
         modifier = Modifier.padding(16.dp)
     ) {
         AppIcon()
-        HeaderQuote()
+        HeaderSubtitleApp()
         SpacerHeight(height = 32)
 
         if (title != null) {
