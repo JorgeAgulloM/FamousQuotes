@@ -39,8 +39,6 @@ import coil.size.Size
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.admob.Banner
-import com.softyorch.famousquotes.ui.admob.Bonified
-import com.softyorch.famousquotes.ui.admob.BonifiedAdState
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.admob.InterstitialAdState
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
@@ -74,9 +72,9 @@ fun HomeScreen(
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
-    val bonified = Bonified.instance
+    //val bonified = Bonified.instance
 
-    AdmobAds(state, interstitial, bonified) { action ->
+    AdmobAds(state, interstitial, /*bonified*/) { action ->
         viewModel.onActions(action)
     }
 
@@ -107,7 +105,7 @@ fun HomeScreen(
 private fun AdmobAds(
     state: HomeState,
     interstitial: Interstitial,
-    bonified: Bonified,
+    //bonified: Bonified,
     onActions: (HomeActions) -> Unit
 ) {
     if (state.hasConnection == true && state.showInterstitial)
@@ -115,11 +113,11 @@ private fun AdmobAds(
             interstitial = interstitial,
             onActions = onActions
         )
-    if (state.hasConnection == true && state.showBonified)
+/*    if (state.hasConnection == true && state.showBonified)
         ShowBonified(
             bonified = bonified,
             onActions = onActions
-        )
+        )*/
 }
 
 @Composable
@@ -136,7 +134,7 @@ private fun ShowInterstitial(
     }
 }
 
-@Composable
+/*@Composable
 private fun ShowBonified(
     bonified: Bonified,
     showBonified: Boolean = true,
@@ -157,7 +155,7 @@ private fun ShowBonified(
             onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
-}
+}*/
 
 @Composable
 private fun ContentBody(
