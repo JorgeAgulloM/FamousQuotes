@@ -72,9 +72,8 @@ fun HomeScreen(
 
     val state: HomeState by viewModel.uiState.collectAsStateWithLifecycle()
     val interstitial = Interstitial.instance
-    //val bonified = Bonified.instance
 
-    AdmobAds(state, interstitial, /*bonified*/) { action ->
+    AdmobAds(state, interstitial) { action ->
         viewModel.onActions(action)
     }
 
@@ -105,57 +104,39 @@ fun HomeScreen(
 private fun AdmobAds(
     state: HomeState,
     interstitial: Interstitial,
-    //bonified: Bonified,
     onActions: (HomeActions) -> Unit
 ) {
     if (state.hasConnection == true && state.showInterstitial)
         ShowInterstitial(
             interstitial = interstitial,
+            downloadImageRequest = state.downloadImageRequest,
             onActions = onActions
         )
-/*    if (state.hasConnection == true && state.showBonified)
-        ShowBonified(
-            bonified = bonified,
-            onActions = onActions
-        )*/
 }
 
 @Composable
 private fun ShowInterstitial(
     interstitial: Interstitial,
     showInterstitial: Boolean = true,
+    downloadImageRequest: Boolean,
     onActions: (HomeActions) -> Unit
 ) {
     interstitial.Show(showInterstitial) {
         writeLog(INFO, "[Interstitial] -> OnAction: $it")
 
         if ((it is InterstitialAdState.Showed || it is InterstitialAdState.Error))
-            onActions(HomeActions.NewQuote())
-    }
-}
+            if (downloadImageRequest) onActions(HomeActions.DownloadImage())
+            else onActions(HomeActions.NewQuote())
 
-/*@Composable
-private fun ShowBonified(
-    bonified: Bonified,
-    showBonified: Boolean = true,
-    onActions: (HomeActions) -> Unit
-) {
-    bonified.Show(showBonified) { bonifiedState ->
-        writeLog(INFO, "[HomeScreen] -> bonifiedState: $bonifiedState")
-
-        if (bonifiedState == BonifiedAdState.Reward) onActions(HomeActions.DownloadImage())
-
-        // Estudiar como advertir al usuairo que debe esperar la finalización del ad
         if (
-            bonifiedState == BonifiedAdState.Showed ||
-            bonifiedState == BonifiedAdState.Close ||
-            bonifiedState == BonifiedAdState.Error ||
-            bonifiedState == BonifiedAdState.OnDismissed
+            it == InterstitialAdState.Showed ||
+            it == InterstitialAdState.Close ||
+            it == InterstitialAdState.Error("Error showing interstitial ad")
         ) {
             onActions(HomeActions.ShowedOrCloseOrDismissedOrErrorDownloadByBonifiedAd())
         }
     }
-}*/
+}
 
 @Composable
 private fun ContentBody(
