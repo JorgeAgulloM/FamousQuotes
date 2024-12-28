@@ -37,7 +37,9 @@ fun ButtonApp(
     ) {
         Text(
             text = text,
-            style = MyTypography.bodyLarge,
+            style = MyTypography.bodyLarge.copy(
+                color = AppColorSchema.text
+            ),
             textAlign = TextAlign.Center
         )
     }
