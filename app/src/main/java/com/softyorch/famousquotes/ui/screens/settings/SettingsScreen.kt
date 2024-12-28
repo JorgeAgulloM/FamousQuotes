@@ -54,6 +54,8 @@ import com.softyorch.famousquotes.utils.userId
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
+    onNavigateToOnBoarding: () -> Unit,
+    onNavigateToInfo: () -> Unit,
     onBackNavigation: () -> Unit
 ) {
     val paddingTop = with(LocalDensity.current) {
@@ -100,7 +102,10 @@ fun SettingsScreen(
                 settings = settings,
                 onActions = viewModel::actions
             )
-            SettingsButtons()
+            SettingsButtons(
+                onNavigateToOnBoarding = onNavigateToOnBoarding,
+                onNavigateToInfo = onNavigateToInfo
+            )
         }
     }
 }
@@ -145,6 +150,8 @@ fun SettingsCheckers(
 @Composable
 fun SettingsButtons(
     modifier: Modifier = Modifier,
+    onNavigateToOnBoarding: () -> Unit,
+    onNavigateToInfo: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -153,8 +160,8 @@ fun SettingsButtons(
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp)
         SpacerHeight()
-        ButtonApp(modifier = modifierBtn, text = "On Boarding", primary = true) { }
-        ButtonApp(modifier = modifierBtn, text = "Info SoftYorch") { }
+        ButtonApp(modifier = modifierBtn, text = "On Boarding", primary = true) { onNavigateToOnBoarding() }
+        ButtonApp(modifier = modifierBtn, text = "Info SoftYorch") { onNavigateToInfo() }
         SpacerHeight()
         IdDeviceButton(modifier, context)
 
