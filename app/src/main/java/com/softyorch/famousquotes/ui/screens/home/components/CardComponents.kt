@@ -68,8 +68,8 @@ fun CardControlsGroup(
         blackDismissActions = true
     ) {
         when (it) {
-            POSITIVE -> onAction(HomeActions.ShareWithImage())
-            NEGATIVE -> onAction(HomeActions.ShareText())
+            POSITIVE -> onAction(HomeActions.ShareText())
+            NEGATIVE -> onAction(HomeActions.ShareWithImage())
             DISMISS -> Unit
         }
         showSendDialog = false
