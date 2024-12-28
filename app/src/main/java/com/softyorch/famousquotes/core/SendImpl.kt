@@ -26,11 +26,7 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
-import com.softyorch.famousquotes.ui.theme.TextShadowColor
-import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
@@ -106,27 +102,27 @@ class SendImpl @Inject constructor(
                 BitmapFactory.decodeResource(context.resources, R.drawable.icon_quote)
             val paintIcon = Paint().apply {
                 colorFilter =
-                    PorterDuffColorFilter(SecondaryColor.toArgb(), PorterDuff.Mode.SRC_IN)
-                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
+                    PorterDuffColorFilter(AppColorSchema.secondary.toArgb(), PorterDuff.Mode.SRC_IN)
+                setShadowLayer(20f, 2f, 2f, AppColorSchema.text.toArgb())
             }
 
             val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
 
             // Configuración de los textos del título
             val paintTitleTop = Paint().apply {
-                color = WhiteSmoke.toArgb()
+                color = AppColorSchema.text.toArgb()
                 textSize = 40f
                 textAlign = Paint.Align.LEFT // Alineación a la izquierda
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
+                setShadowLayer(20f, 2f, 2f, AppColorSchema.shadowText.toArgb())
             }
 
             val paintTitleBottom = Paint().apply { // Mismo estilo que titleTop
-                color = WhiteSmoke.toArgb()
+                color = AppColorSchema.text.toArgb()
                 textSize = 40f
                 textAlign = Paint.Align.LEFT
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(20f, 2f, 2f, TextShadowColor.toArgb())
+                setShadowLayer(20f, 2f, 2f, AppColorSchema.shadowText.toArgb())
             }
 
             val titleTop = titleToDraw.split(" ")[0]
@@ -155,11 +151,11 @@ class SendImpl @Inject constructor(
 
             val gradientColors = intArrayOf(
                 Color.Transparent.toArgb(),
-                BackgroundColor.toArgb(),
-                BackgroundColor.toArgb(),
-                BackgroundColor.toArgb(),
-                BackgroundColor.toArgb(),
-                BackgroundColor.toArgb()
+                AppColorSchema.background.toArgb(),
+                AppColorSchema.background.toArgb(),
+                AppColorSchema.background.toArgb(),
+                AppColorSchema.background.toArgb(),
+                AppColorSchema.background.toArgb()
             )
 
             // De negro semitransparente a transparente
@@ -206,36 +202,55 @@ class SendImpl @Inject constructor(
 
             // Configura el título para el texto
             val subtitlePaint = Paint().apply {
-                color = SecondaryColor.toArgb() // Color del texto
+                color = AppColorSchema.secondary.toArgb() // Color del texto
                 textSize = 60f // Tamaño del texto
                 textAlign = Paint.Align.CENTER // Alineación del texto
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(10f, 2f, 2f, TextShadowColor.toArgb())
+                setShadowLayer(10f, 2f, 2f, AppColorSchema.shadowText.toArgb())
             }
 
             // Dibuja el texto en el Canvas
             canvas.drawText(subtitle, x, y, subtitlePaint)
 
             val quotePaint = Paint().apply {
-                color = TextStandardWhiteColor.toArgb() // Color del texto
+                color = AppColorSchema.text.toArgb() // Color del texto
                 textSize = 60f // Tamaño del texto
                 textAlign = Paint.Align.CENTER // Alineación del texto
                 typeface = Typeface.DEFAULT_BOLD
-                setShadowLayer(10f, 1f, 1f, TextShadowColor.toArgb())
+                setShadowLayer(10f, 1f, 1f, AppColorSchema.shadowText.toArgb())
             }
 
-            val palabras = textToDraw.split(" ") // Dividir el texto en palabras
-
-            var indice = 0
+            val margin = 16 * 1.5f // Convertir dp a píxeles
+            val maxWidth = mutableBitmap.width.toFloat() - (margin * 2) // Ancho máximo disponible con márgenes
+            val words = textToDraw.split(" ") // Dividir el texto en palabras
+            var currentLine = ""
             var decrementY = 0.0f
-            while (indice < palabras.size) {
-                val grupo = palabras.subList(indice, minOf(indice + 6, palabras.size))
-                x = mutableBitmap.width / 2f
-                y = mutableBitmap.height / (1.20f + decrementY)
-                canvas.drawText(grupo.joinToString(" "), x, y, quotePaint)
-                indice += 6
-                decrementY -= 0.05f
+
+            for (word in words) {
+                val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
+
+                // Comprobar si la línea actual con la nueva palabra cabe en el ancho permitido
+                if (quotePaint.measureText(testLine) <= maxWidth) {
+                    currentLine = testLine // Añadir la palabra a la línea actual
+                } else {
+                    // Dibujar la línea actual en el canvas
+                    x = margin + (maxWidth / 2) // Centrar el texto teniendo en cuenta los márgenes
+                    y = mutableBitmap.height / (1.20f + decrementY)
+                    canvas.drawText(currentLine, x, y, quotePaint)
+
+                    // Comenzar una nueva línea con la palabra que no cabía
+                    currentLine = word
+                    decrementY -= 0.05f // Ajustar el espacio entre líneas
+                }
             }
+
+            // Dibujar la última línea si queda texto
+            if (currentLine.isNotEmpty()) {
+                x = margin + (maxWidth / 2)
+                y = mutableBitmap.height / (1.20f + decrementY)
+                canvas.drawText(currentLine, x, y, quotePaint)
+            }
+
 
             // Guarda el Bitmap modificado en un archivo temporal
             val cacheDir = context.externalCacheDir
