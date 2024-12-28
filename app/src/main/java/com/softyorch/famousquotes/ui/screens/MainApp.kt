@@ -16,7 +16,6 @@ import com.softyorch.famousquotes.ui.theme.BackgroundColor
 fun MainApp(modifier: Modifier = Modifier) {
 
     // Start AdMob Ads
-    Banner.bannerInstance.StartAdView()
     Interstitial()
     Bonified()
 
@@ -25,9 +24,6 @@ fun MainApp(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.BottomCenter
     ) {
         NavigationWrapper()
-        Banner.bannerInstance.apply {
-            StartAdView()
-            Show()
-        }
+        Banner.bannerInstance.StartAdView()
     }
 }
