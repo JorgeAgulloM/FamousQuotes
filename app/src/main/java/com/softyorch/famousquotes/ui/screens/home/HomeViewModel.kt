@@ -209,8 +209,8 @@ class HomeViewModel @Inject constructor(
 
     private fun startProcessDownloadImage() {
         viewModelScope.launch(dispatcherDefault) {
-            if (!_uiState.value.showBonified) {
-                _uiState.update { it.copy(showBonified = true, isLoading = true) }
+            if (!_uiState.value.showInterstitial) {
+                _uiState.update { it.copy(showInterstitial = true, isLoading = true) }
             }
         }
     }
@@ -221,7 +221,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         downloadImage = downloadResult,
-                        showBonified = false,
+                        showInterstitial = false,
                         isLoading = false
                     )
                 }
