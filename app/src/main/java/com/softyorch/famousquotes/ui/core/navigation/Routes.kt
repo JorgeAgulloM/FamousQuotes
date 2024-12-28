@@ -16,3 +16,9 @@ object Settings
 
 @Serializable
 data class Detail(val id: String)
+
+@Serializable
+object OnBoarding
+
+@Serializable
+object Info

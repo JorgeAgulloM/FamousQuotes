@@ -21,6 +21,8 @@ import com.softyorch.famousquotes.ui.screens.grid.GridViewModel
 import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
+import com.softyorch.famousquotes.ui.screens.info.InfoScreen
+import com.softyorch.famousquotes.ui.screens.onboading.OnBoardingScreen
 import com.softyorch.famousquotes.ui.screens.settings.SettingsScreen
 import com.softyorch.famousquotes.ui.screens.settings.SettingsViewModel
 import com.softyorch.famousquotes.ui.screens.splash.SplashScreen
@@ -92,7 +94,15 @@ fun NavigationWrapper(
                 val settingsViewModel = hiltViewModel<SettingsViewModel>()
                 SettingsScreen(
                     viewModel = settingsViewModel,
+                    onNavigateToOnBoarding = { navController.navigate(OnBoarding) },
+                    onNavigateToInfo = { navController.navigate(Info) },
                     onBackNavigation = { navController.navigateUp() })
+            }
+            composable<OnBoarding> {
+                OnBoardingScreen { navController.navigateUp() }
+            }
+            composable<Info> {
+                InfoScreen { navController.navigateUp() }
             }
         }
     }
