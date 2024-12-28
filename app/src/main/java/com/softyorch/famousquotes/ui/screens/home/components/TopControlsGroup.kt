@@ -50,8 +50,7 @@ import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.utils.sdk29AndDown
 import com.softyorch.famousquotes.utils.showToast
@@ -194,8 +193,8 @@ private fun FoldableMenu(
         modifier = modifier
             .padding(end = 8.dp)
             .shadow(elevation = shadow, shape = shape)
-            .background(SecondaryColor.copy(alpha = 0.6f), shape = shape)
-            .border(border = BorderStroke(borderStroke, PrimaryColor), shape = shape)
+            .background(AppColorSchema.secondary.copy(alpha = 0.6f), shape = shape)
+            .border(border = BorderStroke(borderStroke, AppColorSchema.primary), shape = shape)
             .animateContentSize()
             .height(if (expanded) expandedSize.dp else closedSize.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,6 +205,7 @@ private fun FoldableMenu(
             expanded = expanded,
             iconFirst = Icons.Outlined.Menu,
             iconSecond = Icons.Outlined.Close,
+            colorIcon = AppColorSchema.whiteSmoke,
             shadowOn = true,
             animatedType = AnimatedType.Rotate,
             onCloseMenu = onCloseMenu

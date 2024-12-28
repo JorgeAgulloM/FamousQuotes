@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
-import com.softyorch.famousquotes.ui.theme.FavoriteColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.extFunc.copyToClipboard
 
 @Composable
@@ -31,7 +31,7 @@ fun IsDebugShowText(quote: FamousQuoteModel) {
             Text(
                 text = quote.id,
                 modifier = Modifier
-                    .background(FavoriteColor.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
+                    .background(AppColorSchema.favoriteColor.copy(alpha = 0.8f), shape = MaterialTheme.shapes.large)
                     .padding(8.dp)
                     .clickable { context.copyToClipboard("Id quote", quote.id) }
             )

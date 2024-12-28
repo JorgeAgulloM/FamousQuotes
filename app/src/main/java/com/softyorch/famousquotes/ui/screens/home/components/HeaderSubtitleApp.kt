@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun HeaderSubtitleApp() {
@@ -20,7 +20,7 @@ fun HeaderSubtitleApp() {
         TextInfoApp(
             text = stringResource(R.string.main_text_get_inspired),
             size = 22,
-            color = SecondaryColor
+            color = AppColorSchema.secondary
         )
     }
 }

@@ -37,7 +37,7 @@ import com.softyorch.famousquotes.ui.core.commonComponents.MessageToUser
 import com.softyorch.famousquotes.ui.screens.grid.components.CardItem
 import com.softyorch.famousquotes.ui.screens.grid.components.TopBarGrid
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -82,7 +82,7 @@ fun GridScreen(
                 viewModel.setAction(GridActions.SelectFilterQuotes(filterQuotes = it))
             }
         },
-        containerColor = BackgroundColor
+        containerColor = AppColorSchema.background
     ) { paddingValues ->
 
         AnimatedContent(state.isLoading, label = "Animated content grid") { isLoading ->

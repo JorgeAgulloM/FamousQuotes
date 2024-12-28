@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -31,7 +32,7 @@ import coil.request.ImageRequest
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.ui.core.commonComponents.IsDebugShowText
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -58,9 +59,9 @@ fun CardItem(
                     .clickable { onNavigateToDetail(item.id) },
                 shape = MaterialTheme.shapes.large,
                 colors = CardDefaults.cardColors(
-                    containerColor = WhiteSmoke
+                    containerColor = AppColorSchema.cardColor
                 ),
-                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
             ) {
 
                 val painter = rememberAsyncImagePainter(
@@ -72,8 +73,7 @@ fun CardItem(
                 )
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -82,7 +82,7 @@ fun CardItem(
                             .height(180.dp)
                             .padding(4.dp),
                         shape = MaterialTheme.shapes.large,
-                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                     ) {
                         Image(
                             painter = painter,
@@ -104,7 +104,10 @@ fun CardItem(
 
                     Text(
                         text = item.body,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = AppColorSchema.text,
+                            fontStyle = FontStyle.Italic
+                        ),
                         modifier = Modifier.padding(8.dp),
                     )
                 }

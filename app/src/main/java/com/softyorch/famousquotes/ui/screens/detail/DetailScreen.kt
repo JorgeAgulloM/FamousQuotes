@@ -29,8 +29,7 @@ import com.softyorch.famousquotes.ui.screens.detail.components.CardDetail
 import com.softyorch.famousquotes.ui.screens.detail.components.SetDialogs
 import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -51,7 +50,7 @@ fun DetailScreen(
     val finishAnimation =
         animatedVisibilityScope.transition.currentState == EnterExitState.Visible && !state.hideControls
 
-    Scaffold(modifier = modifier.fillMaxSize(), containerColor = BackgroundColor) { paddingValues ->
+    Scaffold(modifier = modifier.fillMaxSize(), containerColor = AppColorSchema.background) { paddingValues ->
         Column(
             modifier = modifier.padding(paddingValues),
             verticalArrangement = Arrangement.Center
@@ -80,7 +79,7 @@ fun DetailScreen(
                 ) {
                     IconButtonMenu(
                         cDescription = "Back",
-                        color = SecondaryColor.copy(alpha = 0.6f),
+                        color = AppColorSchema.secondary.copy(alpha = 0.6f),
                         icon = Icons.AutoMirrored.Outlined.ArrowBack,
                         shadowOn = true
                     ) { onBackNavigation() }

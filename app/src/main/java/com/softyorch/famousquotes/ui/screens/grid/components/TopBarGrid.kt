@@ -21,7 +21,7 @@ import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedIconRotating180Degrees
 import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun TopBarGrid(
@@ -42,12 +42,13 @@ fun TopBarGrid(
     ) {
         IconButtonMenu(
             cDescription = "Back",
-            icon = Icons.AutoMirrored.Filled.ArrowBack
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
+            colorIcon = AppColorSchema.iconColor
         ) { navigateBack() }
 
         Row(
             modifier = Modifier
-                .background(color = WhiteSmoke, shape = MaterialTheme.shapes.large)
+                .background(color = AppColorSchema.smoke, shape = MaterialTheme.shapes.large)
                 .padding(start = 1.dp, end = 1.dp, top = 2.dp, bottom = 2.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -76,6 +77,7 @@ fun TopBarGrid(
             expanded = expanded,
             iconFirst = Icons.AutoMirrored.Filled.Sort,
             iconSecond = Icons.AutoMirrored.Filled.Sort,
+            colorIcon = AppColorSchema.iconColor,
             shadowOn = false,
             animatedType = AnimatedType.Flip,
             onCloseMenu = onActions

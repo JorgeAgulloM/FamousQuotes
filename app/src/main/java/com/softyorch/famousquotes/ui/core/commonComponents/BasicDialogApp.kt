@@ -20,7 +20,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
 import com.softyorch.famousquotes.ui.screens.home.components.TextInfo
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
@@ -40,7 +40,7 @@ fun BasicDialogApp(
     BasicAlertDialog(
         onDismissRequest = { onActions(if (blackDismissActions) DISMISS else NEGATIVE) },
         modifier = Modifier.background(
-            color = BackgroundColor,
+            color = AppColorSchema.background,
             shape = MaterialTheme.shapes.large
         ),
         properties = DialogProperties(

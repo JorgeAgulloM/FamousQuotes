@@ -43,10 +43,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
 import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
-import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.extFunc.copyToClipboard
 import com.softyorch.famousquotes.utils.userId
 
@@ -78,20 +75,21 @@ fun SettingsScreen(
             ) {
                 IconButtonMenu(
                     cDescription = "Back",
-                    icon = Icons.AutoMirrored.Filled.ArrowBack
+                    icon = Icons.AutoMirrored.Filled.ArrowBack,
+                    colorIcon = AppColorSchema.iconColor
                 ) { onBackNavigation() }
 
                 Text(
                     text = "Settings",
                     modifier = modifier.weight(1f),
                     textAlign = TextAlign.Center,
-                    color = WhiteSmoke,
+                    color = AppColorSchema.text,
                     style = MaterialTheme.typography.displaySmall
                 )
                 SpacerIconButton()
             }
         },
-        containerColor = BackgroundColor
+        containerColor = AppColorSchema.background
     ) { paddingValues: PaddingValues ->
         Column(
             modifier = modifier
@@ -194,13 +192,13 @@ private fun IdDeviceButton(modifier: Modifier, context: Context) {
         Icon(
             imageVector = Icons.Default.Android,
             contentDescription = "Id device",
-            tint = SecondaryColor
+            tint = AppColorSchema.secondary
         )
         SpacerWidth()
         Text(
             text = "ID de tu dispositivo Android",
             style = MaterialTheme.typography.labelLarge.copy(
-                color = TextStandardWhiteColor
+                color = AppColorSchema.text
             ),
             textDecoration = TextDecoration.Underline
         )

@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.MyTypography
-import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 
 @Composable
 fun TextToClick(text: String, onclick: () -> Unit = {}) {
@@ -19,7 +19,7 @@ fun TextToClick(text: String, onclick: () -> Unit = {}) {
             .fillMaxWidth()
             .clickable { onclick() }
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-        color = TextStandardWhiteColor,
+        color = AppColorSchema.text,
         style = MyTypography.labelMedium,
         textAlign = TextAlign.Center
     )

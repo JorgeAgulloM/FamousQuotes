@@ -9,12 +9,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.MyTypography
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
 
 @Composable
 fun ButtonApp(
@@ -23,8 +22,8 @@ fun ButtonApp(
     primary: Boolean = false,
     onClick: () -> Unit
 ) {
-    val color = if (primary) PrimaryColor else Color.LightGray
-    val elevation = if (primary) 4.dp else 1.dp
+    val color = if (primary) AppColorSchema.primary else AppColorSchema.cardColor
+    val elevation = if (primary) 4.dp else 3.dp
 
     Button(
         onClick = { onClick() },

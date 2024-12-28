@@ -15,7 +15,7 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.admob.Bonified
 import com.softyorch.famousquotes.ui.admob.Interstitial
 import com.softyorch.famousquotes.ui.core.navigation.NavigationWrapper
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
 
 @Composable
@@ -38,7 +38,7 @@ fun MainApp(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewMo
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .background(BackgroundColor),
+                .background(AppColorSchema.background),
             contentAlignment = Alignment.BottomCenter
         ) {
             NavigationWrapper(leftHanded = settings.leftHanded)

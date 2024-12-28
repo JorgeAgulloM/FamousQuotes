@@ -28,9 +28,7 @@ import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.ui.theme.FavoriteColor
-import com.softyorch.famousquotes.ui.theme.LikeColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
@@ -100,8 +98,8 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                 icon = Icons.Rounded.FavoriteBorder,
                 secondIcon = Icons.Rounded.Favorite,
-                color = LikeColor,
-                colorIcon = WhiteSmoke,
+                color = AppColorSchema.likeColor,
+                colorIcon = AppColorSchema.whiteSmoke,
                 isSelected = stateLikes.isLike,
                 valueStatistic = stateStatistics.likes,
                 isVisible = isQuoteFromService,
@@ -114,8 +112,8 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
-                color = FavoriteColor,
-                colorIcon = WhiteSmoke,
+                color = AppColorSchema.favoriteColor,
+                colorIcon = AppColorSchema.whiteSmoke,
                 isSelected = stateFavorite.isFavorite,
                 valueStatistic = stateStatistics.favorites,
                 isVisible = isQuoteFromService,

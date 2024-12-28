@@ -14,8 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun SwitchSettings(
@@ -36,7 +35,7 @@ fun SwitchSettings(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedTrackColor = PrimaryColor
+                checkedTrackColor = AppColorSchema.primary
             ),
             enabled = isEnable
         )
@@ -48,12 +47,12 @@ fun SwitchSettings(
         ) {
             Text(
                 text = titleText,
-                style = MaterialTheme.typography.labelLarge.copy(color = TextStandardWhiteColor)
+                style = MaterialTheme.typography.labelLarge.copy(color = AppColorSchema.text)
             )
             descriptionText?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodySmall.copy(color = TextStandardWhiteColor)
+                    style = MaterialTheme.typography.bodySmall.copy(color = AppColorSchema.text)
                 )
             }
         }

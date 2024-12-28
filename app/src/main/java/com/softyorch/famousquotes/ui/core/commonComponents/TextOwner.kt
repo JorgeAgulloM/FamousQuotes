@@ -13,13 +13,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.ui.screens.home.components.AnimatedTextHome
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.MyTypography
-import com.softyorch.famousquotes.ui.theme.TextStandardWhiteColor
 
 @Composable
 fun TextOwner(
     text: String,
-    color: Color = TextStandardWhiteColor,
+    color: Color = AppColorSchema.text,
     isHiPadding: Boolean = true,
     onClick: () -> Unit
 ) {
