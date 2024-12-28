@@ -28,7 +28,10 @@ import com.softyorch.famousquotes.utils.sdk32AndUp
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun NavigationWrapper(navController: NavHostController = rememberNavController()) {
+fun NavigationWrapper(
+    navController: NavHostController = rememberNavController(),
+    leftHanded: Boolean
+) {
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val gridViewModel = hiltViewModel<GridViewModel>()
@@ -55,6 +58,7 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
             composable<Home> {
                 HomeScreen(
                     viewModel = homeViewModel,
+                    leftHanded = leftHanded,
                     onNavigateToUserScreen = { navController.navigate(Grid) },
                     onNavigateToSettings = { navController.navigate(Settings) }
                 )
@@ -77,6 +81,7 @@ fun NavigationWrapper(navController: NavHostController = rememberNavController()
                 DetailScreen(
                     viewModel = detailViewModel,
                     id = id,
+                    leftHanded = leftHanded,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
                 ) {

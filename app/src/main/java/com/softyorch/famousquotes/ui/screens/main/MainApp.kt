@@ -41,7 +41,7 @@ fun MainApp(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewMo
                 .background(BackgroundColor),
             contentAlignment = Alignment.BottomCenter
         ) {
-            NavigationWrapper()
+            NavigationWrapper(leftHanded = settings.leftHanded)
             Banner.bannerInstance.StartAdView()
         }
     }

@@ -37,6 +37,7 @@ import com.softyorch.famousquotes.ui.theme.SecondaryColor
 fun DetailScreen(
     modifier: Modifier = Modifier,
     id: String,
+    leftHanded: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: DetailViewModel,

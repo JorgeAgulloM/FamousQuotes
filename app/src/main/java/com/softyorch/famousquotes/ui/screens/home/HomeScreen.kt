@@ -66,6 +66,7 @@ import com.softyorch.famousquotes.utils.writeLog
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
+    leftHanded: Boolean,
     onNavigateToUserScreen: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
