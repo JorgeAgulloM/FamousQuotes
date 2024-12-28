@@ -25,7 +25,7 @@ import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
 import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
-fun CardControls(
+fun CardControlsLeft(
     modifier: Modifier = Modifier,
     quote: QuoteDetailsModel,
     state: DetailState,
@@ -82,6 +82,68 @@ fun CardControls(
                 isEnabled = state.hasConnection,
                 valueStatistic = statistics.showns
             ) { }
+        }
+    }
+}
+
+@Composable
+fun CardControlsNonLeft(
+    modifier: Modifier = Modifier,
+    quote: QuoteDetailsModel,
+    state: DetailState,
+    statistics: QuoteStatistics,
+    onAction: (DetailActions) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+            .fillMaxWidth()
+            .background(
+                color = AppColorSchema.background.copy(alpha = 0.6f),
+                shape = MaterialTheme.shapes.large
+            ),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        quote.let {
+            IconCard(
+                cDescription = "Shown",
+                icon = Icons.Outlined.RemoveRedEye,
+                colorIcon = AppColorSchema.whiteSmoke,
+                isEnabled = state.hasConnection,
+                valueStatistic = statistics.showns
+            ) { }
+            IconCard(
+                cDescription = "Download",
+                icon = Icons.Outlined.Download,
+                colorIcon = AppColorSchema.whiteSmoke,
+                isEnabled = state.hasConnection,
+            ) { onAction(DetailActions.DownloadQuote()) }
+            IconCard(
+                cDescription = "Share",
+                icon = Icons.Outlined.Share,
+                colorIcon = AppColorSchema.whiteSmoke,
+                isEnabled = state.hasConnection,
+            ) { onAction(DetailActions.HowToShareQuote()) }
+            IconCard(
+                cDescription = "Favorite",
+                icon = Icons.Default.StarOutline,
+                secondIcon = Icons.Default.Star,
+                color = AppColorSchema.favoriteColor,
+                colorIcon = AppColorSchema.whiteSmoke,
+                valueStatistic = statistics.favorites,
+                isEnabled = state.hasConnection,
+                isSelected = quote.isFavorite
+            ) { onAction(DetailActions.SetFavoriteQuote()) }
+            IconCard(
+                cDescription = "Like",
+                icon = Icons.Default.FavoriteBorder,
+                secondIcon = Icons.Default.Favorite,
+                color = AppColorSchema.likeColor,
+                colorIcon = AppColorSchema.whiteSmoke,
+                valueStatistic = statistics.likes,
+                isEnabled = state.hasConnection,
+                isSelected = quote.isLiked,
+            ) { onAction(DetailActions.SetLikeQuote()) }
         }
     }
 }

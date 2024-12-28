@@ -20,6 +20,7 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 fun SwitchSettings(
     isChecked: Boolean = false,
     isEnable: Boolean = true,
+    isLeftHanded: Boolean,
     titleText: String,
     descriptionText: String? = null,
     onCheckedChange: (Boolean) -> Unit
@@ -27,22 +28,15 @@ fun SwitchSettings(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp),
+            .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Switch(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedTrackColor = AppColorSchema.primary
-            ),
-            enabled = isEnable
-        )
+        if(isLeftHanded) Switch(isChecked, onCheckedChange, isEnable)
 
         Column(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
+            horizontalAlignment = if (isLeftHanded) Alignment.Start else Alignment.End,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
@@ -56,17 +50,35 @@ fun SwitchSettings(
                 )
             }
         }
+
+        if(!isLeftHanded) Switch(isChecked, onCheckedChange, isEnable)
     }
+}
+
+@Composable
+private fun Switch(
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    isEnable: Boolean
+) {
+    Switch(
+        checked = isChecked,
+        onCheckedChange = onCheckedChange,
+        colors = SwitchDefaults.colors(
+            checkedTrackColor = AppColorSchema.primary
+        ),
+        enabled = isEnable
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SwitchSettingsPreviewChecked() {
-    SwitchSettings(isChecked = true, titleText = "Title", descriptionText = "Description") {}
+    SwitchSettings(isChecked = true, isLeftHanded = true, titleText = "Title", descriptionText = "Description") {}
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SwitchSettingsPreviewUnchecked() {
-    SwitchSettings(isChecked = false, titleText = "Title", descriptionText = "Description") {}
+    SwitchSettings(isChecked = false, isLeftHanded = false, titleText = "Title", descriptionText = "Description") {}
 }

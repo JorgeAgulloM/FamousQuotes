@@ -68,6 +68,7 @@ fun NavigationWrapper(
             composable<Grid> {
                 GridScreen(
                     viewModel = gridViewModel,
+                    leftHanded = leftHanded,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
                     onNavigateToDetail = { idQuote ->

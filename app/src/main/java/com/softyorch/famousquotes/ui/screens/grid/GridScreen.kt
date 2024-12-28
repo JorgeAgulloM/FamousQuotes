@@ -43,6 +43,7 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 @Composable
 fun GridScreen(
     viewModel: GridViewModel,
+    leftHanded: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onNavigateToDetail: (String) -> Unit,
@@ -69,6 +70,7 @@ fun GridScreen(
         topBar = {
             TopBarGrid(
                 paddingTop = paddingTop,
+                leftHanded = leftHanded,
                 filterQuotes = selectedQuotes,
                 expanded = state.orderByAscending,
                 navigateBack = onNavigateBack,

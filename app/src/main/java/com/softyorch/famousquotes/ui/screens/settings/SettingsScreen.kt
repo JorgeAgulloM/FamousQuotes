@@ -73,11 +73,11 @@ fun SettingsScreen(
                     .padding(paddingTop)
                     .fillMaxWidth()
             ) {
-                IconButtonMenu(
+                if (settings.leftHanded) IconButtonMenu(
                     cDescription = "Back",
                     icon = Icons.AutoMirrored.Filled.ArrowBack,
                     colorIcon = AppColorSchema.iconColor
-                ) { onBackNavigation() }
+                ) { onBackNavigation() } else SpacerIconButton()
 
                 Text(
                     text = "Settings",
@@ -86,7 +86,11 @@ fun SettingsScreen(
                     color = AppColorSchema.text,
                     style = MaterialTheme.typography.displaySmall
                 )
-                SpacerIconButton()
+                if (!settings.leftHanded) IconButtonMenu(
+                    cDescription = "Back",
+                    icon = Icons.AutoMirrored.Filled.ArrowBack,
+                    colorIcon = AppColorSchema.iconColor
+                ) { onBackNavigation() } else SpacerIconButton()
             }
         },
         containerColor = AppColorSchema.background
@@ -118,6 +122,7 @@ fun SettingsCheckers(
         SwitchSettings(
             isChecked = settings.autoDarkMode,
             isEnable = true,
+            isLeftHanded = settings.leftHanded,
             titleText = "Auto Dark Mode",
             descriptionText = "Set to use system Dark Mode"
         ) { onActions(SettingsActions.AutoDarkMode(autoDarkMode = it)) }
@@ -125,6 +130,7 @@ fun SettingsCheckers(
         SwitchSettings(
             isChecked = settings.darkMode,
             isEnable = !settings.autoDarkMode,
+            isLeftHanded = settings.leftHanded,
             titleText = "Dark Mode",
             descriptionText = "Set Dark Mode in app"
         ) { onActions(SettingsActions.DarkMode(darkMode = it)) }
@@ -132,6 +138,7 @@ fun SettingsCheckers(
         SwitchSettings(
             isChecked = settings.leftHanded,
             isEnable = true,
+            isLeftHanded = settings.leftHanded,
             titleText = "Left-handed",
             descriptionText = "Move controls to left site"
         ) { onActions(SettingsActions.LeftHanded(leftHanded = it)) }
@@ -139,6 +146,7 @@ fun SettingsCheckers(
         SwitchSettings(
             isChecked = settings.notificationChannel,
             isEnable = true,
+            isLeftHanded = settings.leftHanded,
             titleText = "Notification channel",
             descriptionText = "Subscribe to daily notifications"
         ) { onActions(SettingsActions.NotificationChannel(notificationChannel = it)) }

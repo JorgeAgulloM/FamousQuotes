@@ -50,6 +50,7 @@ fun CardDetail(
     quote: QuoteDetailsModel,
     state: DetailState,
     statistics: QuoteStatistics,
+    leftHanded: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     finishAnimation: Boolean,
@@ -137,7 +138,18 @@ fun CardDetail(
                         }
                     }
                     AnimatedVisibility(finishAnimation) {
-                        CardControls(quote = quote, state = state, statistics = statistics, onAction = onAction)
+                        if (leftHanded) CardControlsLeft(
+                            quote = quote,
+                            state = state,
+                            statistics = statistics,
+                            onAction = onAction
+                        )
+                        else CardControlsNonLeft(
+                            quote = quote,
+                            state = state,
+                            statistics = statistics,
+                            onAction = onAction
+                        )
                     }
                 }
             }

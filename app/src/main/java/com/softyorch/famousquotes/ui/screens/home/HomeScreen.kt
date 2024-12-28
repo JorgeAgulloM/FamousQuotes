@@ -89,6 +89,7 @@ fun HomeScreen(
 
     ContentBody(
         paddingTop = paddingTop,
+        leftHanded = leftHanded,
         state = state,
         stateStatistics = stateStatistics,
         stateLikes = stateLikes,
@@ -142,6 +143,7 @@ private fun ShowInterstitial(
 @Composable
 private fun ContentBody(
     paddingTop: Dp,
+    leftHanded: Boolean,
     state: HomeState,
     stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
@@ -161,6 +163,7 @@ private fun ContentBody(
     ) {
         TopControlsGroup(
             hasText = state.quote.body,
+            leftHanded = leftHanded,
             isEnabled = state.hasConnection == true,
             isImageExt = state.quote.imageUrl.startsWith("http"),
             isShoImage = state.showImage,
@@ -177,6 +180,7 @@ private fun ContentBody(
 
         CardQuote(
             state = state,
+            leftHanded = leftHanded,
             stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
@@ -244,6 +248,7 @@ private fun BackgroundImage(uri: String, context: Context, onActions: (HomeActio
 @Composable
 private fun CardQuote(
     state: HomeState,
+    leftHanded: Boolean,
     stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
@@ -277,6 +282,7 @@ private fun CardQuote(
                         }
                         BottomBar(
                             state = state,
+                            leftHanded = leftHanded,
                             stateStatistics = stateStatistics,
                             stateLikes = stateLikes,
                             stateFavorite = stateFavorite,
@@ -300,6 +306,7 @@ private fun CardQuote(
 @Composable
 private fun BottomBar(
     state: HomeState,
+    leftHanded: Boolean,
     stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
@@ -318,6 +325,7 @@ private fun BottomBar(
     ) {
         CardControlsGroup(
             hasText = state.quote.body,
+            leftHanded = leftHanded,
             stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,

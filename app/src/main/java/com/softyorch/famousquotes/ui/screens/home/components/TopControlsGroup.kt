@@ -58,6 +58,7 @@ import com.softyorch.famousquotes.utils.showToast
 @Composable
 fun TopControlsGroup(
     hasText: String,
+    leftHanded: Boolean,
     isEnabled: Boolean,
     isImageExt: Boolean,
     isShoImage: Boolean,
@@ -84,13 +85,13 @@ fun TopControlsGroup(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = paddingTop)
-            .zIndex(10f),
-        contentAlignment = Alignment.TopEnd
+            .zIndex(10f)
     ) {
         AnimatedTextHome(hasText, !isShoImage) {
             TopControls(
                 isEnabled = isEnabled,
                 isImageExt = isImageExt,
+                leftHanded = leftHanded,
                 disabledReload = disabledReload,
                 context = context,
                 onAction = onAction,
@@ -122,6 +123,7 @@ fun TopControlsGroup(
 private fun TopControls(
     isEnabled: Boolean,
     isImageExt: Boolean,
+    leftHanded: Boolean,
     disabledReload: Boolean,
     context: Context,
     onAction: (HomeActions) -> Unit,
@@ -137,7 +139,7 @@ private fun TopControls(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.End,
+        horizontalArrangement = if (leftHanded) Arrangement.Start else Arrangement.End,
         verticalAlignment = Alignment.Top
     ) {
         IconButtonMenu(

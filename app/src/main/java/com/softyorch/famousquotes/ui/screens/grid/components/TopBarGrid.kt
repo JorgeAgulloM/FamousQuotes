@@ -26,6 +26,7 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 @Composable
 fun TopBarGrid(
     paddingTop: Dp,
+    leftHanded: Boolean,
     filterQuotes: FilterQuotes,
     expanded: Boolean,
     navigateBack: () -> Unit,
@@ -37,14 +38,22 @@ fun TopBarGrid(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, paddingTop, end = 16.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Top
     ) {
-        IconButtonMenu(
+        if (leftHanded) IconButtonMenu(
             cDescription = "Back",
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             colorIcon = AppColorSchema.iconColor
-        ) { navigateBack() }
+        ) { navigateBack() } else AnimatedIconRotating180Degrees(
+            expanded = expanded,
+            iconFirst = Icons.AutoMirrored.Filled.Sort,
+            iconSecond = Icons.AutoMirrored.Filled.Sort,
+            colorIcon = AppColorSchema.iconColor,
+            shadowOn = false,
+            animatedType = AnimatedType.Flip,
+            onCloseMenu = onActions
+        )
 
         Row(
             modifier = Modifier
@@ -73,7 +82,7 @@ fun TopBarGrid(
             ) { onClickListener(it) }
         }
 
-        AnimatedIconRotating180Degrees(
+        if (leftHanded) AnimatedIconRotating180Degrees(
             expanded = expanded,
             iconFirst = Icons.AutoMirrored.Filled.Sort,
             iconSecond = Icons.AutoMirrored.Filled.Sort,
@@ -81,6 +90,10 @@ fun TopBarGrid(
             shadowOn = false,
             animatedType = AnimatedType.Flip,
             onCloseMenu = onActions
-        )
+        ) else IconButtonMenu(
+            cDescription = "Back",
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
+            colorIcon = AppColorSchema.iconColor
+        ) { navigateBack() }
     }
 }
