@@ -46,11 +46,12 @@ fun TopBarStandard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
+            val sizeIcon = 36
             Icon(
                 imageVector = iconTitle,
                 contentDescription = "Información",
                 tint = AppColorSchema.secondary,
-                modifier = modifier.size(36.dp)
+                modifier = modifier.size(sizeIcon.dp)
             )
             SpacerWidth(4)
             Text(
@@ -59,6 +60,8 @@ fun TopBarStandard(
                     color = AppColorSchema.text
                 )
             )
+            SpacerWidth(4)
+            SpacerIconButton(size = sizeIcon)
         }
         if (!leftHanded) IconButtonMenu(
             cDescription = "Back",
