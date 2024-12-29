@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestore.setLoggingEnabled
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -44,4 +45,8 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Singleton
+    @Provides
+    fun providesFirebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
 }
