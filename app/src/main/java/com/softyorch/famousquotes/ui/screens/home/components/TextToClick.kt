@@ -12,7 +12,7 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.MyTypography
 
 @Composable
-fun TextToClick(text: String, onclick: () -> Unit = {}) {
+fun TextToClick(text: String, isCenter: Boolean = true, onclick: () -> Unit = {}) {
     Text(
         text = text,
         modifier = Modifier
@@ -21,6 +21,6 @@ fun TextToClick(text: String, onclick: () -> Unit = {}) {
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         color = AppColorSchema.text,
         style = MyTypography.labelMedium,
-        textAlign = TextAlign.Center
+        textAlign = if (isCenter) TextAlign.Center else TextAlign.Start
     )
 }
