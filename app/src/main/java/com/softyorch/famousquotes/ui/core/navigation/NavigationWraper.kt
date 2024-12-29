@@ -32,7 +32,8 @@ import com.softyorch.famousquotes.utils.sdk32AndUp
 @Composable
 fun NavigationWrapper(
     navController: NavHostController = rememberNavController(),
-    leftHanded: Boolean
+    leftHanded: Boolean,
+    darkTheme: Boolean
 ) {
 
     val homeViewModel = hiltViewModel<HomeViewModel>()
@@ -103,7 +104,7 @@ fun NavigationWrapper(
                 OnBoardingScreen(leftHanded = leftHanded) { navController.navigateUp() }
             }
             composable<Info> {
-                InfoScreen(leftHanded = leftHanded) { navController.navigateUp() }
+                InfoScreen(leftHanded = leftHanded, darkTheme = darkTheme) { navController.navigateUp() }
             }
         }
     }
