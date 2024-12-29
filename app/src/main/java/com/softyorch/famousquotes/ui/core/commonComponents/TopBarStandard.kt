@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -48,11 +49,13 @@ fun TopBarStandard(
             Icon(
                 imageVector = iconTitle,
                 contentDescription = "Información",
-                tint = AppColorSchema.secondary
+                tint = AppColorSchema.secondary,
+                modifier = modifier.size(36.dp)
             )
-            SpacerWidth(8)
+            SpacerWidth(4)
             Text(
-                text = textTitle, style = MaterialTheme.typography.labelLarge.copy(
+                text = textTitle,
+                style = MaterialTheme.typography.titleLarge.copy(
                     color = AppColorSchema.text
                 )
             )
