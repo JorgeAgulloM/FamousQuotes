@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
@@ -27,8 +28,10 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.main.MainApp
 import com.softyorch.famousquotes.utils.LevelLog
@@ -36,6 +39,8 @@ import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import com.softyorch.famousquotes.utils.sdk33AndUp
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -64,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
         StartUpdateManager()
         StartFirebase()
-        sdk33AndUp { PermissionNotifications() }
+        sdk33AndUp { PermissionNotifications() } ?: SubscribeNotificationFirstTime()
         RequestGrantedProtectionData(this).getConsent()
         SetBlockedScreenShoot()
 
@@ -93,6 +98,7 @@ class MainActivity : ComponentActivity() {
             if (isGranted) {
                 writeLog(LevelLog.INFO, "PERMISSION POST_NOTIFICATIONS GRANTED")
                 CreatedChannelNotifications()
+                SubscribeNotificationFirstTime()
             } else {
                 writeLog(LevelLog.WARN, "PERMISSION POST_NOTIFICATIONS DENIED")
             }
@@ -109,6 +115,26 @@ class MainActivity : ComponentActivity() {
 
         val channel = NotificationChannel(channelId, chName, NotificationManager.IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun SubscribeNotificationFirstTime() {
+        var finished = false
+        val messaging = FirebaseMessaging.getInstance()
+
+        lifecycleScope.launch {
+            while (!finished) {
+                messaging.subscribeToTopic(FIREBASE_NOTIFICATION_CHANNEL_1).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        writeLog(text = "Subscribed to $FIREBASE_NOTIFICATION_CHANNEL_1")
+                        finished = true
+                    } else {
+                        writeLog(LevelLog.ERROR, text = "Error subscribing to $FIREBASE_NOTIFICATION_CHANNEL_1")
+                        writeLog(LevelLog.ERROR, text = "Retry in 5 seconds...")
+                    }
+                }
+                delay(5000)
+            }
+        }
     }
 
     override fun onResume() {
