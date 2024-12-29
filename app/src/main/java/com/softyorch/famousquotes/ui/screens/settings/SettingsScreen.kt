@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,16 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
-import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
+import com.softyorch.famousquotes.ui.core.commonComponents.TopBarStandard
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
 import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
@@ -70,30 +69,14 @@ fun SettingsScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            Row(
-                modifier = modifier
-                    .padding(paddingTop)
-                    .fillMaxWidth()
-            ) {
-                if (settings.leftHanded) IconButtonMenu(
-                    cDescription = "Back",
-                    icon = Icons.AutoMirrored.Filled.ArrowBack,
-                    colorIcon = AppColorSchema.iconColor
-                ) { onBackNavigation() } else SpacerIconButton()
-
-                Text(
-                    text = "Settings",
-                    modifier = modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    color = AppColorSchema.text,
-                    style = MaterialTheme.typography.displaySmall
-                )
-                if (!settings.leftHanded) IconButtonMenu(
-                    cDescription = "Back",
-                    icon = Icons.AutoMirrored.Filled.ArrowBack,
-                    colorIcon = AppColorSchema.iconColor
-                ) { onBackNavigation() } else SpacerIconButton()
-            }
+            TopBarStandard(
+                modifier = modifier,
+                paddingTop = paddingTop,
+                leftHanded = settings.leftHanded,
+                textTitle = "Settings",
+                iconTitle = Icons.Default.Settings,
+                onUpNavigation = onBackNavigation
+            )
         },
         containerColor = AppColorSchema.background
     ) { paddingValues: PaddingValues ->
