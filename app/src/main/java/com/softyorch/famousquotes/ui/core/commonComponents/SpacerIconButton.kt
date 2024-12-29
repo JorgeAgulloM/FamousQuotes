@@ -7,6 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SpacerIconButton(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.size(48.dp))
+fun SpacerIconButton(modifier: Modifier = Modifier, size: Int = 48) {
+    Box(modifier = modifier.size(size.dp))
 }
