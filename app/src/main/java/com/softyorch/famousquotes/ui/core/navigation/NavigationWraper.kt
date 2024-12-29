@@ -100,10 +100,10 @@ fun NavigationWrapper(
                     onBackNavigation = { navController.navigateUp() })
             }
             composable<OnBoarding> {
-                OnBoardingScreen { navController.navigateUp() }
+                OnBoardingScreen(leftHanded = leftHanded) { navController.navigateUp() }
             }
             composable<Info> {
-                InfoScreen { navController.navigateUp() }
+                InfoScreen(leftHanded = leftHanded) { navController.navigateUp() }
             }
         }
     }
