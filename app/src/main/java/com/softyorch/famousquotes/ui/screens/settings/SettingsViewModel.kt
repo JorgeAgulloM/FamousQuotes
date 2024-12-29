@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1
 import com.softyorch.famousquotes.domain.model.SubscribeNotificationDTO
 import com.softyorch.famousquotes.domain.model.SettingsModel
@@ -33,6 +34,7 @@ class SettingsViewModel @Inject constructor(
     val state: StateFlow<SettingsState> = _state
 
     fun actions(actions: SettingsActions) {
+        Analytics.sendAction(Analytics.ActionSettings(actions))
         when (actions) {
             is SettingsActions.GetSettings -> getSettings()
             is SettingsActions.AutoDarkMode -> setAutoDarkMode(actions.autoDarkMode)
