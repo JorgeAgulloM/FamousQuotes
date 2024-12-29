@@ -29,9 +29,11 @@ fun MainApp(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewMo
 
     val settings by viewModel.settings.collectAsStateWithLifecycle()
 
-    val darkTheme = if (settings.darkMode) true
-    else if (settings.autoDarkMode) isSystemInDarkTheme()
-    else false
+    val darkTheme = when {
+        !settings.autoDarkMode && settings.darkMode -> true
+        settings.autoDarkMode -> isSystemInDarkTheme()
+        else -> false
+    }
 
     FamousQuotesTheme(darkTheme = darkTheme) {
         onApplyTheme()
