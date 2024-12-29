@@ -37,6 +37,7 @@ import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
+import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
 import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
@@ -64,6 +65,7 @@ fun SettingsScreen(
     }
 
     val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -109,6 +111,8 @@ fun SettingsScreen(
                 onNavigateToInfo = onNavigateToInfo
             )
         }
+
+        if (state.isLoading) LoadingCircle()
     }
 }
 
