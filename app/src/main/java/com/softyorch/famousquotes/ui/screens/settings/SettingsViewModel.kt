@@ -86,8 +86,7 @@ class SettingsViewModel @Inject constructor(
             if (result.subscribe)
                 setSettingsChanges(_settings.value.copy(notificationChannel = newValue))
 
-            val getError = newValue != result.subscribe
-            _state.update { it.copy(isLoading = false, errorSubscribe = getError) }
+            _state.update { it.copy(isLoading = false, errorSubscribe = !result.subscribe) }
         }
     }
 
