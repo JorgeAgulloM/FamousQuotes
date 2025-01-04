@@ -73,7 +73,7 @@ fun CardControlsGroup(
         title = stringResource(R.string.dialog_share_title),
         textBtnPositive = stringResource(R.string.dialog_share_by_text),
         textBtnNegative = stringResource(R.string.dialog_share_by_image),
-        blackDismissActions = true
+        blockDismissActions = true
     ) {
         when (it) {
             POSITIVE -> onAction(HomeActions.ShareText())

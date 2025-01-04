@@ -34,18 +34,18 @@ fun BasicDialogApp(
     title: String? = null,
     textBtnPositive: String? = null,
     textBtnNegative: String? = null,
-    blackDismissActions: Boolean = false,
+    blockDismissActions: Boolean = false,
     onActions: (DialogCloseAction) -> Unit,
 ) {
     BasicAlertDialog(
-        onDismissRequest = { onActions(if (blackDismissActions) DISMISS else NEGATIVE) },
+        onDismissRequest = { onActions(if (blockDismissActions) DISMISS else NEGATIVE) },
         modifier = Modifier.background(
             color = AppColorSchema.background,
             shape = MaterialTheme.shapes.large
         ),
         properties = DialogProperties(
-            dismissOnBackPress = blackDismissActions,
-            dismissOnClickOutside = blackDismissActions
+            dismissOnBackPress = blockDismissActions,
+            dismissOnClickOutside = blockDismissActions
         )
     ) {
         ContentDialog(title, text, auxText, textBtnPositive, textBtnNegative, onActions)

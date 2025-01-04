@@ -64,7 +64,7 @@ class DatastoreImpl @Inject constructor(
     override fun getSettings(): Flow<SettingsStoreModel> =
         context.datastore.data.map { data ->
             SettingsStoreModel(
-                autoDarkMode = data[booleanPreferencesKey(AUTO_DARK_MODE)] ?: false,
+                autoDarkMode = data[booleanPreferencesKey(AUTO_DARK_MODE)] ?: true,
                 darkMode = data[booleanPreferencesKey(DARK_MODE)] ?: false,
                 leftHanded = data[booleanPreferencesKey(LEFT_HANDED)] ?: false,
                 notificationChannel = data[booleanPreferencesKey(NOTIFICATION_CHANNEL)] ?: false,

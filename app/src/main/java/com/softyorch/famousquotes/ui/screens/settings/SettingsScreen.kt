@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +32,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
@@ -44,6 +48,7 @@ import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
 import com.softyorch.famousquotes.ui.theme.AppColorSchema
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.ui.utils.extFunc.copyToClipboard
 import com.softyorch.famousquotes.utils.userId
 
@@ -65,6 +70,11 @@ fun SettingsScreen(
 
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    OnResume {
+        if (state.notificationsPermissionState == NotificationsPermissionState.Waiting)
+            viewModel.actions(SettingsActions.NotificationChannel(notificationChannel = true))
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -96,6 +106,9 @@ fun SettingsScreen(
         }
 
         if (state.isLoading) LoadingCircle()
+
+        PrepareDialogs(state = state.notificationsPermissionState, onActions = viewModel::actions)
+
     }
 }
 
@@ -205,8 +218,62 @@ private fun IdDeviceButton(modifier: Modifier, context: Context) {
         title = "Id copiada al portapapeles",
         textBtnPositive = null,
         textBtnNegative = null,
-        blackDismissActions = true
+        blockDismissActions = true
     ) {
         showDialog = false
     }
+}
+
+@Composable
+fun OnResume(onResume: () -> Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                onResume()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+}
+
+@Composable
+private fun PrepareDialogs(
+    state: NotificationsPermissionState,
+    onActions: (SettingsActions) -> Unit
+) {
+    if (state == NotificationsPermissionState.Denied)
+        BasicDialogApp(
+            text = "El permiso para recibir notificaciones está denegado.",
+            auxText = "Por favor, habilita el permiso en la configuración del sistema para recibir actualizaciones importantes.",
+            title = "Permiso de notificaciones denegado",
+            textBtnPositive = "Cancelar",
+            textBtnNegative = "Ir a configuración",
+            blockDismissActions = true
+        ) { result ->
+            when (result) {
+                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionUserWantBlock())
+                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
+                DialogCloseAction.DISMISS -> Unit
+            }
+        }
+
+    if (state == NotificationsPermissionState.Blocked)
+        BasicDialogApp(
+            text = "¿Estás seguro de no querer recibir notificaciones?",
+            auxText = "Podrías perder notificaciones importantes!",
+            title = "Notificaciones deshabilitadas",
+            textBtnPositive = "Confirmar",
+            textBtnNegative = "No, habilitar las notificaciones",
+            blockDismissActions = true
+        ) { result ->
+            when (result) {
+                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionUserBlocked())
+                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
+                DialogCloseAction.DISMISS -> Unit
+            }
+        }
 }

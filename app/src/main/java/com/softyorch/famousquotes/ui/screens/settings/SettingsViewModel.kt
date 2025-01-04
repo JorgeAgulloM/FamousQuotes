@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1
-import com.softyorch.famousquotes.domain.model.SubscribeNotificationDTO
+import com.softyorch.famousquotes.core.NotificationUtils
 import com.softyorch.famousquotes.domain.model.SettingsModel
+import com.softyorch.famousquotes.domain.model.SubscribeNotificationDTO
 import com.softyorch.famousquotes.domain.useCases.notificationSubscribe.SubscribeNotificationByTopic
 import com.softyorch.famousquotes.domain.useCases.settings.GetSettings
 import com.softyorch.famousquotes.domain.useCases.settings.SetSettings
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,10 @@ class SettingsViewModel @Inject constructor(
             is SettingsActions.AutoDarkMode -> setAutoDarkMode(actions.autoDarkMode)
             is SettingsActions.DarkMode -> setManualDarkMode(actions.darkMode)
             is SettingsActions.LeftHanded -> setLeftHanded(actions.leftHanded)
-            is SettingsActions.NotificationChannel -> setNotificationChannel(actions.notificationChannel)
+            is SettingsActions.NotificationChannel -> verifyNotificationsPermission(actions.notificationChannel)
+            is SettingsActions.NotificationsPermissionRequest -> verifyNotificationsPermissionRequest()
+            is SettingsActions.NotificationsPermissionUserWantBlock -> userWantBlockedNotifications()
+            is SettingsActions.NotificationsPermissionUserBlocked -> userConfirmedBlockedNotifications()
             is SettingsActions.IsShowOnBoarding -> setIsShowOnBoarding(actions.isShowOnBoarding)
         }
     }
@@ -48,7 +53,9 @@ class SettingsViewModel @Inject constructor(
     private fun getSettings() {
         viewModelScope.launch(dispatcherDefault) {
             getSettings.invoke().collect { settings ->
-                _settings.update { settings }
+                _settings.update { settings }.also {
+                    verifyActivatedNotifications()
+                }
             }
         }
     }
@@ -71,8 +78,59 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun setNotificationChannel(newValue: Boolean) {
+    private fun verifyActivatedNotifications() {
+        viewModelScope.launch {
+            NotificationUtils(MainActivity.instance)
+                .verifyPermissionNotifications(request = false) { statePermission ->
+                    setSettingsChanges(_settings.value.copy(notificationChannel = statePermission))
+                }
+        }
+    }
+
+    private fun verifyNotificationsPermission(newValue: Boolean) {
         _state.update { it.copy(isLoading = true) }
+
+        if (newValue) NotificationUtils(MainActivity.instance)
+            .verifyPermissionNotifications(request = false) { statePermission ->
+                if (!statePermission)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            notificationsPermissionState = NotificationsPermissionState.Denied
+                        )
+                    }
+                else {
+                    _state.update {
+                        it.copy(notificationsPermissionState = NotificationsPermissionState.Granted)
+                    }
+                    setNotificationsChannel(newValue)
+                }
+            } else setNotificationsChannel(newValue)
+    }
+
+    private fun verifyNotificationsPermissionRequest() {
+        NotificationUtils(MainActivity.instance).goToConfigurationNotifications()
+        _state.update {
+            it.copy(
+                //Prueba el loading
+                notificationsPermissionState = NotificationsPermissionState.Waiting
+            )
+        }
+    }
+
+    private fun userWantBlockedNotifications() {
+        _state.update {
+            it.copy(notificationsPermissionState = NotificationsPermissionState.Blocked)
+        }
+    }
+
+    private fun userConfirmedBlockedNotifications() {
+        _state.update {
+            it.copy(notificationsPermissionState = NotificationsPermissionState.BlockedConfirmed)
+        }
+    }
+
+    private fun setNotificationsChannel(newValue: Boolean) {
         viewModelScope.launch {
             val result = withContext(dispatcherDefault) {
                 subscribeNotificationsByTopic.invoke(

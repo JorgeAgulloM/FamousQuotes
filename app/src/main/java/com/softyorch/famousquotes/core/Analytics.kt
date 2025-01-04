@@ -75,6 +75,9 @@ sealed class Analytics(val name: String) {
             is SettingsActions.DarkMode -> "${FLAVOR}_action_dark_mode_${action.darkMode}"
             is SettingsActions.LeftHanded -> "${FLAVOR}_action_left_handed_${action.leftHanded}"
             is SettingsActions.NotificationChannel -> "${FLAVOR}_action_notification_channel_${action.notificationChannel}"
+            is SettingsActions.NotificationsPermissionRequest -> "${FLAVOR}_action_notifications_permission_request"
+            is SettingsActions.NotificationsPermissionUserBlocked -> "${FLAVOR}_action_notifications_permission_user_blocked"
+            is SettingsActions.NotificationsPermissionUserWantBlock -> "${FLAVOR}_action_notifications_permission_user_want_block"
             is SettingsActions.IsShowOnBoarding -> "${FLAVOR}_action_is_show_on_boarding"
         }
 
