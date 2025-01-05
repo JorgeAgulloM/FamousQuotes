@@ -22,6 +22,7 @@ import com.softyorch.famousquotes.ui.screens.home.HomeScreen
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel
 import com.softyorch.famousquotes.ui.screens.home.HomeViewModel.Companion.HTTP
 import com.softyorch.famousquotes.ui.screens.info.InfoScreen
+import com.softyorch.famousquotes.ui.screens.info.InfoViewModel
 import com.softyorch.famousquotes.ui.screens.onboading.OnBoardingScreen
 import com.softyorch.famousquotes.ui.screens.settings.SettingsScreen
 import com.softyorch.famousquotes.ui.screens.settings.SettingsViewModel
@@ -104,7 +105,10 @@ fun NavigationWrapper(
                 OnBoardingScreen(leftHanded = leftHanded) { navController.navigateUp() }
             }
             composable<Info> {
-                InfoScreen(leftHanded = leftHanded, darkTheme = darkTheme) { navController.navigateUp() }
+                val viewModel = hiltViewModel<InfoViewModel>()
+                InfoScreen(viewModel = viewModel, leftHanded = leftHanded, darkTheme = darkTheme) {
+                    navController.navigateUp()
+                }
             }
         }
     }

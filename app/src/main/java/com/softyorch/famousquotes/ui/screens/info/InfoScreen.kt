@@ -48,6 +48,7 @@ import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 @Composable
 fun InfoScreen(
     modifier: Modifier = Modifier,
+    viewModel: InfoViewModel,
     leftHanded: Boolean,
     darkTheme: Boolean,
     onUpNavigation: () -> Unit
@@ -82,7 +83,7 @@ fun InfoScreen(
         ) {
             CardSoftYorch(modifier = modifier)
             TextInfo(leftHanded = leftHanded)
-            IconsInfo(leftHanded = leftHanded, darkTheme = darkTheme)
+            IconsInfo(leftHanded = leftHanded, darkTheme = darkTheme, onActions = viewModel::actions)
             TitleAppInfo()
             SpacerHeight(Banner.heightBanner + 32)
         }
@@ -115,7 +116,7 @@ private fun TextInfo(modifier: Modifier = Modifier, leftHanded: Boolean) {
         iconButton = Icons.Default.Info,
         iconDescription = "Info",
         text = nameApp
-    )
+    ) {}
     AppVersionText(isCenter = false) {}
     HorizontalDivider(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 4.dp),
@@ -124,7 +125,9 @@ private fun TextInfo(modifier: Modifier = Modifier, leftHanded: Boolean) {
     )
     SpacerHeight()
     Text(
-        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel quam eget tortor faucibus feugiat. Aliquam erat volutpat. Aenean vehicula, ex id pharetra vulputate, purus neque varius libero, a facilisis risus sapien vel sapien. Integer fringilla dolor sit amet nibh sodales, ac facilisis arcu condimentum. Nullam porttitor, nulla at pellentesque posuere, metus erat pellentesque felis, nec laoreet orci erat id nulla. Maecenas interdum odio nec lectus fermentum convallis. Ut placerat, ligula non pellentesque efficitur, arcu lorem gravida sapien, vitae tristique augue odio eget magna. Vestibulum sit amet erat non arcu laoreet dictum.",
+        text = "Inspirate con Frases Positivas.\n" +
+                "Explora Frases Positivas diarias e imágenes generadas por IA para Inspirarte.\n" +
+                "Con Frases Positivas, tendrás acceso a citas positivas y dichos inspiradores de algunas de las mentes más brillantes del mundo.",
         style = MaterialTheme.typography.bodyLarge.copy(color = AppColorSchema.text),
         modifier = Modifier.padding(horizontal = 16.dp)
     )
@@ -132,28 +135,35 @@ private fun TextInfo(modifier: Modifier = Modifier, leftHanded: Boolean) {
 }
 
 @Composable
-private fun IconsInfo(leftHanded: Boolean, darkTheme: Boolean) {
+private fun IconsInfo(leftHanded: Boolean, darkTheme: Boolean, onActions: (InfoActions) -> Unit) {
     val buyIcon = if (darkTheme) R.drawable.coffee_white else R.drawable.coffee_black
     val payIcon = if (darkTheme) R.drawable.logo_paypal_white else R.drawable.logo_paypal_black
+    val playIcon = R.drawable.google_play
 
     IconButtonInfo(
         leftHanded = leftHanded,
         iconButton = Icons.Default.Mail,
         iconDescription = "Support",
         text = "Soporte"
-    )
+    ) { onActions(InfoActions.Support) }
     IconButtonInfo(
         leftHanded = leftHanded,
         imageIconButton = painterResource(buyIcon),
         iconDescription = "Buy Me A Coffee",
         text = "Buy Me A Coffee"
-    )
+    ) { onActions(InfoActions.BuyMeACoffee) }
     IconButtonInfo(
         leftHanded = leftHanded,
         imageIconButton = painterResource(payIcon),
         iconDescription = "Coffee with PayPal",
         text = "Coffee with PayPal"
-    )
+    ) { onActions(InfoActions.CoffeeWithPayPal) }
+    IconButtonInfo(
+        leftHanded = leftHanded,
+        imageIconButton = painterResource(playIcon),
+        iconDescription = "Valora la app",
+        text = "Valora la app"
+    ) { onActions(InfoActions.OpenGooglePlay) }
     SpacerHeight(32)
 }
 
@@ -171,7 +181,7 @@ fun IconButtonInfo(
     imageIconButton: Painter? = null,
     iconDescription: String,
     text: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     val shape = MaterialTheme.shapes.medium
 
