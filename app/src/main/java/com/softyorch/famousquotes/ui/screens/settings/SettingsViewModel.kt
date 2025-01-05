@@ -54,7 +54,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch(dispatcherDefault) {
             getSettings.invoke().collect { settings ->
                 _settings.update { settings }.also {
-                    verifyActivatedNotifications()
+                    if (settings.notificationChannel) verifyActivatedNotifications()
                 }
             }
         }
