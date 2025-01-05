@@ -30,8 +30,8 @@ import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
 import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
-import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 
 @Composable
 fun CardControlsGroup(
@@ -71,13 +71,13 @@ fun CardControlsGroup(
     if (showSendDialog) BasicDialogApp(
         text = stringResource(R.string.dialog_how_do_you_share),
         title = stringResource(R.string.dialog_share_title),
-        textBtnPositive = stringResource(R.string.dialog_share_by_text),
-        textBtnNegative = stringResource(R.string.dialog_share_by_image),
+        textBtnNegative = stringResource(R.string.dialog_share_by_text),
+        textBtnPositive = stringResource(R.string.dialog_share_by_image),
         blockDismissActions = true
     ) {
         when (it) {
-            POSITIVE -> onAction(HomeActions.ShareText())
-            NEGATIVE -> onAction(HomeActions.ShareWithImage())
+            NEGATIVE -> onAction(HomeActions.ShareText())
+            POSITIVE -> onAction(HomeActions.ShareWithImage())
             DISMISS -> Unit
         }
         showSendDialog = false

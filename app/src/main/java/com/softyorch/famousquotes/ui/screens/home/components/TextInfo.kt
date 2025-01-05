@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.screens.home.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -22,11 +23,25 @@ fun TextInfo(text: String) {
     AnimatedTextHome(text) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 8.dp),
             style = MyTypography.labelLarge.copy(
                 shadow = Shadow(color = AppColorSchema.shadowText, offset = Offset(2f, 2f)),
                 color = AppColorSchema.text,
                 textAlign = TextAlign.Start
+            )
+        )
+    }
+}
+
+@Composable
+fun TextDescription(text: String) {
+    AnimatedTextHome(text) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+            style = MyTypography.labelMedium.copy(
+                color = AppColorSchema.text,
+                textAlign = TextAlign.Center
             )
         )
     }

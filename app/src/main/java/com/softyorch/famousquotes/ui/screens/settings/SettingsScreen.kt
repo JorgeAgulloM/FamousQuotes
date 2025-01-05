@@ -216,8 +216,8 @@ private fun IdDeviceButton(modifier: Modifier, context: Context) {
         text = "Esta ID es única para tu dispositivo. Con ella, creamos automáticamente tu cuenta para que no tengas que preocuparte por nada.",
         auxText = "Con esta ID podrás realizar acciones futuras en próximas actualizaciones, como eliminar tu cuenta.",
         title = "Id copiada al portapapeles",
-        textBtnPositive = null,
         textBtnNegative = null,
+        textBtnPositive = null,
         blockDismissActions = true
     ) {
         showDialog = false
@@ -250,13 +250,13 @@ private fun PrepareDialogs(
             text = "El permiso para recibir notificaciones está denegado.",
             auxText = "Por favor, habilita el permiso en la configuración del sistema para recibir actualizaciones importantes.",
             title = "Permiso de notificaciones denegado",
-            textBtnPositive = "Cancelar",
-            textBtnNegative = "Ir a configuración",
+            textBtnNegative = "Cancelar",
+            textBtnPositive = "Ir a configuración",
             blockDismissActions = true
         ) { result ->
             when (result) {
-                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionUserWantBlock())
-                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
+                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionUserWantBlock())
+                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
                 DialogCloseAction.DISMISS -> Unit
             }
         }
@@ -266,13 +266,13 @@ private fun PrepareDialogs(
             text = "¿Estás seguro de no querer recibir notificaciones?",
             auxText = "Podrías perder notificaciones importantes!",
             title = "Notificaciones deshabilitadas",
-            textBtnPositive = "Confirmar",
-            textBtnNegative = "No, habilitar las notificaciones",
+            textBtnNegative = "Confirmar",
+            textBtnPositive = "No, habilitar las notificaciones",
             blockDismissActions = true
         ) { result ->
             when (result) {
-                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionUserBlocked())
-                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
+                DialogCloseAction.NEGATIVE -> onActions(SettingsActions.NotificationsPermissionUserBlocked())
+                DialogCloseAction.POSITIVE -> onActions(SettingsActions.NotificationsPermissionRequest())
                 DialogCloseAction.DISMISS -> Unit
             }
         }
