@@ -114,4 +114,33 @@
     <string name="screen_info_icon_coffee_with_paypal_text">用 PayPal 请喝咖啡</string>
     <string name="screen_info_icon_rate_app_text">评价应用</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_screen_top_bar_title">设置</string>
+    <string name="settings_screen_switch_auto_dark_mode_title">自动深色模式</string>
+    <string name="settings_screen_switch_dark_mode_title">深色模式</string>
+    <string name="settings_screen_switch_left_handed_title">左手模式</string>
+    <string name="settings_screen_switch_notification_channel_title">通知频道</string>
+    <string name="settings_screen_switch_auto_dark_mode_description">设置为使用系统深色模式</string>
+    <string name="settings_screen_switch_dark_mode_description">在应用中设置深色模式</string>
+    <string name="settings_screen_switch_left_handed_description">将控件移动到左侧</string>
+    <string name="settings_screen_switch_notification_channel_description">订阅每日通知</string>
+    <string name="settings_screen_btn_on_boarding_text">入门</string>
+    <string name="settings_screen_btn_info_softyorch_text">SoftYorch信息</string>
+    <string name="settings_screen_clip_board_title_copy_text">设备ID</string>
+    <string name="settings_screen_icon_btn_id_device_text">设备ID</string>
+    <string name="settings_screen_text_btn_title">您的安卓设备ID</string>
+    <string name="settings_screen_dialog_id_text">此ID是您的设备独有的。凭此ID，我们会自动创建您的账户，无需您担心。</string>
+    <string name="settings_screen_dialog_id_aux_text">使用此ID，您可以在未来更新中执行操作，例如删除您的账户。</string>
+    <string name="settings_screen_dialog_id_title">ID已复制到剪贴板</string>
+    <string name="settings_screen_dialog_permission_text">接收通知的权限被拒绝。</string>
+    <string name="settings_screen_dialog_permission_aux_text">请在系统设置中启用权限以接收重要更新。</string>
+    <string name="settings_screen_dialog_permission_title">通知权限被拒绝</string>
+    <string name="settings_screen_dialog_permission_btn_negative_text">取消</string>
+    <string name="settings_screen_dialog_permission_btn_positive_text">前往设置</string>
+    <string name="settings_screen_dialog_permission_assert_text">您确定不想接收通知吗？</string>
+    <string name="settings_screen_dialog_permission_assert_aux_text">您可能会错过重要通知！</string>
+    <string name="settings_screen_dialog_permission_assert_title">通知已禁用</string>
+    <string name="settings_screen_dialog_permission_assert_btn_negative_text">确认</string>
+    <string name="settings_screen_dialog_permission_assert_btn_positive_text">不，启用通知</string>
+
 </resources>

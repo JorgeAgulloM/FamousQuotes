@@ -114,4 +114,33 @@
     <string name="screen_info_icon_coffee_with_paypal_text">Coffee with PayPal</string>
     <string name="screen_info_icon_rate_app_text">Rate the app</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_screen_top_bar_title">Settings</string>
+    <string name="settings_screen_switch_auto_dark_mode_title">Auto Dark Mode</string>
+    <string name="settings_screen_switch_dark_mode_title">Dark Mode</string>
+    <string name="settings_screen_switch_left_handed_title">Left-handed</string>
+    <string name="settings_screen_switch_notification_channel_title">Notification channel</string>
+    <string name="settings_screen_switch_auto_dark_mode_description">Set to use system Dark Mode</string>
+    <string name="settings_screen_switch_dark_mode_description">Set Dark Mode in app</string>
+    <string name="settings_screen_switch_left_handed_description">Move controls to left site</string>
+    <string name="settings_screen_switch_notification_channel_description">Subscribe to daily notifications</string>
+    <string name="settings_screen_btn_on_boarding_text">On Boarding</string>
+    <string name="settings_screen_btn_info_softyorch_text">Info SoftYorch</string>
+    <string name="settings_screen_clip_board_title_copy_text">Id Device</string>
+    <string name="settings_screen_icon_btn_id_device_text">Id device</string>
+    <string name="settings_screen_text_btn_title">Your Android Device ID</string>
+    <string name="settings_screen_dialog_id_text">This ID is unique to your device. With it, we automatically create your account so you don’t have to worry about anything.</string>
+    <string name="settings_screen_dialog_id_aux_text">With this ID, you’ll be able to perform future actions in upcoming updates, such as deleting your account.</string>
+    <string name="settings_screen_dialog_id_title">ID copied to clipboard</string>
+    <string name="settings_screen_dialog_permission_text">Permission to receive notifications is denied.</string>
+    <string name="settings_screen_dialog_permission_aux_text">Please enable the permission in system settings to receive important updates.</string>
+    <string name="settings_screen_dialog_permission_title">Notification permission denied</string>
+    <string name="settings_screen_dialog_permission_btn_negative_text">Cancel</string>
+    <string name="settings_screen_dialog_permission_btn_positive_text">Go to settings</string>
+    <string name="settings_screen_dialog_permission_assert_text">Are you sure you don’t want to receive notifications?</string>
+    <string name="settings_screen_dialog_permission_assert_aux_text">You might miss important notifications!</string>
+    <string name="settings_screen_dialog_permission_assert_title">Notifications disabled</string>
+    <string name="settings_screen_dialog_permission_assert_btn_negative_text">Confirm</string>
+    <string name="settings_screen_dialog_permission_assert_btn_positive_text">No, enable notifications</string>
+
 </resources>

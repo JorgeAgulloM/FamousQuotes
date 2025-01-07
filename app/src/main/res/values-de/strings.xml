@@ -114,4 +114,33 @@
     <string name="screen_info_icon_coffee_with_paypal_text">Kaffee mit PayPal</string>
     <string name="screen_info_icon_rate_app_text">Bewerte die App</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_screen_top_bar_title">Einstellungen</string>
+    <string name="settings_screen_switch_auto_dark_mode_title">Automatischer Dunkelmodus</string>
+    <string name="settings_screen_switch_dark_mode_title">Dunkelmodus</string>
+    <string name="settings_screen_switch_left_handed_title">Linkshändig</string>
+    <string name="settings_screen_switch_notification_channel_title">Benachrichtigungskanal</string>
+    <string name="settings_screen_switch_auto_dark_mode_description">System-Dunkelmodus verwenden</string>
+    <string name="settings_screen_switch_dark_mode_description">Dunkelmodus in der App aktivieren</string>
+    <string name="settings_screen_switch_left_handed_description">Steuerelemente auf die linke Seite verschieben</string>
+    <string name="settings_screen_switch_notification_channel_description">Abonnieren Sie tägliche Benachrichtigungen</string>
+    <string name="settings_screen_btn_on_boarding_text">Einführung</string>
+    <string name="settings_screen_btn_info_softyorch_text">Info SoftYorch</string>
+    <string name="settings_screen_clip_board_title_copy_text">Geräte-ID</string>
+    <string name="settings_screen_icon_btn_id_device_text">Geräte-ID</string>
+    <string name="settings_screen_text_btn_title">Ihre Android-Geräte-ID</string>
+    <string name="settings_screen_dialog_id_text">Diese ID ist eindeutig für Ihr Gerät. Mit ihr erstellen wir automatisch Ihr Konto, damit Sie sich um nichts kümmern müssen.</string>
+    <string name="settings_screen_dialog_id_aux_text">Mit dieser ID können Sie in zukünftigen Updates Aktionen wie das Löschen Ihres Kontos durchführen.</string>
+    <string name="settings_screen_dialog_id_title">ID in die Zwischenablage kopiert</string>
+    <string name="settings_screen_dialog_permission_text">Die Berechtigung für Benachrichtigungen wurde verweigert.</string>
+    <string name="settings_screen_dialog_permission_aux_text">Bitte aktivieren Sie die Berechtigung in den Systemeinstellungen, um wichtige Updates zu erhalten.</string>
+    <string name="settings_screen_dialog_permission_title">Benachrichtigungsberechtigung verweigert</string>
+    <string name="settings_screen_dialog_permission_btn_negative_text">Abbrechen</string>
+    <string name="settings_screen_dialog_permission_btn_positive_text">Zu den Einstellungen gehen</string>
+    <string name="settings_screen_dialog_permission_assert_text">Sind Sie sicher, dass Sie keine Benachrichtigungen erhalten möchten?</string>
+    <string name="settings_screen_dialog_permission_assert_aux_text">Sie könnten wichtige Benachrichtigungen verpassen!</string>
+    <string name="settings_screen_dialog_permission_assert_title">Benachrichtigungen deaktiviert</string>
+    <string name="settings_screen_dialog_permission_assert_btn_negative_text">Bestätigen</string>
+    <string name="settings_screen_dialog_permission_assert_btn_positive_text">Nein, Benachrichtigungen aktivieren</string>
+
 </resources>

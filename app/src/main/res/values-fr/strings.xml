@@ -114,4 +114,33 @@
     <string name="screen_info_icon_coffee_with_paypal_text">Café avec PayPal</string>
     <string name="screen_info_icon_rate_app_text">Évaluez l\'application</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_screen_top_bar_title">Paramètres</string>
+    <string name="settings_screen_switch_auto_dark_mode_title">Mode sombre automatique</string>
+    <string name="settings_screen_switch_dark_mode_title">Mode sombre</string>
+    <string name="settings_screen_switch_left_handed_title">Gaucher</string>
+    <string name="settings_screen_switch_notification_channel_title">Canal de notification</string>
+    <string name="settings_screen_switch_auto_dark_mode_description">Utiliser le mode sombre du système</string>
+    <string name="settings_screen_switch_dark_mode_description">Activer le mode sombre dans l\'application</string>
+    <string name="settings_screen_switch_left_handed_description">Déplacer les contrôles vers la gauche</string>
+    <string name="settings_screen_switch_notification_channel_description">S\'abonner aux notifications quotidiennes</string>
+    <string name="settings_screen_btn_on_boarding_text">Introduction</string>
+    <string name="settings_screen_btn_info_softyorch_text">Info SoftYorch</string>
+    <string name="settings_screen_clip_board_title_copy_text">ID de l\'appareil</string>
+    <string name="settings_screen_icon_btn_id_device_text">ID de l\'appareil</string>
+    <string name="settings_screen_text_btn_title">Votre ID d\'appareil Android</string>
+    <string name="settings_screen_dialog_id_text">Cet ID est unique pour votre appareil. Avec elle, nous créons automatiquement votre compte pour que vous n\'ayez à vous soucier de rien.</string>
+    <string name="settings_screen_dialog_id_aux_text">Avec cet ID, vous pourrez effectuer des actions futures dans les mises à jour à venir, comme supprimer votre compte.</string>
+    <string name="settings_screen_dialog_id_title">ID copié dans le presse-papiers</string>
+    <string name="settings_screen_dialog_permission_text">Autorisation de recevoir des notifications refusée.</string>
+    <string name="settings_screen_dialog_permission_aux_text">Veuillez activer l\'autorisation dans les paramètres du système pour recevoir des mises à jour importantes.</string>
+    <string name="settings_screen_dialog_permission_title">Autorisation de notification refusée</string>
+    <string name="settings_screen_dialog_permission_btn_negative_text">Annuler</string>
+    <string name="settings_screen_dialog_permission_btn_positive_text">Aller aux paramètres</string>
+    <string name="settings_screen_dialog_permission_assert_text">Êtes-vous sûr de ne pas vouloir recevoir de notifications ?</string>
+    <string name="settings_screen_dialog_permission_assert_aux_text">Vous pourriez manquer des notifications importantes !</string>
+    <string name="settings_screen_dialog_permission_assert_title">Notifications désactivées</string>
+    <string name="settings_screen_dialog_permission_assert_btn_negative_text">Confirmer</string>
+    <string name="settings_screen_dialog_permission_assert_btn_positive_text">Non, activer les notifications</string>
+
 </resources>

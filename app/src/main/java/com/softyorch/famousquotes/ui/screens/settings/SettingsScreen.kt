@@ -30,12 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
@@ -83,7 +85,7 @@ fun SettingsScreen(
                 modifier = modifier,
                 paddingTop = paddingTop,
                 leftHanded = settings.leftHanded,
-                textTitle = "Settings",
+                textTitle = stringResource(R.string.settings_screen_top_bar_title),
                 iconTitle = Icons.Default.Settings,
                 onUpNavigation = onBackNavigation
             )
@@ -123,32 +125,32 @@ fun SettingsCheckers(
             isChecked = settings.autoDarkMode,
             isEnable = true,
             isLeftHanded = settings.leftHanded,
-            titleText = "Auto Dark Mode",
-            descriptionText = "Set to use system Dark Mode"
+            titleText = stringResource(R.string.settings_screen_switch_auto_dark_mode_title),
+            descriptionText = stringResource(R.string.settings_screen_switch_auto_dark_mode_description)
         ) { onActions(SettingsActions.AutoDarkMode(autoDarkMode = it)) }
 
         SwitchSettings(
             isChecked = settings.darkMode,
             isEnable = !settings.autoDarkMode,
             isLeftHanded = settings.leftHanded,
-            titleText = "Dark Mode",
-            descriptionText = "Set Dark Mode in app"
+            titleText = stringResource(R.string.settings_screen_switch_dark_mode_title),
+            descriptionText = stringResource(R.string.settings_screen_switch_dark_mode_description)
         ) { onActions(SettingsActions.DarkMode(darkMode = it)) }
 
         SwitchSettings(
             isChecked = settings.leftHanded,
             isEnable = true,
             isLeftHanded = settings.leftHanded,
-            titleText = "Left-handed",
-            descriptionText = "Move controls to left site"
+            titleText = stringResource(R.string.settings_screen_switch_left_handed_title),
+            descriptionText = stringResource(R.string.settings_screen_switch_left_handed_description)
         ) { onActions(SettingsActions.LeftHanded(leftHanded = it)) }
 
         SwitchSettings(
             isChecked = settings.notificationChannel,
             isEnable = true,
             isLeftHanded = settings.leftHanded,
-            titleText = "Notification channel",
-            descriptionText = "Subscribe to daily notifications"
+            titleText = stringResource(R.string.settings_screen_switch_notification_channel_title),
+            descriptionText = stringResource(R.string.settings_screen_switch_notification_channel_description)
         ) { onActions(SettingsActions.NotificationChannel(notificationChannel = it)) }
     }
 }
@@ -166,8 +168,15 @@ fun SettingsButtons(
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp)
         SpacerHeight()
-        ButtonApp(modifier = modifierBtn, text = "On Boarding", primary = true) { onNavigateToOnBoarding() }
-        ButtonApp(modifier = modifierBtn, text = "Info SoftYorch") { onNavigateToInfo() }
+        ButtonApp(
+            modifier = modifierBtn,
+            text = stringResource(R.string.settings_screen_btn_on_boarding_text),
+            primary = true
+        ) { onNavigateToOnBoarding() }
+        ButtonApp(
+            modifier = modifierBtn,
+            text = stringResource(R.string.settings_screen_btn_info_softyorch_text)
+        ) { onNavigateToInfo() }
         SpacerHeight()
         IdDeviceButton(modifier, context)
 
@@ -192,19 +201,22 @@ private fun IdDeviceButton(modifier: Modifier, context: Context) {
             .clip(shape = MaterialTheme.shapes.medium)
             .clickable {
                 showDialog = true
-                context.copyToClipboard("Id Device", context.userId())
+                context.copyToClipboard(
+                    context.getString(R.string.settings_screen_clip_board_title_copy_text),
+                    context.userId()
+                )
             },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Default.Android,
-            contentDescription = "Id device",
+            contentDescription = stringResource(R.string.settings_screen_icon_btn_id_device_text),
             tint = AppColorSchema.secondary
         )
         SpacerWidth()
         Text(
-            text = "ID de tu dispositivo Android",
+            text = stringResource(R.string.settings_screen_text_btn_title),
             style = MaterialTheme.typography.labelLarge.copy(
                 color = AppColorSchema.text
             ),
@@ -213,9 +225,9 @@ private fun IdDeviceButton(modifier: Modifier, context: Context) {
     }
 
     if (showDialog) BasicDialogApp(
-        text = "Esta ID es única para tu dispositivo. Con ella, creamos automáticamente tu cuenta para que no tengas que preocuparte por nada.",
-        auxText = "Con esta ID podrás realizar acciones futuras en próximas actualizaciones, como eliminar tu cuenta.",
-        title = "Id copiada al portapapeles",
+        text = stringResource(R.string.settings_screen_dialog_id_text),
+        auxText = stringResource(R.string.settings_screen_dialog_id_aux_text),
+        title = stringResource(R.string.settings_screen_dialog_id_title),
         textBtnNegative = null,
         textBtnPositive = null,
         blockDismissActions = true
@@ -247,11 +259,11 @@ private fun PrepareDialogs(
 ) {
     if (state == NotificationsPermissionState.Denied)
         BasicDialogApp(
-            text = "El permiso para recibir notificaciones está denegado.",
-            auxText = "Por favor, habilita el permiso en la configuración del sistema para recibir actualizaciones importantes.",
-            title = "Permiso de notificaciones denegado",
-            textBtnNegative = "Cancelar",
-            textBtnPositive = "Ir a configuración",
+            text = stringResource(R.string.settings_screen_dialog_permission_text),
+            auxText = stringResource(R.string.settings_screen_dialog_permission_aux_text),
+            title = stringResource(R.string.settings_screen_dialog_permission_title),
+            textBtnNegative = stringResource(R.string.settings_screen_dialog_permission_btn_negative_text),
+            textBtnPositive = stringResource(R.string.settings_screen_dialog_permission_btn_positive_text),
             blockDismissActions = true
         ) { result ->
             when (result) {
@@ -263,11 +275,11 @@ private fun PrepareDialogs(
 
     if (state == NotificationsPermissionState.Blocked)
         BasicDialogApp(
-            text = "¿Estás seguro de no querer recibir notificaciones?",
-            auxText = "Podrías perder notificaciones importantes!",
-            title = "Notificaciones deshabilitadas",
-            textBtnNegative = "Confirmar",
-            textBtnPositive = "No, habilitar las notificaciones",
+            text = stringResource(R.string.settings_screen_dialog_permission_assert_text),
+            auxText = stringResource(R.string.settings_screen_dialog_permission_assert_aux_text),
+            title = stringResource(R.string.settings_screen_dialog_permission_assert_title),
+            textBtnNegative = stringResource(R.string.settings_screen_dialog_permission_assert_btn_negative_text),
+            textBtnPositive = stringResource(R.string.settings_screen_dialog_permission_assert_btn_positive_text),
             blockDismissActions = true
         ) { result ->
             when (result) {
