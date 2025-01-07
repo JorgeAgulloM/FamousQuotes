@@ -100,4 +100,18 @@
     <string name="have_not_like_quotes">No te gusta ninguna frase</string>
     <string name="have_not_show_any_quotes">No has visto ninguna frase</string>
 
+    <!-- Info Screen -->
+    <string name="screen_info_top_bar_title">Información</string>
+    <string name="screen_info_card_logo_cont_desc">Logo</string>
+    <string name="screen_info_text_info_cont_desc">Información</string>
+    <string name="screen_info_text_info_text_description_app">Inspírate con frases positivas.\nExplora frases positivas diarias e imágenes generadas por IA para motivarte.\nCon Frases Positivas, tendrás acceso a citas inspiradoras y dichos positivos de algunas de las mentes más brillantes del mundo."</string>
+    <string name="screen_info_icon_support_cont_desc">Soporte</string>
+    <string name="screen_info_icon_buy_me_a_coffee_cont_desc">Invítame un café</string>
+    <string name="screen_info_icon_coffee_with_paypal_cont_desc">Café con PayPal</string>
+    <string name="screen_info_icon_rate_app_cont_desc">Valora la app</string>
+    <string name="screen_info_icon_support_text">Soporte</string>
+    <string name="screen_info_icon_buy_me_a_coffee_text">Invítame un café</string>
+    <string name="screen_info_icon_coffee_with_paypal_text">Café con PayPal</string>
+    <string name="screen_info_icon_rate_app_text">Valora la app</string>
+
 </resources>

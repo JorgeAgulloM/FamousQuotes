@@ -100,4 +100,18 @@
     <string name="have_not_like_quotes">आपको कोई उद्धरण पसंद नहीं है</string>
     <string name="have_not_show_any_quotes">आपने कोई उद्धरण नहीं देखा है</string>
 
+    <!-- Info Screen -->
+    <string name="screen_info_top_bar_title">जानकारी</string>
+    <string name="screen_info_card_logo_cont_desc">लोगो</string>
+    <string name="screen_info_text_info_cont_desc">जानकारी</string>
+    <string name="screen_info_text_info_text_description_app">सकारात्मक उद्धरणों से प्रेरित हों।\nदैनिक सकारात्मक उद्धरणों और प्रेरणा के लिए AI द्वारा बनाई गई छवियों का अन्वेषण करें।\nसकारात्मक उद्धरणों के साथ, आपको दुनिया के कुछ सबसे प्रतिभाशाली दिमागों से प्रेरणादायक उद्धरण और कहावतें प्राप्त होंगी।"</string>
+    <string name="screen_info_icon_support_cont_desc">सहायता</string>
+    <string name="screen_info_icon_buy_me_a_coffee_cont_desc">मुझे एक कॉफी खरीदें</string>
+    <string name="screen_info_icon_coffee_with_paypal_cont_desc">PayPal के साथ कॉफी</string>
+    <string name="screen_info_icon_rate_app_cont_desc">ऐप रेट करें</string>
+    <string name="screen_info_icon_support_text">सहायता</string>
+    <string name="screen_info_icon_buy_me_a_coffee_text">मुझे एक कॉफी खरीदें</string>
+    <string name="screen_info_icon_coffee_with_paypal_text">PayPal के साथ कॉफी</string>
+    <string name="screen_info_icon_rate_app_text">ऐप रेट करें</string>
+
 </resources>

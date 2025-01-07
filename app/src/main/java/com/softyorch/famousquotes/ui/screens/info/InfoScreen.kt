@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
@@ -64,7 +65,7 @@ fun InfoScreen(
                 modifier = modifier,
                 paddingTop = paddingTop,
                 leftHanded = leftHanded,
-                textTitle = "Información",
+                textTitle = stringResource(R.string.screen_info_top_bar_title),
                 iconTitle = Icons.Default.Info,
                 onUpNavigation = onUpNavigation
             )
@@ -98,7 +99,7 @@ private fun CardSoftYorch(modifier: Modifier) {
     ) {
         Image(
             painter = painterResource(R.drawable.softyorch),
-            contentDescription = "Logo",
+            contentDescription = stringResource(R.string.screen_info_card_logo_cont_desc),
             contentScale = ContentScale.Crop
         )
     }
@@ -114,7 +115,7 @@ private fun TextInfo(modifier: Modifier = Modifier, leftHanded: Boolean) {
     IconButtonInfo(
         leftHanded = leftHanded,
         iconButton = Icons.Default.Info,
-        iconDescription = "Info",
+        iconDescription = stringResource(R.string.screen_info_text_info_cont_desc),
         text = nameApp
     ) {}
     AppVersionText(isCenter = false) {}
@@ -125,9 +126,7 @@ private fun TextInfo(modifier: Modifier = Modifier, leftHanded: Boolean) {
     )
     SpacerHeight()
     Text(
-        text = "Inspirate con Frases Positivas.\n" +
-                "Explora Frases Positivas diarias e imágenes generadas por IA para Inspirarte.\n" +
-                "Con Frases Positivas, tendrás acceso a citas positivas y dichos inspiradores de algunas de las mentes más brillantes del mundo.",
+        text = stringResource(R.string.screen_info_text_info_text_description_app),
         style = MaterialTheme.typography.bodyLarge.copy(color = AppColorSchema.text),
         modifier = Modifier.padding(horizontal = 16.dp)
     )
@@ -143,26 +142,26 @@ private fun IconsInfo(leftHanded: Boolean, darkTheme: Boolean, onActions: (InfoA
     IconButtonInfo(
         leftHanded = leftHanded,
         iconButton = Icons.Default.Mail,
-        iconDescription = "Support",
-        text = "Soporte"
+        iconDescription = stringResource(R.string.screen_info_icon_support_cont_desc),
+        text = stringResource(R.string.screen_info_icon_support_text)
     ) { onActions(InfoActions.Support) }
     IconButtonInfo(
         leftHanded = leftHanded,
         imageIconButton = painterResource(buyIcon),
-        iconDescription = "Buy Me A Coffee",
-        text = "Buy Me A Coffee"
+        iconDescription = stringResource(R.string.screen_info_icon_buy_me_a_coffee_cont_desc),
+        text = stringResource(R.string.screen_info_icon_buy_me_a_coffee_text)
     ) { onActions(InfoActions.BuyMeACoffee) }
     IconButtonInfo(
         leftHanded = leftHanded,
         imageIconButton = painterResource(payIcon),
-        iconDescription = "Coffee with PayPal",
-        text = "Coffee with PayPal"
+        iconDescription = stringResource(R.string.screen_info_icon_coffee_with_paypal_cont_desc),
+        text = stringResource(R.string.screen_info_icon_coffee_with_paypal_text)
     ) { onActions(InfoActions.CoffeeWithPayPal) }
     IconButtonInfo(
         leftHanded = leftHanded,
         imageIconButton = painterResource(playIcon),
-        iconDescription = "Valora la app",
-        text = "Valora la app"
+        iconDescription = stringResource(R.string.screen_info_icon_rate_app_cont_desc),
+        text = stringResource(R.string.screen_info_icon_rate_app_text)
     ) { onActions(InfoActions.OpenGooglePlay) }
     SpacerHeight(32)
 }
