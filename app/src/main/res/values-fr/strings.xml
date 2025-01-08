@@ -101,8 +101,8 @@
     <string name="have_not_show_any_quotes">Vous n\'avez vu aucune citation</string>
     <string name="default_text_cont_desc_back">Retour</string>
     <string name="default_text_cont_desc_information">Informations</string>
-    <string name="default_text_cont_desc_like">J'aime</string>
-    <string name="default_text_cont_desc_likes">J'aimes</string>
+    <string name="default_text_cont_desc_like">J\'aime</string>
+    <string name="default_text_cont_desc_likes">J\'aimes</string>
     <string name="default_text_cont_desc_shown">Montré</string>
     <string name="default_text_cont_desc_favorite">Favori</string>
     <string name="default_text_cont_desc_favorites">Favoris</string>
