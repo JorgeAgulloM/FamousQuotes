@@ -16,7 +16,9 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.detail.DetailActions
@@ -44,7 +46,7 @@ fun CardControlsLeft(
     ) {
         quote.let {
             IconCard(
-                cDescription = "Like",
+                cDescription = stringResource(R.string.default_text_cont_desc_like),
                 icon = Icons.Default.FavoriteBorder,
                 secondIcon = Icons.Default.Favorite,
                 color = AppColorSchema.likeColor,
@@ -54,7 +56,7 @@ fun CardControlsLeft(
                 isSelected = quote.isLiked,
             ) { onAction(DetailActions.SetLikeQuote()) }
             IconCard(
-                cDescription = "Favorite",
+                cDescription = stringResource(R.string.default_text_cont_desc_favorites),
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
                 color = AppColorSchema.favoriteColor,
@@ -64,19 +66,19 @@ fun CardControlsLeft(
                 isSelected = quote.isFavorite
             ) { onAction(DetailActions.SetFavoriteQuote()) }
             IconCard(
-                cDescription = "Share",
+                cDescription = stringResource(R.string.default_text_cont_desc_share),
                 icon = Icons.Outlined.Share,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
             ) { onAction(DetailActions.HowToShareQuote()) }
             IconCard(
-                cDescription = "Download",
+                cDescription = stringResource(R.string.default_text_cont_desc_download),
                 icon = Icons.Outlined.Download,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
             ) { onAction(DetailActions.DownloadQuote()) }
             IconCard(
-                cDescription = "Shown",
+                cDescription = stringResource(R.string.default_text_cont_desc_shown),
                 icon = Icons.Outlined.RemoveRedEye,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
@@ -106,26 +108,26 @@ fun CardControlsNonLeft(
     ) {
         quote.let {
             IconCard(
-                cDescription = "Shown",
+                cDescription = stringResource(R.string.default_text_cont_desc_shown),
                 icon = Icons.Outlined.RemoveRedEye,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
                 valueStatistic = statistics.showns
             ) { }
             IconCard(
-                cDescription = "Download",
+                cDescription = stringResource(R.string.default_text_cont_desc_download),
                 icon = Icons.Outlined.Download,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
             ) { onAction(DetailActions.DownloadQuote()) }
             IconCard(
-                cDescription = "Share",
+                cDescription = stringResource(R.string.default_text_cont_desc_share),
                 icon = Icons.Outlined.Share,
                 colorIcon = AppColorSchema.whiteSmoke,
                 isEnabled = state.hasConnection,
             ) { onAction(DetailActions.HowToShareQuote()) }
             IconCard(
-                cDescription = "Favorite",
+                cDescription = stringResource(R.string.default_text_cont_desc_favorite),
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
                 color = AppColorSchema.favoriteColor,
@@ -135,7 +137,7 @@ fun CardControlsNonLeft(
                 isSelected = quote.isFavorite
             ) { onAction(DetailActions.SetFavoriteQuote()) }
             IconCard(
-                cDescription = "Like",
+                cDescription = stringResource(R.string.default_text_cont_desc_like),
                 icon = Icons.Default.FavoriteBorder,
                 secondIcon = Icons.Default.Favorite,
                 color = AppColorSchema.likeColor,

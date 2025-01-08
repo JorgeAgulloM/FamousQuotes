@@ -99,6 +99,15 @@
     <string name="have_not_favorites_quotes">Du hast keine Lieblingszitate</string>
     <string name="have_not_like_quotes">Dir gefällt kein Zitat</string>
     <string name="have_not_show_any_quotes">Du hast kein Zitat gesehen</string>
+    <string name="default_text_cont_desc_back">Zurück</string>
+    <string name="default_text_cont_desc_information">Informationen</string>
+    <string name="default_text_cont_desc_like">Gefällt mir</string>
+    <string name="default_text_cont_desc_likes">Gefällt mirs</string>
+    <string name="default_text_cont_desc_shown">Gezeigt</string>
+    <string name="default_text_cont_desc_favorite">Favorit</string>
+    <string name="default_text_cont_desc_favorites">Favoriten</string>
+    <string name="default_text_cont_desc_share">Teilen</string>
+    <string name="default_text_cont_desc_download">Herunterladen</string>
 
     <!-- Info screen Screen-->
     <string name="screen_info_top_bar_title">Information</string>

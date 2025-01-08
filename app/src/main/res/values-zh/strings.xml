@@ -99,6 +99,15 @@
     <string name="have_not_favorites_quotes">您没有喜欢的句子</string>
     <string name="have_not_like_quotes">您不喜欢任何句子</string>
     <string name="have_not_show_any_quotes">您没有看到任何句子</string>
+    <string name="default_text_cont_desc_back">返回</string>
+    <string name="default_text_cont_desc_information">信息</string>
+    <string name="default_text_cont_desc_like">喜欢</string>
+    <string name="default_text_cont_desc_likes">喜欢数</string>
+    <string name="default_text_cont_desc_shown">显示</string>
+    <string name="default_text_cont_desc_favorite">收藏</string>
+    <string name="default_text_cont_desc_favorites">收藏夹</string>
+    <string name="default_text_cont_desc_share">分享</string>
+    <string name="default_text_cont_desc_download">下载</string>
 
     <!-- Info Screen -->
     <string name="screen_info_top_bar_title">信息</string>

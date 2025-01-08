@@ -99,6 +99,15 @@
     <string name="have_not_favorites_quotes">आपके पास पसंदीदा उद्धरण नहीं हैं</string>
     <string name="have_not_like_quotes">आपको कोई उद्धरण पसंद नहीं है</string>
     <string name="have_not_show_any_quotes">आपने कोई उद्धरण नहीं देखा है</string>
+    <string name="default_text_cont_desc_back">पीछे</string>
+    <string name="default_text_cont_desc_information">जानकारी</string>
+    <string name="default_text_cont_desc_like">पसंद</string>
+    <string name="default_text_cont_desc_likes">पसंदें</string>
+    <string name="default_text_cont_desc_shown">दिखाया गया</string>
+    <string name="default_text_cont_desc_favorite">पसंदीदा</string>
+    <string name="default_text_cont_desc_favorites">पसंदीदाएँ</string>
+    <string name="default_text_cont_desc_share">साझा करें</string>
+    <string name="default_text_cont_desc_download">डाउनलोड</string>
 
     <!-- Info Screen -->
     <string name="screen_info_top_bar_title">जानकारी</string>

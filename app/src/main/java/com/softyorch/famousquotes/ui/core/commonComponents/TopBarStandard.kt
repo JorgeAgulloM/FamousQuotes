@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerWidth
 import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
@@ -37,7 +39,7 @@ fun TopBarStandard(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (leftHanded) IconButtonMenu(
-            cDescription = "Back",
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             colorIcon = AppColorSchema.iconColor
         ) { onUpNavigation() } else SpacerIconButton()
@@ -49,7 +51,7 @@ fun TopBarStandard(
             val sizeIcon = 36
             Icon(
                 imageVector = iconTitle,
-                contentDescription = "Información",
+                contentDescription = stringResource(R.string.default_text_cont_desc_information),
                 tint = AppColorSchema.secondary,
                 modifier = modifier.size(sizeIcon.dp)
             )
@@ -64,7 +66,7 @@ fun TopBarStandard(
             SpacerIconButton(size = sizeIcon)
         }
         if (!leftHanded) IconButtonMenu(
-            cDescription = "Back",
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             colorIcon = AppColorSchema.iconColor
         ) { onUpNavigation() } else SpacerIconButton()

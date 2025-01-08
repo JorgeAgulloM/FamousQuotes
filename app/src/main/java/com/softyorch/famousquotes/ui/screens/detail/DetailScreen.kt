@@ -19,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
@@ -94,7 +96,7 @@ private fun TopMenu(
         horizontalArrangement = if (leftHanded) Arrangement.Start else Arrangement.End
     ) {
         IconButtonMenu(
-            cDescription = "Back",
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
             color = AppColorSchema.secondary.copy(alpha = 0.6f),
             icon = Icons.AutoMirrored.Outlined.ArrowBack,
             shadowOn = true

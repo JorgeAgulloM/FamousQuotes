@@ -15,8 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedIconRotating180Degrees
 import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
@@ -42,7 +44,7 @@ fun TopBarGrid(
         verticalAlignment = Alignment.Top
     ) {
         if (leftHanded) IconButtonMenu(
-            cDescription = "Back",
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             colorIcon = AppColorSchema.iconColor
         ) { navigateBack() } else AnimatedIconRotating180Degrees(
@@ -63,19 +65,19 @@ fun TopBarGrid(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ButtonTopBar(
-                contentDescription = "Likes",
+                contentDescription = stringResource(R.string.default_text_cont_desc_likes),
                 filterQuotes = FilterQuotes.Likes,
                 icon = Icons.Default.Favorite,
                 isSelected = filterQuotes == FilterQuotes.Likes
             ) { onClickListener(it) }
             ButtonTopBar(
-                contentDescription = "Shown",
+                contentDescription = stringResource(R.string.default_text_cont_desc_shown),
                 filterQuotes = FilterQuotes.Shown,
                 icon = Icons.Default.RemoveRedEye,
                 isSelected = filterQuotes == FilterQuotes.Shown,
             ) { onClickListener(it) }
             ButtonTopBar(
-                contentDescription = "Favorites",
+                contentDescription = stringResource(R.string.default_text_cont_desc_favorites),
                 filterQuotes = FilterQuotes.Favorites,
                 icon = Icons.Default.Star,
                 isSelected = filterQuotes == FilterQuotes.Favorites
@@ -91,7 +93,7 @@ fun TopBarGrid(
             animatedType = AnimatedType.Flip,
             onCloseMenu = onActions
         ) else IconButtonMenu(
-            cDescription = "Back",
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             colorIcon = AppColorSchema.iconColor
         ) { navigateBack() }

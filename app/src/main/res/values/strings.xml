@@ -99,6 +99,15 @@
     <string name="have_not_favorites_quotes">You have no favorite quotes</string>
     <string name="have_not_like_quotes">You don\'t like any quote</string>
     <string name="have_not_show_any_quotes">You haven\'t seen any quote</string>
+    <string name="default_text_cont_desc_back">Back</string>
+    <string name="default_text_cont_desc_information">Information</string>
+    <string name="default_text_cont_desc_like">Like</string>
+    <string name="default_text_cont_desc_likes">Likes</string>
+    <string name="default_text_cont_desc_shown">Shown</string>
+    <string name="default_text_cont_desc_favorite">Favorite</string>
+    <string name="default_text_cont_desc_favorites">Favorites</string>
+    <string name="default_text_cont_desc_share">Share</string>
+    <string name="default_text_cont_desc_download">Download</string>
 
     <!-- Info Screen -->
     <string name="screen_info_top_bar_title">Information</string>
