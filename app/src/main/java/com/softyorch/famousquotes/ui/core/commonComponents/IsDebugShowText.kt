@@ -19,7 +19,7 @@ import com.softyorch.famousquotes.ui.utils.extFunc.copyToClipboard
 
 @Composable
 fun IsDebugShowText(quote: FamousQuoteModel) {
-    if (BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG && false == true) {
         val context = LocalContext.current
 
         Column(
