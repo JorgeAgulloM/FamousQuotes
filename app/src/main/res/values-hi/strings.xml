@@ -152,4 +152,53 @@
     <string name="settings_screen_dialog_permission_assert_btn_negative_text">पुष्टि करें</string>
     <string name="settings_screen_dialog_permission_assert_btn_positive_text">नहीं, सूचनाएँ सक्षम करें</string>
 
+    <!-- On Boarding -->
+    <string name="on_boarding_list_steps_presentation">प्रस्तावना</string>
+    <string name="on_boarding_list_steps_interaction_users">उपयोगकर्ता इंटरैक्शन</string>
+    <string name="on_boarding_list_steps_menu">मुख्य मेनू</string>
+    <string name="on_boarding_list_steps_my_images">मेरी छवियाँ</string>
+    <string name="on_boarding_list_steps_acknowledgements">आभार</string>
+    <string name="on_boarding_top_bar_title">प्रस्तावना</string>
+    <string name="on_boarding_button_action_principal_finish">समाप्त करें</string>
+    <string name="on_boarding_button_action_principal_next">आगे</string>
+    <string name="on_boarding_button_action_principal_exit">बाहर निकलें</string>
+    <string name="on_boarding_step_one_line_one">अगले चरण में, हम आपको ऐप का संचालन दिखाएंगे।</string>
+    <string name="on_boarding_step_one_line_two">आप विभिन्न अनुभागों में मिलने वाले सामान्य नियंत्रणों का उपयोग सीखेंगे।</string>
+    <string name="on_boarding_step_one_line_three">आगे बढ़ने या पीछे जाने के लिए "आगे" पर टैप करें या सर्कल्स का उपयोग करें।</string>
+    <string name="on_boarding_step_two_line_one">ऊपर से नीचे और बाएँ से दाएँ, आप पाएंगे:</string>
+    <string name="on_boarding_step_two_line_two_title">वाक्य के लेखक का नाम:</string>
+    <string name="on_boarding_step_two_line_two_description">इस पर टैप करने पर, आपका ब्राउज़र खोलकर लेखक की जानकारी खोजी जाएगी।</string>
+    <string name="on_boarding_step_two_line_three_title">लाइक बटन:</string>
+    <string name="on_boarding_step_two_line_three_description">इस पर टैप करने से वाक्य को "पसंद" किया जाएगा और लाइक्स की संख्या देखी जा सकेगी।</string>
+    <string name="on_boarding_step_two_line_four_title">पसंदीदा बटन:</string>
+    <string name="on_boarding_step_two_line_four_description">इस पर टैप करने से वाक्य "पसंदीदा" हो जाएगा और आप पसंदीदा की संख्या देख सकते हैं।</string>
+    <string name="on_boarding_step_two_line_five_title">शेयर बटन:</string>
+    <string name="on_boarding_step_two_line_five_description">आप छवि या वाक्य को जिसे चाहें उसके साथ साझा कर सकते हैं।</string>
+    <string name="on_boarding_step_two_line_six_title">उपयोगकर्ता:</string>
+    <string name="on_boarding_step_two_line_six_description">इस वाक्य को देखने वाले उपयोगकर्ताओं की संख्या।</string>
+    <string name="on_boarding_step_three_line_one">मुख्य मेनू</string>
+    <string name="on_boarding_step_three_line_two">मुख्य मेनू बंद करें</string>
+    <string name="on_boarding_step_three_line_three">मेरी छवियाँ</string>
+    <string name="on_boarding_step_three_line_four">एक और वाक्य और छवि लोड करें</string>
+    <string name="on_boarding_step_three_line_five">वर्तमान छवि डाउनलोड करें</string>
+    <string name="on_boarding_step_three_line_six">ऐप की जानकारी दिखाएँ</string>
+    <string name="on_boarding_step_three_line_seven">सेटिंग्स</string>
+    <string name="on_boarding_step_four_line_one">यहाँ आप देख सकते हैं: आपकी देखी गई छवियाँ, आपकी पसंदीदा, और जिन्हें आपने "लाइक" किया है।</string>
+    <string name="on_boarding_step_four_line_two">ऊपर से नीचे और बाएँ से दाएँ, आप पाएंगे:</string>
+    <string name="on_boarding_step_four_line_three_title">वापस:</string>
+    <string name="on_boarding_step_four_line_three_description">मुख्य स्क्रीन पर वापस जाएँ।</string>
+    <string name="on_boarding_step_four_line_four_title">लाइक्स के अनुसार फ़िल्टर करें:</string>
+    <string name="on_boarding_step_four_line_four_description">वाक्य दिखाएंगे जिन्हें आपने "लाइक" किया है।</string>
+    <string name="on_boarding_step_four_line_five_title">व्यू के अनुसार फ़िल्टर करें:</string>
+    <string name="on_boarding_step_four_line_five_description">वे सभी वाक्य दिखाएंगे जिन्हें आपने देखा है।</string>
+    <string name="on_boarding_step_four_line_six_title">पसंदीदा के अनुसार फ़िल्टर करें:</string>
+    <string name="on_boarding_step_four_line_six_description">आपकी पसंदीदा वाक्य और छवियाँ दिखाएँ।</string>
+    <string name="on_boarding_step_four_line_seven_title">क्रम बदलें:</string>
+    <string name="on_boarding_step_four_line_seven_description">दिखाए गए वाक्यों का क्रम बदलें।</string>
+    <string name="on_boarding_step_four_line_eight">जिस वाक्य को आप विस्तार से देखना चाहते हैं, उस पर टैप करें।</string>
+    <string name="on_boarding_step_five_line_one">समाप्ति</string>
+    <string name="on_boarding_step_five_line_two">आपके समय के लिए धन्यवाद।</string>
+    <string name="on_boarding_step_five_line_three">अब आप हमारी ऐप के संचालन को जानते हैं।</string>
+    <string name="on_boarding_step_five_line_four">हमें उम्मीद है कि यह आपको पसंद आएगी और आपकी आवश्यकता पूरी करेगी।</string>
+
 </resources>

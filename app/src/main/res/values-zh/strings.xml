@@ -152,4 +152,53 @@
     <string name="settings_screen_dialog_permission_assert_btn_negative_text">确认</string>
     <string name="settings_screen_dialog_permission_assert_btn_positive_text">不，启用通知</string>
 
+    <!-- On Boarding -->
+    <string name="on_boarding_list_steps_presentation">介绍</string>
+    <string name="on_boarding_list_steps_interaction_users">用户互动</string>
+    <string name="on_boarding_list_steps_menu">主菜单</string>
+    <string name="on_boarding_list_steps_my_images">个人图库</string>
+    <string name="on_boarding_list_steps_acknowledgements">致谢</string>
+    <string name="on_boarding_top_bar_title">介绍</string>
+    <string name="on_boarding_button_action_principal_finish">完成</string>
+    <string name="on_boarding_button_action_principal_next">下一步</string>
+    <string name="on_boarding_button_action_principal_exit">退出</string>
+    <string name="on_boarding_step_one_line_one">接下来我们将向您展示应用程序的工作原理。</string>
+    <string name="on_boarding_step_one_line_two">您将了解基本控件及其在应用程序不同部分中的常用功能。</string>
+    <string name="on_boarding_step_one_line_three">点击“下一步”或使用圆点来前进或后退。</string>
+    <string name="on_boarding_step_two_line_one">从上到下，从左到右，您会看到：</string>
+    <string name="on_boarding_step_two_line_two_title">句子作者：</string>
+    <string name="on_boarding_step_two_line_two_description">点击此处，我们将打开您的浏览器并搜索作者的更多信息。</string>
+    <string name="on_boarding_step_two_line_three_title">点赞按钮：</string>
+    <string name="on_boarding_step_two_line_three_description">点击它将句子标记为“喜欢”，并可以看到喜欢的数量。</string>
+    <string name="on_boarding_step_two_line_four_title">收藏按钮：</string>
+    <string name="on_boarding_step_two_line_four_description">点击它将句子标记为收藏，并可以查看收藏的数量。</string>
+    <string name="on_boarding_step_two_line_five_title">分享按钮：</string>
+    <string name="on_boarding_step_two_line_five_description">您可以将句子以图片或文本的形式分享给任何人。</string>
+    <string name="on_boarding_step_two_line_six_title">用户数：</string>
+    <string name="on_boarding_step_two_line_six_description">查看此句子的用户数量。</string>
+    <string name="on_boarding_step_three_line_one">主菜单</string>
+    <string name="on_boarding_step_three_line_two">关闭主菜单</string>
+    <string name="on_boarding_step_three_line_three">个人图库</string>
+    <string name="on_boarding_step_three_line_four">加载另一个句子和图片</string>
+    <string name="on_boarding_step_three_line_five">下载当前图片</string>
+    <string name="on_boarding_step_three_line_six">显示应用程序信息</string>
+    <string name="on_boarding_step_three_line_seven">设置</string>
+    <string name="on_boarding_step_four_line_one">在这里，您可以看到您喜欢的图片、您看过的图片以及您点赞的图片。</string>
+    <string name="on_boarding_step_four_line_two">从上到下，从左到右，您会看到：</string>
+    <string name="on_boarding_step_four_line_three_title">返回：</string>
+    <string name="on_boarding_step_four_line_three_description">返回主屏幕。</string>
+    <string name="on_boarding_step_four_line_four_title">按点赞筛选：</string>
+    <string name="on_boarding_step_four_line_four_description">显示您点赞过的句子。</string>
+    <string name="on_boarding_step_four_line_five_title">按查看筛选：</string>
+    <string name="on_boarding_step_four_line_five_description">显示您看过的所有句子。不漏掉任何一个。</string>
+    <string name="on_boarding_step_four_line_six_title">按收藏筛选：</string>
+    <string name="on_boarding_step_four_line_six_description">显示您收藏的句子和图片。</string>
+    <string name="on_boarding_step_four_line_seven_title">更改排序顺序：</string>
+    <string name="on_boarding_step_four_line_seven_description">更改显示句子的顺序。</string>
+    <string name="on_boarding_step_four_line_eight">选择您想详细查看的句子。</string>
+    <string name="on_boarding_step_five_line_one">结束</string>
+    <string name="on_boarding_step_five_line_two">感谢您的时间。</string>
+    <string name="on_boarding_step_five_line_three">现在，您已经了解了我们应用程序的功能。</string>
+    <string name="on_boarding_step_five_line_four">希望它能让您满意，并提供您所需的功能。</string>
+
 </resources>

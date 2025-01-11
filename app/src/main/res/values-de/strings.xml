@@ -152,4 +152,53 @@
     <string name="settings_screen_dialog_permission_assert_btn_negative_text">Bestätigen</string>
     <string name="settings_screen_dialog_permission_assert_btn_positive_text">Nein, Benachrichtigungen aktivieren</string>
 
+    <!-- On Boarding -->
+    <string name="on_boarding_list_steps_presentation">Einführung</string>
+    <string name="on_boarding_list_steps_interaction_users">Benutzerinteraktionen</string>
+    <string name="on_boarding_list_steps_menu">Hauptmenü</string>
+    <string name="on_boarding_list_steps_my_images">Persönliche Galerie</string>
+    <string name="on_boarding_list_steps_acknowledgements">Danksagungen</string>
+    <string name="on_boarding_top_bar_title">Einführung</string>
+    <string name="on_boarding_button_action_principal_finish">Fertigstellen</string>
+    <string name="on_boarding_button_action_principal_next">Weiter</string>
+    <string name="on_boarding_button_action_principal_exit">Beenden</string>
+    <string name="on_boarding_step_one_line_one">Als Nächstes zeigen wir Ihnen, wie die App funktioniert.</string>
+    <string name="on_boarding_step_one_line_two">Entdecken Sie die grundlegenden Steuerelemente und deren übliche Verwendung in den verschiedenen Bereichen der App.</string>
+    <string name="on_boarding_step_one_line_three">Tippen Sie auf „Weiter“ oder verwenden Sie die Kreise, um vorwärts oder rückwärts zu navigieren.</string>
+    <string name="on_boarding_step_two_line_one">Von oben nach unten und von links nach rechts finden Sie:</string>
+    <string name="on_boarding_step_two_line_two_title">Autor des Zitats:</string>
+    <string name="on_boarding_step_two_line_two_description">Durch Tippen öffnen wir Ihren Browser mit einer Suche nach dem Autor für weitere Informationen.</string>
+    <string name="on_boarding_step_two_line_three_title">„Gefällt mir“-Button:</string>
+    <string name="on_boarding_step_two_line_three_description">Durch Tippen markieren Sie die Phrase als „Gefällt mir“ und können die Anzahl der Likes sehen.</string>
+    <string name="on_boarding_step_two_line_four_title">„Favoriten“-Button:</string>
+    <string name="on_boarding_step_two_line_four_description">Durch Tippen markieren Sie die Phrase als Favorit und können die Anzahl der Favoriten sehen.</string>
+    <string name="on_boarding_step_two_line_five_title">Teilen-Button:</string>
+    <string name="on_boarding_step_two_line_five_description">Sie können die Phrase als Bild oder Text mit beliebigen Personen teilen.</string>
+    <string name="on_boarding_step_two_line_six_title">Benutzer:</string>
+    <string name="on_boarding_step_two_line_six_description">Anzahl der Benutzer, die diese Phrase angesehen haben.</string>
+    <string name="on_boarding_step_three_line_one">Hauptmenü</string>
+    <string name="on_boarding_step_three_line_two">Hauptmenü schließen</string>
+    <string name="on_boarding_step_three_line_three">Persönliche Galerie</string>
+    <string name="on_boarding_step_three_line_four">Neue Phrase und Bild laden</string>
+    <string name="on_boarding_step_three_line_five">Aktuelles Bild herunterladen</string>
+    <string name="on_boarding_step_three_line_six">App-Informationen anzeigen</string>
+    <string name="on_boarding_step_three_line_seven">Einstellungen</string>
+    <string name="on_boarding_step_four_line_one">Hier können Sie Ihre Lieblingsbilder, die Sie angesehen haben und die Ihnen gefallen haben, sehen.</string>
+    <string name="on_boarding_step_four_line_two">Von oben nach unten und von links nach rechts finden Sie:</string>
+    <string name="on_boarding_step_four_line_three_title">Zurück:</string>
+    <string name="on_boarding_step_four_line_three_description">Zurück zum Hauptbildschirm.</string>
+    <string name="on_boarding_step_four_line_four_title">Nach Likes filtern:</string>
+    <string name="on_boarding_step_four_line_four_description">Zeigt die Phrasen, die Ihnen gefallen haben.</string>
+    <string name="on_boarding_step_four_line_five_title">Nach Ansichten filtern:</string>
+    <string name="on_boarding_step_four_line_five_description">Zeigt alle Phrasen, die Sie angesehen haben. Verpassen Sie keine.</string>
+    <string name="on_boarding_step_four_line_six_title">Nach Favoriten filtern:</string>
+    <string name="on_boarding_step_four_line_six_description">Zeigt Ihre Lieblingsphrasen und Bilder an.</string>
+    <string name="on_boarding_step_four_line_seven_title">Sortierreihenfolge ändern:</string>
+    <string name="on_boarding_step_four_line_seven_description">Ändert die Reihenfolge der angezeigten Phrasen.</string>
+    <string name="on_boarding_step_four_line_eight">Wählen Sie die Phrase, die Sie im Detail sehen möchten.</string>
+    <string name="on_boarding_step_five_line_one">Abschluss</string>
+    <string name="on_boarding_step_five_line_two">Vielen Dank für Ihre Zeit.</string>
+    <string name="on_boarding_step_five_line_three">Jetzt kennen Sie die Funktionsweise unserer App.</string>
+    <string name="on_boarding_step_five_line_four">Wir hoffen, dass sie Ihnen gefällt und Ihnen das bietet, wonach Sie suchen.</string>
+
 </resources>

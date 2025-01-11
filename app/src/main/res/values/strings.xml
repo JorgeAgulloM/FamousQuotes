@@ -152,4 +152,53 @@
     <string name="settings_screen_dialog_permission_assert_btn_negative_text">Confirm</string>
     <string name="settings_screen_dialog_permission_assert_btn_positive_text">No, enable notifications</string>
 
+    <!-- On Boarding -->
+    <string name="on_boarding_list_steps_presentation">Introduction</string>
+    <string name="on_boarding_list_steps_interaction_users">User Interactions</string>
+    <string name="on_boarding_list_steps_menu">Main Menu</string>
+    <string name="on_boarding_list_steps_my_images">Personal Gallery</string>
+    <string name="on_boarding_list_steps_acknowledgements">Acknowledgements</string>
+    <string name="on_boarding_top_bar_title">Introduction</string>
+    <string name="on_boarding_button_action_principal_finish">Finish</string>
+    <string name="on_boarding_button_action_principal_next">Next</string>
+    <string name="on_boarding_button_action_principal_exit">Exit</string>
+    <string name="on_boarding_step_one_line_one">Next, we will show you how the app works.</string>
+    <string name="on_boarding_step_one_line_two">You will explore the basic controls and their common use in different sections of the app.</string>
+    <string name="on_boarding_step_one_line_three">Tap "Next" or use the circles to move forward or backward.</string>
+    <string name="on_boarding_step_two_line_one">From top to bottom and left to right, you will find:</string>
+    <string name="on_boarding_step_two_line_two_title">Author of the phrase:</string>
+    <string name="on_boarding_step_two_line_two_description">By tapping, we will open your browser with a search for the author to provide more information.</string>
+    <string name="on_boarding_step_two_line_three_title">"Like" button:</string>
+    <string name="on_boarding_step_two_line_three_description">By tapping it, you will mark the phrase as "Liked" and see its likes count.</string>
+    <string name="on_boarding_step_two_line_four_title">"Favorite" button:</string>
+    <string name="on_boarding_step_two_line_four_description">By tapping it, you will mark the phrase as a favorite and see its favorites count.</string>
+    <string name="on_boarding_step_two_line_five_title">Share button:</string>
+    <string name="on_boarding_step_two_line_five_description">You can share the phrase as an image or text with anyone you want.</string>
+    <string name="on_boarding_step_two_line_six_title">Users:</string>
+    <string name="on_boarding_step_two_line_six_description">Number of users who have viewed this phrase.</string>
+    <string name="on_boarding_step_three_line_one">Main Menu</string>
+    <string name="on_boarding_step_three_line_two">Close Main Menu</string>
+    <string name="on_boarding_step_three_line_three">Personal Gallery</string>
+    <string name="on_boarding_step_three_line_four">Load new phrase and image</string>
+    <string name="on_boarding_step_three_line_five">Download current image</string>
+    <string name="on_boarding_step_three_line_six">View app information</string>
+    <string name="on_boarding_step_three_line_seven">Settings</string>
+    <string name="on_boarding_step_four_line_one">Here you can see your favorite images, those you have viewed, and those you liked.</string>
+    <string name="on_boarding_step_four_line_two">From top to bottom and left to right, you will find:</string>
+    <string name="on_boarding_step_four_line_three_title">Go Back:</string>
+    <string name="on_boarding_step_four_line_three_description">Return to the main screen.</string>
+    <string name="on_boarding_step_four_line_four_title">Filter by Likes:</string>
+    <string name="on_boarding_step_four_line_four_description">Displays the phrases you have liked.</string>
+    <string name="on_boarding_step_four_line_five_title">Filter by Views:</string>
+    <string name="on_boarding_step_four_line_five_description">Displays all the phrases you have viewed. Don’t miss any.</string>
+    <string name="on_boarding_step_four_line_six_title">Filter by Favorites:</string>
+    <string name="on_boarding_step_four_line_six_description">Displays your favorite phrases and images.</string>
+    <string name="on_boarding_step_four_line_seven_title">Change Order:</string>
+    <string name="on_boarding_step_four_line_seven_description">Rearrange the order of displayed phrases.</string>
+    <string name="on_boarding_step_four_line_eight">Select the phrase you want to see in detail.</string>
+    <string name="on_boarding_step_five_line_one">Completion</string>
+    <string name="on_boarding_step_five_line_two">Thank you for your time.</string>
+    <string name="on_boarding_step_five_line_three">Now you know how our app works.</string>
+    <string name="on_boarding_step_five_line_four">We hope you like it and find it helpful.</string>
+
 </resources>

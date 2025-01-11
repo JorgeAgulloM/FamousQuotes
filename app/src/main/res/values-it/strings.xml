@@ -152,4 +152,53 @@
     <string name="settings_screen_dialog_permission_assert_btn_negative_text">Conferma</string>
     <string name="settings_screen_dialog_permission_assert_btn_positive_text">No, abilita le notifiche</string>
 
+    <!-- On Boarding -->
+    <string name="on_boarding_list_steps_presentation">Presentazione</string>
+    <string name="on_boarding_list_steps_interaction_users">Interazioni Utenti</string>
+    <string name="on_boarding_list_steps_menu">Menu Principale</string>
+    <string name="on_boarding_list_steps_my_images">Galleria Personale</string>
+    <string name="on_boarding_list_steps_acknowledgements">Ringraziamenti</string>
+    <string name="on_boarding_top_bar_title">Presentazione</string>
+    <string name="on_boarding_button_action_principal_finish">Fine</string>
+    <string name="on_boarding_button_action_principal_next">Avanti</string>
+    <string name="on_boarding_button_action_principal_exit">Esci</string>
+    <string name="on_boarding_step_one_line_one">Ora ti mostreremo come funziona l\'app.</string>
+    <string name="on_boarding_step_one_line_two">Scoprirai i controlli base e il loro utilizzo comune nelle varie sezioni dell\'app.</string>
+    <string name="on_boarding_step_one_line_three">Premi "Avanti" o utilizza i cerchi per avanzare o tornare indietro.</string>
+    <string name="on_boarding_step_two_line_one">Dall\'alto verso il basso e da sinistra a destra, troverai:</string>
+    <string name="on_boarding_step_two_line_two_title">Autore della frase:</string>
+    <string name="on_boarding_step_two_line_two_description">Toccando qui, apriremo il tuo browser con una ricerca sull\'autore per ottenere maggiori informazioni.</string>
+    <string name="on_boarding_step_two_line_three_title">Pulsante "Mi piace":</string>
+    <string name="on_boarding_step_two_line_three_description">Premendolo, segnerai la frase come "Mi piace" e potrai vedere il numero di like ricevuti.</string>
+    <string name="on_boarding_step_two_line_four_title">Pulsante Preferito:</string>
+    <string name="on_boarding_step_two_line_four_description">Premendolo, segnerai la frase come preferita e potrai vedere i preferiti ricevuti.</string>
+    <string name="on_boarding_step_two_line_five_title">Pulsante Condividi:</string>
+    <string name="on_boarding_step_two_line_five_description">Puoi condividere la frase come immagine o testo con chiunque tu voglia.</string>
+    <string name="on_boarding_step_two_line_six_title">Utenti:</string>
+    <string name="on_boarding_step_two_line_six_description">Numero di utenti che hanno visualizzato questa frase.</string>
+    <string name="on_boarding_step_three_line_one">Menu Principale</string>
+    <string name="on_boarding_step_three_line_two">Chiudi il Menu Principale</string>
+    <string name="on_boarding_step_three_line_three">Galleria Personale</string>
+    <string name="on_boarding_step_three_line_four">Carica un\'altra frase e immagine</string>
+    <string name="on_boarding_step_three_line_five">Scarica l\'immagine corrente</string>
+    <string name="on_boarding_step_three_line_six">Mostra informazioni sull\'app</string>
+    <string name="on_boarding_step_three_line_seven">Impostazioni</string>
+    <string name="on_boarding_step_four_line_one">Qui puoi vedere le immagini che hai visualizzato, le tue preferite e quelle a cui hai messo "Mi piace".</string>
+    <string name="on_boarding_step_four_line_two">Dall\'alto verso il basso e da sinistra a destra, troverai:</string>
+    <string name="on_boarding_step_four_line_three_title">Indietro:</string>
+    <string name="on_boarding_step_four_line_three_description">Torna alla schermata principale.</string>
+    <string name="on_boarding_step_four_line_four_title">Filtra per Mi Piace:</string>
+    <string name="on_boarding_step_four_line_four_description">Mostra le frasi a cui hai messo "Mi Piace".</string>
+    <string name="on_boarding_step_four_line_five_title">Filtra per Visualizzazioni:</string>
+    <string name="on_boarding_step_four_line_five_description">Mostra tutte le frasi che hai visualizzato. Non perdere nulla.</string>
+    <string name="on_boarding_step_four_line_six_title">Filtra per Preferiti:</string>
+    <string name="on_boarding_step_four_line_six_description">Mostra le tue frasi e immagini preferite.</string>
+    <string name="on_boarding_step_four_line_seven_title">Modifica ordine:</string>
+    <string name="on_boarding_step_four_line_seven_description">Modifica l\'ordine delle frasi visualizzate.</string>
+    <string name="on_boarding_step_four_line_eight">Seleziona la frase che desideri vedere nei dettagli.</string>
+    <string name="on_boarding_step_five_line_one">Conclusione</string>
+    <string name="on_boarding_step_five_line_two">Grazie per il tuo tempo.</string>
+    <string name="on_boarding_step_five_line_three">Ora conosci il funzionamento della nostra app.</string>
+    <string name="on_boarding_step_five_line_four">Speriamo che ti piaccia e che ti offra ciò che stai cercando.</string>
+
 </resources>
