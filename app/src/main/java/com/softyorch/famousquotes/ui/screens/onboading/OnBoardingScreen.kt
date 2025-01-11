@@ -16,18 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -47,9 +40,13 @@ import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
 import com.softyorch.famousquotes.ui.core.commonComponents.TopBarStandard
 import com.softyorch.famousquotes.ui.screens.home.components.AppIcon
-import com.softyorch.famousquotes.ui.screens.home.components.ButtonApp
 import com.softyorch.famousquotes.ui.screens.home.components.HeaderSubtitleApp
 import com.softyorch.famousquotes.ui.screens.home.components.SpacerHeight
+import com.softyorch.famousquotes.ui.screens.onboading.components.CardOnBoarding
+import com.softyorch.famousquotes.ui.screens.onboading.components.ControlButtonsOnBoarding
+import com.softyorch.famousquotes.ui.screens.onboading.components.ControlImageShow
+import com.softyorch.famousquotes.ui.screens.onboading.components.TextOnBoarding
+import com.softyorch.famousquotes.ui.screens.onboading.components.TitleOnBoarding
 import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
@@ -64,13 +61,13 @@ fun OnBoardingScreen(
     }
 
     val steps = listOf(
-        "Presentación",
-        "Interacciones de usuarios",
-        "Menú principal",
-        "Mis imagenes",
-        "Agradecimientos"
+        stringResource(R.string.on_boarding_list_steps_presentation),
+        stringResource(R.string.on_boarding_list_steps_interaction_users),
+        stringResource(R.string.on_boarding_list_steps_menu),
+        stringResource(R.string.on_boarding_list_steps_my_images),
+        stringResource(R.string.on_boarding_list_steps_acknowledgements)
     )
-    var selectStep by remember { mutableIntStateOf(0) }
+    var selectStep by remember { mutableIntStateOf(1) }
 
     Scaffold(
         topBar = {
@@ -78,7 +75,7 @@ fun OnBoardingScreen(
                 modifier = modifier,
                 paddingTop = paddingTop,
                 leftHanded = leftHanded,
-                textTitle = "OnBoarding",
+                textTitle = stringResource(R.string.on_boarding_top_bar_title),
                 iconTitle = Icons.Default.LocalLibrary,
                 onUpNavigation = onUpNavigation
             )
@@ -101,8 +98,9 @@ fun OnBoardingScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val textButtonPrimary = if (selectStep == steps.size -1) "Finalizar"
-            else "Siguiente"
+            val textButtonPrimary = if (selectStep == steps.size - 1)
+                stringResource(R.string.on_boarding_button_action_principal_finish)
+            else stringResource(R.string.on_boarding_button_action_principal_next)
 
             Column(
                 modifier = Modifier
@@ -134,29 +132,23 @@ fun OnBoardingScreen(
 }
 
 @Composable
-fun StepZero(titleStep: String) {
+private fun StepZero(titleStep: String) {
     CardOnBoarding {
-        SpacerHeight()
         TitleOnBoarding(text = titleStep)
-        SpacerHeight()
         AppIcon()
         HeaderSubtitleApp()
         AppVersionText {}
-        SpacerHeight()
-        TextOnBoarding(text = "    A continuación te vamos a mostrar el funcionamiento de la aplicación.")
-        SpacerHeight()
-        TextOnBoarding(text = "    Te mostraremos el uso común de los controles básicos que encontrarás por las diferentes secciones de la app.")
-        SpacerHeight()
-        TextOnBoarding(text = "    Pulsa en siguiente o sobre los circulos para avanzar o retroceder.")
+        TextOnBoarding(text = stringResource(R.string.on_boarding_step_one_line_one))
+        TextOnBoarding(text = stringResource(R.string.on_boarding_step_one_line_two))
+        TextOnBoarding(text = stringResource(R.string.on_boarding_step_one_line_three))
     }
 }
 
 @Composable
-fun StepOne(titleStep: String) {
+private fun StepOne(titleStep: String) {
     CardOnBoarding {
-        SpacerHeight()
         TitleOnBoarding(text = titleStep)
-        SpacerHeight(32)
+        SpacerHeight()
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Card(
                 border = BorderStroke(4.dp, color = AppColorSchema.background)
@@ -169,31 +161,41 @@ fun StepOne(titleStep: String) {
                 )
             }
         }
-        SpacerHeight()
-        TextOnBoarding("    De arriba a abajo y de izquierda a derecha puedes encontrar:")
-        SpacerHeight()
-        TextOnBoarding("    Nombre del autor de la frase: \nAl pulsar sobre abriremos tu navegador y te mostgraremos una busqueda del mismo, para que obtengas más info si quieres.")
-        SpacerHeight()
-        TextOnBoarding("    Botón de Likes: \npulsado maracarás la frase como \"Me gusta\" y podrás ver los likes que tiene.")
-        SpacerHeight()
-        TextOnBoarding("    Botón de Favorito: \npulsado maracarás la frase como \"Favorita\" y podrás ver los favoritos que tiene.")
-        SpacerHeight()
-        TextOnBoarding("    Botón compartir: \nPodrás compartir como una imagen o solo la frase con quien tú quieras.")
-        SpacerHeight()
-        TextOnBoarding("    Icono Vistos: \nTendrás información sobre la cantidad de usuarios que han visto es frase.")
-        SpacerHeight()
+        TextOnBoarding(stringResource(R.string.on_boarding_step_two_line_one))
+        TextOnBoarding(
+            stringResource(R.string.on_boarding_step_two_line_two_title),
+            stringResource(R.string.on_boarding_step_two_line_two_description)
+        )
+        TextOnBoarding(
+            stringResource(R.string.on_boarding_step_two_line_three_title),
+            stringResource(R.string.on_boarding_step_two_line_three_description)
+        )
+        TextOnBoarding(
+            stringResource(R.string.on_boarding_step_two_line_four_title),
+            stringResource(R.string.on_boarding_step_two_line_four_description)
+        )
+        TextOnBoarding(
+            stringResource(R.string.on_boarding_step_two_line_five_title),
+            stringResource(R.string.on_boarding_step_two_line_five_description)
+        )
+        TextOnBoarding(
+            stringResource(R.string.on_boarding_step_two_line_six_title),
+            stringResource(R.string.on_boarding_step_two_line_six_description)
+        )
     }
 }
 
 @Composable
-fun StepTwo(titleStep: String) {
+private fun StepTwo(titleStep: String) {
     CardOnBoarding {
         Column {
-            SpacerHeight()
             TitleOnBoarding(text = titleStep)
-            SpacerHeight(32)
+            SpacerHeight()
             Row(Modifier.fillMaxSize()) {
-                Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Top) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Top
+                ) {
                     Card {
                         Image(
                             painter = painterResource(R.drawable.image_ob_02),
@@ -217,20 +219,19 @@ fun StepTwo(titleStep: String) {
                         .weight(1f)
                         .padding(top = 8.dp, start = 16.dp)
                 ) {
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_one))
+                    SpacerHeight(56)
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_two))
                     SpacerHeight()
-                    TextOnBoarding("Menu Principal")
-                    SpacerHeight(72)
-                    TextOnBoarding("Cerrar Menu Principal")
-                    SpacerHeight(32)
-                    TextOnBoarding("Mis imagenes")
-                    SpacerHeight(32)
-                    TextOnBoarding("Cargar otra frase e imagen")
-                    SpacerHeight(32)
-                    TextOnBoarding("Descargar imagen actual")
-                    SpacerHeight(32)
-                    TextOnBoarding("Mostrar información de la app")
-                    SpacerHeight(32)
-                    TextOnBoarding("configuración")
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_three))
+                    SpacerHeight()
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_four))
+                    SpacerHeight()
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_five))
+                    SpacerHeight()
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_six))
+                    SpacerHeight()
+                    TextOnBoarding(stringResource(R.string.on_boarding_step_three_line_seven))
                 }
             }
         }
@@ -238,16 +239,14 @@ fun StepTwo(titleStep: String) {
 }
 
 @Composable
-fun StepThree(titleStep: String) {
+private fun StepThree(titleStep: String) {
     CardOnBoarding {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            SpacerHeight()
             TitleOnBoarding(text = titleStep)
-            SpacerHeight(32)
             Card(
                 border = BorderStroke(4.dp, color = AppColorSchema.background)
             ) {
@@ -258,140 +257,53 @@ fun StepThree(titleStep: String) {
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            SpacerHeight()
-            TextOnBoarding("    Aquí podrás ver aquellas imagenes que hayas visto, tus favoritas y a las que has dado un Like.")
-            SpacerHeight()
-            TextOnBoarding("    De arriba a abajo y de izquierda a derecha puedes encontrar:")
-            SpacerHeight()
-            TextOnBoarding("    Volver atrás: \nVolverás a la pantalla principal.")
-            SpacerHeight()
-            TextOnBoarding("    Filtrado por Likes: \nVerás las frases a las que has dado Like.")
-            SpacerHeight()
-            TextOnBoarding("    Filtrado por Vistas: \nPodrás ver todas aquellas frases que hayas visto. No te pierdas ninguna.")
-            SpacerHeight()
-            TextOnBoarding("    Filtrado por Favoritas: \nMostrará tus frases e imagenes favoritas.")
-            SpacerHeight()
-            TextOnBoarding("    Modificar orden: \nCambiarás el orden de las frases mostradas.")
-            SpacerHeight()
-            TextOnBoarding("    Pulsa sobre la frase que desees observar para ver sus detalles.")
+            TextOnBoarding(stringResource(R.string.on_boarding_step_four_line_one))
+            TextOnBoarding(stringResource(R.string.on_boarding_step_four_line_two))
+            TextOnBoarding(
+                stringResource(R.string.on_boarding_step_four_line_three_title),
+                stringResource(R.string.on_boarding_step_four_line_three_description)
+            )
+            TextOnBoarding(
+                stringResource(R.string.on_boarding_step_four_line_four_title),
+                stringResource(R.string.on_boarding_step_four_line_four_description)
+            )
+            TextOnBoarding(
+                stringResource(R.string.on_boarding_step_four_line_five_title),
+                stringResource(R.string.on_boarding_step_four_line_five_description)
+            )
+            TextOnBoarding(
+                stringResource(R.string.on_boarding_step_four_line_six_title),
+                stringResource(R.string.on_boarding_step_four_line_six_description)
+            )
+            TextOnBoarding(
+                stringResource(R.string.on_boarding_step_four_line_seven_title),
+                stringResource(R.string.on_boarding_step_four_line_seven_description)
+            )
+            TextOnBoarding(stringResource(R.string.on_boarding_step_four_line_eight))
         }
     }
 }
 
 @Composable
-fun StepFour(titleStep: String) {
+private fun StepFour(titleStep: String) {
     CardOnBoarding {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            SpacerHeight()
             TitleOnBoarding(text = titleStep)
-            SpacerHeight(32)
-            TextOnBoarding("Finalización")
             SpacerHeight()
-            TextOnBoarding("    Gracias por tu tiempo.")
-            SpacerHeight()
-            TextOnBoarding("    Ahora ya conoces el funcionamiento de nuestra app.")
-            SpacerHeight()
-            TextOnBoarding("    Esperamos que te guste y que te aporte aquello que estás buscando.")
-        }
-    }
-}
-
-@Composable
-fun ControlImageShow(steps: List<String>, selectStep: Int, onClick: (Int) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        LazyRow {
-            items(steps.size) {
-                RadioButton(
-                    selected = it == selectStep,
-                    onClick = { onClick(it) },
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = AppColorSchema.primary,
-                        unselectedColor = AppColorSchema.whiteSmoke
-                    )
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ControlButtonsOnBoarding(
-    textButtonPrimary: String,
-    onNext: () -> Unit,
-    onExit: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        val btnModifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-        ButtonApp(
-            modifier = btnModifier,
-            text = textButtonPrimary,
-            primary = true
-        ) { onNext() }
-        ButtonApp(
-            modifier = btnModifier,
-            text = "Salir"
-        ) { onExit() }
-    }
-}
-
-@Composable
-fun TitleOnBoarding(text: String) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleLarge.copy(
-                textAlign = TextAlign.Center
-            ),
-            color = AppColorSchema.text,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun TextOnBoarding(text: String) {
-    Text(text = text, style = MaterialTheme.typography.bodyLarge, color = AppColorSchema.text)
-}
-
-@Composable
-fun CardOnBoarding(modifier: Modifier = Modifier, composable: @Composable () -> Unit) {
-
-    val scrollState = rememberScrollState()
-
-    Card(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 4.dp, start = 8.dp, end = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColorSchema.smoke),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(scrollState)
-        ) {
-            composable()
+            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_one))
+            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_two))
+            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_three))
+            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_four))
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun OnboardingPreview() {
+private fun OnboardingPreview() {
     OnBoardingScreen(leftHanded = true) {}
 }
