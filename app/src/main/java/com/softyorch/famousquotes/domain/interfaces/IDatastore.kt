@@ -10,4 +10,5 @@ interface IDatastore {
     suspend fun setDbVersion(dbVersion: String)
     fun getSettings(): Flow<SettingsStoreModel>
     suspend fun setSettings(settings: SettingsStoreModel)
+    suspend fun setOnboarding(onboarding: Boolean)
 }

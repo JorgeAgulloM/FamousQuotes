@@ -81,4 +81,10 @@ class DatastoreImpl @Inject constructor(
             data[booleanPreferencesKey(IS_SHOW_ON_BOARDING)] = settings.isShowOnBoarding
         }
     }
+
+    override suspend fun setOnboarding(onboarding: Boolean) {
+        context.datastore.edit { data ->
+            data[booleanPreferencesKey(IS_SHOW_ON_BOARDING)] = onboarding
+        }
+    }
 }
