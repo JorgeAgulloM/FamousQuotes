@@ -18,6 +18,7 @@ import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.sdk33AndUp
+import com.softyorch.famousquotes.utils.notificationChannelByUserLanguage
 import com.softyorch.famousquotes.utils.writeLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,17 +101,18 @@ class NotificationUtils(private val context: Context) {
         val delay = 5000L
         var retry = 0
         val messaging = FirebaseMessaging.getInstance()
+        val notificationChannel = notificationChannelByUserLanguage()
 
         while (!finished) {
-            messaging.subscribeToTopic(FIREBASE_NOTIFICATION_CHANNEL_1)
+            messaging.subscribeToTopic(notificationChannel)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        writeLog(text = "Subscribed to $FIREBASE_NOTIFICATION_CHANNEL_1")
+                        writeLog(text = "Subscribed to $notificationChannel")
                         finished = true
                     } else {
                         writeLog(
                             LevelLog.ERROR,
-                            text = "Error subscribing to $FIREBASE_NOTIFICATION_CHANNEL_1"
+                            text = "Error subscribing to $notificationChannel"
                         )
                         writeLog(LevelLog.ERROR, text = "Times $retry. Retry in 5 seconds...")
                         finished = retry >= 3
@@ -119,7 +121,7 @@ class NotificationUtils(private val context: Context) {
                 }.addOnFailureListener {
                     writeLog(
                         LevelLog.ERROR,
-                        text = "Error subscribing to $FIREBASE_NOTIFICATION_CHANNEL_1"
+                        text = "Error subscribing to $notificationChannel"
                     )
                     writeLog(LevelLog.ERROR, text = "Times $retry. Retry in 5 seconds...")
                     finished = retry >= 3
