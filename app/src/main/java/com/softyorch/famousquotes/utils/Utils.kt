@@ -12,6 +12,20 @@ import androidx.compose.ui.res.painterResource
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.core.Crashlytics
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_DE
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_EN
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_ES
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_FR
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_HI
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_IT
+import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1_ZH
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_DE
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_ES
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_FR
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_HI
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_IT
+import com.softyorch.famousquotes.core.LANGUAGE_CODE_ZH
+import java.util.Locale
 
 fun writeLog(level: LevelLog = LevelLog.INFO, text: String, throwable: Throwable? = null) {
     val isTest = !IsTestMode.isTest
@@ -84,3 +98,15 @@ fun appIcon() = painterResource(
 //Provisional
 @SuppressLint("HardwareIds")
 fun Context.userId(): String = Settings.Secure.getString(contentResolver, ANDROID_ID)
+
+fun notificationChannelByUserLanguage() = when (Locale.getDefault().language.lowercase()) {
+    LANGUAGE_CODE_ES -> FIREBASE_NOTIFICATION_CHANNEL_1_ES
+    LANGUAGE_CODE_DE -> FIREBASE_NOTIFICATION_CHANNEL_1_DE
+    LANGUAGE_CODE_FR -> FIREBASE_NOTIFICATION_CHANNEL_1_FR
+    LANGUAGE_CODE_HI -> FIREBASE_NOTIFICATION_CHANNEL_1_HI
+    LANGUAGE_CODE_IT -> FIREBASE_NOTIFICATION_CHANNEL_1_IT
+    LANGUAGE_CODE_ZH -> FIREBASE_NOTIFICATION_CHANNEL_1_ZH
+    else -> FIREBASE_NOTIFICATION_CHANNEL_1_EN
+}.apply {
+    writeLog(text = "Channel selected is: $this")
+}

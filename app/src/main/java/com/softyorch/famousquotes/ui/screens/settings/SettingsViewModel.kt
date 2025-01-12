@@ -3,7 +3,6 @@ package com.softyorch.famousquotes.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Analytics
-import com.softyorch.famousquotes.core.FIREBASE_NOTIFICATION_CHANNEL_1
 import com.softyorch.famousquotes.core.NotificationUtils
 import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.domain.model.SubscribeNotificationDTO
@@ -11,6 +10,7 @@ import com.softyorch.famousquotes.domain.useCases.notificationSubscribe.Subscrib
 import com.softyorch.famousquotes.domain.useCases.settings.GetSettings
 import com.softyorch.famousquotes.domain.useCases.settings.SetSettings
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
+import com.softyorch.famousquotes.utils.notificationChannelByUserLanguage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -132,11 +132,12 @@ class SettingsViewModel @Inject constructor(
 
     private fun setNotificationsChannel(newValue: Boolean) {
         viewModelScope.launch {
+            val notificationChannel = notificationChannelByUserLanguage()
             val result = withContext(dispatcherDefault) {
                 subscribeNotificationsByTopic.invoke(
                     SubscribeNotificationDTO(
                         subscribe = newValue,
-                        topic = FIREBASE_NOTIFICATION_CHANNEL_1
+                        topic = notificationChannel
                     )
                 )
             }
