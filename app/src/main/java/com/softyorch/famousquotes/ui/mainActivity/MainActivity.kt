@@ -25,6 +25,7 @@ import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.NotificationUtils
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
 import com.softyorch.famousquotes.ui.screens.main.MainApp
+import com.softyorch.famousquotes.ui.screens.main.MainViewModel
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
         var packageAppName: String = ""
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewActivityModel: MainActivityViewModel
     private lateinit var appUpdateManager: AppUpdateManager
     private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
     private val channel = 1111
@@ -60,11 +61,12 @@ class MainActivity : ComponentActivity() {
         SetBlockedScreenShoot()
 
         setContent {
-            viewModel = hiltViewModel<MainViewModel>()
-            val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
+            viewActivityModel = hiltViewModel<MainActivityViewModel>()
+            val state: MainState by viewActivityModel.mainState.collectAsStateWithLifecycle()
+            val mainViewModel = hiltViewModel<MainViewModel>()
 
             when (state) {
-                MainState.Home -> MainApp { splash.setKeepOnScreenCondition { false } }
+                MainState.Home -> MainApp(viewModel = mainViewModel) { splash.setKeepOnScreenCondition { false } }
                 MainState.Unauthorized -> LoadingCircle()
                 MainState.Start -> Unit
             }
