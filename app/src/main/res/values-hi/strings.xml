@@ -196,9 +196,8 @@
     <string name="on_boarding_step_four_line_seven_title">क्रम बदलें:</string>
     <string name="on_boarding_step_four_line_seven_description">दिखाए गए वाक्यों का क्रम बदलें।</string>
     <string name="on_boarding_step_four_line_eight">जिस वाक्य को आप विस्तार से देखना चाहते हैं, उस पर टैप करें।</string>
-    <string name="on_boarding_step_five_line_one">समाप्ति</string>
-    <string name="on_boarding_step_five_line_two">आपके समय के लिए धन्यवाद।</string>
-    <string name="on_boarding_step_five_line_three">अब आप हमारी ऐप के संचालन को जानते हैं।</string>
-    <string name="on_boarding_step_five_line_four">हमें उम्मीद है कि यह आपको पसंद आएगी और आपकी आवश्यकता पूरी करेगी।</string>
+    <string name="on_boarding_step_five_line_one">आपके समय के लिए धन्यवाद।</string>
+    <string name="on_boarding_step_five_line_two">अब आप हमारी ऐप के संचालन को जानते हैं।</string>
+    <string name="on_boarding_step_five_line_three">हमें उम्मीद है कि यह आपको पसंद आएगी और आपकी आवश्यकता पूरी करेगी।</string>
 
 </resources>

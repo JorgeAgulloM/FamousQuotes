@@ -196,9 +196,8 @@
     <string name="on_boarding_step_four_line_seven_title">Change Order:</string>
     <string name="on_boarding_step_four_line_seven_description">Rearrange the order of displayed phrases.</string>
     <string name="on_boarding_step_four_line_eight">Select the phrase you want to see in detail.</string>
-    <string name="on_boarding_step_five_line_one">Completion</string>
-    <string name="on_boarding_step_five_line_two">Thank you for your time.</string>
-    <string name="on_boarding_step_five_line_three">Now you know how our app works.</string>
-    <string name="on_boarding_step_five_line_four">We hope you like it and find it helpful.</string>
+    <string name="on_boarding_step_five_line_one">Thank you for your time.</string>
+    <string name="on_boarding_step_five_line_two">Now you know how our app works.</string>
+    <string name="on_boarding_step_five_line_three">We hope you like it and find it helpful.</string>
 
 </resources>

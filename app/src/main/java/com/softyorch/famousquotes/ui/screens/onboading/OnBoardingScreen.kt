@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalLibrary
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -67,7 +70,7 @@ fun OnBoardingScreen(
         stringResource(R.string.on_boarding_list_steps_my_images),
         stringResource(R.string.on_boarding_list_steps_acknowledgements)
     )
-    var selectStep by remember { mutableIntStateOf(1) }
+    var selectStep by remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
@@ -243,7 +246,7 @@ private fun StepThree(titleStep: String) {
     CardOnBoarding {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
             TitleOnBoarding(text = titleStep)
@@ -294,10 +297,15 @@ private fun StepFour(titleStep: String) {
         ) {
             TitleOnBoarding(text = titleStep)
             SpacerHeight()
+            Icon(
+                imageVector = Icons.Rounded.Favorite,
+                contentDescription = null,
+                tint = AppColorSchema.secondary,
+                modifier = Modifier.size(100.dp)
+            )
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_one))
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_two))
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_three))
-            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_four))
         }
     }
 }

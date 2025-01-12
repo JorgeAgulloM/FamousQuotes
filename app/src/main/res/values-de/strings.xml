@@ -196,9 +196,8 @@
     <string name="on_boarding_step_four_line_seven_title">Sortierreihenfolge ändern:</string>
     <string name="on_boarding_step_four_line_seven_description">Ändert die Reihenfolge der angezeigten Phrasen.</string>
     <string name="on_boarding_step_four_line_eight">Wählen Sie die Phrase, die Sie im Detail sehen möchten.</string>
-    <string name="on_boarding_step_five_line_one">Abschluss</string>
-    <string name="on_boarding_step_five_line_two">Vielen Dank für Ihre Zeit.</string>
-    <string name="on_boarding_step_five_line_three">Jetzt kennen Sie die Funktionsweise unserer App.</string>
-    <string name="on_boarding_step_five_line_four">Wir hoffen, dass sie Ihnen gefällt und Ihnen das bietet, wonach Sie suchen.</string>
+    <string name="on_boarding_step_five_line_one">Vielen Dank für Ihre Zeit.</string>
+    <string name="on_boarding_step_five_line_two">Jetzt kennen Sie die Funktionsweise unserer App.</string>
+    <string name="on_boarding_step_five_line_three">Wir hoffen, dass sie Ihnen gefällt und Ihnen das bietet, wonach Sie suchen.</string>
 
 </resources>

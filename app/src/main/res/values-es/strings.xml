@@ -196,10 +196,9 @@
     <string name="on_boarding_step_four_line_seven_title">Modificar orden:</string>
     <string name="on_boarding_step_four_line_seven_description">Cambia el orden de las frases mostradas.</string>
     <string name="on_boarding_step_four_line_eight">Selecciona la frase que quieras observar para ver más detalles.</string>
-    <string name="on_boarding_step_five_line_one">Finalización</string>
-    <string name="on_boarding_step_five_line_two">Gracias por tu tiempo.</string>
-    <string name="on_boarding_step_five_line_three">Ahora ya conoces cómo funciona nuestra app.</string>
-    <string name="on_boarding_step_five_line_four">Esperamos que te guste y te sea útil.</string>
+    <string name="on_boarding_step_five_line_one">Gracias por tu tiempo.</string>
+    <string name="on_boarding_step_five_line_two">Ahora ya conoces cómo funciona nuestra app.</string>
+    <string name="on_boarding_step_five_line_three">Esperamos que te guste y te sea útil.</string>
 
 
 </resources>

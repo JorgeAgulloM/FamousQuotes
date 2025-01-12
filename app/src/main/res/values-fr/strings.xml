@@ -196,9 +196,8 @@
     <string name="on_boarding_step_four_line_seven_title">Modifier l\'ordre :</string>
     <string name="on_boarding_step_four_line_seven_description">Changer l\'ordre des phrases affichées.</string>
     <string name="on_boarding_step_four_line_eight">Sélectionnez la phrase que vous souhaitez voir en détail.</string>
-    <string name="on_boarding_step_five_line_one">Fin</string>
-    <string name="on_boarding_step_five_line_two">Merci pour votre temps.</string>
-    <string name="on_boarding_step_five_line_three">Vous connaissez maintenant le fonctionnement de notre application.</string>
-    <string name="on_boarding_step_five_line_four">Nous espérons qu\'elle vous plaira et qu\'elle vous apportera ce que vous recherchez.</string>
+    <string name="on_boarding_step_five_line_one">Merci pour votre temps.</string>
+    <string name="on_boarding_step_five_line_two">Vous connaissez maintenant le fonctionnement de notre application.</string>
+    <string name="on_boarding_step_five_line_three">Nous espérons qu\'elle vous plaira et qu\'elle vous apportera ce que vous recherchez.</string>
 
 </resources>
