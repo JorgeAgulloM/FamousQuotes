@@ -22,13 +22,13 @@ fun SetDialogs(state: DetailState, onActions: (DetailActions) -> Unit) {
     if (state.shareAs) BasicDialogApp(
         text = stringResource(R.string.dialog_how_do_you_share),
         title = stringResource(R.string.dialog_share_title),
-        textBtnPositive = stringResource(R.string.dialog_share_by_text),
-        textBtnNegative = stringResource(R.string.dialog_share_by_image),
-        blackDismissActions = true
+        textBtnNegative = stringResource(R.string.dialog_share_by_text),
+        textBtnPositive = stringResource(R.string.dialog_share_by_image),
+        blockDismissActions = true
     ) {
         when (it) {
-            DialogCloseAction.POSITIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Text))
-            DialogCloseAction.NEGATIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Image))
+            DialogCloseAction.NEGATIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Text))
+            DialogCloseAction.POSITIVE -> onActions(DetailActions.ShareQuoteAs(shareAs = ShareAs.Image))
             DialogCloseAction.DISMISS -> onActions(DetailActions.HowToShareQuote())
         }
     }

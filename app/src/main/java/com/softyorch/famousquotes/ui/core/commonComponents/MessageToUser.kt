@@ -15,26 +15,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun MessageToUser(
     icon: ImageVector,
     msg: String,
-    tint: Color = PrimaryColor,
+    tint: Color = AppColorSchema.primary,
     contentDescription: String? = null
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Row (
             modifier = Modifier
-                .background(color = WhiteSmoke, shape = MaterialTheme.shapes.large)
+                .background(color = AppColorSchema.smoke, shape = MaterialTheme.shapes.large)
                 .padding(top = 16.dp, start = 8.dp, end = 16.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(imageVector = icon, contentDescription = contentDescription, tint = tint)
-            Text(text = msg, style = MaterialTheme.typography.bodyLarge)
+            Text(text = msg, style = MaterialTheme.typography.bodyLarge.copy(
+                color = AppColorSchema.text
+            ))
         }
     }
 }

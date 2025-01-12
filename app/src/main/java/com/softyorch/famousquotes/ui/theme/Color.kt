@@ -5,15 +5,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.softyorch.famousquotes.BuildConfig
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
- // Configured colors in gradle flavors
+// Configured colors in gradle flavors
 /*
 val HistoricalPrimary = Color(0xFFFFB005)
 val HistoricalSecondary = Color(0xFFFFD966)
@@ -29,41 +21,112 @@ val UpliftingBackground = Color(0xFF00253A)
 */
 
 
-val WhiteSmoke = Color(0xFFE6E6E6)
-val LikeColor = Color(0xFFBE0000)
-val FavoriteColor = Color(0xFFC8C800)
-val DisabledIconButtonsColor = Color(0xFF737373)
-val TextStandardColor = Color(0xE6000000)
-val TextShadowColor = Color(0x4D000000)
-val TextStandardWhiteColor = Color(0xFFE6E6E6)
+/* Light Colors */
+val LightSmoke = Color(0xFFE6E6E6)
+val LightLikeColor = Color(0xFFBE0000)
+val LightFavoriteColor = Color(0xFFC8C800)
+val LightDisabledIconButtonColor = Color(0xFF737373)
+val LightTextStandardColor = Color(0xE6000000)
+val LightTextShadowColor = Color(0x4D000000)
+val LightIconColor = Color(0xFF1E1E1E)
+val LightBackgroundColor = Color(0xFFEAEAEA)
+val LightWhiteSmoke = Color(0xFFFFFFFF)
+val LightCardColor = Color(0xFFD3D8DC)
+
+/* Dark Colors */
+val DarkSmoke = Color(0xFF3D3D3D)
+val DarkLikeColor = Color(0xFFBE0000)
+val DarkFavoriteColor = Color(0xFFC8C800)
+val DarkDisabledIconButtonColor = Color(0xFF737373)
+val DarkTextStandardColor = Color(0xE6FFFFFF)
+val DarkTextShadowColor = Color(0x4DFFFFFF)
+val DarkIconColor = Color(0xFFE6E6E6)
+val DarkBackgroundColor = Color(0xFF00253A)
+val DarkWhiteSmoke = Color(0xFFE6E6E6)
+val DarkCardColor = Color(0xFF2F373B)
+
+/* Common Colors */
 val PrimaryColor = Color(BuildConfig.PRIMARY_COLOR)
 val SecondaryColor = Color(BuildConfig.SECONDARY_COLOR)
-val BackgroundColor = Color(BuildConfig.BACKGROUND_COLOR)
+
+fun LightColorSchemeApp(
+    primary: Color = PrimaryColor,
+    secondary: Color = SecondaryColor,
+    background: Color = LightBackgroundColor,
+    smoke: Color = LightSmoke,
+    text: Color = LightTextStandardColor,
+    shadowText: Color = LightTextShadowColor,
+    likeColor: Color = LightLikeColor,
+    favoriteColor: Color = LightFavoriteColor,
+    disabledIconButtonColor: Color = LightDisabledIconButtonColor,
+    iconColor: Color = LightIconColor,
+    whiteSmoke: Color = LightWhiteSmoke
+): AppColorScheme = AppColorScheme(
+    primary = primary,
+    secondary = secondary,
+    background = background,
+    smoke = smoke,
+    text = text,
+    shadowText = shadowText,
+    likeColor = likeColor,
+    favoriteColor = favoriteColor,
+    disabledIconButtonColor = disabledIconButtonColor,
+    iconColor = iconColor,
+    whiteSmoke = whiteSmoke,
+    cardColor = LightCardColor
+)
+
+fun DarkColorSchemeApp(
+    primary: Color = PrimaryColor,
+    secondary: Color = SecondaryColor,
+    background: Color = DarkBackgroundColor,
+    smoke: Color = DarkSmoke,
+    text: Color = DarkTextStandardColor,
+    shadowText: Color = DarkTextShadowColor,
+    likeColor: Color = DarkLikeColor,
+    favoriteColor: Color = DarkFavoriteColor,
+    disabledIconButtonColor: Color = DarkDisabledIconButtonColor,
+    iconColor: Color = DarkIconColor,
+    whiteSmoke: Color = DarkWhiteSmoke
+): AppColorScheme = AppColorScheme(
+    primary = primary,
+    secondary = secondary,
+    background = background,
+    smoke = smoke,
+    text = text,
+    shadowText = shadowText,
+    likeColor = likeColor,
+    favoriteColor = favoriteColor,
+    disabledIconButtonColor = disabledIconButtonColor,
+    iconColor = iconColor,
+    whiteSmoke = whiteSmoke,
+    cardColor = DarkCardColor
+)
 
 @Composable
 fun brushBackGround(): Brush = Brush.linearGradient(
     listOf(
-        BackgroundColor.copy(alpha = 0.6f),
-        BackgroundColor,
-        BackgroundColor,
-        BackgroundColor.copy(alpha = 0.6f),
+        AppColorSchema.background.copy(alpha = 0.6f),
+        AppColorSchema.background,
+        AppColorSchema.background,
+        AppColorSchema.background.copy(alpha = 0.6f),
     )
 )
 
 @Composable
 fun brushBackGround2(): Brush = Brush.verticalGradient(
     listOf(
-        BackgroundColor.copy(alpha = 0f),
-        BackgroundColor.copy(alpha = 0.3f),
-        BackgroundColor.copy(alpha = 0.7f),
-        BackgroundColor.copy(alpha = 0.9f),
-        BackgroundColor,
+        AppColorSchema.background.copy(alpha = 0f),
+        AppColorSchema.background.copy(alpha = 0.3f),
+        AppColorSchema.background.copy(alpha = 0.7f),
+        AppColorSchema.background.copy(alpha = 0.9f),
+        AppColorSchema.background,
         //-------------- 50% ------------//
-        BackgroundColor,
-        BackgroundColor,
-        BackgroundColor,
-        BackgroundColor,
-        BackgroundColor,
+        AppColorSchema.background,
+        AppColorSchema.background,
+        AppColorSchema.background,
+        AppColorSchema.background,
+        AppColorSchema.background,
     )
 )
 

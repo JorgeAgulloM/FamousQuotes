@@ -25,10 +25,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +37,7 @@ fun InfoDialog(onAction: () -> Unit) {
     BasicAlertDialog(onDismissRequest = { onAction() }, modifier = Modifier.semantics {
         text = AnnotatedString(text = infoText)
     }) {
-        Box(modifier = Modifier.background(WhiteSmoke, shape = MaterialTheme.shapes.medium)) {
+        Box(modifier = Modifier.background(AppColorSchema.smoke, shape = MaterialTheme.shapes.medium)) {
             Column(
                 modifier = Modifier.background(
                     brush = brushBackGround(),
@@ -46,7 +45,7 @@ fun InfoDialog(onAction: () -> Unit) {
                 ).padding(16.dp)
             ) {
                 AppIcon()
-                HeaderQuote()
+                HeaderSubtitleApp()
                 SpacerHeight(height = 32)
                 InfoIcons(
                     icon = Icons.Outlined.Info,
@@ -79,14 +78,14 @@ fun InfoDialog(onAction: () -> Unit) {
                     text = stringResource(R.string.main_icon_content_desc_lost_connection)
                 )
                 SpacerHeight()
-                TextToClick(text = "V: ${BuildConfig.VERSION_NAME}")
+                AppVersionText()
             }
         }
     }
 }
 
 @Composable
-private fun InfoIcons(icon: ImageVector, tint: Color = PrimaryColor, text: String) {
+private fun InfoIcons(icon: ImageVector, tint: Color = AppColorSchema.primary, text: String) {
     Row {
         Icon(imageVector = icon, contentDescription = text, tint = tint)
         TextInfo(text)

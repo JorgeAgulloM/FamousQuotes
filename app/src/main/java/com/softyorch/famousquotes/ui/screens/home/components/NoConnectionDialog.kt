@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.brushBackGround
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +34,7 @@ fun NoConnectionDialog(onAction: () -> Unit) {
         val shape = MaterialTheme.shapes.extraLarge
         Box(
             modifier = Modifier.fillMaxWidth().background(
-                color = WhiteSmoke,
+                color = AppColorSchema.smoke,
                 shape = shape
             ),
             contentAlignment = Alignment.Center

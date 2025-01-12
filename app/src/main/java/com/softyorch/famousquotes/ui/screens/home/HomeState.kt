@@ -13,5 +13,6 @@ data class HomeState(
     val hasConnection: Boolean? = null,
     val showDialogNoConnection: Boolean = false,
     val reConnect: Boolean? = null,
+    val downloadImageRequest: Boolean = false,
     val downloadImage: Boolean = false,
 )

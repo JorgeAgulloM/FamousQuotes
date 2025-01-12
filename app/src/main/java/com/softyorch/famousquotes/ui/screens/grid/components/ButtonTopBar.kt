@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.core.FilterQuotes
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun ButtonTopBar(
@@ -27,7 +27,7 @@ fun ButtonTopBar(
             .padding(horizontal = 1.dp)
             .shadow(elevation = 4.dp, shape = MaterialTheme.shapes.large)
             .background(
-                color = BackgroundColor,
+                color = AppColorSchema.background,
                 shape = MaterialTheme.shapes.large
             ),
         contentAlignment = Alignment.BottomCenter

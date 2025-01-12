@@ -28,16 +28,15 @@ import com.softyorch.famousquotes.ui.core.commonComponents.IconCard
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.ui.theme.FavoriteColor
-import com.softyorch.famousquotes.ui.theme.LikeColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.DISMISS
-import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction.POSITIVE
+import com.softyorch.famousquotes.ui.utils.DialogCloseAction.NEGATIVE
 
 @Composable
 fun CardControlsGroup(
     hasText: String,
+    leftHanded: Boolean,
     stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
@@ -48,7 +47,16 @@ fun CardControlsGroup(
     var showSendDialog by remember { mutableStateOf(false) }
 
     AnimatedTextHome(hasText) {
-        CardControls(
+        if (leftHanded) CardControlsLeft(
+            stateStatistics = stateStatistics,
+            stateLikes = stateLikes,
+            stateFavorite = stateFavorite,
+            isQuoteFromService = isQuoteFromService,
+            isEnabled = isEnabled,
+            onAction = onAction
+        ) {
+            showSendDialog = true
+        } else CardControlsNonLeft(
             stateStatistics = stateStatistics,
             stateLikes = stateLikes,
             stateFavorite = stateFavorite,
@@ -63,13 +71,13 @@ fun CardControlsGroup(
     if (showSendDialog) BasicDialogApp(
         text = stringResource(R.string.dialog_how_do_you_share),
         title = stringResource(R.string.dialog_share_title),
-        textBtnPositive = stringResource(R.string.dialog_share_by_text),
-        textBtnNegative = stringResource(R.string.dialog_share_by_image),
-        blackDismissActions = true
+        textBtnNegative = stringResource(R.string.dialog_share_by_text),
+        textBtnPositive = stringResource(R.string.dialog_share_by_image),
+        blockDismissActions = true
     ) {
         when (it) {
-            POSITIVE -> onAction(HomeActions.ShareText())
-            NEGATIVE -> onAction(HomeActions.ShareWithImage())
+            NEGATIVE -> onAction(HomeActions.ShareText())
+            POSITIVE -> onAction(HomeActions.ShareWithImage())
             DISMISS -> Unit
         }
         showSendDialog = false
@@ -77,7 +85,7 @@ fun CardControlsGroup(
 }
 
 @Composable
-private fun CardControls(
+private fun CardControlsLeft(
     stateStatistics: QuoteStatistics,
     stateLikes: QuoteLikesState,
     stateFavorite: QuoteFavoriteState,
@@ -100,8 +108,8 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_like_use),
                 icon = Icons.Rounded.FavoriteBorder,
                 secondIcon = Icons.Rounded.Favorite,
-                color = LikeColor,
-                colorIcon = WhiteSmoke,
+                color = AppColorSchema.likeColor,
+                colorIcon = AppColorSchema.whiteSmoke,
                 isSelected = stateLikes.isLike,
                 valueStatistic = stateStatistics.likes,
                 isVisible = isQuoteFromService,
@@ -114,8 +122,8 @@ private fun CardControls(
                 cDescription = stringResource(R.string.main_icon_content_desc_share),
                 icon = Icons.Default.StarOutline,
                 secondIcon = Icons.Default.Star,
-                color = FavoriteColor,
-                colorIcon = WhiteSmoke,
+                color = AppColorSchema.favoriteColor,
+                colorIcon = AppColorSchema.whiteSmoke,
                 isSelected = stateFavorite.isFavorite,
                 valueStatistic = stateStatistics.favorites,
                 isVisible = isQuoteFromService,
@@ -138,7 +146,75 @@ private fun CardControls(
                 valueStatistic = stateStatistics.showns,
                 isEnabled = isEnabled
             ) { }
-            SpacerWidth()
+            SpacerWidth(8)
+        }
+    }
+}
+
+
+@Composable
+private fun CardControlsNonLeft(
+    stateStatistics: QuoteStatistics,
+    stateLikes: QuoteLikesState,
+    stateFavorite: QuoteFavoriteState,
+    isQuoteFromService: Boolean,
+    isEnabled: Boolean,
+    onAction: (HomeActions) -> Unit,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(start = 8.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row {
+            IconCard(
+                cDescription = stringResource(R.string.main_icon_content_desc_share),
+                icon = Icons.Outlined.RemoveRedEye,
+                valueStatistic = stateStatistics.showns,
+                isEnabled = isEnabled
+            ) { }
+        }
+
+        Row {
+            IconCard(
+                cDescription = stringResource(R.string.main_icon_content_desc_share),
+                icon = Icons.Outlined.Share,
+                isEnabled = isEnabled
+            ) { onClick() }
+
+            SpacerWidth(width = 8)
+
+            IconCard(
+                cDescription = stringResource(R.string.main_icon_content_desc_share),
+                icon = Icons.Default.StarOutline,
+                secondIcon = Icons.Default.Star,
+                color = AppColorSchema.favoriteColor,
+                colorIcon = AppColorSchema.whiteSmoke,
+                isSelected = stateFavorite.isFavorite,
+                valueStatistic = stateStatistics.favorites,
+                isVisible = isQuoteFromService,
+                isEnabled = isEnabled
+            ) { onAction(HomeActions.Favorite()) }
+
+            SpacerWidth(width = 8)
+
+            IconCard(
+                cDescription = stringResource(R.string.main_icon_content_desc_like_use),
+                icon = Icons.Rounded.FavoriteBorder,
+                secondIcon = Icons.Rounded.Favorite,
+                color = AppColorSchema.likeColor,
+                colorIcon = AppColorSchema.whiteSmoke,
+                isSelected = stateLikes.isLike,
+                valueStatistic = stateStatistics.likes,
+                isVisible = isQuoteFromService,
+                isEnabled = isEnabled
+            ) { onAction(HomeActions.Like()) }
+
+            SpacerWidth(8)
         }
     }
 }

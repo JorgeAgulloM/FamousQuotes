@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 
 @Composable
@@ -40,7 +40,7 @@ fun AppIcon() {
             painter = painterResource(R.drawable.icon_quote),
             contentDescription = null,
             modifier = Modifier.size(28.dp),
-            tint = SecondaryColor
+            tint = AppColorSchema.secondary
         )
         Column(verticalArrangement = Arrangement.SpaceAround) {
             TextInfoApp(text = firstName, 12, 4)

@@ -16,26 +16,24 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PrimaryColor,
+    secondary = SecondaryColor,
+    background = DarkBackgroundColor,
+    onBackground = LightSmoke,
+    onPrimary = LightTextStandardColor,
+    onSecondary = LightTextShadowColor,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = PrimaryColor,
+    secondary = SecondaryColor,
+    background = DarkBackgroundColor,
+    onBackground = DarkSmoke,
+    onPrimary = DarkTextStandardColor,
+    onSecondary = DarkTextShadowColor,
 )
+
+var AppColorSchema: AppColorScheme = DarkColorSchemeApp()
 
 @Composable
 fun FamousQuotesTheme(
@@ -62,6 +60,8 @@ fun FamousQuotesTheme(
         controller.hide(WindowInsetsCompat.Type.statusBars())
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
+
+    AppColorSchema = if (darkTheme) DarkColorSchemeApp() else LightColorSchemeApp()
 
     MaterialTheme(
         colorScheme = colorScheme,

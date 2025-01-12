@@ -210,7 +210,13 @@ class HomeViewModel @Inject constructor(
     private fun startProcessDownloadImage() {
         viewModelScope.launch(dispatcherDefault) {
             if (!_uiState.value.showInterstitial) {
-                _uiState.update { it.copy(showInterstitial = true, isLoading = true) }
+                _uiState.update {
+                    it.copy(
+                        showInterstitial = true,
+                        isLoading = true,
+                        downloadImageRequest = true
+                    )
+                }
             }
         }
     }
@@ -222,7 +228,8 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         downloadImage = downloadResult,
                         showInterstitial = false,
-                        isLoading = false
+                        isLoading = false,
+                        downloadImageRequest = false
                     )
                 }
             }

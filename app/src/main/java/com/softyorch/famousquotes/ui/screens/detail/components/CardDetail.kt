@@ -39,8 +39,7 @@ import com.softyorch.famousquotes.ui.screens.detail.DetailActions
 import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel.Companion.toFamousQuoteModel
-import com.softyorch.famousquotes.ui.theme.TextStandardColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.utils.showToast
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -51,6 +50,7 @@ fun CardDetail(
     quote: QuoteDetailsModel,
     state: DetailState,
     statistics: QuoteStatistics,
+    leftHanded: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     finishAnimation: Boolean,
@@ -72,7 +72,7 @@ fun CardDetail(
                     .clip(MaterialTheme.shapes.large),
                 shape = MaterialTheme.shapes.large,
                 colors = CardDefaults.cardColors(
-                    containerColor = WhiteSmoke
+                    containerColor = AppColorSchema.cardColor
                 ),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
             ) {
@@ -115,6 +115,7 @@ fun CardDetail(
                         Text(
                             text = quote.body,
                             style = MaterialTheme.typography.bodyLarge.copy(
+                                color = AppColorSchema.text,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 22.sp,
                                 textAlign = TextAlign.Center,
@@ -122,14 +123,14 @@ fun CardDetail(
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp, start = 16.dp, end = 8.dp)
+                                .padding(top = 8.dp, start = 16.dp, bottom = 16.dp, end = 8.dp)
                         )
                     }
 
                     AnimatedVisibility(finishAnimation) {
                         TextOwner(
                             text = quote.owner,
-                            color = TextStandardColor,
+                            color = AppColorSchema.text,
                             isHiPadding = false
                         ) {
                             if (state.hasConnection) onAction(DetailActions.OwnerQuoteIntent())
@@ -137,7 +138,18 @@ fun CardDetail(
                         }
                     }
                     AnimatedVisibility(finishAnimation) {
-                        CardControls(quote = quote, state = state, statistics = statistics, onAction = onAction)
+                        if (leftHanded) CardControlsLeft(
+                            quote = quote,
+                            state = state,
+                            statistics = statistics,
+                            onAction = onAction
+                        )
+                        else CardControlsNonLeft(
+                            quote = quote,
+                            state = state,
+                            statistics = statistics,
+                            onAction = onAction
+                        )
                     }
                 }
             }

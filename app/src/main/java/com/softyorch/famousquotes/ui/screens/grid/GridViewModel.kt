@@ -41,6 +41,7 @@ class GridViewModel @Inject constructor(
     }
 
     private fun getAllQuotes() {
+        if (_quotes.value.isEmpty()) _state.update { it.copy(isLoading = true) }
         getFilteredQuotes()
     }
 

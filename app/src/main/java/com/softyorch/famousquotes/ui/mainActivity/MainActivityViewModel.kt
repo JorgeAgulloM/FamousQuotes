@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     private val authService: AuthConnection,
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {

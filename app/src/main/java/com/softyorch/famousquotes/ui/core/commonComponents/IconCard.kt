@@ -26,20 +26,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.DisabledIconButtonsColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
-import com.softyorch.famousquotes.ui.theme.LikeColor
-import com.softyorch.famousquotes.ui.theme.FavoriteColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun IconCard(
     cDescription: String,
     icon: ImageVector,
     secondIcon: ImageVector? = null,
-    color: Color = SecondaryColor,
-    colorIcon: Color = WhiteSmoke,
+    color: Color = AppColorSchema.secondary,
+    colorIcon: Color = AppColorSchema.whiteSmoke,
+    backgroundColor: Color = AppColorSchema.text,
     valueStatistic: Int = -1,
     isVisible: Boolean = true,
     isEnabled: Boolean = true,
@@ -48,7 +44,7 @@ fun IconCard(
 ) {
     if (isVisible) {
         val rowShape = MaterialTheme.shapes.large
-        val colorBackground = selectBackgroundColor(isEnabled, isSelected, color, colorIcon)
+        val colorBackground = selectBackgroundColor(isEnabled, isSelected, color, backgroundColor)
         val textColor = selectTextColor(isSelected, color, colorIcon)
 
         Box(modifier = Modifier
@@ -73,7 +69,7 @@ fun IconCard(
                             Icon(
                                 imageVector = secondIcon!!,
                                 contentDescription = cDescription,
-                                tint = WhiteSmoke,
+                                tint = AppColorSchema.whiteSmoke,
                                 modifier = Modifier
                                     .padding(4.dp)
                                     .size(20.dp),
@@ -103,8 +99,8 @@ fun IconCard(
 @Composable
 fun selectTextColor(isSelected: Boolean, color: Color, colorIcon: Color) = when {
     isSelected -> color
-    colorIcon != WhiteSmoke -> colorIcon
-    else -> WhiteSmoke
+    colorIcon != AppColorSchema.whiteSmoke -> colorIcon
+    else -> AppColorSchema.whiteSmoke
 }
 
 @Composable
@@ -114,22 +110,22 @@ private fun selectBackgroundColor(
     color: Color,
     colorIcon: Color
 ) = when {
-    !isEnabled -> DisabledIconButtonsColor
+    !isEnabled -> AppColorSchema.disabledIconButtonColor
     isSelected -> color.copy(alpha = 0.2f)
-    colorIcon != WhiteSmoke -> colorIcon.copy(alpha = 0.1f)
-    else -> WhiteSmoke.copy(alpha = 0.1f)
+    colorIcon != AppColorSchema.whiteSmoke -> colorIcon.copy(alpha = 0.1f)
+    else -> AppColorSchema.whiteSmoke.copy(alpha = 0.1f)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun IconCardPrev(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.background(color = BackgroundColor)) {
+    Box(modifier = Modifier.background(color = AppColorSchema.background)) {
         IconCard(
             cDescription = "Content Description Favorite",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
-            color = LikeColor,
-            colorIcon = WhiteSmoke,
+            color = AppColorSchema.whiteSmoke,
+            colorIcon = AppColorSchema.whiteSmoke,
             valueStatistic = 23,
             isSelected = false
         ) { }
@@ -139,13 +135,13 @@ fun IconCardPrev(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun IconCardPrevSelected(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.background(color = BackgroundColor)) {
+    Box(modifier = Modifier.background(color = AppColorSchema.background)) {
         IconCard(
             cDescription = "Content Description FavoriteBorder",
             icon = Icons.Rounded.FavoriteBorder,
             secondIcon = Icons.Rounded.Favorite,
-            color = LikeColor,
-            colorIcon = WhiteSmoke,
+            color = AppColorSchema.likeColor,
+            colorIcon = AppColorSchema.whiteSmoke,
             valueStatistic = 2,
             isSelected = true
         ) { }
@@ -155,13 +151,13 @@ fun IconCardPrevSelected(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun IconCardFavoritePrev(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.background(color = BackgroundColor)) {
+    Box(modifier = Modifier.background(color = AppColorSchema.background)) {
         IconCard(
             cDescription = "Content Description Star",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
-            color = FavoriteColor,
-            colorIcon = WhiteSmoke,
+            color = AppColorSchema.favoriteColor,
+            colorIcon = AppColorSchema.whiteSmoke,
             valueStatistic = 23,
             isSelected = false
         ) { }
@@ -171,13 +167,13 @@ fun IconCardFavoritePrev(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun IconCardPrevFavoriteSelected(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.background(color = BackgroundColor)) {
+    Box(modifier = Modifier.background(color = AppColorSchema.background)) {
         IconCard(
             cDescription = "Content Description StarBorder",
             icon = Icons.Rounded.StarBorder,
             secondIcon = Icons.Rounded.Star,
-            color = FavoriteColor,
-            colorIcon = WhiteSmoke,
+            color = AppColorSchema.favoriteColor,
+            colorIcon = AppColorSchema.whiteSmoke,
             valueStatistic = 23,
             isSelected = true
         ) { }
@@ -187,12 +183,12 @@ fun IconCardPrevFavoriteSelected(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun IconCardSharePrev(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.background(color = BackgroundColor)) {
+    Box(modifier = Modifier.background(color = AppColorSchema.background)) {
         IconCard(
             cDescription = "Content Description Share",
             icon = Icons.Rounded.Share,
-            color = FavoriteColor,
-            colorIcon = WhiteSmoke,
+            color = AppColorSchema.favoriteColor,
+            colorIcon = AppColorSchema.whiteSmoke,
             isSelected = false
         ) { }
     }

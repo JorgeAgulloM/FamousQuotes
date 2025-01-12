@@ -1,16 +1,10 @@
 package com.softyorch.famousquotes.ui.mainActivity
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,14 +22,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.softyorch.famousquotes.BuildConfig
-import com.softyorch.famousquotes.R
+import com.softyorch.famousquotes.core.NotificationUtils
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
-import com.softyorch.famousquotes.ui.screens.MainApp
-import com.softyorch.famousquotes.ui.theme.FamousQuotesTheme
-import com.softyorch.famousquotes.utils.LevelLog
+import com.softyorch.famousquotes.ui.screens.main.MainApp
+import com.softyorch.famousquotes.ui.screens.main.MainViewModel
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
-import com.softyorch.famousquotes.utils.sdk33AndUp
-import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,7 +38,7 @@ class MainActivity : ComponentActivity() {
         var packageAppName: String = ""
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewActivityModel: MainActivityViewModel
     private lateinit var appUpdateManager: AppUpdateManager
     private val appUpdateOptions = AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
     private val channel = 1111
@@ -65,19 +56,17 @@ class MainActivity : ComponentActivity() {
 
         StartUpdateManager()
         StartFirebase()
-        sdk33AndUp { PermissionNotifications() }
+        NotificationUtils(this).verifyPermissionNotifications(true)
         RequestGrantedProtectionData(this).getConsent()
         SetBlockedScreenShoot()
 
         setContent {
-            viewModel = hiltViewModel<MainViewModel>()
-            val state: MainState by viewModel.mainState.collectAsStateWithLifecycle()
+            viewActivityModel = hiltViewModel<MainActivityViewModel>()
+            val state: MainState by viewActivityModel.mainState.collectAsStateWithLifecycle()
+            val mainViewModel = hiltViewModel<MainViewModel>()
 
             when (state) {
-                MainState.Home -> FamousQuotesTheme {
-                    splash.setKeepOnScreenCondition { false }
-                    MainApp()
-                }
+                MainState.Home -> MainApp(viewModel = mainViewModel) { splash.setKeepOnScreenCondition { false } }
                 MainState.Unauthorized -> LoadingCircle()
                 MainState.Start -> Unit
             }
@@ -87,32 +76,6 @@ class MainActivity : ComponentActivity() {
     private fun StartUpdateManager() {
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         if (!BuildConfig.DEBUG) checkForAppUpdates()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun PermissionNotifications() {
-        val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-                writeLog(LevelLog.INFO, "PERMISSION POST_NOTIFICATIONS GRANTED")
-                CreatedChannelNotifications()
-            } else {
-                writeLog(LevelLog.WARN, "PERMISSION POST_NOTIFICATIONS DENIED")
-            }
-        }
-
-        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-    }
-
-    private fun CreatedChannelNotifications() {
-        val channelId = getString(R.string.default_channel)
-        val chName = "${BuildConfig.APP_TITLE}_Promotion"
-        val notificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        val channel = NotificationChannel(channelId, chName, NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onResume() {
@@ -135,16 +98,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun StartFirebase() {
-        // Start Firebase
         FirebaseApp.initializeApp(this)
 
-        // Start Firebase Analytics
         firebaseAnalytics = Firebase.analytics
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
 
-        // Start Firebase Crashlytics
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
-        // Configurar Crashlytics para manejar excepciones no capturadas
+
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             Firebase.crashlytics.recordException(throwable)
         }
@@ -157,6 +117,3 @@ class MainActivity : ComponentActivity() {
         )
     }
 }
-
-//Añadir Tests de implementación
-//Añadir CD/CI con github
