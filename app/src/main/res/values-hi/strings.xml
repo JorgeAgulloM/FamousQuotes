@@ -199,5 +199,6 @@
     <string name="on_boarding_step_five_line_one">आपके समय के लिए धन्यवाद।</string>
     <string name="on_boarding_step_five_line_two">अब आप हमारी ऐप के संचालन को जानते हैं।</string>
     <string name="on_boarding_step_five_line_three">हमें उम्मीद है कि यह आपको पसंद आएगी और आपकी आवश्यकता पूरी करेगी।</string>
+    <string name="on_boarding_step_five_line_four">हम अनुशंसा करते हैं कि आप अपनी अनुभव को अनुकूलित करने के लिए प्राथमिकताएँ एक्सेस करें</string>
 
 </resources>

@@ -199,5 +199,6 @@
     <string name="on_boarding_step_five_line_one">Merci pour votre temps.</string>
     <string name="on_boarding_step_five_line_two">Vous connaissez maintenant le fonctionnement de notre application.</string>
     <string name="on_boarding_step_five_line_three">Nous espérons qu\'elle vous plaira et qu\'elle vous apportera ce que vous recherchez.</string>
+    <string name="on_boarding_step_five_line_four">Nous vous recommandons d’accéder aux Préférences pour personnaliser votre expérience</string>
 
 </resources>

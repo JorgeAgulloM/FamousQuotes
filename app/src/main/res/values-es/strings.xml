@@ -133,7 +133,7 @@
     <string name="settings_screen_switch_dark_mode_description">Activar el modo oscuro en la app</string>
     <string name="settings_screen_switch_left_handed_description">Mover controles al lado izquierdo</string>
     <string name="settings_screen_switch_notification_channel_description">Suscríbete a notificaciones diarias</string>
-    <string name="settings_screen_btn_on_boarding_text">Introducción</string>
+    <string name="settings_screen_btn_on_boarding_text">Tutorial</string>
     <string name="settings_screen_btn_info_softyorch_text">Info SoftYorch</string>
     <string name="settings_screen_clip_board_title_copy_text">ID del dispositivo</string>
     <string name="settings_screen_icon_btn_id_device_text">ID del dispositivo</string>
@@ -199,6 +199,6 @@
     <string name="on_boarding_step_five_line_one">Gracias por tu tiempo.</string>
     <string name="on_boarding_step_five_line_two">Ahora ya conoces cómo funciona nuestra app.</string>
     <string name="on_boarding_step_five_line_three">Esperamos que te guste y te sea útil.</string>
-
+    <string name="on_boarding_step_five_line_four">Te recomendamos que accedas a Preferencias para personalizar tu experiencia</string>
 
 </resources>
