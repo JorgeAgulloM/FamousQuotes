@@ -199,6 +199,6 @@
     <string name="on_boarding_step_five_line_one">感谢您的时间。</string>
     <string name="on_boarding_step_five_line_two">现在，您已经了解了我们应用程序的功能。</string>
     <string name="on_boarding_step_five_line_three">希望它能让您满意，并提供您所需的功能。</string>
-    <string name="on_boarding_step_five_line_four">我们建议访问“首选项”以个性化您的体验</string>
+    <string name="on_boarding_step_five_line_four">我们建议访问“首选项”以个性化您的体验。</string>
 
 </resources>

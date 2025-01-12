@@ -199,6 +199,6 @@
     <string name="on_boarding_step_five_line_one">Gracias por tu tiempo.</string>
     <string name="on_boarding_step_five_line_two">Ahora ya conoces cómo funciona nuestra app.</string>
     <string name="on_boarding_step_five_line_three">Esperamos que te guste y te sea útil.</string>
-    <string name="on_boarding_step_five_line_four">Te recomendamos que accedas a Preferencias para personalizar tu experiencia</string>
+    <string name="on_boarding_step_five_line_four">Te recomendamos que accedas a Preferencias para personalizar tu experiencia.</string>
 
 </resources>
