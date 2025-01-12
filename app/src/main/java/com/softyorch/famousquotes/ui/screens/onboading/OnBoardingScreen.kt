@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.AppVersionText
@@ -55,9 +57,14 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
+    viewModel: OnBoardingViewModel,
     leftHanded: Boolean,
     onUpNavigation: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.setOnBoarding()
+    }
 
     val paddingTop = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(this).toDp() + 24.dp
@@ -313,5 +320,5 @@ private fun StepFour(titleStep: String) {
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingPreview() {
-    OnBoardingScreen(leftHanded = true) {}
+    OnBoardingScreen(leftHanded = true, viewModel = hiltViewModel<OnBoardingViewModel>()) {}
 }
