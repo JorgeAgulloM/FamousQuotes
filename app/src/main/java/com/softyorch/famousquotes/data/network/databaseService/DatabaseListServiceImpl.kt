@@ -1,9 +1,6 @@
 package com.softyorch.famousquotes.data.network.databaseService
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.Settings
-import android.provider.Settings.Secure.ANDROID_ID
 import com.softyorch.famousquotes.data.network.databaseService.auxFireStore.IAuxFireStoreLists
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableQuantityValuesTypeList
 import com.softyorch.famousquotes.data.network.databaseService.typeList.QuoteEditableValuesTypeList
@@ -13,6 +10,7 @@ import com.softyorch.famousquotes.data.network.dto.LikesDataDTO
 import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.QuoteStatisticsResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
+import com.softyorch.famousquotes.utils.userId
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,9 +20,7 @@ class DatabaseListServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : IDatabaseListService {
 
-    //Provisional
-    @SuppressLint("HardwareIds")
-    private val userId = Settings.Secure.getString(context.contentResolver, ANDROID_ID)
+    private val userId = context.userId()
 
     /*************************************** SETTERS ***************************************/
 

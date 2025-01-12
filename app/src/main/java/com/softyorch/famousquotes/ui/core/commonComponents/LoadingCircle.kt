@@ -23,8 +23,7 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.utils.appIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +40,7 @@ fun LoadingCircle() {
     val gradientBrush by remember {
         mutableStateOf(
             Brush.horizontalGradient(
-                colors = listOf(PrimaryColor, BackgroundColor, PrimaryColor),
+                colors = listOf(AppColorSchema.primary, AppColorSchema.background, AppColorSchema.primary),
                 startX = -10.0f,
                 endX = 400.0f,
                 tileMode = TileMode.Repeated

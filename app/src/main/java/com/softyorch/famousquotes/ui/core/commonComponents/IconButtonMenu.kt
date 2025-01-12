@@ -13,27 +13,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @Composable
 fun IconButtonMenu(
     cDescription: String,
     icon: ImageVector,
-    color: Color = SecondaryColor.copy(alpha = 0.6f),
-    colorIcon: Color = WhiteSmoke,
+    color: Color = AppColorSchema.secondary.copy(alpha = 0.6f),
+    colorIcon: Color = AppColorSchema.whiteSmoke,
     isVisible: Boolean = true,
     isEnabled: Boolean = true,
     shadowOn: Boolean = false,
     isSelected: Boolean = false,
     onClick: () -> Unit,
 ) {
-    val selectedColor = PrimaryColor
+    val selectedColor = AppColorSchema.primary
     val selectColor = if (isSelected) selectedColor
-    else if (colorIcon != WhiteSmoke)
+    else if (colorIcon != AppColorSchema.whiteSmoke)
         colorIcon
-    else WhiteSmoke
+    else AppColorSchema.whiteSmoke
 
     if (isVisible) IconButton(
         onClick = { onClick() },

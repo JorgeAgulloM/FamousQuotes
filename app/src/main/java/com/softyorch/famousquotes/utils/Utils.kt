@@ -3,18 +3,15 @@ package com.softyorch.famousquotes.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.os.Environment
+import android.provider.Settings
+import android.provider.Settings.Secure.ANDROID_ID
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
-import com.softyorch.famousquotes.core.APP_NAME
 import com.softyorch.famousquotes.core.Crashlytics
-import java.io.File
 
 fun writeLog(level: LevelLog = LevelLog.INFO, text: String, throwable: Throwable? = null) {
     val isTest = !IsTestMode.isTest
@@ -66,9 +63,6 @@ inline fun <T> sdk33AndUp(onSdk: () -> T): T? =
 inline fun <T> sdk32AndUp(onSdk: () -> T): T? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) onSdk() else null
 
-inline fun <T> sdk30AndUp(onSdk: () -> T): T? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) onSdk() else null
-
 val sdk29AndDown = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
 @SuppressLint("DiscouragedApi")
@@ -87,21 +81,6 @@ fun appIcon() = painterResource(
     }
 )
 
-fun doesDownloadPathFileExist(fileName: String): Boolean {
-    val path =
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-    val completePath = "$path/$APP_NAME-$fileName.png"
-
-    return File(completePath).exists()
-}
-
-@Suppress("DEPRECATION")
-fun isFullScreenMode(activity: ComponentActivity): Boolean =
-    sdk30AndUp {
-        val insets = activity.window.decorView.rootWindowInsets
-        val isVisible = insets?.isVisible(android.view.WindowInsets.Type.systemBars()) ?: true
-        !isVisible
-    } ?: run {
-        val flags = activity.window.decorView.systemUiVisibility
-        (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
-    }
+//Provisional
+@SuppressLint("HardwareIds")
+fun Context.userId(): String = Settings.Secure.getString(contentResolver, ANDROID_ID)

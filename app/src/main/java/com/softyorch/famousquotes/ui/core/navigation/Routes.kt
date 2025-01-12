@@ -16,3 +16,9 @@ object Settings
 
 @Serializable
 data class Detail(val id: String)
+
+@Serializable
+data class OnBoarding(val goToHome: Boolean = false)
+
+@Serializable
+object Info

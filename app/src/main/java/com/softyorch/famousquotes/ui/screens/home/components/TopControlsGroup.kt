@@ -50,8 +50,7 @@ import com.softyorch.famousquotes.ui.core.commonComponents.AnimatedType
 import com.softyorch.famousquotes.ui.core.commonComponents.BasicDialogApp
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
 import com.softyorch.famousquotes.ui.screens.home.HomeActions
-import com.softyorch.famousquotes.ui.theme.PrimaryColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.DialogCloseAction
 import com.softyorch.famousquotes.utils.sdk29AndDown
 import com.softyorch.famousquotes.utils.showToast
@@ -59,6 +58,7 @@ import com.softyorch.famousquotes.utils.showToast
 @Composable
 fun TopControlsGroup(
     hasText: String,
+    leftHanded: Boolean,
     isEnabled: Boolean,
     isImageExt: Boolean,
     isShoImage: Boolean,
@@ -85,13 +85,13 @@ fun TopControlsGroup(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = paddingTop)
-            .zIndex(10f),
-        contentAlignment = Alignment.TopEnd
+            .zIndex(10f)
     ) {
         AnimatedTextHome(hasText, !isShoImage) {
             TopControls(
                 isEnabled = isEnabled,
                 isImageExt = isImageExt,
+                leftHanded = leftHanded,
                 disabledReload = disabledReload,
                 context = context,
                 onAction = onAction,
@@ -107,12 +107,12 @@ fun TopControlsGroup(
     if (showPermissionRationaleDialog) BasicDialogApp(
         text = stringResource(R.string.dialog_permission_rationale_text),
         auxText = stringResource(R.string.dialog_permission_rationale_aux_text),
-        textBtnPositive = stringResource(R.string.dialog_permission_rationale_denied),
-        textBtnNegative = stringResource(R.string.dialog_permission_rationale_ok),
+        textBtnNegative = stringResource(R.string.dialog_permission_rationale_denied),
+        textBtnPositive = stringResource(R.string.dialog_permission_rationale_ok),
     ) { action ->
         when (action) {
-            DialogCloseAction.POSITIVE -> launcher.launch(permission.WRITE_EXTERNAL_STORAGE)
-            DialogCloseAction.NEGATIVE -> context.showToast(context.getString(R.string.dialog_permission_rationale_denied_toast))
+            DialogCloseAction.NEGATIVE -> launcher.launch(permission.WRITE_EXTERNAL_STORAGE)
+            DialogCloseAction.POSITIVE -> context.showToast(context.getString(R.string.dialog_permission_rationale_denied_toast))
             DialogCloseAction.DISMISS -> Unit
         }
         showPermissionRationaleDialog = false
@@ -123,6 +123,7 @@ fun TopControlsGroup(
 private fun TopControls(
     isEnabled: Boolean,
     isImageExt: Boolean,
+    leftHanded: Boolean,
     disabledReload: Boolean,
     context: Context,
     onAction: (HomeActions) -> Unit,
@@ -138,7 +139,7 @@ private fun TopControls(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.End,
+        horizontalArrangement = if (leftHanded) Arrangement.Start else Arrangement.End,
         verticalAlignment = Alignment.Top
     ) {
         IconButtonMenu(
@@ -194,8 +195,8 @@ private fun FoldableMenu(
         modifier = modifier
             .padding(end = 8.dp)
             .shadow(elevation = shadow, shape = shape)
-            .background(SecondaryColor.copy(alpha = 0.6f), shape = shape)
-            .border(border = BorderStroke(borderStroke, PrimaryColor), shape = shape)
+            .background(AppColorSchema.secondary.copy(alpha = 0.6f), shape = shape)
+            .border(border = BorderStroke(borderStroke, AppColorSchema.primary), shape = shape)
             .animateContentSize()
             .height(if (expanded) expandedSize.dp else closedSize.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,6 +207,7 @@ private fun FoldableMenu(
             expanded = expanded,
             iconFirst = Icons.Outlined.Menu,
             iconSecond = Icons.Outlined.Close,
+            colorIcon = AppColorSchema.whiteSmoke,
             shadowOn = true,
             animatedType = AnimatedType.Rotate,
             onCloseMenu = onCloseMenu

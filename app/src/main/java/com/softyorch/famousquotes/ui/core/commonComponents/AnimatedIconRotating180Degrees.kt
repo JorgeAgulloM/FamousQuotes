@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.softyorch.famousquotes.utils.writeLog
@@ -16,6 +17,7 @@ fun AnimatedIconRotating180Degrees(
     expanded: Boolean,
     iconFirst: ImageVector,
     iconSecond: ImageVector,
+    colorIcon: Color,
     shadowOn: Boolean,
     animatedType: AnimatedType,
     onCloseMenu: () -> Unit
@@ -38,6 +40,7 @@ fun AnimatedIconRotating180Degrees(
         IconButtonMenu(
             cDescription = "Close menu",
             icon = icon,
+            colorIcon = colorIcon,
             shadowOn = shadowOn,
             isEnabled = true
         ) {

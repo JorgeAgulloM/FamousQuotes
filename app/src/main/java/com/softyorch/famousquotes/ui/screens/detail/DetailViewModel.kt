@@ -2,6 +2,7 @@ package com.softyorch.famousquotes.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.core.ISend
 import com.softyorch.famousquotes.core.Intents
 import com.softyorch.famousquotes.core.InternetConnection
@@ -61,6 +62,7 @@ class DetailViewModel @Inject constructor(
     val detailState: StateFlow<DetailState> = _detailState
 
     fun setDetailAction(action: DetailActions, id: String) {
+        Analytics.sendAction(Analytics.ActionDetails(action))
         when (action) {
             is DetailActions.LoadQuoteData -> {
                 getData(id)

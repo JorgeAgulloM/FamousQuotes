@@ -1,4 +1,4 @@
 package com.softyorch.famousquotes.ui.utils
 
-enum class DialogCloseAction { POSITIVE, NEGATIVE, DISMISS }
+enum class DialogCloseAction { NEGATIVE, POSITIVE, DISMISS }
 

@@ -19,24 +19,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.model.QuoteStatistics
 import com.softyorch.famousquotes.ui.admob.Banner
 import com.softyorch.famousquotes.ui.core.commonComponents.IconButtonMenu
-import com.softyorch.famousquotes.ui.core.commonComponents.SpacerIconButton
 import com.softyorch.famousquotes.ui.screens.detail.components.CardDetail
 import com.softyorch.famousquotes.ui.screens.detail.components.SetDialogs
 import com.softyorch.famousquotes.ui.screens.detail.model.DetailState
 import com.softyorch.famousquotes.ui.screens.detail.model.QuoteDetailsModel
-import com.softyorch.famousquotes.ui.theme.BackgroundColor
-import com.softyorch.famousquotes.ui.theme.SecondaryColor
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
     id: String,
+    leftHanded: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: DetailViewModel,
@@ -50,7 +51,7 @@ fun DetailScreen(
     val finishAnimation =
         animatedVisibilityScope.transition.currentState == EnterExitState.Visible && !state.hideControls
 
-    Scaffold(modifier = modifier.fillMaxSize(), containerColor = BackgroundColor) { paddingValues ->
+    Scaffold(modifier = modifier.fillMaxSize(), containerColor = AppColorSchema.background) { paddingValues ->
         Column(
             modifier = modifier.padding(paddingValues),
             verticalArrangement = Arrangement.Center
@@ -67,29 +68,38 @@ fun DetailScreen(
                     quote = quote,
                     state = state,
                     statistics = statistics,
+                    leftHanded = leftHanded,
                     sharedTransitionScope = sharedTransitionScope,
                     animatedVisibilityScope = animatedVisibilityScope,
                     finishAnimation = finishAnimation
                 ) { action -> viewModel.setDetailAction(action, id) }
-                if (finishAnimation) Row(
-                    modifier = modifier
-                        .padding(start = 16.dp, top = 8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    IconButtonMenu(
-                        cDescription = "Back",
-                        color = SecondaryColor.copy(alpha = 0.6f),
-                        icon = Icons.AutoMirrored.Outlined.ArrowBack,
-                        shadowOn = true
-                    ) { onBackNavigation() }
-                    SpacerIconButton()
-                }
+                if (finishAnimation) TopMenu(modifier, leftHanded, onBackNavigation)
             }
             Box(Modifier.height(Banner.heightBanner.dp)) {}
         }
         SetDialogs(state) {
             viewModel.setDetailAction(it, id)
         }
+    }
+}
+
+@Composable
+private fun TopMenu(
+    modifier: Modifier,
+    leftHanded: Boolean,
+    onBackNavigation: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = if (leftHanded) Arrangement.Start else Arrangement.End
+    ) {
+        IconButtonMenu(
+            cDescription = stringResource(R.string.default_text_cont_desc_back),
+            color = AppColorSchema.secondary.copy(alpha = 0.6f),
+            icon = Icons.AutoMirrored.Outlined.ArrowBack,
+            shadowOn = true
+        ) { onBackNavigation() }
     }
 }

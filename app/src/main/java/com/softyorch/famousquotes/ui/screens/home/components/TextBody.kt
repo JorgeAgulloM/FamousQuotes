@@ -6,9 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.unit.dp
+import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.theme.MyTypography
-import com.softyorch.famousquotes.ui.theme.TextStandardColor
-import com.softyorch.famousquotes.ui.theme.WhiteSmoke
 
 @Composable
 fun TextBody(text: String) {
@@ -21,9 +20,9 @@ fun TextBody(text: String) {
                 bottom = 16.dp
             ),
             style = MyTypography.displayLarge.copy(
-                color = WhiteSmoke,
+                color = AppColorSchema.text,
                 shadow = Shadow(
-                    color = TextStandardColor,
+                    color = AppColorSchema.smoke,
                     blurRadius = 8f
                 )
             )
