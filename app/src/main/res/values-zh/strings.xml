@@ -158,7 +158,7 @@
     <string name="on_boarding_list_steps_menu">主菜单</string>
     <string name="on_boarding_list_steps_my_images">个人图库</string>
     <string name="on_boarding_list_steps_acknowledgements">致谢</string>
-    <string name="on_boarding_top_bar_title">介绍</string>
+    <string name="on_boarding_top_bar_title">教程</string>
     <string name="on_boarding_button_action_principal_finish">完成</string>
     <string name="on_boarding_button_action_principal_next">下一步</string>
     <string name="on_boarding_button_action_principal_exit">退出</string>

@@ -158,7 +158,7 @@
     <string name="on_boarding_list_steps_menu">Menú principal</string>
     <string name="on_boarding_list_steps_my_images">Galería personal</string>
     <string name="on_boarding_list_steps_acknowledgements">Agradecimientos</string>
-    <string name="on_boarding_top_bar_title">Introducción</string>
+    <string name="on_boarding_top_bar_title">Tutorial</string>
     <string name="on_boarding_button_action_principal_finish">Finalizar</string>
     <string name="on_boarding_button_action_principal_next">Siguiente</string>
     <string name="on_boarding_button_action_principal_exit">Salir</string>
