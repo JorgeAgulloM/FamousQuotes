@@ -22,7 +22,11 @@ class MainViewModel @Inject constructor(
     private val _settings = MutableStateFlow(SettingsModel.DEFAULT)
     val settings: StateFlow<SettingsModel> = _settings
 
-    fun getSettings() {
+    init {
+        getSettings()
+    }
+
+    private fun getSettings() {
         viewModelScope.launch(dispatcherDefault) {
             getSettings.invoke().collect { settings ->
                 _settings.update { settings }
