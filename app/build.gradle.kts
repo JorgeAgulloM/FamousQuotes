@@ -28,8 +28,8 @@ android {
         applicationId = "com.softyorch.famousquotes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 201
-        versionName = "2.0.1"
+        versionCode = 212
+        versionName = "2.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
