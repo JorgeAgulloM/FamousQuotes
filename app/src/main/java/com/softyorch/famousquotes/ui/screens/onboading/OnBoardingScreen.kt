@@ -313,6 +313,7 @@ private fun StepFour(titleStep: String) {
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_one))
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_two))
             TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_three))
+            TextOnBoarding(stringResource(R.string.on_boarding_step_five_line_four))
         }
     }
 }
