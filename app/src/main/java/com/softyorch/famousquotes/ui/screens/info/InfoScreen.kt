@@ -100,7 +100,8 @@ private fun CardSoftYorch(modifier: Modifier) {
         Image(
             painter = painterResource(R.drawable.softyorch),
             contentDescription = stringResource(R.string.screen_info_card_logo_cont_desc),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
