@@ -108,7 +108,7 @@ fun OnBoardingScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val textButtonPrimary = if (selectStep == steps.size - 1)
+            val textButtonPrimary = if (selectStep >= steps.size - 1)
                 stringResource(R.string.on_boarding_button_action_principal_finish)
             else stringResource(R.string.on_boarding_button_action_principal_next)
 
@@ -166,7 +166,7 @@ private fun StepOne(titleStep: String) {
                 Image(
                     painter = painterResource(R.drawable.image_ob_01),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -263,7 +263,7 @@ private fun StepThree(titleStep: String) {
                 Image(
                     painter = painterResource(R.drawable.image_ob_04),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
