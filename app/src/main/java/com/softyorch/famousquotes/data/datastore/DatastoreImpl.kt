@@ -87,4 +87,10 @@ class DatastoreImpl @Inject constructor(
             data[booleanPreferencesKey(IS_SHOW_ON_BOARDING)] = onboarding
         }
     }
+
+    override suspend fun setSubscribeNotifications() {
+        context.datastore.edit { data ->
+            data[booleanPreferencesKey(NOTIFICATION_CHANNEL)] = true
+        }
+    }
 }
