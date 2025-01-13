@@ -166,7 +166,7 @@ private fun StepOne(titleStep: String) {
                 Image(
                     painter = painterResource(R.drawable.image_ob_01),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -263,7 +263,7 @@ private fun StepThree(titleStep: String) {
                 Image(
                     painter = painterResource(R.drawable.image_ob_04),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
