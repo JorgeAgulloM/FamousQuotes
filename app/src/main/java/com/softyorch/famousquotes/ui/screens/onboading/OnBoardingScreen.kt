@@ -108,7 +108,7 @@ fun OnBoardingScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val textButtonPrimary = if (selectStep == steps.size - 1)
+            val textButtonPrimary = if (selectStep >= steps.size - 1)
                 stringResource(R.string.on_boarding_button_action_principal_finish)
             else stringResource(R.string.on_boarding_button_action_principal_next)
 
