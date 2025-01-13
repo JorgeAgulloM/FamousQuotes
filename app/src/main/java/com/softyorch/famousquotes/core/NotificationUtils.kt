@@ -40,7 +40,7 @@ class NotificationUtils(private val context: Context) {
                         if (isGranted) {
                             writeLog(LevelLog.INFO, "PERMISSION POST_NOTIFICATIONS GRANTED")
                             createdChannelNotifications()
-                            startProcessSubscribeNotifications()
+                            startProcessSubscribeNotifications(onResult)
                         } else {
                             writeLog(LevelLog.WARN, "PERMISSION POST_NOTIFICATIONS DENIED")
                         }
@@ -66,7 +66,7 @@ class NotificationUtils(private val context: Context) {
                 }
             }
         } ?: CoroutineScope(Dispatchers.Default).launch {
-            subscribeNotificationFirstTime().also { onResult(true) }
+            subscribeNotificationFirstTime(onResult)
         }
     }
 
@@ -83,10 +83,10 @@ class NotificationUtils(private val context: Context) {
         }
     }
 
-    private fun startProcessSubscribeNotifications() {
+    private fun startProcessSubscribeNotifications(onResult: (Boolean) -> Unit) {
         areNotificationsEnabled { result ->
             if (result) CoroutineScope(Dispatchers.Default).launch {
-                subscribeNotificationFirstTime()
+                subscribeNotificationFirstTime(onResult)
             }
         }
     }
@@ -96,9 +96,10 @@ class NotificationUtils(private val context: Context) {
         onResult(notificationManager.areNotificationsEnabled())
     }
 
-    private suspend fun subscribeNotificationFirstTime() {
+    private suspend fun subscribeNotificationFirstTime(onResult: (Boolean) -> Unit) {
         var finished = false
         val delay = 5000L
+        val maxIterations = 3
         var retry = 0
         val messaging = FirebaseMessaging.getInstance()
         val notificationChannel = notificationChannelByUserLanguage()
@@ -115,7 +116,7 @@ class NotificationUtils(private val context: Context) {
                             text = "Error subscribing to $notificationChannel"
                         )
                         writeLog(LevelLog.ERROR, text = "Times $retry. Retry in 5 seconds...")
-                        finished = retry >= 3
+                        finished = retry >= maxIterations
                         retry += 1
                     }
                 }.addOnFailureListener {
@@ -124,11 +125,13 @@ class NotificationUtils(private val context: Context) {
                         text = "Error subscribing to $notificationChannel"
                     )
                     writeLog(LevelLog.ERROR, text = "Times $retry. Retry in 5 seconds...")
-                    finished = retry >= 3
+                    finished = retry >= maxIterations
                     retry += 1
                 }
             delay(delay)
         }
+
+        onResult(retry < maxIterations)
     }
 
     fun goToConfigurationNotifications() {
