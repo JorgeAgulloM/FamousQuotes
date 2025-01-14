@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
 
         StartUpdateManager()
         StartFirebase()
-        NotificationUtils(this).verifyPermissionNotifications(true)
+        NotificationUtils(this).verifyPermissionNotifications(true) { subscried ->
+            if (subscried) viewActivityModel.setSubscribeNotificationsSetting()
+        }
         RequestGrantedProtectionData(this).getConsent()
         SetBlockedScreenShoot()
 

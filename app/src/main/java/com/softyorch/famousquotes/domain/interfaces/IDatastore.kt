@@ -11,4 +11,5 @@ interface IDatastore {
     fun getSettings(): Flow<SettingsStoreModel>
     suspend fun setSettings(settings: SettingsStoreModel)
     suspend fun setOnboarding(onboarding: Boolean)
+    suspend fun setSubscribeNotifications()
 }

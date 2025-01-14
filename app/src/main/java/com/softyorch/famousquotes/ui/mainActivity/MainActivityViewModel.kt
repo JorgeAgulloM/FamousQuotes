@@ -3,6 +3,7 @@ package com.softyorch.famousquotes.ui.mainActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.domain.useCases.AuthConnection
+import com.softyorch.famousquotes.domain.useCases.settings.SetSubscribeNotifications
 import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val authService: AuthConnection,
+    private val setSubscribeNotifications: SetSubscribeNotifications,
     private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(MainState.Start)
@@ -25,6 +27,12 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         anonymousAuthentication()
+    }
+
+    fun setSubscribeNotificationsSetting() {
+        viewModelScope.launch(dispatcherDefault) {
+            setSubscribeNotifications.invoke()
+        }
     }
 
     private fun anonymousAuthentication() {
