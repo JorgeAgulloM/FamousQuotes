@@ -5,14 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.softyorch.famousquotes.core.Intents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class InfoViewModel @Inject constructor(
     private val intents: Intents,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcherDefault: CoroutineDispatcher
 ): ViewModel() {
 
     fun actions(action: InfoActions) {
