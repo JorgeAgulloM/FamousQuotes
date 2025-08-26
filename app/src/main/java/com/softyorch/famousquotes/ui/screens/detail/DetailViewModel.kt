@@ -21,15 +21,12 @@ import com.softyorch.famousquotes.ui.screens.home.model.FavoritesUiDTO.Companion
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.utils.LevelLog
-import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -47,7 +44,7 @@ class DetailViewModel @Inject constructor(
     private val storage: IStorageService,
     private val intents: Intents,
     private val hasConnection: InternetConnection,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcherDefault: CoroutineDispatcher
 ) : ViewModel() {
 
     private var quoteJob: Job? = null
@@ -135,9 +132,7 @@ class DetailViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherDefault) {
-            hasConnection.isConnectedFlow().catch {
-                writeLog(ERROR, "Error getting connection state: ${it.cause}", it)
-            }.collect { connection ->
+            hasConnection.isConnectedFlow().collect { connection ->
                 _detailState.update {
                     it.copy(
                         hasConnection = connection,
