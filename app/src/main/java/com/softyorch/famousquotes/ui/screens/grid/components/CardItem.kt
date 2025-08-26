@@ -49,7 +49,7 @@ fun CardItem(
             Card(
                 modifier = Modifier
                     .sharedElement(
-                        state = rememberSharedContentState(key = "image-${item.id}"),
+                        sharedContentState = rememberSharedContentState(key = "image-${item.id}"),
                         animatedVisibilityScope = animatedVisibilityScope
                     )
                     .padding(start = 4.dp, end = 4.dp, bottom = 16.dp)
