@@ -11,13 +11,12 @@ import com.softyorch.famousquotes.data.network.response.QuoteResponse
 import com.softyorch.famousquotes.data.network.response.QuoteStatisticsResponse
 import com.softyorch.famousquotes.domain.interfaces.IDatabaseListService
 import com.softyorch.famousquotes.utils.userId
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DatabaseListServiceImpl @Inject constructor(
     private val auxFirebaseLists: IAuxFireStoreLists,
-    @ApplicationContext private val context: Context,
+    context: Context,
 ) : IDatabaseListService {
 
     private val userId = context.userId()
