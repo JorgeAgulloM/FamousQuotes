@@ -22,16 +22,13 @@ import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO
 import com.softyorch.famousquotes.ui.screens.home.model.LikesUiDTO.Companion.toDomain
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteFavoriteState
 import com.softyorch.famousquotes.ui.screens.home.model.QuoteLikesState
-import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.LevelLog.INFO
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,7 +48,7 @@ class HomeViewModel @Inject constructor(
     private val shareQuote: ISend,
     private val intents: Intents,
     private val hasConnection: InternetConnection,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
+    private val dispatcherDefault: CoroutineDispatcher,
 ) : ViewModel() {
 
     private var quoteJob: Job? = null
@@ -258,9 +255,7 @@ class HomeViewModel @Inject constructor(
         likeJob?.cancel()
 
         likeJob = viewModelScope.launch(dispatcherDefault) {
-            getUserLikeQuote(id).catch {
-                writeLog(ERROR, "Error from getting user like: ${it.cause}", it)
-            }.collect { isLike ->
+            getUserLikeQuote(id).collect { isLike ->
                 _likeState.update { it.copy(isLike = isLike ?: false) }
             }
         }
@@ -270,9 +265,7 @@ class HomeViewModel @Inject constructor(
         favoriteJob?.cancel()
 
         favoriteJob = viewModelScope.launch(dispatcherDefault) {
-            getUserFavoriteQuote(id).catch {
-                writeLog(ERROR, "Error from getting user favorite: ${it.cause}", it)
-            }.collect { isFavorite ->
+            getUserFavoriteQuote(id).collect { isFavorite ->
                 _favoriteState.update { it.copy(isFavorite = isFavorite ?: false) }
             }
         }
@@ -315,9 +308,7 @@ class HomeViewModel @Inject constructor(
 
     private fun hasConnectionFlow() {
         viewModelScope.launch(dispatcherDefault) {
-            hasConnection.isConnectedFlow().catch {
-                writeLog(ERROR, "Error getting connection state: ${it.cause}", it)
-            }.onEach { connection ->
+            hasConnection.isConnectedFlow().onEach { connection ->
                 if (isNeedActionWhenReconnection(connection))
                     onActions(HomeActions.ReConnection())
             }.collect { connection ->
