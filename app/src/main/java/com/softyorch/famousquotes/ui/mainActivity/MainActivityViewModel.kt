@@ -8,7 +8,6 @@ import com.softyorch.famousquotes.utils.LevelLog
 import com.softyorch.famousquotes.utils.writeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,7 +19,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val authService: AuthConnection,
     private val setSubscribeNotifications: SetSubscribeNotifications,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
+    private val dispatcherDefault: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(MainState.Start)
     val mainState: StateFlow<MainState> = _uiState
