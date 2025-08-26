@@ -1,5 +1,6 @@
 package com.softyorch.famousquotes.ui.admob
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
@@ -11,17 +12,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.softyorch.famousquotes.BuildConfig
-import com.softyorch.famousquotes.FamousQuotesApp.Companion.adRequest
 import com.softyorch.famousquotes.core.Analytics
 import com.softyorch.famousquotes.ui.mainActivity.MainActivity
+import com.softyorch.famousquotes.ui.mainActivity.MainActivity.Companion.adRequest
 import javax.inject.Singleton
 
 @Singleton
@@ -51,39 +50,41 @@ class Banner {
 
     @Composable
     fun StartAdView() {
-        val context = LocalContext.current
-        val currentWidth = LocalConfiguration.current.screenWidthDp
+        val context = MainActivity.instance
         var adLoadedState by remember { mutableStateOf(false) }
 
         if (adLoadedState) Show()
 
-        adView = AdView(context).apply {
-            setAdSize(
-                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                    context, currentWidth
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            val currentWidth = this.maxWidth.value.toInt()
+            adView = AdView(context).apply {
+                setAdSize(
+                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                        context, currentWidth
+                    )
                 )
-            )
-            adUnitId = BuildConfig.ID_BANNER_HOME
-            loadAd(adRequest)
+                adUnitId = BuildConfig.ID_BANNER_HOME
+                loadAd(adRequest)
 
-            adListener = object : AdListener() {
-                override fun onAdClicked() {
-                    super.onAdClicked()
-                    Analytics.sendAction(Analytics.Banner())
-                }
+                adListener = object : AdListener() {
+                    override fun onAdClicked() {
+                        super.onAdClicked()
+                        Analytics.sendAction(Analytics.Banner())
+                    }
 
-                override fun onAdSwipeGestureClicked() {
-                    super.onAdSwipeGestureClicked()
-                    Analytics.sendAction(Analytics.Banner())
-                }
+                    override fun onAdSwipeGestureClicked() {
+                        super.onAdSwipeGestureClicked()
+                        Analytics.sendAction(Analytics.Banner())
+                    }
 
-                override fun onAdLoaded() {
-                    val density = resources.displayMetrics.density
-                    val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MainActivity.instance, getAdWidth()) // ancho en dp
-                    val heightInDp = adSize.height
-                    val heightInPixels = (heightInDp * density).toInt()
-                    heightBanner = pxToIntFoDpUse(heightInPixels)
-                    adLoadedState = true
+                    override fun onAdLoaded() {
+                        val density = resources.displayMetrics.density
+                        val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MainActivity.instance, getAdWidth()) // ancho en dp
+                        val heightInDp = adSize.height
+                        val heightInPixels = (heightInDp * density).toInt()
+                        heightBanner = pxToIntFoDpUse(heightInPixels)
+                        adLoadedState = true
+                    }
                 }
             }
         }
