@@ -6,7 +6,6 @@ import com.softyorch.famousquotes.domain.model.SettingsModel
 import com.softyorch.famousquotes.domain.useCases.settings.GetSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -16,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getSettings: GetSettings,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcherDefault: CoroutineDispatcher
 ): ViewModel() {
 
     private val _settings = MutableStateFlow(SettingsModel.DEFAULT)

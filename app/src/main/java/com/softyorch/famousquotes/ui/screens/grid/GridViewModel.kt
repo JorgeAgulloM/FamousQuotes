@@ -7,7 +7,6 @@ import com.softyorch.famousquotes.domain.model.FamousQuoteModel
 import com.softyorch.famousquotes.domain.useCases.GetAllQuotesFiltered
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GridViewModel @Inject constructor(
     private val getQuotes: GetAllQuotesFiltered,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcherDefault: CoroutineDispatcher
 ) : ViewModel() {
 
     private var quotesJob: Job? = null

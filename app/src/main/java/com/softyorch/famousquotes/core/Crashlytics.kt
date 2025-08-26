@@ -1,7 +1,7 @@
 package com.softyorch.famousquotes.core
 
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.softyorch.famousquotes.BuildConfig
 
 class Crashlytics {

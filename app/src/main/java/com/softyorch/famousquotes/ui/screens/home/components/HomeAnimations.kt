@@ -57,6 +57,10 @@ fun AnimatedTextHome(text: String, isVisible: Boolean = true, content: @Composab
         enter = fadeIn(
             animationSpec = spring(0.8f, 20f),
             initialAlpha = 0f
+        ),
+        exit = fadeOut(
+            animationSpec = spring(0.8f, 20f),
+            targetAlpha = 0f
         )
     ) { content() }
 }

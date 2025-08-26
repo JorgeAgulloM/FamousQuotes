@@ -9,18 +9,20 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.core.NotificationUtils
 import com.softyorch.famousquotes.ui.core.commonComponents.LoadingCircle
@@ -28,6 +30,9 @@ import com.softyorch.famousquotes.ui.screens.main.MainApp
 import com.softyorch.famousquotes.ui.screens.main.MainViewModel
 import com.softyorch.famousquotes.utils.RequestGrantedProtectionData
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,6 +41,7 @@ class MainActivity : ComponentActivity() {
         lateinit var firebaseAnalytics: FirebaseAnalytics
         lateinit var instance: MainActivity
         var packageAppName: String = ""
+        lateinit var adRequest: AdRequest
     }
 
     private lateinit var viewActivityModel: MainActivityViewModel
@@ -47,19 +53,22 @@ class MainActivity : ComponentActivity() {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        instance = this
+        instance = this@MainActivity
         packageAppName = applicationContext.packageName
 
         enableEdgeToEdge()
 
         splash.setKeepOnScreenCondition { true }
-
+        CoroutineScope(Dispatchers.IO).launch {
+            MobileAds.initialize(this@MainActivity) {}
+        }
+        adRequest = AdRequest.Builder().build()
         StartUpdateManager()
         StartFirebase()
-        NotificationUtils(this).verifyPermissionNotifications(true) { subscried ->
-            if (subscried) viewActivityModel.setSubscribeNotificationsSetting()
+        NotificationUtils(this@MainActivity).verifyPermissionNotifications(true) { subscribed ->
+            if (subscribed) viewActivityModel.setSubscribeNotificationsSetting()
         }
-        RequestGrantedProtectionData(this).getConsent()
+        RequestGrantedProtectionData(this@MainActivity).getConsent()
         SetBlockedScreenShoot()
 
         setContent {
@@ -76,7 +85,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun StartUpdateManager() {
-        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity)
         if (!BuildConfig.DEBUG) checkForAppUpdates()
     }
 
@@ -84,7 +93,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         if (!BuildConfig.DEBUG) appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
+                appUpdateManager.startUpdateFlowForResult(info, this@MainActivity, appUpdateOptions, channel)
             }
         }
     }
@@ -94,13 +103,13 @@ class MainActivity : ComponentActivity() {
             val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
             val isUpdateAllowed = info.isImmediateUpdateAllowed
             if (isUpdateAvailable && isUpdateAllowed) {
-                appUpdateManager.startUpdateFlowForResult(info, this, appUpdateOptions, channel)
+                appUpdateManager.startUpdateFlowForResult(info, this@MainActivity, appUpdateOptions, channel)
             }
         }
     }
 
     private fun StartFirebase() {
-        FirebaseApp.initializeApp(this)
+        FirebaseApp.initializeApp(this@MainActivity)
 
         firebaseAnalytics = Firebase.analytics
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
