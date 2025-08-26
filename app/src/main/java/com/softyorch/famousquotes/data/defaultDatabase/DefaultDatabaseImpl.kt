@@ -4,17 +4,15 @@ import android.content.Context
 import com.softyorch.famousquotes.BuildConfig
 import com.softyorch.famousquotes.R
 import com.softyorch.famousquotes.domain.interfaces.IDefaultDatabase
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class DefaultDatabaseImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val context: Context
 ) : IDefaultDatabase {
 
     companion object {
         const val HISTORICAL_FLAVOUR = "historical"
         const val BIBLICAL_FLAVOUR = "biblical"
-        //const val UPLIFTING_FLAVOUR = "uplifting"
     }
 
     override fun getDefaultQuote(): DefaultModel =
