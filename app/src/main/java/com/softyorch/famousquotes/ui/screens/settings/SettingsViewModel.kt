@@ -13,7 +13,6 @@ import com.softyorch.famousquotes.ui.mainActivity.MainActivity
 import com.softyorch.famousquotes.utils.notificationChannelByUserLanguage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -26,7 +25,7 @@ class SettingsViewModel @Inject constructor(
     private val getSettings: GetSettings,
     private val setSettings: SetSettings,
     private val subscribeNotificationsByTopic: SubscribeNotificationByTopic,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcherDefault: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _settings = MutableStateFlow(SettingsModel.DEFAULT)
