@@ -30,22 +30,23 @@ import com.softyorch.famousquotes.ui.theme.AppColorSchema
 import com.softyorch.famousquotes.ui.utils.extFunc.getResourceString
 import com.softyorch.famousquotes.utils.showToast
 import com.softyorch.famousquotes.utils.writeLog
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
+import androidx.core.graphics.scale
 
 class SendImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
+    private val context: Context,
+    private val dispatcherDefault: CoroutineDispatcher,
 ) : ISend {
 
     private val rawName = BuildConfig.APP_TITLE
     private val name = context.getResourceString(rawName)
     private val startLink = "https://softyorch.com"
+    private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     override suspend fun shareTextTo(data: String) {
         val sendText = "$data\n\n$name\n\n${selectLink()}"
@@ -106,7 +107,7 @@ class SendImpl @Inject constructor(
                 setShadowLayer(20f, 2f, 2f, AppColorSchema.text.toArgb())
             }
 
-            val scaledIconBitmap = Bitmap.createScaledBitmap(iconBitmap, 70, 70, true)
+            val scaledIconBitmap = iconBitmap.scale(70, 70)
 
             // Configuración de los textos del título
             val paintTitleTop = Paint().apply {
@@ -273,7 +274,7 @@ class SendImpl @Inject constructor(
         val clip = ClipData.newPlainText("App Link", selectLink())
         clipboard.setPrimaryClip(clip)
         val message = context.getResourceString("share_toast_link")
-        withContext(Dispatchers.Main) { context.showToast(message, Toast.LENGTH_LONG) }
+        withContext(mainDispatcher) { context.showToast(message, Toast.LENGTH_LONG) }
     }
 
     private fun selectLink(): String {
