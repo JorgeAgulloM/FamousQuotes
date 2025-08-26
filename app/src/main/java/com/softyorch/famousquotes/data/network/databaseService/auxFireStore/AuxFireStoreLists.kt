@@ -38,7 +38,7 @@ import kotlin.coroutines.resumeWithException
 class AuxFireStoreLists(
     private val firestore: FirebaseFirestore,
     private val internetConnection: InternetConnection,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val dispatcher: CoroutineDispatcher,
 ) : IAuxFireStoreLists {
 
     override suspend fun getUserLikeQuotesId(userId: String): UserLikesResponse? =
