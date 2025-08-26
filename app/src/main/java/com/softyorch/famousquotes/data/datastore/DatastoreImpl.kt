@@ -14,13 +14,12 @@ import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Compan
 import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.LEFT_HANDED
 import com.softyorch.famousquotes.data.datastore.model.SettingsStoreModel.Companion.NOTIFICATION_CHANNEL
 import com.softyorch.famousquotes.domain.interfaces.IDatastore
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class DatastoreImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val context: Context
 ) : IDatastore {
 
     companion object {
