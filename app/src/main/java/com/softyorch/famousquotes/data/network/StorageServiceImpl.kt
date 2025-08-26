@@ -2,8 +2,8 @@ package com.softyorch.famousquotes.data.network
 
 import android.app.DownloadManager
 import android.content.Context
-import android.net.Uri
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import androidx.core.net.toUri
 import com.google.firebase.FirebaseException
 import com.google.firebase.storage.FirebaseStorage
 import com.softyorch.famousquotes.core.APP_NAME
@@ -12,7 +12,6 @@ import com.softyorch.famousquotes.core.URL_STORAGE_PROJECT
 import com.softyorch.famousquotes.domain.interfaces.IStorageService
 import com.softyorch.famousquotes.utils.LevelLog.ERROR
 import com.softyorch.famousquotes.utils.writeLog
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
@@ -22,7 +21,7 @@ import kotlin.coroutines.resumeWithException
 
 class StorageServiceImpl @Inject constructor(
     private val storage: FirebaseStorage,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
 ) : IStorageService {
 
     private val imageList: MutableList<String> = mutableListOf()
@@ -96,7 +95,7 @@ class StorageServiceImpl @Inject constructor(
 
     private fun downloadFile(fileName: String, url: String?, result: () -> Unit) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val uri = Uri.parse(url)
+        val uri = url?.toUri()
         val request = DownloadManager.Request(uri).apply {
             setTitle(fileName)
             setDescription(fileName)

@@ -64,7 +64,7 @@ fun CardDetail(
             Card(
                 modifier = Modifier
                     .sharedElement(
-                        state = rememberSharedContentState(key = "image-$id"),
+                        sharedContentState = rememberSharedContentState(key = "image-$id"),
                         animatedVisibilityScope = animatedVisibilityScope
                     )
                     .padding(horizontal = 8.dp)
